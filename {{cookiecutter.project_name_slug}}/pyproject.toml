@@ -1,0 +1,62 @@
+[build-system]
+requires = ["poetry-core>=1.0.0"]
+build-backend = "poetry.core.masonry.api"
+
+[tool.poetry]
+# Check https://python-poetry.org/docs/pyproject/ for all available sections
+name = "{{ cookiecutter.pkg_name }}"
+version = "{{ cookiecutter.version }}"
+description = "{{ cookiecutter.short_description }}"
+license = "MIT"
+authors = ["Ansys, Inc."] # this is required
+maintainers = ["PyAnsys developers <pyansys.support@ansys.com>"]
+readme = "README.rst"
+repository = "{{ cookiecutter.repository_url }}"
+classifiers = [
+    "Development Status :: 4 - Beta",
+    "Programming Language :: Python :: 3",
+    "License :: OSI Approved :: MIT License",
+    "Operating System :: OS Independent",
+]
+packages = [
+    { include = "ansys", from = "src" },
+]
+
+[tool.poetry.dependencies]
+python = ">={{ cookiecutter.requires_python }},<4.0"
+importlib-metadata = {version = "^4.0", python = "<3.8"}
+
+
+[tool.poetry.group.docs]
+optional = true
+
+[tool.poetry.group.docs.dependencies]
+Sphinx =  {version="^4.4"}
+numpydoc =  {version="^1.2"}
+pyansys_sphinx_theme =  {version="^0.2"}
+sphinx-copybutton =  {version="^0.4"}
+
+
+[tool.poetry.group.style]
+optional = true
+
+[tool.poetry.group.style.dependencies]
+black = {version="^22.1.0"}
+flake8 = {version="^3.9"}
+isort = {version="^5.10.1"}
+pydocstyle = {version="^6.1.1"}
+
+
+[tool.poetry.group.tests]
+optional = true
+
+[tool.poetry.group.tests.dependencies]
+pytest = {version="^7.0"}
+pytest-cov = {version="^3.0"}
+
+
+[tool.poetry.group.build]
+optional = true
+
+[tool.poetry.group.build.dependencies]
+twine = {version="^3.8"}
