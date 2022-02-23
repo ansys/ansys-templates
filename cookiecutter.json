@@ -8,5 +8,7 @@
   "version": "0.1.0",
   "short_description": "A Python wrapper for Ansys {{ cookiecutter.product_name }} {{ cookiecutter.library_name }}",
   "repository_url": "https://github.com/pyansys/{{ cookiecutter.project_name_slug }}",
-  "requires_python": "3.7"
+  "requires_python": "3.7",
+  "build_system": ["flit", "poetry"],
+  "max_linelength": "100"
 }

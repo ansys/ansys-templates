@@ -1,3 +1,5 @@
+import pytest
+
 PRODUCT_NAME = "Product"
 PRODUCT_NAME_SLUG = PRODUCT_NAME.lower().replace(" ", "-").replace("_", "-")
 LIBRARY_NAME = "Library"
@@ -8,9 +10,11 @@ VERSION = "0.1.0"
 SHORT_DESCRIPTION = f"A Python wrapper for Ansys {PRODUCT_NAME} {LIBRARY_NAME}"
 REPOSITORY_URL = f"https://github.com/pyansys/{PROJECT_NAME_SLUG}"
 REQUIRES_PYTHON = "3.7"
+MAX_LINELENGTH = "100"
 
 
-def test_bake_project(cookies):
+@pytest.mark.parametrize("tool", ["flit", "poetry"])
+def test_bake_project_with_build_system(cookies, tool):
     result = cookies.bake(
         extra_context={
             "product_name": PRODUCT_NAME,
@@ -23,6 +27,8 @@ def test_bake_project(cookies):
             "short_description": SHORT_DESCRIPTION,
             "repository_url": REPOSITORY_URL,
             "requires_python": REQUIRES_PYTHON,
+            "build_system": tool,
+            "max_linelength": MAX_LINELENGTH,
         }
     )
 
@@ -34,6 +40,7 @@ def test_bake_project(cookies):
     files = [
         ".github/workflows/ci_cd.yml",
         ".gitignore",
+        ".flake8",
         "LICENSE",
         "README.rst",
         "pyproject.toml",
