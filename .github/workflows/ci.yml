@@ -20,8 +20,7 @@ jobs:
           python-version: 3.7
       - name: Install dependencies
         run: |
-          python -m pip install --upgrade pip
-          pip install poetry==1.2.0a2 tox tox-gh-actions
+          python -m pip install --upgrade pip tox
       - name: Test with tox
         run: tox -e py37
 
@@ -44,7 +43,11 @@ jobs:
         run: |
           python -m pip install --upgrade pip
           pip install tox tox-gh-actions
-      - name: Test with tox
+      - name: Test with tox-gh-actions
+        # The following tox command is being executed by tox-gh-actions. Thus,
+        # only the tox environment defined for the particular
+        # {{ matrix.python-version }} will be the one executed. See the tox.ini
+        # file for more information.
         run: tox
       - name: Test baked project
         run: |
