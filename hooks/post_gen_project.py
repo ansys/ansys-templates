@@ -1,3 +1,4 @@
+"""Post-processing script for cleaning the raw rendered project."""
 import os
 from pathlib import Path
 
@@ -6,8 +7,8 @@ ALLOWED_BUILD_SYSTEMS = ["flit", "poetry"]
 
 
 def remove_tool_files(tool_name, basedir):
-    """Removes files matching given glob expression within desired base
-    directory.
+    """
+    Remove files matching given glob expression within desired base directory.
 
     Parameters
     ----------
@@ -15,8 +16,8 @@ def remove_tool_files(tool_name, basedir):
         Name of the tool used as build system.
     basedir: Path
         Base directory path.
-    """
 
+    """
     for filepath in basedir.glob(f"**/*_{tool_name}*"):
         filepath.unlink()
 
@@ -30,8 +31,8 @@ def rename_tool_files(tool_name, basedir):
         Name of the tool used as build system.
     basedir: Path
         Base directory path.
-    """
 
+    """
     for original_filepath in basedir.glob(f"**/*_{tool_name}*"):
         new_filename = original_filepath.name.replace(f"_{tool_name}", "")
         original_filepath.rename(Path(original_filepath.parent, new_filename))
@@ -39,7 +40,6 @@ def rename_tool_files(tool_name, basedir):
 
 def main():
     """Entry point of the script."""
-
     # Get baked project location path
     project_path = Path(os.getcwd())
 

@@ -41,6 +41,7 @@ def test_bake_project_with_build_system(cookies, tool):
         ".github/workflows/ci_cd.yml",
         ".gitignore",
         ".flake8",
+        ".pre-commit-config.yaml",
         "LICENSE",
         "README.rst",
         "pyproject.toml",
