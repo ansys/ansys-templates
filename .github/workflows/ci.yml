@@ -65,7 +65,7 @@ jobs:
       
       - name: Configure act for Windows OS 
         if: ${{ matrix.os }} == windows-latest
-        uses: crazy-max/ghaction-chocolatey@v1
+        #uses: crazy-max/ghaction-chocolatey@v1
         run: |
           choco install act-cli
           echo "-P ubuntu-latest=ghcr.io/catthehacker/ubuntu:act-latest" >> ./.actrc
