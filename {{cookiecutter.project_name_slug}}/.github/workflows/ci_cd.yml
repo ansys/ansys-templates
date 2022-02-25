@@ -25,7 +25,7 @@ jobs:
         run: tox -e style
 
 
-  test:
+  tests:
     name: Tests and coverage
     runs-on: {{ '${{ matrix.os }}' }}
     strategy:

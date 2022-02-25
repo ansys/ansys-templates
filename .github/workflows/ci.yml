@@ -25,7 +25,7 @@ jobs:
         run: tox -e style
 
 
-  test:
+  tests:
     name: Test baked project
     runs-on: ${{ matrix.os }}
     strategy:
@@ -49,14 +49,35 @@ jobs:
       - name: Test with tox-gh-actions
         run: tox
 
+      - name: Install dependencies for testing baked project
+        run: |
+
+      - name: Install and configure act for Linux-based OS
+        if: ${{ matrix.os }} == ubuntu-latest
+        run: |
+          sudo apt-get install build-essential gcc
+          /bin/bash -c "$(curl -fsSL https://raw.githubusercontent.com/Homebrew/install/HEAD/install.sh)"
+          test -d ~/.linuxbrew && eval "$(~/.linuxbrew/bin/brew shellenv)"
+          test -d /home/linuxbrew/.linuxbrew && eval "$(/home/linuxbrew/.linuxbrew/bin/brew shellenv)"
+          test -r ~/.bash_profile && echo "eval \"\$($(brew --prefix)/bin/brew shellenv)\"" >> ~/.bash_profile
+          brew install act
+          echo "-P ubuntu-latest=ghcr.io/catthehacker/ubuntu:act-latest" >> ~/.actrc
+      
+      - name: Configure act for Windows OS 
+        if: ${{ matrix.os }} == windows-latest
+        uses: crazy-max/ghaction-chocolatey@v1
+        run: |
+          choco install act-cli
+          echo "-P ubuntu-latest=ghcr.io/catthehacker/ubuntu:act-latest" >> ./.actrc
+
       - name: Test flit baked project
         if: matrix.build-system == 'flit'
         run: |
           cd output/test_bake_project_with_build_s0/cookies/bake00/pyproduct-library
-          tox
+          act -j tests
 
       - name: Test poetry baked project
         if: matrix.build-system == 'poetry'
         run: |
           cd output/test_bake_project_with_build_s1/cookies/bake00/pyproduct-library
-          tox
+          act -j tests
