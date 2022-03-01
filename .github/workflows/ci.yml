@@ -67,6 +67,7 @@ jobs:
           cd output/test_bake_project_with_build_s0/cookies/bake00/pyproduct-library
           git clone https://github.com/actions/setup-python
           act -j tests
+          rm -rf ~/.cache/act/
 
       - name: Test poetry baked project
         if: matrix.os == 'ubuntu-latest' && matrix.build-system == 'poetry'
@@ -74,3 +75,4 @@ jobs:
           cd output/test_bake_project_with_build_s1/cookies/bake00/pyproduct-library
           git clone https://github.com/actions/setup-python
           act -j tests
+          rm -rf ~/.cache/act/
