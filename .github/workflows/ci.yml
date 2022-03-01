@@ -60,15 +60,15 @@ jobs:
           brew install act
           echo "-P ubuntu-latest=ghcr.io/catthehacker/ubuntu:act-latest" >> ~/.actrc
 
-      - name: Install chocolate pkg manager for Windows
+      - name: Install act for Windows OS
         if: matrix.os == 'windows-latest'
         uses: crazy-max/ghaction-chocolatey@v1
+        with:
+          args: install act-cli
       
       - name: Configure act for Windows OS 
         if: matrix.os == 'windows-latest'
-        run: |
-          choco install act-cli
-          echo "-P ubuntu-latest=ghcr.io/catthehacker/ubuntu:act-latest" >> ./.actrc
+        run: echo "-P ubuntu-latest=ghcr.io/catthehacker/ubuntu:act-latest" >> ./.actrc
 
       - name: Test flit baked project
         if: matrix.build-system == 'flit'
