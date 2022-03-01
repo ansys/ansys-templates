@@ -44,6 +44,9 @@ def test_bake_project_with_build_system(cookies, tool):
         ".pre-commit-config.yaml",
         "LICENSE",
         "README.rst",
+        "requirements/requirements_tests.txt",
+        "requirements/requirements_docs.txt",
+        "requirements/requirements_build.txt",
         "pyproject.toml",
         "tox.ini",
     ]
@@ -52,6 +55,7 @@ def test_bake_project_with_build_system(cookies, tool):
         ".github",
         ".github/workflows",
         "docs",
+        "requirements",
         "src",
         "src/ansys/" + PRODUCT_NAME_SLUG,
         "src/ansys/" + PRODUCT_NAME_SLUG + "/" + LIBRARY_NAME_SLUG,
