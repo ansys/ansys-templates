@@ -49,11 +49,8 @@ jobs:
       - name: Test with tox-gh-actions
         run: tox
 
-      - name: Install dependencies for testing baked project
-        run: |
-
       - name: Install and configure act for Linux-based OS
-        if: ${{ matrix.os }} == ubuntu-latest
+        if: matrix.os == 'ubuntu-latest'
         run: |
           sudo apt-get install build-essential gcc
           /bin/bash -c "$(curl -fsSL https://raw.githubusercontent.com/Homebrew/install/HEAD/install.sh)"
@@ -62,10 +59,13 @@ jobs:
           test -r ~/.bash_profile && echo "eval \"\$($(brew --prefix)/bin/brew shellenv)\"" >> ~/.bash_profile
           brew install act
           echo "-P ubuntu-latest=ghcr.io/catthehacker/ubuntu:act-latest" >> ~/.actrc
+
+      - name: Install chocolate pkg manager for Windows
+        if: matrix.os == 'windows-latest'
+        uses: crazy-max/ghaction-chocolatey@v1
       
       - name: Configure act for Windows OS 
-        if: ${{ matrix.os }} == windows-latest
-        #uses: crazy-max/ghaction-chocolatey@v1
+        if: matrix.os == 'windows-latest'
         run: |
           choco install act-cli
           echo "-P ubuntu-latest=ghcr.io/catthehacker/ubuntu:act-latest" >> ./.actrc
