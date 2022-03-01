@@ -13,7 +13,7 @@ REQUIRES_PYTHON = "3.7"
 MAX_LINELENGTH = "100"
 
 
-@pytest.mark.parametrize("tool", ["flit", "poetry"])
+@pytest.mark.parametrize("tool", ["flit", "poetry", "setuptools"])
 def test_bake_project_with_build_system(cookies, tool):
     result = cookies.bake(
         extra_context={

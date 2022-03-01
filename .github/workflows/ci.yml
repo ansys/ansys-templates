@@ -32,7 +32,7 @@ jobs:
       matrix:
         os: [windows-latest, ubuntu-latest]
         python-version: ["3.7", "3.8", "3.9", "3.10"]
-        build-system: ["flit", "poetry"]
+        build-system: ["flit", "poetry", "setuptools"]
       fail-fast: false
 
     steps:
@@ -73,6 +73,14 @@ jobs:
         if: matrix.os == 'ubuntu-latest' && matrix.build-system == 'poetry'
         run: |
           cd output/test_bake_project_with_build_s1/cookies/bake00/pyproduct-library
+          # Only checks for workflow syntax without actually running the jobs
+          act --dryrun
+          tox
+
+      - name: Test setuptools baked project
+        if: matrix.os == 'ubuntu-latest' && matrix.build-system == 'setuptools'
+        run: |
+          cd output/test_bake_project_with_build_s2/cookies/bake00/pyproduct-library
           # Only checks for workflow syntax without actually running the jobs
           act --dryrun
           tox

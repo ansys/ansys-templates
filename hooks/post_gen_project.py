@@ -2,7 +2,7 @@
 import os
 from pathlib import Path
 
-ALLOWED_BUILD_SYSTEMS = ["flit", "poetry"]
+ALLOWED_BUILD_SYSTEMS = ["flit", "poetry", "setuptools"]
 """A list of all allowed build systems by the template."""
 
 
