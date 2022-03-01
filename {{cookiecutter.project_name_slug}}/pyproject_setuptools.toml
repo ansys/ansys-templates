@@ -4,29 +4,27 @@ build-backend = "setuptools.build_meta"
 
 [metadata]
 # Check https://setuptools.pypa.io/en/latest/userguide/declarative_config.html#declarative-config
-name = {{ cookiecutter.pkg_name }}
-version = attr: {{ cookiecutter.version }}
-download_url = {{ cookiecutter.repository_url }}
-description = {{ cookiecutter.short_description }}
-readme = file: README.rst
-license = file: = LICENSE
-requires-python = ">={{ cookiecutter.requires_python }}"
-author = Ansys, Inc.
-author_email = pyansys.support@ansys.com
-maintainer = PyAnsys developers
-maintainer_email = pyansys.support@ansys.com
+name = "{{ cookiecutter.pkg_name }}"
+version = "attr: {{ cookiecutter.version }}"
+download_url = "{{ cookiecutter.repository_url }}"
+description = "{{ cookiecutter.short_description }}"
+readme = "file: README.rst"
+license = "file: = LICENSE"
+author = "Ansys, Inc."
+author_email = "pyansys.support@ansys.com"
+maintainer = "PyAnsys developers"
+maintainer_email = "pyansys.support@ansys.com"
 classifiers = [
-    Development Status :: 4 - Beta,
-    Programming Language :: Python :: 3,
-    License :: OSI Approved :: MIT License,
-    Operating System :: OS Independent,
+    "Development Status :: 4 - Beta",
+    "Programming Language :: Python :: 3",
+    "License :: OSI Approved :: MIT License",
+    "Operating System :: OS Independent",
 ]
 
 [options]
-packages = include: ansys, from: src
 install_requires = [
-    importlib-metadata >=4.0,
+    "importlib-metadata >=4.0",
 ]
-
-[tool.flit.module]
-name = ansys.{{ cookiecutter.product_name_slug }}.{{cookiecutter.library_name_slug }}
+python_requires = ">={{ cookiecutter.requires_python }}"
+packages = "include: ansys"
+namespace_packages = ["ansys.{{ cookiecutter.product_name_slug }}.{{cookiecutter.library_name_slug }}"]

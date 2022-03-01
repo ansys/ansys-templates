@@ -65,22 +65,19 @@ jobs:
         if: matrix.os == 'ubuntu-latest' && matrix.build-system == 'flit'
         run: |
           cd output/test_bake_project_with_build_s0/cookies/bake00/pyproduct-library
-          # Only checks for workflow syntax without actually running the jobs
-          act --dryrun
-          tox
+          # Only filter out errors from tox command
+          act -j tests docs > act_output.log  || true > act_output.log; grep -c ERROR act_output.log && cat act_output.log
 
       - name: Test poetry baked project
         if: matrix.os == 'ubuntu-latest' && matrix.build-system == 'poetry'
         run: |
           cd output/test_bake_project_with_build_s1/cookies/bake00/pyproduct-library
-          # Only checks for workflow syntax without actually running the jobs
-          act --dryrun
-          tox
+          # Only filter out errors from tox command
+          act -j tests docs > act_output.log  || true > act_output.log; grep -c ERROR act_output.log && cat act_output.log
 
       - name: Test setuptools baked project
         if: matrix.os == 'ubuntu-latest' && matrix.build-system == 'setuptools'
         run: |
           cd output/test_bake_project_with_build_s2/cookies/bake00/pyproduct-library
-          # Only checks for workflow syntax without actually running the jobs
-          act --dryrun
-          tox
+          # Only filter out errors from tox command
+          act -j tests docs > act_output.log  || true > act_output.log; grep -c ERROR act_output.log && cat act_output.log
