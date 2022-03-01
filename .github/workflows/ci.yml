@@ -49,6 +49,7 @@ jobs:
       - name: Test with tox-gh-actions
         run: tox
 
+        # Baked project actions are tested only for Linux-base OS
       - name: Install and configure act for Linux-based OS
         if: matrix.os == 'ubuntu-latest'
         run: |
@@ -60,24 +61,14 @@ jobs:
           brew install act
           echo "-P ubuntu-latest=ghcr.io/catthehacker/ubuntu:act-latest" >> ~/.actrc
 
-      - name: Install act for Windows OS
-        if: matrix.os == 'windows-latest'
-        uses: crazy-max/ghaction-chocolatey@v1
-        with:
-          args: install act-cli
-      
-      - name: Configure act for Windows OS 
-        if: matrix.os == 'windows-latest'
-        run: echo "-P ubuntu-latest=ghcr.io/catthehacker/ubuntu:act-latest" >> ./.actrc
-
       - name: Test flit baked project
-        if: matrix.build-system == 'flit'
+        if: matrix.os == 'ubuntu-latest' && matrix.build-system == 'flit'
         run: |
           cd output/test_bake_project_with_build_s0/cookies/bake00/pyproduct-library
           act -j tests
 
       - name: Test poetry baked project
-        if: matrix.build-system == 'poetry'
+        if: matrix.os == 'ubuntu-latest' && matrix.build-system == 'poetry'
         run: |
           cd output/test_bake_project_with_build_s1/cookies/bake00/pyproduct-library
           act -j tests
