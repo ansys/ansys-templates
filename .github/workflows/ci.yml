@@ -65,10 +65,10 @@ jobs:
         if: matrix.os == 'ubuntu-latest' && matrix.build-system == 'flit'
         run: |
           cd output/test_bake_project_with_build_s0/cookies/bake00/pyproduct-library
-          act
+          act -j tests
 
       - name: Test poetry baked project
         if: matrix.os == 'ubuntu-latest' && matrix.build-system == 'poetry'
         run: |
           cd output/test_bake_project_with_build_s1/cookies/bake00/pyproduct-library
-          act
+          act -j tests
