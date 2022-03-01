@@ -65,14 +65,12 @@ jobs:
         if: matrix.os == 'ubuntu-latest' && matrix.build-system == 'flit'
         run: |
           cd output/test_bake_project_with_build_s0/cookies/bake00/pyproduct-library
-          git clone https://github.com/actions/setup-python
-          act -j tests
-          rm -rf ~/.cache/act/
+          # Only checks for workflow syntax without actually running the jobs
+          act --dryrun
 
       - name: Test poetry baked project
         if: matrix.os == 'ubuntu-latest' && matrix.build-system == 'poetry'
         run: |
           cd output/test_bake_project_with_build_s1/cookies/bake00/pyproduct-library
-          git clone https://github.com/actions/setup-python
-          act -j tests
-          rm -rf ~/.cache/act/
+          # Only checks for workflow syntax without actually running the jobs
+          act --dryrun
