@@ -66,11 +66,13 @@ jobs:
         run: |
           cd output/test_bake_project_with_build_s0/cookies/bake00/pyproduct-library
           # Only checks for workflow syntax without actually running the jobs
-          act --dryrun
+          act -j tests
+          ls /run/act
 
       - name: Test poetry baked project
         if: matrix.os == 'ubuntu-latest' && matrix.build-system == 'poetry'
         run: |
           cd output/test_bake_project_with_build_s1/cookies/bake00/pyproduct-library
           # Only checks for workflow syntax without actually running the jobs
-          act --dryrun
+          act -j tests
+          ls /run/act
