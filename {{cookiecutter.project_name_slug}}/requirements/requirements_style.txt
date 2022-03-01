@@ -1,4 +1,0 @@
-black>=21.1.0
-isort>=5.10.1
-flake8>=3.9
-pydocstyle>=6.1.1
