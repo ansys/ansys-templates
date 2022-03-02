@@ -32,7 +32,7 @@ jobs:
       matrix:
         os: [windows-latest, ubuntu-latest]
         python-version: ["3.7", "3.8", "3.9", "3.10"]
-        build-system: ["flit", "poetry", "setuptools"]
+        build-system: ["flit", "setuptools"]
       fail-fast: false
 
     steps:
