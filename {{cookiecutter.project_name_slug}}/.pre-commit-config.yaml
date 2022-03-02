@@ -13,6 +13,7 @@ repos:
     args: [
     "--profile", "black",
     "--force-sort-within-sections",
+    "--line-length", "{{ cookiecutter.max_linelength }}",
     "--section-default", "THIRDPARTY", "src", "tests"
     ]
 
