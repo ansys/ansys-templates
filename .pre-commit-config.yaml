@@ -14,7 +14,7 @@ repos:
     args: [
     "--profile", "black",
     "--force-sort-within-sections",
-    "--section-default", "THIRDPARTY", "src", "tests"
+    "--section-default", "THIRDPARTY", "hooks", "tests"
     ]
 
 - repo: https://gitlab.com/PyCQA/flake8
