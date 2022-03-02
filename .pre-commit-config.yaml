@@ -5,14 +5,17 @@ repos:
   hooks:
   - id: black
     exclude: "^({{cookiecutter.project_name_slug}}/)"
-    args: ["--check", "--diff", "tests", "hooks"]
+    args: ["tests", "hooks"]
 
-- repo: https://github.com/PyCQA/isort
+- repo: https://github.com/pycqa/isort
   rev: 5.10.1
   hooks:
   - id: isort
-    args: ["--check-only", "--diff", "--section-default", "THIRDPARTY", "tests", "hooks"]
-    exclude: "^({{cookiecutter.project_name_slug}}/)"
+    args: [
+    "--profile", "black",
+    "--force-sort-within-sections",
+    "--section-default", "THIRDPARTY", "src", "tests"
+    ]
 
 - repo: https://gitlab.com/PyCQA/flake8
   rev: 4.0.1

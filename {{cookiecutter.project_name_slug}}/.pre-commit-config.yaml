@@ -4,13 +4,17 @@ repos:
   rev: 22.1.0
   hooks:
   - id: black
-    args: ["--check", "--diff", "src", "tests"]
+    args: ["src", "tests"]
 
-- repo: https://github.com/PyCQA/isort
+- repo: https://github.com/pycqa/isort
   rev: 5.10.1
   hooks:
   - id: isort
-    args: ["--check-only", "--diff", "--section-default", "THIRDPARTY", "src", "tests"]
+    args: [
+    "--profile", "black",
+    "--force-sort-within-sections",
+    "--section-default", "THIRDPARTY", "src", "tests"
+    ]
 
 - repo: https://gitlab.com/PyCQA/flake8
   rev: 4.0.1
