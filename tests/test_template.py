@@ -47,7 +47,7 @@ def test_bake_project_with_build_system(cookies, tool):
         "requirements/requirements_tests.txt",
         "requirements/requirements_docs.txt",
         "requirements/requirements_build.txt",
-        "pyproject.toml",
+        "pyproject.toml" if tool != "setuptools" else "setup.py",
         "tox.ini",
     ]
 
