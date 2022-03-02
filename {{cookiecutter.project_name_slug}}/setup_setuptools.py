@@ -1,6 +1,6 @@
 """Installation file for ansys-mapdl-core"""
 
-from setuptools import setup, find_namespace_packages
+from setuptools import find_namespace_packages, setup
 
 setup(
     name="{{ cookiecutter.pkg_name }}",
@@ -18,6 +18,5 @@ setup(
     ],
     url="{{ cookiecutter.repository_url }}",
     python_requires=">={{ cookiecutter.requires_python }}",
-    install_requires="",
+    install_requires=["importlib-metadata >=4.0"],
 )
-

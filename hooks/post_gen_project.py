@@ -45,8 +45,9 @@ def main():
 
     # Get the desired build system
     build_system = "{{ cookiecutter.build_system }}"
-    if build_system == "setuptools":
-        raise UserWarning("Please, consider to update to pyproject.toml.")
+    # TODO: warn user if using setup.py
+    # if build_system == "setuptools":
+    #    raise Warning("Please, consider to update to pyproject.toml.")
 
     # Remove non-desired build system files
     for tool in ALLOWED_BUILD_SYSTEMS:
