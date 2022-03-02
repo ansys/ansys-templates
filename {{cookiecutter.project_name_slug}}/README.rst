@@ -21,19 +21,19 @@ have the required build system tool. To do so, run:
 
 Then, you can simply execute:
 
-{% if cookiecutter.build_system in ["flit", "setuptools"] %}
+{% if cookiecutter.build_system in ["flit", "setuptools"] -%}
 
 .. code:: bash
 
     python -m pip install {{ cookiecutter.pkg_name }}
 
-{% elif cookiecutter.build_system == "poetry" %}
+{% elif cookiecutter.build_system == "poetry" -%}
 
 .. code:: bash
 
     poetry run python -m pip install {{ cookiecutter.pkg_name }}
     
-{% endif %}
+{% endif -%}
 
 
 For developers
@@ -65,19 +65,19 @@ need to follow these steps:
 
 4. Install the project in editable mode:
 
-    {% if cookiecutter.build_system in ["flit", "setuptools"] %}
+    {% if cookiecutter.build_system in ["flit", "setuptools"] -%}
     
     .. code:: bash
     
         python -m pip install --editable {{ cookiecutter.pkg_name }}
     
-    {% elif cookiecutter.build_system == "poetry" %}
+    {% elif cookiecutter.build_system == "poetry" -%}
     
     .. code:: bash
     
         poetry run python -m pip install {{ cookiecutter.pkg_name }}
         
-    {% endif %}
+    {% endif -%}
 
 5. Finally, verify your development installation by running:
 
@@ -141,6 +141,36 @@ However, the recommended way of checking documentation integrity is using:
 .. code:: bash
 
     tox -e doc && your_browser_name .tox/doc_out/html/index.html
+
+
+Distributing
+------------
+
+If you would like to create either source or wheel files, start by installing
+the building requirements:
+
+.. code:: bash
+
+    python -m pip install -r requirements/requirements_build.txt
+
+Then, you can execute:
+
+{% if cookiecutter.build_system in ["flit", "poetry"] -%}
+
+    .. code:: bash
+
+        {{ cookiecutter.build_system }} build
+        python -m twine check dist/*
+
+{% elif cookiecutter.build_system == "setuptools" -%}
+
+    .. code:: bash
+
+        python -m pip install -r requirements/requirements_build.txt
+        python -m build
+        python -m twine check dist/*
+
+{% endif -%}
 
 
 .. LINKS AND REFERENCES
