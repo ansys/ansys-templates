@@ -5,7 +5,7 @@
   "library_name_slug": "{{ cookiecutter.library_name | lower | slugify }}",
   "project_name_slug": "py{{ cookiecutter.product_name_slug }}-{{ cookiecutter.library_name_slug }}",
   "pkg_name": "ansys-{{ cookiecutter.product_name_slug }}-{{ cookiecutter.library_name_slug }}",
-  "version": "0.1.0",
+  "version": "0.1.dev0",
   "short_description": "A Python wrapper for Ansys {{ cookiecutter.product_name }} {{ cookiecutter.library_name }}",
   "repository_url": "https://github.com/pyansys/{{ cookiecutter.project_name_slug }}",
   "requires_python": ["3.7", "3.8", "3.9", "3.10"],
