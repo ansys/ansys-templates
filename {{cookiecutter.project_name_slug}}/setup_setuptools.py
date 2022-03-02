@@ -1,10 +1,10 @@
-"""Installation file for ansys-mapdl-core"""
+"""Installation file for ansys-mapdl-core."""
 
 from setuptools import find_namespace_packages, setup
 
 setup(
     name="{{ cookiecutter.pkg_name }}",
-    packages=find_namespace_packages(include="ansys"),
+    packages=find_namespace_packages(where="src", include="ansys*"),
     package_dir={"": "src"},
     version="{{ cookiecutter.version }}",
     description="{{ cookiecutter.short_description }}",
