@@ -1,5 +1,5 @@
 """
-{{ cookiecutter.product_name }}
+{{ cookiecutter.product_name }}.
 
 {{ cookiecutter.library_name }}
 """
