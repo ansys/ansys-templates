@@ -1,9 +1,8 @@
 """Sphinx documentation configuration file."""
 from datetime import datetime
 
+from ansys.{{cookiecutter.product_name_slug}}.{{cookiecutter.library_name_slug}} import __version__
 from pyansys_sphinx_theme import pyansys_logo_black
-
-from ansys.{{ cookiecutter.product_name_slug }}.{{ cookiecutter.library_name_slug }} import __version__
 
 # Project information
 project = "{{ cookiecutter.pkg_name }}"
