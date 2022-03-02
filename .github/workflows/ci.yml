@@ -67,7 +67,8 @@ jobs:
           cd output/test_bake_project_with_build_s0/cookies/bake00/pyproduct-library && git init
           # TODO: Only filter out errors from tox command
           # act -j tests docs > act_output.log  || true > act_output.log; grep -c ERROR act_output.log && cat act_output.log
-          tox -e style tests docs build
+          tox
+          tox -e style,docs,build
 
       - name: Test poetry baked project
         if: matrix.os == 'ubuntu-latest' && matrix.build-system == 'poetry'
@@ -75,7 +76,8 @@ jobs:
           cd output/test_bake_project_with_build_s1/cookies/bake00/pyproduct-library && git init
           # TODO: Only filter out errors from tox command
           # act -j tests docs > act_output.log  || true > act_output.log; grep -c ERROR act_output.log && cat act_output.log
-          tox -e style tests docs build
+          tox
+          tox -e style,docs,build
 
       - name: Test setuptools baked project
         if: matrix.os == 'ubuntu-latest' && matrix.build-system == 'setuptools'
@@ -83,4 +85,5 @@ jobs:
           cd output/test_bake_project_with_build_s2/cookies/bake00/pyproduct-library && git init
           # TODO: Only filter out errors from tox command
           # act -j tests docs > act_output.log  || true > act_output.log; grep -c ERROR act_output.log && cat act_output.log
-          tox -e style tests docs build
+          tox
+          tox -e style,docs,build
