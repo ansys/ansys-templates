@@ -7,7 +7,7 @@ from pyansys_sphinx_theme import pyansys_logo_black
 # Project information
 project = "{{ cookiecutter.pkg_name }}"
 copyright = f"(c) {datetime.now().year} ANSYS, Inc. All rights reserved"
-author = "Ansys Inc."
+author = "ANSYS, Inc."
 release = version = __version__
 
 # use the default pyansys logo

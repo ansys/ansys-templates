@@ -2,6 +2,8 @@
 import os
 from pathlib import Path
 
+import isort
+
 ALLOWED_BUILD_SYSTEMS = ["flit", "poetry", "setuptools"]
 """A list of all allowed build systems by the template."""
 
@@ -56,6 +58,17 @@ def main():
 
     # Rename any files including tool name suffix
     rename_tool_files(build_system, project_path)
+
+    # Apply isort with desired config
+    isort_config = isort.settings.Config(
+        line_length=100,
+        profile="black",
+    )
+    filepaths_list = [
+        project_path / "doc/source/conf.py",
+    ]
+    for filepath in filepaths_list:
+        isort.api.sort_file(filepath, isort_config)
 
 
 if __name__ == "__main__":
