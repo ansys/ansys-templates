@@ -1,0 +1,113 @@
+name: GitHub CI
+on:
+  pull_request:
+  push:
+    tags:
+      - "*"
+    branches:
+      - main
+
+jobs:
+
+  style:
+    name: Code style
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v2
+      - name: Set up Python
+        uses: actions/setup-python@v2
+        with:
+          python-version: 3.7
+      - name: Install dependencies
+        run: |
+          python -m pip install --upgrade pip tox
+      - name: Test with tox
+        run: tox -e style
+
+
+  tests:
+    name: Test baked project
+    runs-on: ${{ matrix.os }}
+    strategy:
+      matrix:
+        os: [windows-latest, ubuntu-latest]
+        python-version: ["3.7", "3.8", "3.9", "3.10"]
+        build-system: ["flit", "setuptools"]
+      fail-fast: false
+
+    steps:
+      - uses: actions/checkout@v2
+      - name: Set up Python ${{ matrix.python-version }}
+        uses: actions/setup-python@v2
+        with:
+          python-version: ${{ matrix.python-version }}
+
+      - name: Install dependencies
+        run: python -m pip install --upgrade pip ${{ matrix.build-system }} tox tox-gh-actions
+
+        # Runs only the tox environment specified in tox.ini [gh-actions]
+      - name: Test with tox-gh-actions
+        run: tox
+
+        # Baked project actions are tested only for Linux-base OS
+      - name: Install and configure act for Linux-based OS
+        if: matrix.os == 'ubuntu-latest'
+        run: |
+          sudo apt-get install build-essential gcc
+          /bin/bash -c "$(curl -fsSL https://raw.githubusercontent.com/Homebrew/install/HEAD/install.sh)"
+          test -d ~/.linuxbrew && eval "$(~/.linuxbrew/bin/brew shellenv)"
+          test -d /home/linuxbrew/.linuxbrew && eval "$(/home/linuxbrew/.linuxbrew/bin/brew shellenv)"
+          test -r ~/.bash_profile && echo "eval \"\$($(brew --prefix)/bin/brew shellenv)\"" >> ~/.bash_profile
+          brew install act
+          echo "-P ubuntu-latest=ghcr.io/catthehacker/ubuntu:act-latest" >> ~/.actrc
+
+      - name: Test flit baked project
+        if: matrix.os == 'ubuntu-latest' && matrix.build-system == 'flit'
+        run: |
+          # Change to baked project directory
+          cd output/test_bake_project_with_build_s0/cookies/bake00/pyproduct-library
+          # Initialize it as git repository (pre-commit needs it)
+          git config --global user.email "you@example.com"
+          git config --global user.name "Your Name"
+          git init && git add . && git commit -m "Init Python package"
+          # TODO: Only filter out errors from tox command
+          # act -j tests docs > act_output.log  || true > act_output.log; grep -c ERROR act_output.log && cat act_output.log
+          tox
+          # Check package builds properly
+          python -m pip install -r requirements/requirements_build.txt
+          flit build
+          python -m twine check dist/*
+
+      - name: Test poetry baked project
+        if: matrix.os == 'ubuntu-latest' && matrix.build-system == 'poetry'
+        run: |
+          # Change to baked project directory
+          cd output/test_bake_project_with_build_s1/cookies/bake00/pyproduct-library
+          # Initialize it as git repository (pre-commit needs it)
+          git config --global user.email "you@example.com"
+          git config --global user.name "Your Name"
+          git init && git add . && git commit -m "Init Python package"
+          # TODO: Only filter out errors from tox command
+          # act -j tests docs > act_output.log  || true > act_output.log; grep -c ERROR act_output.log && cat act_output.log
+          tox
+          # Check package builds properly
+          poetry run python -m pip install -r requirements/requirements_build.txt
+          poetry build
+          poetry run python -m twine check dist/*
+
+      - name: Test setuptools baked project
+        if: matrix.os == 'ubuntu-latest' && matrix.build-system == 'setuptools'
+        run: |
+          # Change to baked project directory
+          cd output/test_bake_project_with_build_s2/cookies/bake00/pyproduct-library
+          # Initialize it as git repository (pre-commit needs it)
+          git config --global user.email "you@example.com"
+          git config --global user.name "Your Name"
+          git init && git add . && git commit -m "Init Python package"
+          # TODO: Only filter out errors from tox command
+          # act -j tests docs > act_output.log  || true > act_output.log; grep -c ERROR act_output.log && cat act_output.log
+          tox
+          # Check package builds properly
+          python -m pip install -r requirements/requirements_build.txt
+          python -m build
+          python -m twine check dist/*
