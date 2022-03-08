@@ -5,6 +5,7 @@ from cookiecutter.main import cookiecutter
 
 from ansys.templates.paths import PYPKG_TEMPLATE_PATH
 
+
 @click.group()
 def main():
     """An Ansys tool for creating Python projects."""

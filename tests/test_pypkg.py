@@ -1,5 +1,7 @@
 import pytest
 
+from ansys.templates.paths import PYPKG_TEMPLATE_PATH
+
 PRODUCT_NAME = "Product"
 PRODUCT_NAME_SLUG = PRODUCT_NAME.lower().replace(" ", "-").replace("_", "-")
 LIBRARY_NAME = "Library"
@@ -16,6 +18,7 @@ MAX_LINELENGTH = "100"
 @pytest.mark.parametrize("tool", ["flit", "poetry", "setuptools"])
 def test_bake_project_with_build_system(cookies, tool):
     result = cookies.bake(
+        template=str(PYPKG_TEMPLATE_PATH),
         extra_context={
             "product_name": PRODUCT_NAME,
             "product_name_slug": PRODUCT_NAME_SLUG,
