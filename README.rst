@@ -30,18 +30,18 @@ Previous command will ask you to introduce different data regarding your new
 Python project. Some of these are already pre-defined but you can always change
 their value:
 
-- **product_name**: the name of Ansys product (i.e. Product).
-- **product_name_slug**: product sanitized name (i.e. product).
-- **library_name**: the name of the product library (i.e. Library).
-- **library_name_slug**: library named sanitized (i.e. library).
-- **project_name_slug**: the project's directory name (i.e. pyproduct-library).
-- **pkg_name**: the name of the Python package/library (i.e. ansys-product-library).
-- **version**: the version of the package/library (i.e. 0.1.dev0).
+- **product_name**: the name of Ansys product (e.g. Product).
+- **product_name_slug**: product sanitized name (e.g. product).
+- **library_name**: the name of the product library (e.g. Library).
+- **library_name_slug**: library named sanitized (e.g. library).
+- **project_name_slug**: the project's directory name (e.g. pyproduct-library).
+- **pkg_name**: the name of the Python package/library (e.g. ansys-product-library).
+- **version**: the version of the package/library (e.g. 0.1.dev0).
 - **short_description**: a short description of the purpose/goal of the project.
 - **repository_url**: link to the repository where the source code will be hosted.
 - **requires_python**: choose the minimum required Python version among 3.7, 3.8, 3.9 or 3.10.
 - **build_system**: choose the build system among flit, poetry or setuptools.
-- **max_linelength**: maximum number of characters per line in the source code (i.e. 100).
+- **max_linelength**: maximum number of characters per line in the source code (e.g. 100).
 
 
 How to contribute
