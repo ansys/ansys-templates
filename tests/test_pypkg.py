@@ -32,7 +32,7 @@ def test_bake_project_with_build_system(cookies, tool):
             "requires_python": REQUIRES_PYTHON,
             "build_system": tool,
             "max_linelength": MAX_LINELENGTH,
-        }
+        },
     )
 
     assert result.exit_code == 0, result.exception

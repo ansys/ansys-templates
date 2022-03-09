@@ -11,10 +11,12 @@ def main():
     """An Ansys tool for creating Python projects."""
     pass
 
+
 @main.group()
 def new():
     """Create a new project from desired template."""
     pass
+
 
 @new.command()
 def pypkg():

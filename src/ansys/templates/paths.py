@@ -7,4 +7,3 @@ _PATHS_MODULE = Path(os.path.dirname(os.path.abspath(__file__)))
 
 PYPKG_TEMPLATE_PATH = _PATHS_MODULE / "pypkg"
 """Path to the Python Package template."""
-

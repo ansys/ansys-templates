@@ -4,8 +4,8 @@ repos:
   rev: 22.1.0
   hooks:
   - id: black
-    exclude: "^({{cookiecutter.project_name_slug}}/)"
-    args: ["tests", "hooks"]
+    exclude: "^src/"
+    args: ["src", "tests"]
 
 - repo: https://github.com/pycqa/isort
   rev: 5.10.1
@@ -22,8 +22,8 @@ repos:
   rev: 4.0.1
   hooks:
   - id: flake8
-    args: ["tests", "hooks"]
-    exclude: "^({{cookiecutter.project_name_slug}}/)"
+    args: ["src", "tests"]
+    exclude: "^(src/ansys/templates/pypkg/{{cookiecutter.project_name_slug}}/)"
 
 - repo: https://github.com/codespell-project/codespell
   rev: v2.1.0
@@ -35,5 +35,5 @@ repos:
   hooks:
   - id: pydocstyle
     additional_dependencies: [toml]
-    args: ["--match-dir='^(hooks)'"]
-    exclude: "^({{cookiecutter.project_name_slug}}/)|(tests/)"
+    args: ["--match-dir='^(src)'"]
+    exclude: "^(src/ansys/templates/pypkg/{{cookiecutter.project_name_slug}}/)|(tests/)"
