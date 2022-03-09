@@ -50,13 +50,14 @@ jobs:
           retention-days: 7
 
       - name: Deploy to gh-pages
+        if: github.event_name == 'push' && contains(github.ref, 'refs/tags')
         uses: JamesIves/github-pages-deploy-action@3.7.1
         with:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
           BRANCH: gh-pages
           FOLDER: .tox/doc_out/
           CLEAN: true
-          SINGLE-COMMIT: true
+          SINGLE_COMMIT: true
 
 
   tests:
