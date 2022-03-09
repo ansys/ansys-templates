@@ -28,7 +28,7 @@ Which returns:
      version  Display current version.
 
 
-Listing available templates
+Listing Available Templates
 ---------------------------
 
 You can list all available templates by running:
@@ -47,7 +47,7 @@ Which outputs:
    pypkg: Create a Python package template according to PyAnsys guidelines.
 
 
-Creating a new project
+Creating a New Project
 ----------------------
 
 You can create a new project using a given template by running ``ansys-templates
@@ -73,7 +73,7 @@ run:
 For further information about how to use this command.
 
 
-Checking current version
+Checking Current Version
 ------------------------
 
 For checking the your current installed version of ``ansys-templates`` simply run:
