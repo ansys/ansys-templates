@@ -1,3 +1,6 @@
+from pathlib import Path
+
+from cookiecutter.main import cookiecutter
 import pytest
 
 from ansys.templates.paths import PYPKG_TEMPLATE_PATH
@@ -16,9 +19,13 @@ MAX_LINELENGTH = "100"
 
 
 @pytest.mark.parametrize("tool", ["flit", "poetry", "setuptools"])
-def test_bake_project_with_build_system(cookies, tool):
-    result = cookies.bake(
+def test_bake_project_with_build_system(tmpdir, tool):
+
+    # Bake the project in desired output directory
+    cookiecutter(
         template=str(PYPKG_TEMPLATE_PATH),
+        output_dir=str(tmpdir),
+        no_input=True,
         extra_context={
             "product_name": PRODUCT_NAME,
             "__product_name_slug": PRODUCT_NAME_SLUG,
@@ -34,11 +41,6 @@ def test_bake_project_with_build_system(cookies, tool):
             "max_linelength": MAX_LINELENGTH,
         },
     )
-
-    assert result.exit_code == 0, result.exception
-    assert result.exception is None
-    assert result.project_path.name == PROJECT_NAME_SLUG
-    assert result.project_path.is_dir()
 
     files = [
         ".github/workflows/ci_cd.yml",
@@ -66,7 +68,8 @@ def test_bake_project_with_build_system(cookies, tool):
         "tests",
     ]
 
-    for path in files:
-        assert (result.project_path / path).is_file()
-    for path in dirs:
-        assert (result.project_path / path).is_dir()
+    for filepath in files:
+        assert (Path(tmpdir) / PROJECT_NAME_SLUG / filepath).is_file()
+
+    for dirpath in dirs:
+        assert (Path(tmpdir) / PROJECT_NAME_SLUG / dirpath).is_dir()
