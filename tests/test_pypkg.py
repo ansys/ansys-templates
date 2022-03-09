@@ -21,7 +21,7 @@ MAX_LINELENGTH = "100"
 @pytest.mark.parametrize("tool", ["flit", "poetry", "setuptools"])
 def test_bake_project_with_build_system(tmpdir, tool):
 
-    # Bake the project in desired output directory
+    # Bake the project in the desired output directory
     cookiecutter(
         template=str(PYPKG_TEMPLATE_PATH),
         output_dir=str(tmpdir),
@@ -42,25 +42,64 @@ def test_bake_project_with_build_system(tmpdir, tool):
         },
     )
 
-    files = [
-        ".github/workflows/ci_cd.yml",
-        ".gitignore",
+    doc_files = [
+        "doc/make.bat",
+        "doc/Makefile",
+        "doc/source/conf.py",
+        "doc/source/index.rst",
+        "doc/source/_static/README.md",
+        "doc/source/_templates/README.md",
+        "doc/source/_templates/sidebar-nav-bs.html",
+    ]
+
+    dot_files = [
         ".flake8",
+        ".gitignore",
         ".pre-commit-config.yaml",
-        "LICENSE",
-        "README.rst",
+    ]
+
+    github_files = [
+        ".github/workflows/ci_cd.yml",
+    ]
+
+    requirements_files = [
         "requirements/requirements_tests.txt",
         "requirements/requirements_doc.txt",
         "requirements/requirements_build.txt",
+    ]
+
+    src_files = [
+        f"src/ansys/{PRODUCT_NAME_SLUG}/{LIBRARY_NAME_SLUG}/__init__.py",
+    ]
+
+    tests_files = [
+        "tests/test_metadata.py",
+    ]
+
+    basedir_files = [
+        "LICENSE",
+        "README.rst",
         "pyproject.toml" if tool != "setuptools" else "setup.py",
         "tox.ini",
     ]
 
-    dirs = [
+    all_files = (
+        basedir_files
+        + src_files
+        + doc_files
+        + tests_files
+        + requirements_files
+        + dot_files
+        + github_files
+    )
+
+    all_dirs = [
         ".github",
         ".github/workflows",
         "doc",
         "doc/source",
+        "doc/source/_static",
+        "doc/source/_templates",
         "requirements",
         "src",
         "src/ansys/" + PRODUCT_NAME_SLUG,
@@ -68,8 +107,8 @@ def test_bake_project_with_build_system(tmpdir, tool):
         "tests",
     ]
 
-    for filepath in files:
-        assert (Path(tmpdir) / PROJECT_NAME_SLUG / filepath).is_file()
+    for filename in all_files:
+        assert (Path(tmpdir) / PROJECT_NAME_SLUG / filename).is_file()
 
-    for dirpath in dirs:
-        assert (Path(tmpdir) / PROJECT_NAME_SLUG / dirpath).is_dir()
+    for dirname in all_dirs:
+        assert (Path(tmpdir) / PROJECT_NAME_SLUG / dirname).is_dir()
