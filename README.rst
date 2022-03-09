@@ -1,19 +1,19 @@
-PyAnsys library as cookiecutter template
-========================================
+PyAnsys Templates
+=================
 
-This repository holds a `cookiecutter`_ template for
-creating a Python library. The process is fully interactive and the rendered
-project is compliant with the `PyAnsys Developer's guide`_.
+This repository holds a tool for creating new PyAnsys related projects. The
+process is fully interactive and the rendered project is compliant with the
+`PyAnsys Developer's guide`_.
 
 
 Requirements
 ------------
 
-Before creating your library, you will need to install `cookiecutter`_ via:
+You need to install `pyansys-templates` tool by running:
 
 .. code:: bash
 
-    python -m pip install cookiecutter
+    python -m pip install git+https://github.com/pyansys/pyansys-template
 
 
 How to use
@@ -24,7 +24,7 @@ calling this template using:
 
 .. code:: bash
 
-    cookiecutter gh:pyansys/pyansys-template
+
 
 Previous command will ask you to introduce different data regarding your new
 Python project. Some of these are already pre-defined but you can always change

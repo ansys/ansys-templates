@@ -1,13 +1,13 @@
 {
   "product_name": "product",
-  "product_name_slug": "{{ cookiecutter.product_name | lower | slugify }}",
+  "__product_name_slug": "{{ cookiecutter.product_name | lower | slugify }}",
   "library_name": "library",
-  "library_name_slug": "{{ cookiecutter.library_name | lower | slugify }}",
-  "project_name_slug": "py{{ cookiecutter.product_name_slug }}-{{ cookiecutter.library_name_slug }}",
-  "pkg_name": "ansys-{{ cookiecutter.product_name_slug }}-{{ cookiecutter.library_name_slug }}",
+  "__library_name_slug": "{{ cookiecutter.library_name | lower | slugify }}",
+  "__project_name_slug": "py{{ cookiecutter.__product_name_slug }}-{{ cookiecutter.__library_name_slug }}",
+  "__pkg_name": "ansys-{{ cookiecutter.__product_name_slug }}-{{ cookiecutter.__library_name_slug }}",
   "version": "0.1.dev0",
   "short_description": "A Python wrapper for Ansys {{ cookiecutter.product_name }} {{ cookiecutter.library_name }}",
-  "repository_url": "https://github.com/pyansys/{{ cookiecutter.project_name_slug }}",
+  "repository_url": "https://github.com/pyansys/{{ cookiecutter.__project_name_slug }}",
   "requires_python": ["3.7", "3.8", "3.9", "3.10"],
   "build_system": ["flit", "poetry", "setuptools"],
   "max_linelength": "100"

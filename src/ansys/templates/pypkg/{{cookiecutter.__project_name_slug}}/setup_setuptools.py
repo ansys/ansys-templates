@@ -3,7 +3,7 @@
 from setuptools import find_namespace_packages, setup
 
 setup(
-    name="{{ cookiecutter.pkg_name }}",
+    name="{{ cookiecutter.__pkg_name }}",
     packages=find_namespace_packages(where="src", include="ansys*"),
     package_dir={"": "src"},
     version="{{ cookiecutter.version }}",

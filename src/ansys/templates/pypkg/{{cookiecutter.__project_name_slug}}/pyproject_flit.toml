@@ -4,7 +4,7 @@ build-backend = "flit_core.buildapi"
 
 [project]
 # Check https://flit.readthedocs.io/en/latest/pyproject_toml.html for all available sections
-name = "{{ cookiecutter.pkg_name }}"
+name = "{{ cookiecutter.__pkg_name }}"
 version = "{{ cookiecutter.version }}"
 description = "{{ cookiecutter.short_description }}"
 readme = "README.rst"
@@ -28,7 +28,7 @@ dependencies = [
 ]
 
 [tool.flit.module]
-name = "ansys.{{ cookiecutter.product_name_slug }}.{{cookiecutter.library_name_slug }}"
+name = "ansys.{{ cookiecutter.__product_name_slug }}.{{cookiecutter.__library_name_slug }}"
 
 [project.urls]
 Source = "{{ cookiecutter.repository_url }}"
