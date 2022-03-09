@@ -24,7 +24,8 @@ classifiers = [
 ]
 dependencies = [
     "importlib-metadata >=4.0",
-    "click>=8.0.4",
+    "click>=7.0,<8.0.0",
+    "cookiecutter @ git+git://github.com/cookiecutter/cookiecutter.git@2.0.2",
     "isort>=5.10.1",
 ]
 
