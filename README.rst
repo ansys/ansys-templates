@@ -12,3 +12,7 @@ Main advantages of using this tool are:
 - Generated projects are compliant with `PyAnsys Developer's Guidelines`_.
 
 .. _PyAnsys Developer's Guidelines: https://dev.docs.pyansys.com/
+
+To use this tool, reference its documentation at `PyAnsys Template Documentation`_.
+
+.. _PyAnsys Template Documentation: https://templates.pyansys.com/ 
