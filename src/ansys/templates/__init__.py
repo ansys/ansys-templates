@@ -1,5 +1,5 @@
 """
-PyAnsys Templates
+PyAnsys Templates.
 
 A collection of interactive templates for building Python projects from scratch
 according to PyAnsys guidelines.
