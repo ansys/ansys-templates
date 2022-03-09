@@ -4,7 +4,7 @@ build-backend = "poetry.core.masonry.api"
 
 [tool.poetry]
 # Check https://python-poetry.org/docs/pyproject/ for all available sections
-name = "{{ cookiecutter.pkg_name }}"
+name = "{{ cookiecutter.__pkg_name }}"
 version = "{{ cookiecutter.version }}"
 description = "{{ cookiecutter.short_description }}"
 license = "MIT"

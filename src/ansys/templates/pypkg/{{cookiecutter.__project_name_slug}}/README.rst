@@ -1,5 +1,5 @@
 Py{{ cookiecutter.product_name }} {{ cookiecutter.library_name }}
-{{ '=' * (cookiecutter.project_name_slug | length) }}
+{{ '=' * (cookiecutter.__project_name_slug | length) }}
 
 {{ cookiecutter.short_description }}
 
@@ -25,13 +25,13 @@ Then, you can simply execute:
 
 .. code:: bash
 
-    python -m pip install {{ cookiecutter.pkg_name }}
+    python -m pip install {{ cookiecutter.__pkg_name }}
 
 {% elif cookiecutter.build_system == "poetry" -%}
 
 .. code:: bash
 
-    poetry run python -m pip install {{ cookiecutter.pkg_name }}
+    poetry run python -m pip install {{ cookiecutter.__pkg_name }}
     
 {% endif -%}
 
@@ -69,13 +69,13 @@ need to follow these steps:
     
     .. code:: bash
     
-        python -m pip install --editable {{ cookiecutter.pkg_name }}
+        python -m pip install --editable {{ cookiecutter.__pkg_name }}
     
     {% elif cookiecutter.build_system == "poetry" -%}
     
     .. code:: bash
     
-        poetry run python -m pip install {{ cookiecutter.pkg_name }}
+        poetry run python -m pip install {{ cookiecutter.__pkg_name }}
         
     {% endif -%}
 

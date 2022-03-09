@@ -3,12 +3,11 @@ requires = ["flit_core >=3.2,<4"]
 build-backend = "flit_core.buildapi"
 
 [project]
-# Check https://flit.readthedocs.io/en/latest/pyproject_toml.html for all available sections
-name = "{{ cookiecutter.pkg_name }}"
-version = "{{ cookiecutter.version }}"
-description = "{{ cookiecutter.short_description }}"
+name = "ansys-templates"
+version = "0.1.dev0"
+description = "Creates Python projects according to PyAnsys guidelines"
 readme = "README.rst"
-requires-python = ">={{ cookiecutter.requires_python }}"
+requires-python = ">=3.7"
 license = {file = "LICENSE"}
 authors = [
     {name = "ANSYS, Inc.", email = "pyansys.support@ansys.com"},
@@ -25,10 +24,19 @@ classifiers = [
 ]
 dependencies = [
     "importlib-metadata >=4.0",
+    "click>=7.0,<8.0.0",
+    "cookiecutter @ git+git://github.com/cookiecutter/cookiecutter.git@2.0.2",
+    "isort>=5.10.1",
 ]
 
 [tool.flit.module]
-name = "ansys.{{ cookiecutter.product_name_slug }}.{{cookiecutter.library_name_slug }}"
+name = "ansys.templates"
+
+[tool.flit.sdist]
+include = ["src/ansys/templates/pypkg/"]
+
+[project.scripts]
+ansys-templates = "ansys.templates.cli:main"
 
 [project.urls]
-Source = "{{ cookiecutter.repository_url }}"
+Source = "https://github.com/pyansys/pyansys-template"

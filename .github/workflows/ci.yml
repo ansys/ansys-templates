@@ -65,7 +65,7 @@ jobs:
         if: matrix.os == 'ubuntu-latest' && matrix.build-system == 'flit'
         run: |
           # Change to baked project directory
-          cd output/test_bake_project_with_build_s0/cookies/bake00/pyproduct-library
+          cd output/test_bake_project_with_build_s0/pyproduct-library
           # Initialize it as git repository (pre-commit needs it)
           git config --global user.email "you@example.com"
           git config --global user.name "Your Name"
@@ -82,7 +82,7 @@ jobs:
         if: matrix.os == 'ubuntu-latest' && matrix.build-system == 'poetry'
         run: |
           # Change to baked project directory
-          cd output/test_bake_project_with_build_s1/cookies/bake00/pyproduct-library
+          cd output/test_bake_project_with_build_s1/pyproduct-library
           # Initialize it as git repository (pre-commit needs it)
           git config --global user.email "you@example.com"
           git config --global user.name "Your Name"
@@ -99,7 +99,7 @@ jobs:
         if: matrix.os == 'ubuntu-latest' && matrix.build-system == 'setuptools'
         run: |
           # Change to baked project directory
-          cd output/test_bake_project_with_build_s2/cookies/bake00/pyproduct-library
+          cd output/test_bake_project_with_build_s2/pyproduct-library
           # Initialize it as git repository (pre-commit needs it)
           git config --global user.email "you@example.com"
           git config --global user.name "Your Name"
