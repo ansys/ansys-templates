@@ -4,13 +4,13 @@ repos:
   rev: 22.1.0
   hooks:
   - id: black
-    exclude: ^src/ansys/templates/
+    exclude: ^src/ansys/templates/pypkg/
 
 - repo: https://github.com/pycqa/isort
   rev: 5.10.1
   hooks:
   - id: isort
-    exclude: ^src/ansys/templates/
+    exclude: ^src/ansys/templates/pypkg/
     args: [
     "--profile", "black",
     "--force-sort-within-sections",
@@ -22,7 +22,7 @@ repos:
   rev: 4.0.1
   hooks:
   - id: flake8
-    exclude: ^src/ansys/templates/
+    exclude: ^src/ansys/templates/pypkg/
     args: [
       "tests",
     ]
@@ -37,4 +37,4 @@ repos:
   hooks:
   - id: pydocstyle
     additional_dependencies: [toml]
-    exclude: ^src/ansys/templates/|^tests
+    exclude: ^src/ansys/templates/pypkg/|^tests
