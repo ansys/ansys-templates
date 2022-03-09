@@ -24,6 +24,40 @@ jobs:
       - name: Test with tox
         run: tox -e style
 
+  docs:
+    name: Documentation
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v2
+
+      - name: Set up Python
+        uses: actions/setup-python@v2
+        with:
+          python-version: 3.7
+
+      - name: Install dependencies
+        run: |
+          python -m pip install --upgrade pip tox
+
+      - name: Build documentation
+        run: tox -e doc
+
+      - name: Upload Documentation
+        uses: actions/upload-artifact@v2.2.1
+        with:
+          name: Documentation
+          path: .tox/doc_out/
+          retention-days: 7
+
+      - name: Deploy to gh-pages
+        uses: JamesIves/github-pages-deploy-action@3.7.1
+        with:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+          BRANCH: gh-pages
+          FOLDER: .tox/doc_out/
+          CLEAN: true
+          SINGLE-COMMIT: true
+
 
   tests:
     name: Test baked project
