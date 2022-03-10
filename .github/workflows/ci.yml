@@ -68,6 +68,19 @@ jobs:
         os: [windows-latest, ubuntu-latest]
         python-version: ["3.7", "3.8", "3.9", "3.10"]
         build-system: ["flit", "setuptools"]
+        include:
+
+          # Only test baked projects in Linux-based distros
+          - os: ubuntu-latest
+            test_project: true
+
+          # Configure output baked project directory for each build system
+          - build-system: "flit"
+            outdir: output/test_bake_project_with_build_s0/pyproduct-library
+
+          - build-system: "setuptools"
+            outdir: output/test_bake_project_with_build_s2/pyproduct-library
+
       fail-fast: false
 
     steps:
@@ -86,7 +99,7 @@ jobs:
 
         # Baked project actions are tested only for Linux-base OS
       - name: Install and configure act for Linux-based OS
-        if: matrix.os == 'ubuntu-latest'
+        if: matrix.test_project == true
         run: |
           sudo apt-get install build-essential gcc
           /bin/bash -c "$(curl -fsSL https://raw.githubusercontent.com/Homebrew/install/HEAD/install.sh)"
@@ -96,45 +109,11 @@ jobs:
           brew install act
           echo "-P ubuntu-latest=ghcr.io/catthehacker/ubuntu:act-latest" >> ~/.actrc
 
-      - name: Test flit baked project
-        if: matrix.os == 'ubuntu-latest' && matrix.build-system == 'flit'
+      - name: Test ${{ matrix.build-system }} baked project
+        if: matrix.test_project == true
         run: |
           # Change to baked project directory
-          cd output/test_bake_project_with_build_s0/pyproduct-library
-          # Initialize it as git repository (pre-commit needs it)
-          git config --global user.email "you@example.com"
-          git config --global user.name "Your Name"
-          git init && git add . && git commit -m "Init Python package"
-          # TODO: Only filter out errors from tox command
-          # act -j tests docs > act_output.log  || true > act_output.log; grep -c ERROR act_output.log && cat act_output.log
-          tox
-          # Check package builds properly
-          python -m pip install -r requirements/requirements_build.txt
-          flit build
-          python -m twine check dist/*
-
-      - name: Test poetry baked project
-        if: matrix.os == 'ubuntu-latest' && matrix.build-system == 'poetry'
-        run: |
-          # Change to baked project directory
-          cd output/test_bake_project_with_build_s1/pyproduct-library
-          # Initialize it as git repository (pre-commit needs it)
-          git config --global user.email "you@example.com"
-          git config --global user.name "Your Name"
-          git init && git add . && git commit -m "Init Python package"
-          # TODO: Only filter out errors from tox command
-          # act -j tests docs > act_output.log  || true > act_output.log; grep -c ERROR act_output.log && cat act_output.log
-          tox
-          # Check package builds properly
-          poetry run python -m pip install -r requirements/requirements_build.txt
-          poetry build
-          poetry run python -m twine check dist/*
-
-      - name: Test setuptools baked project
-        if: matrix.os == 'ubuntu-latest' && matrix.build-system == 'setuptools'
-        run: |
-          # Change to baked project directory
-          cd output/test_bake_project_with_build_s2/pyproduct-library
+          cd ${{ matrix.outdir }}
           # Initialize it as git repository (pre-commit needs it)
           git config --global user.email "you@example.com"
           git config --global user.name "Your Name"
