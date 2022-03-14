@@ -18,4 +18,8 @@ def inherit_from_template(common_dirpath, project_dirpath):
     This function is intended to be used during the pre_gen_project.py hook.
 
     """
-    copytree(common_dirpath, project_dirpath, dirs_exist_ok=True)
+    copytree(
+        common_dirpath / "{{cookiecutter.__project_name_slug}}", 
+        project_dirpath, 
+        dirs_exist_ok=True
+    )
