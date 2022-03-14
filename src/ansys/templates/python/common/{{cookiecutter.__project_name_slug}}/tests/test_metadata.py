@@ -1,5 +1,5 @@
-from ansys.{{cookiecutter.__product_name_slug}} import {{ cookiecutter.__library_name_slug }}
+from {{cookiecutter.__pkg_namespace}} import __version__
 
 
 def test_pkg_version():
-    assert {{ cookiecutter.__library_name_slug }}.__version__ == "{{ cookiecutter.version }}"
+    assert __version__ == "{{ cookiecutter.__version }}"

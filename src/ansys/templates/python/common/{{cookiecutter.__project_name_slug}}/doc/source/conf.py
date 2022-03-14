@@ -1,7 +1,7 @@
 """Sphinx documentation configuration file."""
 from datetime import datetime
 
-from ansys.{{cookiecutter.__product_name_slug}}.{{cookiecutter.__library_name_slug}} import __version__
+from {{cookiecutter.__pkg_namespace}} import __version__
 from pyansys_sphinx_theme import pyansys_logo_black
 
 # Project information
@@ -16,7 +16,7 @@ html_theme = "pyansys_sphinx_theme"
 
 # specify the location of your github repo
 html_theme_options = {
-    "github_url": "{{ cookiecutter.repository_url }}",
+    "github_url": "{{ cookiecutter.__repository_url }}",
     "show_prev_next": False,
 }
 
