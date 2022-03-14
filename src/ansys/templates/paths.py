@@ -5,6 +5,9 @@ from pathlib import Path
 
 _PATHS_MODULE = Path(os.path.dirname(os.path.abspath(__file__)))
 
+LICENSES_TEMPLATES_PATH = _PATHS_MODULE / "licenses"
+"""Path to the software licenses templates."""
+
 PYTHON_TEMPLATES_PATH = _PATHS_MODULE / "python"
 """Path to the Python templates."""
 

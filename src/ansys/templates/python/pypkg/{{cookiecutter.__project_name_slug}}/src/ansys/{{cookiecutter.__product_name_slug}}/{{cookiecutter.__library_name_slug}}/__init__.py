@@ -1,3 +1,9 @@
+"""
+{{ cookiecutter.product_name }}.
+
+{{ cookiecutter.library_name }}
+"""
+
 try:
     import importlib.metadata as importlib_metadata
 except ModuleNotFoundError:
