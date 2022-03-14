@@ -6,9 +6,9 @@ import pytest
 from ansys.templates.paths import PYTHON_TEMPLATES_COMMON_PATH
 from ansys.templates.testing import assert_template_baking_process, assert_filepath_in_baked_project
 
-PROJECT_NAME_SLUG = "dummy-project"
+PROJECT_NAME_SLUG = "python-common"
 VERSION = "0.1.dev0"
-SHORT_DESCRIPTION = "A dummy project"
+SHORT_DESCRIPTION = "Python common project"
 PKG_NAME = f"{PROJECT_NAME_SLUG}"
 PKG_NAMESPACE = f"{PROJECT_NAME_SLUG.replace('-', '_')}"
 REQUIRES_PYTHON = "3.7"

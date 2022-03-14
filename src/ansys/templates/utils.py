@@ -41,5 +41,5 @@ def include_license(license_path, project_dirpath):
     This function is intended to be used during the pre_gen_project.py hook.
 
     """
-    copyfile(license_path, project_dirpath)
+    copyfile(license_path, project_dirpath + "/" + license_path.name)
 
