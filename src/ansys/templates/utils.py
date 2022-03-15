@@ -35,7 +35,7 @@ def _copytree(input_path, output_path):
 
         # Recursion is used in case a directory is found
         if os.path.isdir(source_path):
-            copytree(source_path, dest_path)
+            _copytree(source_path, dest_path)
         else:
           shutil.copy2(source_path, dest_path)
 
@@ -52,7 +52,7 @@ def _copy_common_template_files(common_path, project_path):
         Path to the baked project directory.
 
     """
-    copytree(
+    _copytree(
         common_path / "{{cookiecutter.__project_name_slug}}", 
         project_path / "{{cookiecutter.__project_name_slug}}", 
     )
@@ -70,7 +70,7 @@ def _copy_all_template_files(template_path, project_path):
         Path to the baked project directory.
 
     """
-    copytree(
+    _copytree(
         template_path, 
         project_path, 
     )
