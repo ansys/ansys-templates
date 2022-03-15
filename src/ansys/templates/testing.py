@@ -25,16 +25,29 @@ def assert_template_baking_process(template_path, output_path, cookiecutter_vars
         extra_context=cookiecutter_vars
     )
 
-def assert_filepath_in_baked_project(filepath, project_dirpath):
+def assert_file_in_baked_project(file, project_path):
     """
     Asserts if file is exists inside desired output path.
 
     Parameters
     ----------
-    filepath: ~pathlib.Path
+    file: str
         Expected file path relative to the output project path.
-    project_dirpath: ~pathlib.Path
+    project_path: ~pathlib.Path
         Path to the output project path.
-
     """
-    assert (project_dirpath / filepath).is_file()
+    assert (project_path.joinpath(file)).is_file()
+
+def assert_files_in_baked_project(files_list, project_path):
+    """
+    Asserts if given files exists inside desired output path.
+
+    Parameters
+    ----------
+    files_list: list
+        A list of expected files path relative to the output project path.
+    project_path: ~pathlib.Path
+        Path to the output project path.
+    """
+    for file in files_list:
+        assert_file_in_baked_project(file, project_path)

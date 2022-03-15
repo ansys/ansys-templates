@@ -6,7 +6,7 @@ import click
 from cookiecutter.main import cookiecutter
 
 from ansys.templates import AVAILABLE_TEMPLATES_AND_DESCRIPTION, __version__
-from ansys.templates.paths import PYTHON_TEMPLATES_PYANSYS_PATH 
+from ansys.templates.paths import TEMPLATE_PATH_FINDER
 from ansys.templates.utils import bake_template
 
 
@@ -37,6 +37,18 @@ def new():
 
 
 @new.command()
+def pybasic():
+    """Create a baic Python Package."""
+    bake_template(TEMPLATE_PATH_FINDER["pybasic"], os.getcwd())
+
+
+@new.command()
 def pyansys():
-    """Create a Python package template according to PyAnsys guidelines."""
-    bake_template(PYTHON_TEMPLATES_PYANSYS_PATH, os.getcwd())
+    """Create a PyAnsys Python Package project."""
+    bake_template(TEMPLATE_PATH_FINDER["pyansys"], os.getcwd())
+
+
+@new.command()
+def pyansys():
+    """Create an advanced PyAnsys Python Package project."""
+    bake_template(TEMPLATE_PATH_FINDER["pyansys_advanced"], os.getcwd())

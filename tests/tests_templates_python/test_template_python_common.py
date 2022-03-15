@@ -1,10 +1,8 @@
-from pathlib import Path
-
-from cookiecutter.main import cookiecutter
-import pytest
-
 from ansys.templates.paths import PYTHON_TEMPLATES_COMMON_PATH
-from ansys.templates.testing import assert_template_baking_process, assert_filepath_in_baked_project
+from ansys.templates.testing import (
+    assert_files_in_baked_project,
+    assert_template_baking_process,
+)
 
 PROJECT_NAME_SLUG = "python-common"
 VERSION = "0.1.dev0"
@@ -16,28 +14,27 @@ REPOSITORY_URL = f"https://platform.domain/organization/{PROJECT_NAME_SLUG}"
 MAX_LINELENGTH = "100"
 
 
-def test_template_python_common(tmpdir, python_common_files):
+def test_template_python_common(tmp_path, python_common_files):
 
     # Main variables for of the common template
     cookiecutter_vars = {
-      "__project_name_slug": PROJECT_NAME_SLUG,
-      "__version": VERSION,
-      "__short_description": SHORT_DESCRIPTION,
-      "__pkg_name": PKG_NAME,
-      "__pkg_namespace": PKG_NAMESPACE,
-      "__requires_python": REQUIRES_PYTHON,
-      "__repository_url": REPOSITORY_URL,
-      "__max_linelength": MAX_LINELENGTH,
+        "__project_name_slug": PROJECT_NAME_SLUG,
+        "__version": VERSION,
+        "__short_description": SHORT_DESCRIPTION,
+        "__pkg_name": PKG_NAME,
+        "__pkg_namespace": PKG_NAMESPACE,
+        "__requires_python": REQUIRES_PYTHON,
+        "__repository_url": REPOSITORY_URL,
+        "__max_linelength": MAX_LINELENGTH,
     }
 
     # Assert no errors were raised during template rendering process
     assert_template_baking_process(
-        PYTHON_TEMPLATES_COMMON_PATH, tmpdir, cookiecutter_vars
+        PYTHON_TEMPLATES_COMMON_PATH, tmp_path, cookiecutter_vars
     )
 
     # Get temporary testing output project directory path
-    project_dirpath = Path(tmpdir) / PROJECT_NAME_SLUG
+    project_path = tmp_path / PROJECT_NAME_SLUG
 
     # Check all common files are included in baked project
-    for filepath in python_common_files:
-        assert_filepath_in_baked_project(filepath, project_dirpath)
+    assert_files_in_baked_project(python_common_files, project_path)

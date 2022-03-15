@@ -1,4 +1,3 @@
-from pathlib import Path
 import pytest
 
 @pytest.fixture(scope="package")
@@ -22,5 +21,4 @@ def python_common_files():
     ]
 
     all_files = (doc_files + tests_files + basedir_files)
-
-    return [Path(file) for file in all_files]
+    return all_files
