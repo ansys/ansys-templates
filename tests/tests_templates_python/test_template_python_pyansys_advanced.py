@@ -1,10 +1,7 @@
 import pytest
 
 from ansys.templates.paths import TEMPLATE_PATH_FINDER
-from ansys.templates.testing import (
-    assert_files_in_baked_project,
-    assert_template_baking_process,
-)
+from ansys.templates.testing import assert_files_in_baked_project, assert_template_baking_process
 
 PRODUCT_NAME = "Product"
 PRODUCT_NAME_SLUG = PRODUCT_NAME.lower().replace(" ", "-")
@@ -76,7 +73,7 @@ def test_bake_project_with_build_system(tmp_path, python_common_files, build_sys
     ]
 
     basedir_files = [
-        #"LICENSE",
+        # "LICENSE",
         "README.rst",
         "pyproject.toml" if build_system != "setuptools" else "setup.py",
         "tox.ini",
@@ -98,4 +95,3 @@ def test_bake_project_with_build_system(tmp_path, python_common_files, build_sys
 
     # Check all common files are included in baked project
     assert_files_in_baked_project(all_expected_baked_files, project_path)
-

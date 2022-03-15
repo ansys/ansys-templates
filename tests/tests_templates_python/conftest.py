@@ -1,5 +1,6 @@
 import pytest
 
+
 @pytest.fixture(scope="package")
 def python_common_files():
     doc_files = [
@@ -20,5 +21,5 @@ def python_common_files():
         "tests/test_metadata.py",
     ]
 
-    all_files = (doc_files + tests_files + basedir_files)
+    all_files = doc_files + tests_files + basedir_files
     return all_files

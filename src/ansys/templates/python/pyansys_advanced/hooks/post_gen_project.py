@@ -11,25 +11,30 @@ ALLOWED_BUILD_SYSTEMS = ["flit", "poetry", "setuptools"]
 def remove_tool_files(tool_name, basedir):
     """
     Remove files matching given glob expression within desired base directory.
+
     Parameters
     ----------
     tool_name: str
         Name of the tool used as build system.
     basedir: Path
         Base directory path.
+
     """
     for filepath in basedir.glob(f"**/*_{tool_name}*"):
         filepath.unlink()
 
 
 def rename_tool_files(tool_name, basedir):
-    """Rename tool filenames within desired base directory.
+    """
+    Rename tool filenames within desired base directory.
+
     Parameters
     ----------
     tool_name: str
         Name of the tool used as build system.
     basedir: Path
         Base directory path.
+
     """
     for original_filepath in basedir.glob(f"**/*_{tool_name}*"):
         new_filename = original_filepath.name.replace(f"_{tool_name}", "")

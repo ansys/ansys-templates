@@ -1,8 +1,5 @@
 from ansys.templates.paths import TEMPLATE_PATH_FINDER
-from ansys.templates.testing import (
-    assert_files_in_baked_project,
-    assert_template_baking_process,
-)
+from ansys.templates.testing import assert_files_in_baked_project, assert_template_baking_process
 
 PRODUCT_NAME = "Product"
 PRODUCT_NAME_SLUG = PRODUCT_NAME.lower().replace(" ", "-").replace("_", "-")
@@ -32,9 +29,7 @@ def test_template_python_pyansys(tmp_path, python_common_files):
     )
 
     # Assert no errors were raised during template rendering process
-    assert_template_baking_process(
-        TEMPLATE_PATH_FINDER["pyansys"], tmp_path, cookiecutter_vars
-    )
+    assert_template_baking_process(TEMPLATE_PATH_FINDER["pyansys"], tmp_path, cookiecutter_vars)
 
     # Expected additional files
     basedir_files = ["setup.py"]

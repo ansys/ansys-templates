@@ -5,7 +5,9 @@ repos:
   hooks:
   - id: black
     args: [
-      "black --force-exclude 'src/ansys/templates/python' src"
+      --force-exclude, src/ansys/templates/python,
+      --line-length, "100",
+      src, tests
     ]
 
 - repo: https://github.com/pycqa/isort
@@ -14,19 +16,21 @@ repos:
   - id: isort
     exclude: ^src/ansys/templates/pypkg/
     args: [
-    "--profile", "black",
-    "--force-sort-within-sections",
-    "--line-length", "100",
-    "--section-default", "THIRDPARTY", "hooks", "tests"
+      --profile, black,
+      --force-sort-within-sections,
+      --line-length, "100",
+      --section-default, THIRDPARTY, 
+      --skip-glob, src/ansys/templates/python/*, 
+      --filter-files,
+      tests, doc
     ]
 
 - repo: https://gitlab.com/PyCQA/flake8
   rev: 4.0.1
   hooks:
   - id: flake8
-    exclude: ^src/ansys/templates/pypkg/
     args: [
-      "tests",
+      tests,
     ]
 
 - repo: https://github.com/codespell-project/codespell
@@ -39,4 +43,4 @@ repos:
   hooks:
   - id: pydocstyle
     additional_dependencies: [toml]
-    exclude: ^src/ansys/templates/pypkg/|^tests
+    exclude: ^src/ansys/templates/python/|^tests

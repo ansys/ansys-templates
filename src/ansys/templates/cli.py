@@ -3,7 +3,6 @@
 import os
 
 import click
-from cookiecutter.main import cookiecutter
 
 from ansys.templates import AVAILABLE_TEMPLATES_AND_DESCRIPTION, __version__
 from ansys.templates.paths import TEMPLATE_PATH_FINDER

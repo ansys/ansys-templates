@@ -1,11 +1,12 @@
 """A collection of routines focused on testing."""
 
-from cookiecutter.main import cookiecutter
+
 from ansys.templates.utils import bake_template
+
 
 def assert_template_baking_process(template_path, output_path, cookiecutter_vars):
     """
-    Asserts if template renders properly.
+    Assert if template renders properly.
 
     Parameters
     ----------
@@ -18,16 +19,17 @@ def assert_template_baking_process(template_path, output_path, cookiecutter_vars
 
     """
     bake_template(
-        template_path, 
-        output_path, 
+        template_path,
+        output_path,
         overwrite_if_exists=True,
         no_input=True,
-        extra_context=cookiecutter_vars
+        extra_context=cookiecutter_vars,
     )
+
 
 def assert_file_in_baked_project(file, project_path):
     """
-    Asserts if file is exists inside desired output path.
+    Assert if file is exists inside desired output path.
 
     Parameters
     ----------
@@ -38,9 +40,10 @@ def assert_file_in_baked_project(file, project_path):
     """
     assert (project_path.joinpath(file)).is_file()
 
+
 def assert_files_in_baked_project(files_list, project_path):
     """
-    Asserts if given files exists inside desired output path.
+    Assert if given files exists inside desired output path.
 
     Parameters
     ----------

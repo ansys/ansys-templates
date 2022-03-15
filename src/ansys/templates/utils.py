@@ -1,17 +1,17 @@
 """A collection of useful utilities and routines."""
 import os
-import stat
-import tempfile
 from pathlib import Path
 import shutil
+import tempfile
 
 from cookiecutter.main import cookiecutter
+
 
 def _copytree(input_path, output_path):
     """
     Recursively copy all the contents of a directory into desired one.
 
-    Paremeters
+    Parameters
     ----------
     input_path: ~pathlib.Path
         Path of the source directory to be copied.
@@ -19,7 +19,6 @@ def _copytree(input_path, output_path):
         Path of the destination directory.
 
     """
-
     # Create output directory if it does not exist and ensure permission bits
     if not os.path.exists(output_path):
         os.makedirs(output_path)
@@ -37,7 +36,7 @@ def _copytree(input_path, output_path):
         if os.path.isdir(source_path):
             _copytree(source_path, dest_path)
         else:
-          shutil.copy2(source_path, dest_path)
+            shutil.copy2(source_path, dest_path)
 
 
 def _copy_common_template_files(common_path, project_path):
@@ -53,8 +52,8 @@ def _copy_common_template_files(common_path, project_path):
 
     """
     _copytree(
-        common_path / "{{cookiecutter.__project_name_slug}}", 
-        project_path / "{{cookiecutter.__project_name_slug}}", 
+        common_path / "{{cookiecutter.__project_name_slug}}",
+        project_path / "{{cookiecutter.__project_name_slug}}",
     )
 
 
@@ -71,8 +70,8 @@ def _copy_all_template_files(template_path, project_path):
 
     """
     _copytree(
-        template_path, 
-        project_path, 
+        template_path,
+        project_path,
     )
 
 
@@ -111,12 +110,12 @@ def bake_template(template_path, output_path, **cookiecutter_kwargs):
     Notes
     -----
     Files from the common directory need to be copied before the cookiecutter
-    context initializes. Otherwhise, copied files by a hook will not be
+    context initializes. Otherwise, copied files by a hook will not be
     rendered. This function creates a temporary directory where the common and
     desired template are combined so then cookiecutter can be executed.
-    """
 
-    # Create a temporary directory to be used as the final template source 
+    """
+    # Create a temporary directory to be used as the final template source
     with tempfile.TemporaryDirectory() as tmp_template_path:
 
         # The common directory can be obtained from the template path
@@ -125,10 +124,6 @@ def bake_template(template_path, output_path, **cookiecutter_kwargs):
         # Copy the common and desired template files
         _copy_common_template_files(common_path, Path(str(tmp_template_path)))
         _copy_all_template_files(template_path, Path(str(tmp_template_path)))
-        
+
         # Bake the temporary project using cookiecutter with desired options
-        cookiecutter(
-            str(tmp_template_path), 
-            output_dir=str(output_path), 
-            **cookiecutter_kwargs
-        )
+        cookiecutter(str(tmp_template_path), output_dir=str(output_path), **cookiecutter_kwargs)
