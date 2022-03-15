@@ -1,10 +1,13 @@
 """Command Line Interface for PyAnsys Templates."""
 
+import os
+
 import click
 from cookiecutter.main import cookiecutter
 
 from ansys.templates import AVAILABLE_TEMPLATES_AND_DESCRIPTION, __version__
-from ansys.templates.paths import PYPKG_TEMPLATE_PATH
+from ansys.templates.paths import PYTHON_TEMPLATES_PYPKG_PATH 
+from ansys.templates.utils import bake_template
 
 
 @click.group()
@@ -36,4 +39,4 @@ def new():
 @new.command()
 def pypkg():
     """Create a Python package template according to PyAnsys guidelines."""
-    cookiecutter(str(PYPKG_TEMPLATE_PATH))
+    bake_template(PYTHON_TEMPLATES_PYPKG_PATH, os.getcwd())

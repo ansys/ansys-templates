@@ -22,7 +22,7 @@ REQUIRES_PYTHON = "3.7"
 MAX_LINELENGTH = "100"
 
 
-def test_template_python_pypkg(tmpdir, python_common_files):
+def test_template_python_pypkg(tmp_path, python_common_files):
 
     # Main variables for the template
     cookiecutter_vars = dict(
@@ -37,11 +37,11 @@ def test_template_python_pypkg(tmpdir, python_common_files):
 
     # Assert no errors were raised during template rendering process
     assert_template_baking_process(
-        PYTHON_TEMPLATES_PYPKG_PATH, Path(tmpdir), cookiecutter_vars
+        PYTHON_TEMPLATES_PYPKG_PATH, tmp_path, cookiecutter_vars
     )
 
     # Get temporary testing output project directory path
-    project_dirpath = Path(tmpdir) / PROJECT_NAME_SLUG
+    project_dirpath = tmp_path / PROJECT_NAME_SLUG
 
     # Expected additional files
     basedir_files = [Path(file) for file in ["setup.py"]]

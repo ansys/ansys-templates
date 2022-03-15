@@ -1,9 +1,8 @@
 """A collection of useful utilities and routines."""
-
 from cookiecutter.main import cookiecutter
 import tempfile
 from pathlib import Path
-from shutil import copytree, copyfile
+from shutil import copytree, copyfile, rmtree
 
 def bake_template(template_path, output_path, **cookiecutter_kwargs):
     """
@@ -27,14 +26,14 @@ def bake_template(template_path, output_path, **cookiecutter_kwargs):
     """
 
     # Create a temporary directory to be used as the final template source 
-    with Path(str(tempfile.TemporaryDirectory())) as tmp_template_path:
+    with tempfile.TemporaryDirectory() as tmp_template_path:
 
         # The common directory can be obtained from the template path
         common_path = template_path / "../common"
 
         # Copy the common and desired template files
-        _copy_common_template_files(common_path, tmp_template_path)
-        _copy_all_template_files(template_path, tmp_template_path)
+        _copy_common_template_files(common_path, Path(str(tmp_template_path)))
+        _copy_all_template_files(template_path, Path(str(tmp_template_path)))
         
         # Bake the temporary project using cookiecutter with desired options
         cookiecutter(
