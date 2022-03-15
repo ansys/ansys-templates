@@ -4,7 +4,9 @@ repos:
   rev: 22.1.0
   hooks:
   - id: black
-    exclude: ^src/ansys/templates/pypkg/
+    args: [
+      "black --force-exclude 'src/ansys/templates/python' src"
+    ]
 
 - repo: https://github.com/pycqa/isort
   rev: 5.10.1
