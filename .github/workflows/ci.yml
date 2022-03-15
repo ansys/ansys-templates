@@ -61,26 +61,12 @@ jobs:
 
 
   tests:
-    name: Test baked project
+    name: Smoke tests
     runs-on: ${{ matrix.os }}
     strategy:
       matrix:
         os: [windows-latest, ubuntu-latest]
         python-version: ["3.7", "3.8", "3.9", "3.10"]
-        build-system: ["flit", "setuptools"]
-        include:
-
-          # Only test baked projects in Linux-based distros
-          - os: ubuntu-latest
-            test_project: true
-
-          # Configure output baked project directory for each build system
-          - build-system: "flit"
-            outdir: output/test_bake_project_with_build_s0/pyproduct-library
-
-          - build-system: "setuptools"
-            outdir: output/test_bake_project_with_build_s2/pyproduct-library
-
       fail-fast: false
 
     steps:
@@ -96,32 +82,3 @@ jobs:
         # Runs only the tox environment specified in tox.ini [gh-actions]
       - name: Test with tox-gh-actions
         run: tox
-
-        # Baked project actions are tested only for Linux-base OS
-      - name: Install and configure act for Linux-based OS
-        if: matrix.test_project == true
-        run: |
-          sudo apt-get install build-essential gcc
-          /bin/bash -c "$(curl -fsSL https://raw.githubusercontent.com/Homebrew/install/HEAD/install.sh)"
-          test -d ~/.linuxbrew && eval "$(~/.linuxbrew/bin/brew shellenv)"
-          test -d /home/linuxbrew/.linuxbrew && eval "$(/home/linuxbrew/.linuxbrew/bin/brew shellenv)"
-          test -r ~/.bash_profile && echo "eval \"\$($(brew --prefix)/bin/brew shellenv)\"" >> ~/.bash_profile
-          brew install act
-          echo "-P ubuntu-latest=ghcr.io/catthehacker/ubuntu:act-latest" >> ~/.actrc
-
-      - name: Test ${{ matrix.build-system }} baked project
-        if: matrix.test_project == true
-        run: |
-          # Change to baked project directory
-          cd ${{ matrix.outdir }}
-          # Initialize it as git repository (pre-commit needs it)
-          git config --global user.email "you@example.com"
-          git config --global user.name "Your Name"
-          git init && git add . && git commit -m "Init Python package"
-          # TODO: Only filter out errors from tox command
-          # act -j tests docs > act_output.log  || true > act_output.log; grep -c ERROR act_output.log && cat act_output.log
-          tox
-          # Check package builds properly
-          python -m pip install -r requirements/requirements_build.txt
-          python -m build
-          python -m twine check dist/*
