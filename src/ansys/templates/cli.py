@@ -6,7 +6,7 @@ import click
 from cookiecutter.main import cookiecutter
 
 from ansys.templates import AVAILABLE_TEMPLATES_AND_DESCRIPTION, __version__
-from ansys.templates.paths import PYTHON_TEMPLATES_PYPKG_PATH 
+from ansys.templates.paths import PYTHON_TEMPLATES_PYANSYS_PATH 
 from ansys.templates.utils import bake_template
 
 
@@ -37,6 +37,6 @@ def new():
 
 
 @new.command()
-def pypkg():
+def pyansys():
     """Create a Python package template according to PyAnsys guidelines."""
-    bake_template(PYTHON_TEMPLATES_PYPKG_PATH, os.getcwd())
+    bake_template(PYTHON_TEMPLATES_PYANSYS_PATH, os.getcwd())

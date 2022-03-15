@@ -3,7 +3,7 @@ from pathlib import Path
 from cookiecutter.main import cookiecutter
 import pytest
 
-from ansys.templates.paths import PYTHON_TEMPLATES_PYPKG_PATH, PYTHON_TEMPLATES_COMMON_PATH
+from ansys.templates.paths import PYTHON_TEMPLATES_PYANSYS_PATH
 from ansys.templates.testing import assert_template_baking_process, assert_filepath_in_baked_project
 from ansys.templates.utils import bake_template
 
@@ -22,7 +22,7 @@ REQUIRES_PYTHON = "3.7"
 MAX_LINELENGTH = "100"
 
 
-def test_template_python_pypkg(tmp_path, python_common_files):
+def test_template_python_pyansys(tmp_path, python_common_files):
 
     # Main variables for the template
     cookiecutter_vars = dict(
@@ -37,7 +37,7 @@ def test_template_python_pypkg(tmp_path, python_common_files):
 
     # Assert no errors were raised during template rendering process
     assert_template_baking_process(
-        PYTHON_TEMPLATES_PYPKG_PATH, tmp_path, cookiecutter_vars
+        PYTHON_TEMPLATES_PYANSYS_PATH, tmp_path, cookiecutter_vars
     )
 
     # Get temporary testing output project directory path
