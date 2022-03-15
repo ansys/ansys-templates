@@ -1,6 +1,7 @@
 """A collection of routines focused on testing."""
 
 from cookiecutter.main import cookiecutter
+from ansys.templates.utils import bake_template
 
 def assert_template_baking_process(template_path, output_path, cookiecutter_vars):
     """
@@ -16,10 +17,10 @@ def assert_template_baking_process(template_path, output_path, cookiecutter_vars
         A dictionary holding cookiecutter variables and their values.
 
     """
-    cookiecutter(
-        template=str(template_path),
+    bake_template(
+        template_path, 
+        output_path, 
         overwrite_if_exists=True,
-        output_dir=str(output_path),
         no_input=True,
         extra_context=cookiecutter_vars
     )

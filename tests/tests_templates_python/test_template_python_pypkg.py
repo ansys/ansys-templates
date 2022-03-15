@@ -3,8 +3,9 @@ from pathlib import Path
 from cookiecutter.main import cookiecutter
 import pytest
 
-from ansys.templates.paths import PYTHON_TEMPLATES_PYPKG_PATH
+from ansys.templates.paths import PYTHON_TEMPLATES_PYPKG_PATH, PYTHON_TEMPLATES_COMMON_PATH
 from ansys.templates.testing import assert_template_baking_process, assert_filepath_in_baked_project
+from ansys.templates.utils import bake_template
 
 
 PRODUCT_NAME = "Product"
@@ -26,44 +27,34 @@ def test_template_python_pypkg(tmpdir, python_common_files):
     # Main variables for the template
     cookiecutter_vars = dict(
         product_name = PRODUCT_NAME,
-        __product_name_slug = PRODUCT_NAME_SLUG,
         library_name = LIBRARY_NAME,
-        __library_name = LIBRARY_NAME_SLUG,
-        __project_name_slug = PROJECT_NAME_SLUG,
-        __pkg_name = PKG_NAME,
-        __pkg_namespace = PKG_NAMESPACE,
         version = VERSION,
-        __version = VERSION,
         short_description = SHORT_DESCRIPTION,
-        __short_description = SHORT_DESCRIPTION,
         repository_url = REPOSITORY_URL,
-        __repository_url = REPOSITORY_URL,
         requires_python = REQUIRES_PYTHON,
-        __requires_python = REQUIRES_PYTHON,
         max_linelength = MAX_LINELENGTH,
-        __max_linelength = MAX_LINELENGTH,
     )
 
     # Assert no errors were raised during template rendering process
     assert_template_baking_process(
-        PYTHON_TEMPLATES_PYPKG_PATH, tmpdir, cookiecutter_vars
+        PYTHON_TEMPLATES_PYPKG_PATH, Path(tmpdir), cookiecutter_vars
     )
 
     # Get temporary testing output project directory path
     project_dirpath = Path(tmpdir) / PROJECT_NAME_SLUG
 
     # Expected additional files
-    basedir_files = [Path(file) for file in ["LICENSE_MIT", "setup.py"]]
+    basedir_files = [Path(file) for file in ["setup.py"]]
     src_files = [
         Path(f"src/ansys/{PRODUCT_NAME_SLUG}/{LIBRARY_NAME_SLUG}/__init__.py")
     ]
 
 
-    # Collect all expected files
+    ## Collect all expected files
     all_expected_baked_files = (
         python_common_files + basedir_files + src_files
     )
 
-    # Check all common files are included in baked project
+    ## Check all common files are included in baked project
     for filepath in all_expected_baked_files:
         assert_filepath_in_baked_project(filepath, project_dirpath)

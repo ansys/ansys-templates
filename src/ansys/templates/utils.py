@@ -1,28 +1,81 @@
 """A collection of useful utilities and routines."""
 
+from cookiecutter.main import cookiecutter
+import tempfile
+from pathlib import Path
 from shutil import copytree, copyfile
 
-def inherit_from_template(common_dirpath, project_dirpath):
+def bake_template(template_path, output_path, **cookiecutter_kwargs):
     """
-    Inherits current template by combining custom and common files.
+    Bakes project using desired template and common files.
 
     Parameters
     ----------
-    common_dirpath: ~pathlib.Path
-        Path to the common template directory.
-    project_dirpath: ~pathlib.Path
-        Path to the baked project directory.
+    template_path: ~pathlib.Path
+        Path to the template.
+    output_path: ~pathlib.Path
+        Output path for the baked template.
+    **cookiecutter_kwargs: dict
+        Additional cookiecutter keyword arguments.
 
     Notes
     -----
-    This function is intended to be used during the pre_gen_project.py hook.
+    Files from the common directory need to be copied before the cookiecutter
+    context initializes. Otherwhise, copied files by a hook will not be
+    rendered. This function creates a temporary directory where the common and
+    desired template are combined so then cookiecutter can be executed.
+    """
+
+    # Create a temporary directory to be used as the final template source 
+    with Path(str(tempfile.TemporaryDirectory())) as tmp_template_path:
+
+        # The common directory can be obtained from the template path
+        common_path = template_path / "../common"
+
+        # Copy the common and desired template files
+        _copy_common_template_files(common_path, tmp_template_path)
+        _copy_all_template_files(template_path, tmp_template_path)
+        
+        # Bake the temporary project using cookiecutter with desired options
+        cookiecutter(
+            str(tmp_template_path), 
+            output_dir=str(output_path), 
+            **cookiecutter_kwargs
+        )
+
+
+def _copy_common_template_files(common_path, project_path):
+    """
+    Copy common template files into desired project directory.
+
+    Parameters
+    ----------
+    common_path: ~pathlib.Path
+        Path to the common template directory.
+    project_path: ~pathlib.Path
+        Path to the baked project directory.
 
     """
     copytree(
-        common_dirpath / "{{cookiecutter.__project_name_slug}}", 
-        project_dirpath, 
+        common_path / "{{cookiecutter.__project_name_slug}}", 
+        project_path / "{{cookiecutter.__project_name_slug}}", 
         dirs_exist_ok=True
     )
+
+
+def _copy_all_template_files(template_path, project_path):
+    """
+    Copy all template files including cookiecutter.json and hooks/ directory.
+
+    Parameters
+    ----------
+    template_path: ~pathlib.Path
+        Path to the template directory.
+    project_path: ~pathlib.Path
+        Path to the baked project directory.
+
+    """
+    copytree(template_path, project_path, dirs_exist_ok=True)
 
 
 def include_license(license_path, project_dirpath):
@@ -42,4 +95,3 @@ def include_license(license_path, project_dirpath):
 
     """
     copyfile(license_path, project_dirpath + "/" + license_path.name)
-
