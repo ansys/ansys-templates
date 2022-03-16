@@ -55,4 +55,5 @@ jobs:
         run: |
           cd "output/test_template_python_${{ matrix.template }}0/${{ matrix.project_name }}"
           python -m pip install -e .
-          tox -e ${{ matrix.toxenv }}
+          python -m pip install -r requirements_tests.txt
+          pytest tests
