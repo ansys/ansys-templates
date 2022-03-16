@@ -18,7 +18,7 @@ MAX_LINELENGTH = "100"
 
 
 @pytest.mark.parametrize("build_system", ["flit", "poetry", "setuptools"])
-def test_bake_project_with_build_system(tmp_path, python_common_files, build_system):
+def test_template_python_pyansys_advanced(tmp_path, python_common_files, build_system):
 
     # Main variables for the template
     cookiecutter_vars = dict(

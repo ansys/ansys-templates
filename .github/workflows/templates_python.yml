@@ -24,6 +24,15 @@ jobs:
           - python-version: "3.10"
             toxenv: py310-keep-output
 
+          - template: "pybasic"
+            project_name: "python-basic"
+
+          - template: "pyansys"
+            project_name: "pyproduct-library"
+
+          - template: "pyansys"
+            project_name: "pyproduct-library"
+
       fail-fast: false
 
     steps:
@@ -41,3 +50,9 @@ jobs:
         run: |
           export TEMPLATE=${{ matrix.template }}
           tox -e ${{ matrix.toxenv }}-template
+
+      - name: Install baked project
+        run: |
+          cd "output/test_template_python_${{ matrix.template }}0/${{ matrix.project_name }}"
+          python -m pip install -e .
+          tox -e ${{ matrix.toxenv }}
