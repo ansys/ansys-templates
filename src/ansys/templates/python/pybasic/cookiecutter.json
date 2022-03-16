@@ -6,7 +6,7 @@
   "short_description": "",
   "__short_description": "{{ cookiecutter.short_description }}",
   "__pkg_name": "{{ cookiecutter.__project_name_slug }}",
-  "__pkg_namespace": "{{ cookiecutter.__pkg_name | replace('-', '.') }}",
+  "__pkg_namespace": "{{ cookiecutter.__pkg_name | replace('-', '_') }}",
   "requires_python": ["3.7", "3.8", "3.9", "3.10"],
   "__requires_python": "{{ cookiecutter.requires_python }}",
   "repository_url": "",
