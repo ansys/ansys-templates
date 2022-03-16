@@ -4,6 +4,11 @@
 User guide
 ==========
 
+.. toctree::
+
+   templating
+   usage
+
 Because ``ansys-templates`` is a command line tool, its usage is intended via
 the command line. You can check available commands by running:
 
