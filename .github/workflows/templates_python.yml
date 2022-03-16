@@ -30,7 +30,7 @@ jobs:
           - template: "pyansys"
             project_name: "pyproduct-library"
 
-          - template: "pyansys"
+          - template: "pyansys_advanced"
             project_name: "pyproduct-library"
 
       fail-fast: false
@@ -56,4 +56,4 @@ jobs:
           cd "output/test_template_python_${{ matrix.template }}0/${{ matrix.project_name }}"
           python -m pip install -e .
           python -m pip install -r requirements_tests.txt
-          pytest tests
+          pytest tests -vvv

@@ -15,6 +15,7 @@ def python_common_files():
 
     basedir_files = [
         "README.rst",
+        "requirements_tests.txt",
     ]
 
     tests_files = [
