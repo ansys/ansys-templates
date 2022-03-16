@@ -56,17 +56,22 @@ jobs:
           tox -e ${{ matrix.toxenv }}-${{ matrix.toxextra }}-template
 
       - name: Install and test project
-        if: matrix.template != 'pyansys_advanced'
+        if: matrix.cfg.template != 'pyansys_advanced'
         run: |
           cd "output/test_template_python_${{ matrix.cfg.outdir }}"
           python -m pip install --upgrade pip
           python -m pip install -e .
+          # Check unit tests
           python -m pip install -r requirements_tests.txt
           pytest tests -vvv
+          # Check documentation
+          python -m pip install -r requirements_doc.txt
+          sphinx-build doc/source doc/build -v -W -b html
 
       - name: Install and test project
-        if: matrix.template != 'pyansys_advanced'
+        if: matrix.cfg.template == 'pyansys_advanced'
         run: |
+          cd "output/test_template_python_${{ matrix.cfg.outdir }}"
           python -m pip install --upgrade pip ${{ matrix.cfg.build-system }} tox
           python -m pip install -e .
           tox -e style,${{ matrix.toxenv }},doc
