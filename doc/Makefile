@@ -2,7 +2,7 @@
 #
 
 # You can set these variables from the command line.
-SPHINXOPTS    =
+SPHINXOPTS    = -j auto
 SPHINXBUILD   = sphinx-build
 SOURCEDIR     = source
 BUILDDIR      = build
@@ -21,4 +21,6 @@ help:
 
 # Customized clean due to examples gallery
 clean:
-	rm -rf build
+	rm -rf $(BUILDDIR)/*
+	rm -rf $(SOURCEDIR)/examples
+	find . -type d -name "_autosummary" -exec rm -rf {} +
