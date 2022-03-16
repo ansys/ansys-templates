@@ -10,12 +10,11 @@ on:
 jobs:
 
   tests:
-    name: Test ${{ matrix.template }} in Python ${{ matrix.python-version }}
+    name: Test ${{ matrix.cfg.template }} in Python ${{ matrix.python-version }}
     runs-on: ubuntu-latest
     strategy:
       matrix:
         python-version: ["3.7", "3.10"]
-        template: ["pybasic", "pyansys", "pyansys_advanced"]
         include:
 
           - python-version: "3.7"
@@ -24,14 +23,17 @@ jobs:
           - python-version: "3.10"
             toxenv: py310-keep-output
 
-          - template: "pybasic"
-            project_name: "python-basic"
+        cfg:
+          # All pybasic template tests
+          - {template: "pybasic", outdir: "pybasic0/pybasic"}
+            
+          # All pybasic template tests
+          - {template: "pyansys", outdir: "pyansys0/pyproduct-library"}
 
-          - template: "pyansys"
-            project_name: "pyproduct-library"
-
-          - template: "pyansys_advanced"
-            project_name: "pyproduct-library"
+          # All pyansys_advanced template tests
+          - {template: "pyansys_advanced", build-system: "flit", outdir: "pyansys_a0/pyproduct-library"}
+          - {template: "pyansys_advanced", build-system: "poetry", outdir: "pyansys_a1/pyproduct-library"}
+          - {template: "pyansys_advanced", build-system: "setuptools", outdir: "pyansys_a2/pyproduct-library"}
 
       fail-fast: false
 
@@ -53,7 +55,7 @@ jobs:
 
       - name: Install baked project
         run: |
-          cd "output/test_template_python_${{ matrix.template }}0/${{ matrix.project_name }}"
+          cd "output/test_template_python_${{ matrix.cfg.outdir }}"
           python -m pip install -e .
           python -m pip install -r requirements_tests.txt
           pytest tests -vvv

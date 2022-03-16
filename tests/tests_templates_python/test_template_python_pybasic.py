@@ -1,8 +1,8 @@
 from ansys.templates.paths import TEMPLATE_PATH_FINDER
 from ansys.templates.testing import assert_files_in_baked_project, assert_template_baking_process
 
-PROJECT_NAME = "python-basic"
-PROJECT_NAME_SLUG = "python-basic"
+PROJECT_NAME = "pybasic"
+PROJECT_NAME_SLUG = "pybasic"
 VERSION = "0.1.dev0"
 SHORT_DESCRIPTION = "A basic Python Package"
 REPOSITORY_URL = f"https://platform.domain/organization/{PROJECT_NAME_SLUG}"
