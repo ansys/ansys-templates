@@ -48,6 +48,6 @@ def pyansys():
 
 
 @new.command()
-def pyansys():
+def pyansys_advanced():
     """Create an advanced PyAnsys Python Package project."""
     bake_template(TEMPLATE_PATH_FINDER["pyansys_advanced"], os.getcwd())
