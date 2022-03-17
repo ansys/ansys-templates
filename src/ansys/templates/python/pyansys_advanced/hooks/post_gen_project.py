@@ -64,7 +64,7 @@ def main():
             f"requirements_{name}.txt" for name in ["build", "doc", "tests"]
     ]
     for file in requirements_files:
-        shutil.move(project_path / file, project_path / "requirements")
+        shutil.move(str(project_path / file), str(project_path / "requirements"))
 
     # Apply isort with desired config
     isort_config = isort.settings.Config(
