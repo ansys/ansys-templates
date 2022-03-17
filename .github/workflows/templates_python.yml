@@ -74,4 +74,6 @@ jobs:
           cd "output/test_template_python_${{ matrix.cfg.outdir }}"
           python -m pip install --upgrade pip ${{ matrix.cfg.build-system }} tox
           python -m pip install -e .
-          tox -e style,${{ matrix.toxenv }},doc
+          # TODO: Style environment interferes with ansys-templates pre-commit
+          # in GitHub actions
+          tox -e ${{ matrix.toxenv }},doc
