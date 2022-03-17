@@ -13,6 +13,8 @@ except ModuleNotFoundError:
 __version__ = importlib_metadata.version(__name__.replace(".", "-"))
 
 AVAILABLE_TEMPLATES_AND_DESCRIPTION = {
-    "pypkg": "Create a Python package template according to PyAnsys guidelines.",
+    "pybasic": "Create a baic Python Package.",
+    "pyansys": "Create a PyAnsys Python Package project.",
+    "pyansys_advanced": "Create an advanced PyAnsys Python Package project.",
 }
 """A list holding all available templates names."""
