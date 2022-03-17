@@ -11,7 +11,7 @@ from ansys.templates.utils import bake_template
 
 @click.group()
 def main():
-    """Ansys tool for creating Python projects."""
+    """Ansys tool for creating new Ansys projects."""
     pass
 
 
