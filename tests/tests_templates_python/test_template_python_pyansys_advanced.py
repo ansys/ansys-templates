@@ -20,6 +20,14 @@ MAX_LINELENGTH = "100"
 @pytest.mark.parametrize("build_system", ["flit", "poetry", "setuptools"])
 def test_template_python_pyansys_advanced(tmp_path, python_common_files, build_system):
 
+    # Remove the requirements files at base directory level as they are included
+    # now under a common requirements/ directory
+    new_python_common_files = python_common_files.copy()
+    [
+        new_python_common_files.remove(f"requirements_{name}.txt")
+        for name in ["build", "doc", "tests"]
+    ]
+
     # Main variables for the template
     cookiecutter_vars = dict(
         product_name=PRODUCT_NAME,
@@ -73,14 +81,14 @@ def test_template_python_pyansys_advanced(tmp_path, python_common_files, build_s
     ]
 
     basedir_files = [
-        # "LICENSE",
+        "LICENSE",
         "README.rst",
         "pyproject.toml" if build_system != "setuptools" else "setup.py",
         "tox.ini",
     ]
 
     all_expected_baked_files = (
-        python_common_files
+        new_python_common_files
         + basedir_files
         + src_files
         + doc_files

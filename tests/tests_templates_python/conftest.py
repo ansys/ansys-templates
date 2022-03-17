@@ -15,6 +15,7 @@ def python_common_files():
 
     basedir_files = [
         "README.rst",
+        "requirements_build.txt",
         "requirements_tests.txt",
         "requirements_doc.txt",
         "LICENSE",

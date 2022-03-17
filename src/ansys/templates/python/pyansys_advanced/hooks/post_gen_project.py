@@ -1,5 +1,6 @@
 """Post-processing script for cleaning the raw rendered project."""
 import os
+import shutil
 from pathlib import Path
 
 import isort
@@ -57,9 +58,17 @@ def main():
     # Rename any files including tool name suffix
     rename_tool_files(build_system, project_path)
 
+    # Move all requirements files into a requirements/ directory
+    os.mkdir(project_path / "requirements")
+    requirements_files = [
+            f"requirements_{name}.txt" for name in ["build", "doc", "tests"]
+    ]
+    for file in requirements_files:
+        shutil.move(project_path / file, project_path / "requirements")
+
     # Apply isort with desired config
     isort_config = isort.settings.Config(
-        line_length=100,
+        line_length="{{ cookiecutter.__max_linelength }}",
         profile="black",
     )
     filepaths_list = [
