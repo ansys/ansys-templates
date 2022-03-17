@@ -17,6 +17,7 @@ def python_common_files():
         "README.rst",
         "requirements_tests.txt",
         "requirements_doc.txt",
+        "LICENSE",
     ]
 
     tests_files = [

@@ -6,6 +6,8 @@ import tempfile
 
 from cookiecutter.main import cookiecutter
 
+from ansys.templates.licenses import MIT_LICENSE
+
 
 def _copytree(input_path, output_path):
     """
@@ -75,7 +77,7 @@ def _copy_all_template_files(template_path, project_path):
     )
 
 
-def include_license(license_path, project_dirpath):
+def _include_license(license_path, project_path):
     """
     Include a desired license into the baked project.
 
@@ -83,7 +85,7 @@ def include_license(license_path, project_dirpath):
     ----------
     license_path: ~pathlib.Path
         Path to the license template.
-    project_dirpath: ~pathlib.Path
+    project_path: ~pathlib.Path
         Path to the baked project directory.
 
     Notes
@@ -91,10 +93,10 @@ def include_license(license_path, project_dirpath):
     This function is intended to be used during the pre_gen_project.py hook.
 
     """
-    shutil.copyfile(license_path, project_dirpath + "/" + license_path.name)
+    shutil.copyfile(license_path, project_path / "{{cookiecutter.__project_name_slug}}/LICENSE")
 
 
-def bake_template(template_path, output_path, **cookiecutter_kwargs):
+def bake_template(template_path, output_path, license_path=MIT_LICENSE, **cookiecutter_kwargs):
     """
     Bakes project using desired template and common files.
 
@@ -104,6 +106,8 @@ def bake_template(template_path, output_path, **cookiecutter_kwargs):
         Path to the template.
     output_path: ~pathlib.Path
         Output path for the baked template.
+    license_path: ~pathlib.Path
+        Path to license file. Default is MIT.
     **cookiecutter_kwargs: dict
         Additional cookiecutter keyword arguments.
 
@@ -124,6 +128,9 @@ def bake_template(template_path, output_path, **cookiecutter_kwargs):
         # Copy the common and desired template files
         _copy_common_template_files(common_path, Path(str(tmp_template_path)))
         _copy_all_template_files(template_path, Path(str(tmp_template_path)))
+
+        # Copy license file
+        _include_license(license_path, Path(str(tmp_template_path)))
 
         # Bake the temporary project using cookiecutter with desired options
         cookiecutter(str(tmp_template_path), output_dir=str(output_path), **cookiecutter_kwargs)
