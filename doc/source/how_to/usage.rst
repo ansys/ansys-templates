@@ -1,13 +1,8 @@
 .. _ref_user_guide:
 
 
-User guide
-==========
-
-.. toctree::
-
-   templating
-   usage
+How to Use ansys-templates
+==========================
 
 Because ``ansys-templates`` is a command line tool, its usage is intended via
 the command line. You can check available commands by running:
@@ -49,7 +44,10 @@ Which outputs:
 
    Available templates in ansys-templates are:
 
-   pypkg: Create a Python package template according to PyAnsys guidelines.
+   pybasic: Create a baic Python Package.
+   pyansys: Create a PyAnsys Python Package project.
+   pyansys_advanced: Create an advanced PyAnsys Python Package project.
+
 
 
 Creating a New Project
@@ -66,7 +64,7 @@ For example, to create a new Python Package project, use:
 
 .. code:: bash
 
-   ansys-templates new pypkg
+   ansys-templates new pybasic
 
 Check available templates names using ``ansys-templates list`` command or just
 run:
