@@ -39,7 +39,6 @@ You can list all available templates by running:
 
 Which outputs:
 
-
 .. code:: text
 
    Available templates in ansys-templates are:
