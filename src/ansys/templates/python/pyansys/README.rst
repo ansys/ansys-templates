@@ -70,7 +70,6 @@ need to follow these steps:
         python -m pip install -r requirements/requirements_doc.txt
         python -m pip install -r requirements/requirements_tests.txt
 
-
 6. Finally, verify your development installation by running:
 
     .. code:: bash
