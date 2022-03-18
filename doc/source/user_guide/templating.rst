@@ -71,7 +71,7 @@ Inside this new family, you will need to create at least two different files:
   variables in here.
 
 - A ``common/{{cookiecutter.__project_name_slug}}/`` directory. This directory
-  must contain all the typical files for a given family. All files in the
+  contains all the typical files for a given family. All files in the
   ``common/{{cookiecutter.__project_name_slug}}`` directory will be copied to
   each template when rendering it.
   
