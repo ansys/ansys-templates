@@ -44,7 +44,7 @@ Which outputs:
 
    Available templates in ansys-templates are:
 
-   pybasic: Create a baic Python Package.
+   pybasic: Create a basic Python Package.
    pyansys: Create a PyAnsys Python Package project.
    pyansys_advanced: Create an advanced PyAnsys Python Package project.
 
