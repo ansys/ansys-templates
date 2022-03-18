@@ -52,7 +52,7 @@ Adding a New family of Templates
 --------------------------------
 
 Start by creating a new directory in ``src/ansys/templates/`` with the name of
-the new family of templates. For example, let us name it ``src/ansys/templates/new_family``:
+the new family of templates. For example, let's name it ``src/ansys/templates/new_family``:
 
 .. code:: bash
 
