@@ -44,7 +44,7 @@ various ``templates/``:
    └── family_N/
 
 
-Therefore, you must check if there is already a family for the template you want
+Be sure to check if there is already a family for the template you want
 to add or you need to create one.
 
 
