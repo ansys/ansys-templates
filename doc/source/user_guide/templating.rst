@@ -77,7 +77,7 @@ Inside this new family, you will need to create at least two different files:
   
 .. note::
 
-    You can later add a ``hooks/pos_gen_project.py`` file in the
+    You can later add a ``hooks/post_gen_project.py`` file in the
     ``family/template/`` directory for removing non-desired files coming from
     the ``common/{{cookiecutter.__project_name_slug}}`` directory.
 
