@@ -5,7 +5,7 @@ You can easily add new templates to ``ansys-templates``. Before adding a new
 template, it is important that you read the CONTRIBUTING section.
 
 
-Understanding the templates directory
+Understanding the Templates Directory
 -------------------------------------
 
 All ``ansys-templates`` are collected inside the ``templates/`` directory, which
@@ -48,7 +48,7 @@ Therefore, you must check if there is already a family for the template you want
 to add or you need to create one.
 
 
-Adding a new family of templates
+Adding a New family of Templates
 --------------------------------
 
 Start by creating a new directory in ``src/ansys/templates/`` with the name of
@@ -82,7 +82,7 @@ Inside this new family, you will need to create at least two different files:
     the ``common/{{cookiecutter.__project_name_slug}}`` directory.
 
 
-Adding a new template to a family
+Adding a New Template to a Family
 ---------------------------------
 
 To add a new template, start by creating a new template folder. For example, let
@@ -135,9 +135,6 @@ need to:
            """Short description of the template."""
            bake_template(TEMPLATE_PATH_FINDER["pyansys"], os.getcwd())
 
-
-Testing the Template
-^^^^^^^^^^^^^^^^^^^^
 
 Adding Unitary Tests
 """"""""""""""""""""
@@ -202,7 +199,7 @@ Therefore, you need to create a:
    the intermediate ones if possible.
 
 
-Removing undesired files
+Removing Undesired Files
 ------------------------
 
 It is likely that you do not want some files coming from the ``common/``

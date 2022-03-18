@@ -10,4 +10,4 @@
    :maxdepth: 3
 
    getting_started/index
-   how_to/index
+   user_guide/index
