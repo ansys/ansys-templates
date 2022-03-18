@@ -85,8 +85,8 @@ Inside this new family, you will need to create at least two different files:
 Adding a New Template to a Family
 ---------------------------------
 
-To add a new template, start by creating a new template folder. For example, let
-us name it ``src/ansys/templates/family_0/new_template``:
+To add a new template, start by creating a new template folder. For example, let's
+name it ``src/ansys/templates/family_0/new_template``:
 
 .. code:: bash
 
