@@ -13,7 +13,7 @@ except ModuleNotFoundError:
 __version__ = importlib_metadata.version(__name__.replace(".", "-"))
 
 AVAILABLE_TEMPLATES_AND_DESCRIPTION = {
-    "pybasic": "Create a baic Python Package.",
+    "pybasic": "Create a basic Python Package.",
     "pyansys": "Create a PyAnsys Python Package project.",
     "pyansys_advanced": "Create an advanced PyAnsys Python Package project.",
 }

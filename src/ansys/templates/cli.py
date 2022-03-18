@@ -37,17 +37,17 @@ def new():
 
 @new.command()
 def pybasic():
-    """Create a baic Python Package."""
-    bake_template(TEMPLATE_PATH_FINDER["pybasic"], os.getcwd())
+    """Create a basic Python Package."""
+    bake_template(TEMPLATE_PATH_FINDER["pybasic"], os.getcwd(), overwrite_if_exists=True)
 
 
 @new.command()
 def pyansys():
     """Create a PyAnsys Python Package project."""
-    bake_template(TEMPLATE_PATH_FINDER["pyansys"], os.getcwd())
+    bake_template(TEMPLATE_PATH_FINDER["pyansys"], os.getcwd(), overwrite_if_exists=True)
 
 
 @new.command()
 def pyansys_advanced():
     """Create an advanced PyAnsys Python Package project."""
-    bake_template(TEMPLATE_PATH_FINDER["pyansys_advanced"], os.getcwd())
+    bake_template(TEMPLATE_PATH_FINDER["pyansys_advanced"], os.getcwd(), overwrite_if_exists=True)

@@ -1,0 +1,8 @@
+[run]
+source =
+    ansys/templates
+omit = 
+    ansys/templates/python/*
+
+[report]
+show_missing = true
