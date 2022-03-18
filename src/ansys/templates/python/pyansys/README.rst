@@ -96,7 +96,10 @@ For building documentation, you can either run the usual rules provided in the
 .. code:: bash
 
     python -m pip install -r requirements/requirements_doc.txt
-    make -C doc/ html && your_browser_name doc/html/index.html
+    make -C doc/ html
+
+    # subsequently open the documentation with (under Linux):
+    your_browser_name doc/html/index.html
 
 Distributing
 ------------
