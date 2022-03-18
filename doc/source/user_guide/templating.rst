@@ -116,7 +116,7 @@ Inside the ``new_template/``, you will need to create at least two different fil
 Adding it to the CLI
 ^^^^^^^^^^^^^^^^^^^^
 
-To have access to the template from the CLI (i.a. command line tool), you will
+To have access to the template from the CLI (command line interface), you will
 need to:
 
 1. Include the named and description of the new template in the
