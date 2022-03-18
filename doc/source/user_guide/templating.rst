@@ -193,8 +193,8 @@ Therefore, you need to create a:
 
 .. note::
 
-   To reduce the amount of CI jobs, templates are only tested under Linux based
-   OS. If you require from any particular programming language, try to test the
+   To reduce the amount of CI jobs, templates are only tested under Linux.
+   If you require from any particular programming language, try to test the
    minimum and maximum supported versions/standards of the language. Avoid all
    the intermediate ones if possible.
 
