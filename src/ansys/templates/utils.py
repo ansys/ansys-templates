@@ -15,9 +15,9 @@ def _copytree(input_path, output_path):
 
     Parameters
     ----------
-    input_path: ~pathlib.Path
+    input_path : ~pathlib.Path
         Path of the source directory to be copied.
-    output_path: ~pathlib.Path
+    output_path : ~pathlib.Path
         Path of the destination directory.
 
     """
@@ -47,9 +47,9 @@ def _copy_common_template_files(common_path, project_path):
 
     Parameters
     ----------
-    common_path: ~pathlib.Path
+    common_path : ~pathlib.Path
         Path to the common template directory.
-    project_path: ~pathlib.Path
+    project_path : ~pathlib.Path
         Path to the baked project directory.
 
     """
@@ -65,9 +65,9 @@ def _copy_all_template_files(template_path, project_path):
 
     Parameters
     ----------
-    template_path: ~pathlib.Path
+    template_path : ~pathlib.Path
         Path to the template directory.
-    project_path: ~pathlib.Path
+    project_path : ~pathlib.Path
         Path to the baked project directory.
 
     """
@@ -83,9 +83,9 @@ def _include_license(license_path, project_path):
 
     Parameters
     ----------
-    license_path: ~pathlib.Path
+    license_path : ~pathlib.Path
         Path to the license template.
-    project_path: ~pathlib.Path
+    project_path : ~pathlib.Path
         Path to the baked project directory.
 
     Notes

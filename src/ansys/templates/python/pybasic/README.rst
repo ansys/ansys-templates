@@ -74,7 +74,7 @@ guide`_. You will need to follow these steps:
     .. code:: bash
         
         python -m pip install -r requirements/requirements_tests.txt
-        pytest tests -vvv
+        pytest tests -vv
 
 
 Style and Testing
@@ -83,7 +83,7 @@ Style and Testing
 If required, you can always call the style commands (`black`_, `isort`_,
 `flake8`_...) or unit testing ones (`pytest`_) from the command line. However,
 this does not guarantee that your project is being tested in an isolated
-environment, which is the reason why tools like `tox`_ exist.
+environment, which is another reason to use tools like `tox`_.
 
 
 Documentation
@@ -95,7 +95,10 @@ For building documentation, you can either run the usual rules provided in the
 .. code:: bash
 
     python -m pip install -r requirements/requirements_doc.txt
-    make -C doc/ html && your_browser_name doc/html/index.html
+    make -C doc/ html
+
+    # optionally view the generated documentation (on linux) with
+    your_browser_name doc/html/index.html
 
 
 Distributing

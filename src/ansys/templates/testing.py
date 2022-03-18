@@ -10,11 +10,11 @@ def assert_template_baking_process(template_path, output_path, cookiecutter_vars
 
     Parameters
     ----------
-    template_path: ~pathlib.Path
+    template_path : ~pathlib.Path
         Path to the project template.
-    output_path: ~pathlib.Path
+    output_path : ~pathlib.Path
         Path to the output baked project.
-    cookiecutter_vars: dict
+    cookiecutter_vars : dict
         A dictionary holding cookiecutter variables and their values.
 
     """
@@ -33,9 +33,9 @@ def assert_file_in_baked_project(file, project_path):
 
     Parameters
     ----------
-    file: str
+    file : str
         Expected file path relative to the output project path.
-    project_path: ~pathlib.Path
+    project_path : ~pathlib.Path
         Path to the output project path.
     """
     assert (project_path.joinpath(file)).is_file()
@@ -47,9 +47,9 @@ def assert_files_in_baked_project(files_list, project_path):
 
     Parameters
     ----------
-    files_list: list
+    files_list : list
         A list of expected files path relative to the output project path.
-    project_path: ~pathlib.Path
+    project_path : ~pathlib.Path
         Path to the output project path.
     """
     for file in files_list:
