@@ -50,7 +50,6 @@ need to follow these steps:
         # Activate it in a Windows Powershell environment
         source .venv\Scripts\Activate.ps1
 
-
 3. Make sure you have the latest version of `pip`_:
 
     .. code:: bash
