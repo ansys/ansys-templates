@@ -75,7 +75,7 @@ need to follow these steps:
     .. code:: bash
         
         python -m pip install -r requirements/requirements_tests.txt
-        pytest tests -vvv
+        pytest tests -v
 
 
 Style and Testing
