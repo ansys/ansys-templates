@@ -48,7 +48,6 @@ Which outputs:
    pyansys_advanced: Create an advanced PyAnsys Python Package project.
 
 
-
 Creating a New Project
 ----------------------
 
