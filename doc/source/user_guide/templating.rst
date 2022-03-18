@@ -136,8 +136,8 @@ need to:
            bake_template(TEMPLATE_PATH_FINDER["pyansys"], os.getcwd())
 
 
-Adding Unitary Tests
-""""""""""""""""""""
+Adding Unit Tests
+"""""""""""""""""
 
 Each template must have its own unit test script. The following namespace is
 followed in order to organize the test suite:
