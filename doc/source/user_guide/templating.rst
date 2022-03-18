@@ -153,7 +153,7 @@ Expected common files should be included under a
 ``tests/tests_templates_family/conftest.py`` as a `pytest fixture`_. For
 example, consider the following code of a generic ``conftest.py`` file:
 
-.. code::
+.. code:: python
 
     @pytest.fixture(scope="package")
     def family_common_files():
