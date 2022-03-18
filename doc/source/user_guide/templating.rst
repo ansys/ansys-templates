@@ -171,7 +171,7 @@ example, consider the following code of a generic ``conftest.py`` file:
 Add the Family to Tox envs
 """"""""""""""""""""""""""
 
-If you created a new faimly, make sure to add it to the [tox] set of
+If you created a new family, make sure to add it to the [tox] set of
 environments:
 
 1. Look for the ``[testenv]`` section in the ``tox.ini`` file.
