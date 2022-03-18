@@ -71,7 +71,7 @@ run:
 
    ansys-templates new --help
 
-For further information about how to use this command.
+for further information about how to use this command.
 
 
 Checking Current Version
