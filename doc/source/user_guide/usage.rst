@@ -56,7 +56,7 @@ new`` and passing the name of the template you wish to use.
 
 .. code:: bash
 
-   ansys-templates new template_name
+   ansys-templates new <template_name>
 
 For example, to create a new Python Package project, use:
 
