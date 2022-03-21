@@ -31,7 +31,7 @@ guide`_. You will need to follow these steps:
         git clone {{ cookiecutter.repository_url }}
 
 2. Create a fresh-clean Python environment and activate it. Refer to the
-   official `venv` documentation if you require further information:
+   official `venv`_ documentation if you require further information:
 
     .. code:: bash
 

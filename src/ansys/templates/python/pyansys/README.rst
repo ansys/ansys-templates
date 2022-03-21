@@ -34,7 +34,7 @@ need to follow these steps:
         git clone {{ cookiecutter.repository_url }}
 
 2. Create a fresh-clean Python environment and activate it. Refer to the
-   official `venv` documentation if you require further information:
+   official `venv`_ documentation if you require further information:
 
     .. code:: bash
 
@@ -128,4 +128,5 @@ Then, you can execute:
 .. _pytest: https://docs.pytest.org/en/stable/
 .. _Sphinx: https://www.sphinx-doc.org/en/master/
 .. _tox: https://tox.wiki/
+.. _venv: https://docs.python.org/3/library/venv.html
 
