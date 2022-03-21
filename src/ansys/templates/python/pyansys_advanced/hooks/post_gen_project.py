@@ -1,5 +1,6 @@
 """Post-processing script for cleaning the raw rendered project."""
 import os
+import shutil
 from pathlib import Path
 
 import isort
@@ -25,7 +26,8 @@ def remove_tool_files(tool_name, basedir):
 
 
 def rename_tool_files(tool_name, basedir):
-    """Rename tool filenames within desired base directory.
+    """
+    Rename tool filenames within desired base directory.
 
     Parameters
     ----------
@@ -47,9 +49,6 @@ def main():
 
     # Get the desired build system
     build_system = "{{ cookiecutter.build_system }}"
-    # TODO: warn user if using setup.py
-    # if build_system == "setuptools":
-    #    raise Warning("Please, consider to update to pyproject.toml.")
 
     # Remove non-desired build system files
     for tool in ALLOWED_BUILD_SYSTEMS:
@@ -59,9 +58,17 @@ def main():
     # Rename any files including tool name suffix
     rename_tool_files(build_system, project_path)
 
+    # Move all requirements files into a requirements/ directory
+    os.mkdir(project_path / "requirements")
+    requirements_files = [
+            f"requirements_{name}.txt" for name in ["build", "doc", "tests"]
+    ]
+    for file in requirements_files:
+        shutil.move(str(project_path / file), str(project_path / "requirements"))
+
     # Apply isort with desired config
     isort_config = isort.settings.Config(
-        line_length=100,
+        line_length="{{ cookiecutter.__max_linelength }}",
         profile="black",
     )
     filepaths_list = [

@@ -55,13 +55,28 @@ need to follow these steps:
 
     .. code:: bash
 
-        python -m venv .venv && source venv .venv
+        # Create a virtual environment
+        python -m venv .venv
 
-3. Make sure you have the latest required build system and testing/CI tools:
+        # Activate it in a Linux environment
+        python -m venv .venv && source .venv/bin/activate
+
+        # Activate it in a Windows CMD environment
+        source .venv\Scripts\activate.bat
+
+        # Activate it in a Windows Powershell environment
+        source .venv\Scripts\Activate.ps1
+
+
+3. Make sure you have the latest required build system and doc, testing, and CI tools:
 
     .. code:: bash
 
         python -m pip install -U pip {{ cookiecutter.build_system }} tox
+        python -m pip install -r requirements/requirements_build.txt
+        python -m pip install -r requirements/requirements_doc.txt
+        python -m pip install -r requirements/requirements_tests.txt
+
 
 4. Install the project in editable mode:
 
@@ -182,3 +197,4 @@ Then, you can execute:
 .. _pytest: https://docs.pytest.org/en/stable/
 .. _Sphinx: https://www.sphinx-doc.org/en/master/
 .. _tox: https://tox.wiki/
+

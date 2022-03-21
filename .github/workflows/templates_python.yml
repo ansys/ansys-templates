@@ -1,0 +1,79 @@
+name: Templates Python
+on:
+  pull_request:
+  push:
+    tags:
+      - "*"
+    branches:
+      - main
+
+jobs:
+
+  tests:
+    name: Test ${{ matrix.cfg.template }} in Python ${{ matrix.python-version }}
+    runs-on: ubuntu-latest
+    strategy:
+      matrix:
+        python-version: ["3.7", "3.10"]
+        include:
+
+          - python-version: "3.7"
+            toxenv: py37
+            toxextra: keep-output
+
+          - python-version: "3.10"
+            toxenv: py310
+            toxextra: keep-output
+
+        cfg:
+          # All pybasic template tests
+          - {template: "pybasic", outdir: "pybasic0/pybasic"}
+            
+          # All pybasic template tests
+          - {template: "pyansys", outdir: "pyansys0/pyproduct-library"}
+
+          # All pyansys_advanced template tests
+          - {template: "pyansys_advanced", build-system: "flit", outdir: "pyansys_a0/pyproduct-library"}
+          #- {template: "pyansys_advanced", build-system: "poetry", outdir: "pyansys_a1/pyproduct-library"}
+          - {template: "pyansys_advanced", build-system: "setuptools", outdir: "pyansys_a2/pyproduct-library"}
+
+      fail-fast: false
+
+    steps:
+      - uses: actions/checkout@v2
+      - name: Set up Python ${{ matrix.python-version }}
+        uses: actions/setup-python@v2
+        with:
+          python-version: ${{ matrix.python-version }}
+
+      - name: Install dependencies
+        run: |
+          python -m pip install --upgrade pip tox
+
+      - name: Bake ${{ matrix.cfg.template }}
+        run: |
+          export TEMPLATE=${{ matrix.cfg.template }}
+          tox -e ${{ matrix.toxenv }}-${{ matrix.toxextra }}-template
+
+      - name: Install and test project
+        if: matrix.cfg.template != 'pyansys_advanced'
+        run: |
+          cd "output/test_template_python_${{ matrix.cfg.outdir }}"
+          python -m pip install --upgrade pip
+          python -m pip install -e .
+          # Check unit tests
+          python -m pip install -r requirements_tests.txt
+          pytest tests -vvv
+          # Check documentation
+          python -m pip install -r requirements_doc.txt
+          sphinx-build doc/source doc/build -v -W -b html
+
+      - name: Install and test project
+        if: matrix.cfg.template == 'pyansys_advanced'
+        run: |
+          cd "output/test_template_python_${{ matrix.cfg.outdir }}"
+          python -m pip install --upgrade pip ${{ matrix.cfg.build-system }} tox
+          python -m pip install -e .
+          # TODO: Style environment interferes with ansys-templates pre-commit
+          # in GitHub actions
+          tox -e ${{ matrix.toxenv }},doc

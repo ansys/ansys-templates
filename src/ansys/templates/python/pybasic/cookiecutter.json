@@ -1,0 +1,16 @@
+{
+  "project_name": "",
+  "__project_name_slug": "{{ cookiecutter.project_name | slugify }}",
+  "version": "0.1.dev0",
+  "__version": "{{ cookiecutter.version }}",
+  "short_description": "",
+  "__short_description": "{{ cookiecutter.short_description }}",
+  "__pkg_name": "{{ cookiecutter.__project_name_slug }}",
+  "__pkg_namespace": "{{ cookiecutter.__pkg_name | replace('-', '_') }}",
+  "requires_python": ["3.7", "3.8", "3.9", "3.10"],
+  "__requires_python": "{{ cookiecutter.requires_python }}",
+  "repository_url": "",
+  "__repository_url": "{{ cookiecutter.repository_url }}",
+  "max_linelength": "100",
+  "__max_linelength": "{{ cookiecutter.max_linelength }}"
+}

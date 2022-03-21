@@ -4,24 +4,28 @@ repos:
   rev: 22.1.0
   hooks:
   - id: black
-    args: ["src", "tests"]
+    args: [
+      --line-length, "{{ cookiecutter.__max_linelength }}",
+      src, tests
+    ]
 
 - repo: https://github.com/pycqa/isort
   rev: 5.10.1
   hooks:
   - id: isort
     args: [
-    "--profile", "black",
-    "--force-sort-within-sections",
-    "--line-length", "{{ cookiecutter.max_linelength }}",
-    "--section-default", "THIRDPARTY", "src", "tests"
+      --profile, black,
+      --force-sort-within-sections,
+      --line-length, "{{ cookiecutter.__max_linelength }}",
+      --section-default, THIRDPARTY,
+      src, tests, doc
     ]
 
 - repo: https://gitlab.com/PyCQA/flake8
   rev: 4.0.1
   hooks:
   - id: flake8
-    args: ["src", "tests"]
+    args: [src, tests, doc]
 
 - repo: https://github.com/codespell-project/codespell
   rev: v2.1.0
