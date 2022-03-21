@@ -25,7 +25,7 @@ def test_cli_main_list_command():
     assert "Available templates in ansys-templates are:" in result.output
 
     for template, description in AVAILABLE_TEMPLATES_AND_DESCRIPTION.items():
-        assert f"{template}: {description}" in result.output
+        assert f"{template.replace('_', '-')}: {description}" in result.output
 
 
 def test_cli_main_new_group():
