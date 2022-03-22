@@ -40,7 +40,7 @@ Ensure that `pipx`_ is in your ``PATH`` by running:
 
 .. code:: bash
 
-   pipx ensurepath
+   python -m pipx ensurepath
 
 If you encounter any issues when installing `pip`_, refer to `pipx installation
 guidelines`_.
