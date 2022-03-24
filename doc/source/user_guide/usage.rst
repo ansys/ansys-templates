@@ -9,7 +9,7 @@ the command line. You can check available commands by running:
 
 .. code:: bash
 
-   pipx run ansys-templates --help
+   ansys-templates --help
 
 Which returns:
 
