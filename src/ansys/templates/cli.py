@@ -20,7 +20,7 @@ def list():
     """List all available templates names."""
     print("Available templates in ansys-templates are:\n")
     for template_name, description in AVAILABLE_TEMPLATES_AND_DESCRIPTION.items():
-        print(f"{template_name}: {description}")
+        print(f"{template_name.replace('_', '-')}: {description}")
 
 
 @main.command()
