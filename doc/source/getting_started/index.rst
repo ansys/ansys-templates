@@ -23,7 +23,7 @@ Upgrade `pip`_ with:
    python -m pip install --upgrade pip
 
 
-Installing Pipx
+Installing ``pipx``
 ^^^^^^^^^^^^^^^
  
 The ``ansys-templates`` tool is built on top of Python. To ensure a clean
