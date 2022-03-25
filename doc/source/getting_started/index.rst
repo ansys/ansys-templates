@@ -54,7 +54,7 @@ Once you have installed `pipx`_, proceed with the installation of
 
 .. code:: bash
 
-   python -m pipx install pyansys-template
+   python -m pipx install pyansys-templates
 
 
 Upgrading ansys-templates
@@ -65,7 +65,7 @@ to the latest version by running:
 
 .. code:: bash
 
-   python -m pipx upgrade pyansys-template
+   python -m pipx upgrade pyansys-templates
 
 
 Verify Your Installation
