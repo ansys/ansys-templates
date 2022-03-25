@@ -3,7 +3,7 @@
 Getting Started
 ===============
 
-To successfully install ``pyansysansys-templates``, carefully read all instructions on this page.
+To successfully install ``pyansys-templates``, carefully read all instructions on this page.
 
 
 Before Installing
