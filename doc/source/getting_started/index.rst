@@ -14,7 +14,7 @@ Several requirements must be met before you install
 
 
 Upgrading ``pip``
-^^^^^^^^^^^^^
+^^^^^^^^^^^^^^^^^
 
 Upgrade `pip`_ with:
 
