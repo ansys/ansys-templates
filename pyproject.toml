@@ -25,7 +25,7 @@ classifiers = [
 dependencies = [
     "importlib-metadata >=4.0",
     "click>=7.0,<8.0.0",
-    "cookiecutter @ git+https://www.github.com/cookiecutter/cookiecutter.git@2.0.2",
+    "ansys-cookiecutter",
     "isort>=5.10.1",
 ]
 
