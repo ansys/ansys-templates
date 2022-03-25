@@ -13,7 +13,7 @@ Several requirements must be met before you install
 ``pyansys-templates``.
 
 
-Upgrading Pip
+Upgrading ``pip``
 ^^^^^^^^^^^^^
 
 Upgrade `pip`_ with:
