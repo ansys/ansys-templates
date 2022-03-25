@@ -31,8 +31,16 @@ jobs:
     strategy:
       matrix:
         os: [windows-latest, ubuntu-latest]
-        python-version: ["3.7", "3.8", "3.9", "3.10"]
+        {% set required_minor = cookiecutter.requires_python[2:] | int %}
+        {%- set python_versions = [ ] -%}
+        {%- for minor in range(7, 11) -%}
+        {%- if minor >= required_minor -%}
+        {{ python_versions.append("3." + minor | string ) or ''}}
+        {%- endif -%}
+        {%- endfor -%}
+        python-version: {{ python_versions }}
       fail-fast: false
+
     steps:
       - uses: actions/checkout@v2
       - name: Set up Python {{ '${{ matrix.python-version }}' }}
@@ -55,7 +63,7 @@ jobs:
       - name: Set up Python
         uses: actions/setup-python@v2
         with:
-          python-version: 3.7
+          python-version: {{ cookiecutter.requires_python }}
       - name: Install dependencies
         run: |
           python -m pip install --upgrade pip {{ cookiecutter.build_system }} tox
@@ -71,7 +79,7 @@ jobs:
       - name: Set up Python
         uses: actions/setup-python@v2
         with:
-          python-version: 3.7
+          python-version: {{ cookiecutter.requires_python }}
       - name: Install dependencies
         run: |
           python -m pip install --upgrade pip {{ cookiecutter.build_system }}
