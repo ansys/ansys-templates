@@ -28,7 +28,7 @@ running:
 Installing pipx
 ^^^^^^^^^^^^^^^
  
-The ``ansys-templates`` tool is build on top of Python. To ensure a clean
+The ``ansys-templates`` tool is built on top of Python. To ensure a clean
 installation you can use `pipx`_. This tool ensures an isolated installation of
 any Python tool you want to use. You can install it by running:
 
@@ -42,21 +42,30 @@ Ensure that `pipx`_ is in your ``PATH`` by running:
 
    python -m pipx ensurepath
 
-If you encounter any issues when installing `pip`_, refer to `pipx installation
+If you encounter any issues when installing `pipx`_, refer to `pipx installation
 guidelines`_.
 
 
 Installing ansys-templates
 --------------------------
 
-Since ``ansys-templates`` makes use of Python, it is advisable to install it
-using `pipx`_ by following `pipx installation guidelines`_. Finally, you can
-install ``ansys-templates`` by running:
+Once you have installed `pipx`_, proceed with the installation of
+``ansys-templates`` by running:
 
 .. code:: bash
 
-   pipx install git+https://github.com/pyansys/pyansys-template
+   python -m pipx install pyansys-template
 
+
+Upgrading ansys-templates
+-------------------------
+
+If you already have ``ansys-templates`` installed with `pipx`_, you can upgrade
+to the latest version by running:
+
+.. code:: bash
+
+   python -m pipx upgrade pyansys-template
 
 
 Verify Your Installation
@@ -66,7 +75,7 @@ Once installed, you can verify your installation by running:
 
 .. code:: bash
 
-   pipx run ansys-templates --help
+   ansys-templates --help
 
 Which returns:
 
@@ -87,4 +96,4 @@ Which returns:
 .. LINKS & REFERENCES
 .. _pip: https://pypi.org/project/pip/
 .. _pipx: https://github.com/pypa/pipx
-.. _pipx installation guidelines: https://github.com/pypa/pipx#install-pipx
+.. _pipx installation guidelines: https://pypa.github.io/pipx/installation/
