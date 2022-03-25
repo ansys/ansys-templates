@@ -201,7 +201,7 @@ Removing Undesired Files
 ------------------------
 
 It is likely that there are some files coming from the ``common/``
-directory that you do not want included in your rendered template. To exlude files,
+directory that you do not want included in your rendered template. To exclude files,
 you can take advantage of `cookiecutter hooks`_. 
 
 Hooks are Python scripts that allow you to control the rendering process both before
