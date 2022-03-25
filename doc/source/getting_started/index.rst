@@ -24,7 +24,7 @@ Upgrade `pip`_ with:
 
 
 Installing ``pipx``
-^^^^^^^^^^^^^^^
+^^^^^^^^^^^^^^^^^^^
  
 The ``ansys-templates`` tool is built on top of Python. To ensure a clean
 installation, you can use `pipx`_. It ensures an isolated installation of
