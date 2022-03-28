@@ -47,7 +47,7 @@ guidelines`_.
 
 
 Installing ``ansys-templates``
-----------------------------
+------------------------------
 
 Once `pipx`_ is installed, proceed with the installation of
 ``ansys-templates`` with:
@@ -58,7 +58,7 @@ Once `pipx`_ is installed, proceed with the installation of
 
 
 Upgrading ``ansys-templates``
----------------------------
+-----------------------------
 
 If you already have ``ansys-templates`` installed with `pipx`_, you can upgrade
 to the latest version with:
