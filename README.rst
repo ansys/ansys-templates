@@ -1,5 +1,5 @@
 Welcome to Ansys Templates
-============================
+==========================
 
 The ``ansys-templates`` repository holds a collection of useful templates compliant
 with PyAnsys guidelines. It also provides the ``ansys-templates`` command line tool
