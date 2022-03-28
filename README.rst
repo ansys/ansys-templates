@@ -15,4 +15,4 @@ The main advantages of using this tool are:
 
 For information on using this tool, see the `Ansys Templates Documentation`_.
 
-.. _PyAnsys Template Documentation: https://templates.pyansys.com/ 
+.. _Ansys Templates Documentation: https://templates.pyansys.com/ 
