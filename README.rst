@@ -1,7 +1,7 @@
-Welcome to PyAnsys Templates
+Welcome to Ansys Templates
 ============================
 
-The ``pyansys-templates`` repository holds a collection of useful templates compliant
+The ``ansys-templates`` repository holds a collection of useful templates compliant
 with PyAnsys guidelines. It also provides the ``ansys-templates`` command line tool
 for interactively generating new projects based on previous templates.
 
@@ -13,6 +13,6 @@ The main advantages of using this tool are:
 
 .. _PyAnsys Developer's Guidelines: https://dev.docs.pyansys.com/
 
-For information on using this tool, see the `PyAnsys Template Documentation`_.
+For information on using this tool, see the `Ansys Templates Documentation`_.
 
 .. _PyAnsys Template Documentation: https://templates.pyansys.com/ 

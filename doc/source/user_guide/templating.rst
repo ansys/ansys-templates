@@ -1,14 +1,14 @@
 How to Add a New Template
 =========================
 
-You can easily add new PyAnsys templates. However, before doing so, it is important that
-you read the CONTRIBUTING section.
+You can easily add new templates. However, before doing so, it is important that
+you read the Contributing section.
 
 
 Understanding the Templates Directory
 -------------------------------------
 
-In ``pyansys-templates``, all templates are placed in ``src/ansys/templates/``.
+In ``ansys-templates``, all templates are placed in ``src/ansys/templates/``.
 The ``templates/`` directory contains different families of templates.
 
 A `family of templates` is simply a directory with a ``common/`` folder and
@@ -84,7 +84,7 @@ Inside this new family, you must create at least two different files:
 Adding a New Template to a Family
 ---------------------------------
 
-To add a new template to a fmaily, first create a new template folder. For example,
+To add a new template to a family, first create a new template folder. For example,
 ``src/ansys/templates/family_0/new_template``:
 
 .. code:: bash
@@ -217,7 +217,7 @@ Only two hooks are allowed:
 
 .. warning::
 
-   Both hooks are executed once the cookie cutter context has been started. This
+   Both hooks are executed once the cookiecutter context has been started. This
    implies that any file with a variable of the type ``{{ cookiecutter.some_var }}``
    or Jinja2 syntax will not be rendered.
 

@@ -3,14 +3,14 @@
 Getting Started
 ===============
 
-To successfully install ``pyansys-templates``, carefully read all instructions on this page.
+To successfully install ``ansys-templates``, carefully read all instructions on this page.
 
 
 Before Installing
 -----------------
 
 Several requirements must be met before you install
-``pyansys-templates``.
+``ansys-templates``.
 
 
 Upgrading ``pip``
@@ -46,21 +46,21 @@ If you encounter any issues when installing `pipx`_, see `pipx installation
 guidelines`_.
 
 
-Installing PyAnsys Templates
+Installing ``ansys-templates``
 ----------------------------
 
 Once `pipx`_ is installed, proceed with the installation of
-``pyansys-templates`` with:
+``ansys-templates`` with:
 
 .. code:: bash
 
-   python -m pipx install pyansys-templates
+   python -m pipx install ansys-templates
 
 
-Upgrading PyAnsys Templates
+Upgrading ``ansys-templates``
 ---------------------------
 
-If you already have ``pyansys-templates`` installed with `pipx`_, you can upgrade
+If you already have ``ansys-templates`` installed with `pipx`_, you can upgrade
 to the latest version with:
 
 .. code:: bash
@@ -75,13 +75,13 @@ Once installed, you can verify your installation with:
 
 .. code:: bash
 
-   pyansys-templates --help
+   ansys-templates --help
 
 The following code is returned:
 
 .. code:: text
 
-   Usage: pyansys-templates [OPTIONS] COMMAND [ARGS]...
+   Usage: ansys-templates [OPTIONS] COMMAND [ARGS]...
 
    Ansys tool for creating Python projects.
    

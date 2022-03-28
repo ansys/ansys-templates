@@ -1,21 +1,21 @@
 .. _ref_user_guide:
 
 
-How to Use PyAnsys Templates
+How to Use ``ansys-templates``
 ============================
 
-Because ``pyansys-templates`` is a command line tool, its usage is intended via
+Because ``ansys-templates`` is a command line tool, its usage is intended via
 the command line. You can check available commands with:
 
 .. code:: bash
 
-   pyansys-templates --help
+   ansys-templates --help
 
 The following help content is returned:
 
 .. code:: text
 
-   Usage: pyansys-templates [OPTIONS] COMMAND [ARGS]...
+   Usage: ansys-templates [OPTIONS] COMMAND [ARGS]...
 
    Ansys tool for creating Python projects.
    
@@ -41,7 +41,7 @@ The following templates are returned:
 
 .. code:: text
 
-   Available templates in pyansys-templates are:
+   Available templates in ``ansys-templates`` are:
 
    pybasic: Create a basic Python Package.
    pyansys: Create a PyAnsys Python Package project.
@@ -56,20 +56,20 @@ new`` followed by the name of the template that you want to use:
 
 .. code:: bash
 
-   pyansys-templates new <template_name>
+   ansys-templates new <template_name>
 
 For example, to create a new Python Package project with the pybasic template:
 
 .. code:: bash
 
-   pyansys-templates new pybasic
+   ansys-templates new pybasic
 
 You can see all templates available with ``pyansys-templates list``. Or, see more
 information about how to use this command with:
 
 .. code:: bash
 
-   pyansys-templates new --help
+   ansys-templates new --help
 
 Checking the Current Version
 ----------------------------
@@ -78,4 +78,4 @@ Check the your current installed version of PyAnsys templates with:
 
 .. code:: bash
 
-   pyansys-templates version
+   ansys-templates version
