@@ -1,17 +1,17 @@
 .. _ref_user_guide:
 
 
-How to Use ansys-templates
-==========================
+How to Use ``ansys-templates``
+==============================
 
 Because ``ansys-templates`` is a command line tool, its usage is intended via
-the command line. You can check available commands by running:
+the command line. You can check available commands with:
 
 .. code:: bash
 
    ansys-templates --help
 
-Which returns:
+The following help content is returned:
 
 .. code:: text
 
@@ -28,56 +28,53 @@ Which returns:
      version  Display current version.
 
 
-Listing Available Templates
----------------------------
+Listing All Templates
+---------------------
 
-You can list all available templates by running:
+You can list all templates with:
 
 .. code:: bash
 
    ansys-templates list
 
-Which outputs:
+The following templates are returned:
 
 .. code:: text
 
-   Available templates in ansys-templates are:
+   Available templates in ``ansys-templates`` are:
 
    pybasic: Create a basic Python Package.
    pyansys: Create a PyAnsys Python Package project.
    pyansys_advanced: Create an advanced PyAnsys Python Package project.
 
 
-Creating a New Project
-----------------------
+Creating a New PyAnsys Project
+------------------------------
 
-You can create a new project using a given template by running ``ansys-templates
-new`` and passing the name of the template you wish to use.
+You can use a given template to create a new PyAnsys project with ``ansys-templates
+new`` followed by the name of the template that you want to use:
 
 .. code:: bash
 
    ansys-templates new <template_name>
 
-For example, to create a new Python Package project, use:
+For example, to create a new Python Package project with the pybasic template:
 
 .. code:: bash
 
    ansys-templates new pybasic
 
-Check available templates names using ``ansys-templates list`` command or just
-run:
+You can see all templates available with ``ansys-templates list``. Or, see more
+information about how to use this command with:
 
 .. code:: bash
 
    ansys-templates new --help
 
-for further information about how to use this command.
+Checking the Current Version
+----------------------------
 
-
-Checking Current Version
-------------------------
-
-For checking the your current installed version of ``ansys-templates`` simply run:
+Check the your current installed version of PyAnsys templates with:
 
 .. code:: bash
 

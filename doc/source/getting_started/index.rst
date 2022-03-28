@@ -3,65 +3,65 @@
 Getting Started
 ===============
 
-Please, carefully read all the instructions in this page in order to achieve a
-successfully install of ``ansys-templates``.
+To successfully install ``ansys-templates``, carefully read all instructions on this page.
 
 
 Before Installing
 -----------------
 
-Several requirements need to be fulfilled before you can proceed installing
-``ansys-templates`` tool.
+Several requirements must be met before you install
+``ansys-templates``.
 
 
-Upgrading pip
-^^^^^^^^^^^^^
+Upgrading ``pip``
+^^^^^^^^^^^^^^^^^
 
-Before installing the ``ansys-templates``, it is advisable to upgrade `pip`_ by
-running:
+Upgrade `pip`_ with:
 
 .. code:: bash
 
    python -m pip install --upgrade pip
 
 
-Installing pipx
-^^^^^^^^^^^^^^^
+Installing ``pipx``
+^^^^^^^^^^^^^^^^^^^
  
 The ``ansys-templates`` tool is built on top of Python. To ensure a clean
-installation you can use `pipx`_. This tool ensures an isolated installation of
-any Python tool you want to use. You can install it by running:
+installation, you can use `pipx`_. It ensures an isolated installation of
+any Python tool that you want to use. 
+
+Install `pipx`_ with:
 
 .. code:: bash
 
    python -m pip install --user pipx
 
-Ensure that `pipx`_ is in your ``PATH`` by running:
+Ensure that `pipx`_ is in your ``PATH`` with:
 
 .. code:: bash
 
    python -m pipx ensurepath
 
-If you encounter any issues when installing `pipx`_, refer to `pipx installation
+If you encounter any issues when installing `pipx`_, see `pipx installation
 guidelines`_.
 
 
-Installing ansys-templates
---------------------------
+Installing ``ansys-templates``
+------------------------------
 
-Once you have installed `pipx`_, proceed with the installation of
-``ansys-templates`` by running:
+Once `pipx`_ is installed, proceed with the installation of
+``ansys-templates`` with:
 
 .. code:: bash
 
-   python -m pipx install pyansys-templates
+   python -m pipx install ansys-templates
 
 
-Upgrading ansys-templates
--------------------------
+Upgrading ``ansys-templates``
+-----------------------------
 
 If you already have ``ansys-templates`` installed with `pipx`_, you can upgrade
-to the latest version by running:
+to the latest version with:
 
 .. code:: bash
 
@@ -71,13 +71,13 @@ to the latest version by running:
 Verify Your Installation
 ------------------------
 
-Once installed, you can verify your installation by running:
+Once installed, you can verify your installation with:
 
 .. code:: bash
 
    ansys-templates --help
 
-Which returns:
+The following code is returned:
 
 .. code:: text
 
