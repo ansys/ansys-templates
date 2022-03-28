@@ -2,7 +2,7 @@
 
 
 How to Use ``ansys-templates``
-============================
+==============================
 
 Because ``ansys-templates`` is a command line tool, its usage is intended via
 the command line. You can check available commands with:
@@ -64,7 +64,7 @@ For example, to create a new Python Package project with the pybasic template:
 
    ansys-templates new pybasic
 
-You can see all templates available with ``pyansys-templates list``. Or, see more
+You can see all templates available with ``ansys-templates list``. Or, see more
 information about how to use this command with:
 
 .. code:: bash
