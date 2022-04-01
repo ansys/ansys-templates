@@ -67,7 +67,7 @@ jobs:
       - name: Install dependencies
         run: |
           python -m pip install --upgrade pip {{ cookiecutter.build_system }} tox
-      - name: Test with tox
+      - name: Generate the documentation with tox
         run: tox -e doc
 
 
@@ -80,7 +80,7 @@ jobs:
         uses: actions/setup-python@v2
         with:
           python-version: {{ cookiecutter.requires_python }}
-      - name: Install dependencies
+      - name: Install dependencies and build the library
         run: |
           python -m pip install --upgrade pip {{ cookiecutter.build_system }}
           python -m pip install -r requirements/requirements_build.txt
