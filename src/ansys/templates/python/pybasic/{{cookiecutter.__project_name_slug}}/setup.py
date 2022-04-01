@@ -15,7 +15,7 @@ setup(
         "Operating System :: OS Independent",
     ],
     license="MIT",
-    license_file=LICENSE,
+    license_file="LICENSE",
     description="{{ cookiecutter.__short_description }}",
     long_description=open("README.rst").read(),
     install_requires=["importlib-metadata >=4.0"],
