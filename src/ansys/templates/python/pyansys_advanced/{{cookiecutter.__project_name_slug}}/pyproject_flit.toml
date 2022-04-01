@@ -5,10 +5,10 @@ build-backend = "flit_core.buildapi"
 [project]
 # Check https://flit.readthedocs.io/en/latest/pyproject_toml.html for all available sections
 name = "{{ cookiecutter.__pkg_name }}"
-version = "{{ cookiecutter.version }}"
-description = "{{ cookiecutter.short_description }}"
+version = "{{ cookiecutter.__version }}"
+description = "{{ cookiecutter.__short_description }}"
 readme = "README.rst"
-requires-python = ">={{ cookiecutter.requires_python }}"
+requires-python = ">={{ cookiecutter.__requires_python }}"
 license = {file = "LICENSE"}
 authors = [
     {name = "ANSYS, Inc.", email = "pyansys.support@ansys.com"},
@@ -31,4 +31,4 @@ dependencies = [
 name = "{{ cookiecutter.__pkg_namespace }}"
 
 [project.urls]
-Source = "{{ cookiecutter.repository_url }}"
+Source = "{{ cookiecutter.__repository_url }}"
