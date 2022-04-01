@@ -23,9 +23,25 @@ PYTHON_TEMPLATES_PYANSYS_PATH = PYTHON_TEMPLATES_PATH / "pyansys"
 PYTHON_TEMPLATES_PYANSYS_ADVANCED_PATH = PYTHON_TEMPLATES_PATH / "pyansys_advanced"
 """Path to the advanced PyAnsys Python Package template."""
 
+PYTHON_TEMPLATES_PYACE_PATH = PYTHON_TEMPLATES_PATH / "pyace_pckg"
+"""Path to the ACE Python Projects template."""
+
+PYTHON_TEMPLATES_PYACE_GRPC_PATH = PYTHON_TEMPLATES_PATH / "pyace_grpc"
+"""Path to the ACE Python Projects template."""
+
+PYTHON_TEMPLATES_PYACE_FLASK_PATH = PYTHON_TEMPLATES_PATH / "pyace_flask"
+"""Path to the ACE Python Projects template."""
+
+PYTHON_TEMPLATES_PYACE_FAST_PATH = PYTHON_TEMPLATES_PATH / "pyace_fastapi"
+"""Path to the ACE Python Projects template."""
+
 TEMPLATE_PATH_FINDER = {
     "pybasic": PYTHON_TEMPLATES_PYBASIC_PATH,
     "pyansys": PYTHON_TEMPLATES_PYANSYS_PATH,
     "pyansys_advanced": PYTHON_TEMPLATES_PYANSYS_ADVANCED_PATH,
+    "pyace": PYTHON_TEMPLATES_PYACE_PATH,
+    "pyace-grpc": PYTHON_TEMPLATES_PYACE_GRPC_PATH,
+    "pyace-flask": PYTHON_TEMPLATES_PYACE_FLASK_PATH,
+    "pyace-fastapi": PYTHON_TEMPLATES_PYACE_FAST_PATH
 }
 """A dictionary relating templates names with their paths."""

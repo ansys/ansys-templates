@@ -1,0 +1,1 @@
+# {{ cookiecutter.project_name }} {{ cookiecutter.library_name }} CHANGELOG
