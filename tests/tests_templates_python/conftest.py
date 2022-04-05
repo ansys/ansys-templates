@@ -21,6 +21,12 @@ def python_common_files():
         "LICENSE",
     ]
 
+    dotfiles = [
+        ".coveragerc",
+        ".gitignore",
+        ".flake8",
+    ]
+
     tests_files = [
         "tests/test_metadata.py",
     ]
