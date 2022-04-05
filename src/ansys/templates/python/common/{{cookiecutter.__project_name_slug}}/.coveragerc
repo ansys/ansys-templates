@@ -1,0 +1,6 @@
+[run]
+source =
+    {{ cookiecutter.__coverage_source }}
+
+[report]
+show_missing = true

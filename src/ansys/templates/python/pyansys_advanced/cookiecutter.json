@@ -17,5 +17,6 @@
   "__requires_python": "{{ cookiecutter.requires_python }}",
   "build_system": ["flit", "poetry", "setuptools"],
   "max_linelength": "100",
-  "__max_linelength": "{{ cookiecutter.max_linelength }}"
+  "__max_linelength": "{{ cookiecutter.max_linelength }}",
+  "__coverage_source": "ansys.{{ cookiecutter.__product_name_slug }}"
 }

@@ -12,5 +12,6 @@
   "repository_url": "",
   "__repository_url": "{{ cookiecutter.repository_url }}",
   "max_linelength": "100",
-  "__max_linelength": "{{ cookiecutter.max_linelength }}"
+  "__max_linelength": "{{ cookiecutter.max_linelength }}",
+  "__coverage_source": "src"
 }
