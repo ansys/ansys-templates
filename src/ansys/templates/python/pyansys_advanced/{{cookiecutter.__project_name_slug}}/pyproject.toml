@@ -1,0 +1,68 @@
+[build-system]
+{%- if cookiecutter.build_system == "flit" %}
+requires = ["flit_core >=3.2,<4"]
+build-backend = "flit_core.buildapi"
+{% elif cookiecutter.build_system == "poetry" %}
+requires = ["poetry-core>=1.0.0"]
+build-backend = "poetry.core.masonry.api"
+{% elif cookiecutter.build_system == "setuptools" %}
+requires = ["setuptools", "wheel"]
+build-backend = "setuptools.build_meta"
+{% endif -%}
+
+{%- if cookiecutter.build_system == "flit" %}
+[project]
+# Check https://flit.readthedocs.io/en/latest/pyproject_toml.html for all available sections
+name = "{{ cookiecutter.__pkg_name }}"
+version = "{{ cookiecutter.__version }}"
+description = "{{ cookiecutter.__short_description }}"
+readme = "README.rst"
+requires-python = ">={{ cookiecutter.__requires_python }}"
+license = {file = "LICENSE"}
+authors = [
+    {name = "ANSYS, Inc.", email = "pyansys.support@ansys.com"},
+]
+maintainers = [
+    {name = "PyAnsys developers", email = "pyansys.maintainers@ansys.com"},
+]
+
+classifiers = [
+    "Development Status :: 4 - Beta",
+    "Programming Language :: Python :: 3",
+    "License :: OSI Approved :: MIT License",
+    "Operating System :: OS Independent",
+]
+dependencies = [
+    "importlib-metadata >=4.0",
+]
+
+[tool.flit.module]
+name = "{{ cookiecutter.__pkg_namespace }}"
+
+[project.urls]
+Source = "{{ cookiecutter.__repository_url }}"
+{% elif cookiecutter.build_system == "poetry"  %}
+[tool.poetry]
+# Check https://python-poetry.org/docs/pyproject/ for all available sections
+name = "{{ cookiecutter.__pkg_name }}"
+version = "{{ cookiecutter.__version }}"
+description = "{{ cookiecutter.__short_description }}"
+license = "MIT"
+authors = ["ANSYS, Inc. <ansys.support@ansys.com>"]
+maintainers = ["PyAnsys developers <pyansys.maintainers@ansys.com>"]
+readme = "README.rst"
+repository = "{{ cookiecutter.__repository_url }}"
+classifiers = [
+    "Development Status :: 4 - Beta",
+    "Programming Language :: Python :: 3",
+    "License :: OSI Approved :: MIT License",
+    "Operating System :: OS Independent",
+]
+packages = [
+    { include = "ansys", from = "src" },
+]
+
+[tool.poetry.dependencies]
+python = ">={{ cookiecutter.__requires_python }},<4.0"
+importlib-metadata = {version = "^4.0", python = "<3.8"}
+{% endif -%}
