@@ -127,6 +127,6 @@ Then, you can execute:
 .. _pre-commit: https://pre-commit.com/
 .. _pytest: https://docs.pytest.org/en/stable/
 .. _Sphinx: https://www.sphinx-doc.org/en/master/
+.. _pip: https://pypi.org/project/pip/
 .. _tox: https://tox.wiki/
 .. _venv: https://docs.python.org/3/library/venv.html
-
