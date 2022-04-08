@@ -22,6 +22,10 @@ def main():
         setup_file = project_path / "setup.py"
         setup_file.unlink()
 
+    # Remove .coveragerc as its content is specified in the pyproject.toml
+    coveragerc_file = project_path / ".coveragerc"
+    coveragerc_file.unlink()
+
     # Move all requirements files into a requirements/ directory
     os.mkdir(project_path / "requirements")
     requirements_files = [

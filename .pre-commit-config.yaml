@@ -4,26 +4,11 @@ repos:
   rev: 22.3.0
   hooks:
   - id: black
-    args: [
-      --force-exclude, src/ansys/templates/python,
-      --line-length, "100",
-      src, tests
-    ]
 
 - repo: https://github.com/pycqa/isort
   rev: 5.10.1
   hooks:
   - id: isort
-    exclude: ^src/ansys/templates/pypkg/
-    args: [
-      --profile, black,
-      --force-sort-within-sections,
-      --line-length, "100",
-      --section-default, THIRDPARTY, 
-      --skip-glob, src/ansys/templates/python/*, 
-      --filter-files,
-      tests, doc
-    ]
 
 - repo: https://gitlab.com/PyCQA/flake8
   rev: 4.0.1
