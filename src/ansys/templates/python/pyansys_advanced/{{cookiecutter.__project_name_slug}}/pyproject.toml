@@ -65,4 +65,23 @@ packages = [
 [tool.poetry.dependencies]
 python = ">={{ cookiecutter.__requires_python }},<4.0"
 importlib-metadata = {version = "^4.0", python = "<3.8"}
-{% endif -%}
+{% endif %}
+[tool.black]
+line-length = {{ cookiecutter.__max_linelength }}
+
+[tool.isort]
+profile = "black"
+force_sort_within_sections = true
+line_length = {{ cookiecutter.__max_linelength }}
+default_section = "THIRDPARTY"
+src_paths = ["doc", "src", "tests"]
+
+[tool.pydocstyle]
+match-dir = "^(src)"
+exclude = "^(tests/)"
+
+[tool.coverage.run]
+source = ["ansys.{{ cookiecutter.__product_name_slug }}"]
+
+[tool.coverage.report]
+show_missing = true
