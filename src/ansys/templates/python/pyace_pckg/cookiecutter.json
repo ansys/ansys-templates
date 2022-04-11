@@ -3,6 +3,7 @@
   "project_name": "project",
   "__project_name_slug": "{{ cookiecutter.project_name | slugify(separator=('_')) }}",
   "library_name": "library",
+  "__library_name_slug": "{{ cookiecutter.library_name | slugify(separator=('_')) }}",
   "ci_cd_platform": ["GitHub", "Azure DevOps"],
   "enable_docker": ["No", "Yes"],
   "enable_full_observability_stack": ["No", "Yes"],
