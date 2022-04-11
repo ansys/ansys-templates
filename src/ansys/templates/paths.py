@@ -26,8 +26,8 @@ PYTHON_TEMPLATES_PYANSYS_ADVANCED_PATH = PYTHON_TEMPLATES_PATH / "pyansys_advanc
 PYTHON_TEMPLATES_PYACE_PATH = PYTHON_TEMPLATES_PATH / "pyace_pkg"
 """Path to the classic Python Project template."""
 
-# PYTHON_TEMPLATES_PYACE_GRPC_PATH = PYTHON_TEMPLATES_PATH / "pyace_grpc"
-# """Path to the gRPC based Python Project template."""
+PYTHON_TEMPLATES_PYACE_GRPC_PATH = PYTHON_TEMPLATES_PATH / "pyace_grpc"
+"""Path to the gRPC based Python Project template."""
 
 # PYTHON_TEMPLATES_PYACE_FLASK_PATH = PYTHON_TEMPLATES_PATH / "pyace_flask"
 # """Path to the Flask based Python Project template."""
@@ -40,7 +40,7 @@ TEMPLATE_PATH_FINDER = {
     "pyansys": PYTHON_TEMPLATES_PYANSYS_PATH,
     "pyansys_advanced": PYTHON_TEMPLATES_PYANSYS_ADVANCED_PATH,
     "pyace": PYTHON_TEMPLATES_PYACE_PATH,
-    # "pyace-grpc": PYTHON_TEMPLATES_PYACE_GRPC_PATH,
+    "pyace-grpc": PYTHON_TEMPLATES_PYACE_GRPC_PATH,
     # "pyace-flask": PYTHON_TEMPLATES_PYACE_FLASK_PATH,
     # "pyace-fastapi": PYTHON_TEMPLATES_PYACE_FAST_PATH,
 }
