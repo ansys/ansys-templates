@@ -10,7 +10,14 @@ from ansys.templates.utils import bake_template
 
 
 def create_project(template):
-    """Create Python project based on a given template."""
+    """Create Python project based on a given template.
+    
+    Parameters
+    ----------
+    template : str
+        Name of the template to be used as basis for the project
+        
+    """
     bake_template(TEMPLATE_PATH_FINDER[template], os.getcwd(), overwrite_if_exists=True)
 
 
