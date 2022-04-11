@@ -70,7 +70,9 @@ def main():
 
     enable_docker = "{{ cookiecutter.enable_docker }}"
     if enable_docker == 'No':
-        shutil.rmtree(str(project_path / 'Docker'))
+        docker_path = str(project_path / 'docker')
+        if os.path.exists(docker_path):
+            shutil.rmtree(docker_path)
         for file in os.listdir(str(project_path)):
             if file.startswith("docker"):
                 Path(file).unlink()
