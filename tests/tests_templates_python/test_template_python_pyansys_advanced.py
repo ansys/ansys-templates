@@ -83,9 +83,13 @@ def test_template_python_pyansys_advanced(tmp_path, python_common_files, build_s
     basedir_files = [
         "LICENSE",
         "README.rst",
-        "pyproject.toml" if build_system != "setuptools" else "setup.py",
+        "pyproject.toml",
         "tox.ini",
     ]
+
+    # Add setup.py file if using setuptools
+    if build_system == "setuptools":
+        basedir_files.append("setup.py")
 
     all_expected_baked_files = (
         new_python_common_files
