@@ -32,8 +32,8 @@ PYTHON_TEMPLATES_PYACE_GRPC_PATH = PYTHON_TEMPLATES_PATH / "pyace_grpc"
 PYTHON_TEMPLATES_PYACE_FLASK_PATH = PYTHON_TEMPLATES_PATH / "pyace_flask"
 """Path to the Flask based Python Project template."""
 
-# PYTHON_TEMPLATES_PYACE_FAST_PATH = PYTHON_TEMPLATES_PATH / "pyace_fastapi"
-# """Path to the FastAPI based Python Project template."""
+PYTHON_TEMPLATES_PYACE_FAST_PATH = PYTHON_TEMPLATES_PATH / "pyace_fastapi"
+"""Path to the FastAPI based Python Project template."""
 
 TEMPLATE_PATH_FINDER = {
     "pybasic": PYTHON_TEMPLATES_PYBASIC_PATH,
@@ -42,6 +42,6 @@ TEMPLATE_PATH_FINDER = {
     "pyace": PYTHON_TEMPLATES_PYACE_PATH,
     "pyace-grpc": PYTHON_TEMPLATES_PYACE_GRPC_PATH,
     "pyace-flask": PYTHON_TEMPLATES_PYACE_FLASK_PATH,
-    # "pyace-fastapi": PYTHON_TEMPLATES_PYACE_FAST_PATH,
+    "pyace-fastapi": PYTHON_TEMPLATES_PYACE_FAST_PATH,
 }
 """A dictionary relating templates names with their paths."""
