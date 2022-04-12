@@ -1,0 +1,43 @@
+{
+  "openapi": "3.0.0",
+  "info": {
+    "description": "{{ cookiecutter.short_description }}",
+    "version": "1.0.0",
+    "title": "{{ cookiecutter.project_name }} {{ cookiecutter.library_name }}",
+    "contact": {
+      "email": ""
+    },
+    "license": {
+      "name": "MIT",
+      "url": "https://opensource.org/licenses/MIT"
+    }
+  },
+  "paths": {
+    "/api/health": {
+      "get": {
+        "description": "Returns the health status of the api!",
+        "responses": {
+          "200": {
+            "description": "Returns the health status",
+            "schema": {
+              "type": "string"
+            }
+          }
+        }
+      }
+    },
+    "/api/version": {
+      "get": {
+        "description": "Returns the version of the api!",
+        "responses": {
+          "200": {
+            "description": "Returns the version",
+            "schema": {
+              "type": "string"
+            }
+          }
+        }
+      }
+    }
+  }
+}

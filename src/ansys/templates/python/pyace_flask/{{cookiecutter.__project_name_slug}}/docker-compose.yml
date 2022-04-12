@@ -1,0 +1,37 @@
+version: '3.9'
+
+services:
+  {{ cookiecutter.library_name }}-api:
+    image: {{ cookiecutter.__project_name_slug }}/{{ cookiecutter.__library_name_slug }}-api
+    build:
+      context: .
+      dockerfile: ./docker/Dockerfile
+    ports:
+      - "5000:5000"
+    networks:
+      - {{ cookiecutter.__project_name_slug }}
+
+{% if cookiecutter.enable_full_observability_stack == 'Yes' -%}
+
+  # OPENTELEMETRY COLLECTOR
+
+  otel-collector:
+    image: otel/opentelemetry-collector-contrib:latest
+    command: [ "--config=/etc/otel-collector-config.yaml" ]
+    volumes:
+      - ./_deploy/otel-collector-config.yaml:/etc/otel-collector-config.yaml
+      - /mnt/{{ cookiecutter.__project_name_slug }}/AppData/Local/Otel:/etc/output:rw # Store the logs
+    ports:
+      - "8888:8888"   # Prometheus metrics exposed by the collector
+      - "8889:8889"   # Prometheus exporter metrics
+      - "4317:4317"   # OTLP gRPC receiver
+      - "13133:13133" # Health check
+    networks:
+      - {{ cookiecutter.__project_name_slug }}
+{% endif %}
+
+
+
+networks:
+  {{ cookiecutter.__project_name_slug }}:
+    name: {{ cookiecutter.__project_name_slug }}-stream
