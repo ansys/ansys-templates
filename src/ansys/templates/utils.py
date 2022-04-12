@@ -95,6 +95,17 @@ def _include_license(license_path, project_path):
     """
     shutil.copyfile(license_path, project_path / "{{cookiecutter.__project_name_slug}}/LICENSE")
 
+def remove_file(filename, project_path=Path(os.getcwd())):
+    """Remove desired file being given its relative path to project.
+
+    Parameters
+    ----------
+    filename : str
+        Filename relative to project root directory.
+
+    """
+    filepath = project_path / filename
+    filepath.unlink()
 
 def bake_template(template_path, output_path, license_path=MIT_LICENSE, **cookiecutter_kwargs):
     """

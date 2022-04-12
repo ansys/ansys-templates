@@ -5,6 +5,8 @@ from pathlib import Path
 
 import isort
 
+from ansys.templates.utils import remove_file
+
 ALLOWED_BUILD_SYSTEMS = ["flit", "poetry", "setuptools"]
 """A list of all allowed build systems by the template."""
 
@@ -19,12 +21,10 @@ def main():
 
     # Remove setup.py file if not required
     if build_system in ["flit", "poetry"]:
-        setup_file = project_path / "setup.py"
-        setup_file.unlink()
+        remove_file("setup.py")
 
     # Remove .coveragerc as its content is specified in the pyproject.toml
-    coveragerc_file = project_path / ".coveragerc"
-    coveragerc_file.unlink()
+    remove_file(".coveragerc")
 
     # Move all requirements files into a requirements/ directory
     os.mkdir(project_path / "requirements")
