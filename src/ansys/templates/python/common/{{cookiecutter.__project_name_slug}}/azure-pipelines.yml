@@ -1,0 +1,45 @@
+# Python package
+# Create and test a Python package on multiple Python versions.
+# Add steps that analyze code, save the dist with the build record, publish to a PyPI-compatible index, and more:
+# https://docs.microsoft.com/azure/devops/pipelines/languages/python
+
+trigger:
+- main
+
+pool:
+  vmImage: ubuntu-latest
+strategy:
+    Python37:
+      python.version: '3.7'
+      tox.env: 'py37'
+    Python38:
+      python.version: '3.8'
+      tox.env: 'py38'
+    Python39:
+      python.version: '3.9'
+      tox.env: 'py39'
+    Python310:
+      python.version: '3.10'
+      tox.env: 'py310'
+
+
+steps:
+- task: UsePythonVersion@0
+  inputs:
+    versionSpec: '$(python.version)'
+  displayName: 'Use Python $(python.version)'
+
+- script: |
+    python -m pip install --upgrade pip
+    pip install -r requirements.txt
+  displayName: 'Install Dependencies'
+
+- script: |
+    python -m pip install pre-commit tox
+    tox -e style
+  displayName: 'Code Style'
+
+- script: |
+    python -m pip install pytest-azurepipelines tox
+    tox -e $(tox.env)
+  displayName: 'Unit Tests'
