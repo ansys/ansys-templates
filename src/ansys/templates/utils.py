@@ -126,13 +126,11 @@ def keep_files(files_list, project_path=Path(os.getcwd())):
     # Remove all undesired files
     for file in all_project_files:
         if str(file.relative_to(project_path)) not in files_list and file.is_file():
-            print(f"Deleting {file}")
             file.unlink()
 
     # Remove all undesired directories
     for file in all_project_files:
         if str(file.relative_to(project_path)) not in files_list and file.is_dir():
-            print(f"Deleting {file}")
             file.rmdir()
 
 def bake_template(template_path, output_path, license_path=MIT_LICENSE, **cookiecutter_kwargs):
