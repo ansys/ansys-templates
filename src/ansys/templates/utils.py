@@ -30,7 +30,7 @@ def _copytree(input_path, output_path):
     files_list = os.listdir(input_path)
 
     for file in files_list:
-        # Create source and destintation file paths
+        # Create source and destination file paths
         source_path = os.path.join(input_path, file)
         dest_path = os.path.join(output_path, file)
 

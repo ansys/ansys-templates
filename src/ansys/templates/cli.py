@@ -71,12 +71,12 @@ def pyace():
     create_project("pyace")
 
 
-# @new.command()
-# def pyace_fast():
-#     """Create a FastAPI project initialized for any developer."""
-#     create_project("pyace-fastapi")
-#
-#
+@new.command()
+def pyace_fast():
+    """Create a FastAPI project initialized for any developer."""
+    create_project("pyace-fastapi")
+
+
 @new.command()
 def pyace_flask():
     """Create a Flask project initialized for any developer."""
