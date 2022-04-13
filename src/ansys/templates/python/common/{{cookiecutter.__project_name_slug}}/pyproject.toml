@@ -1,16 +1,16 @@
 [build-system]
-{%- if cookiecutter.build_system == "flit" %}
+{%- if cookiecutter.__build_system == "flit" %}
 requires = ["flit_core >=3.2,<4"]
 build-backend = "flit_core.buildapi"
-{% elif cookiecutter.build_system == "poetry" %}
+{% elif cookiecutter.__build_system == "poetry" %}
 requires = ["poetry-core>=1.0.0"]
 build-backend = "poetry.core.masonry.api"
-{% elif cookiecutter.build_system == "setuptools" %}
+{% elif cookiecutter.__build_system == "setuptools" %}
 requires = ["setuptools", "wheel"]
 build-backend = "setuptools.build_meta"
 {% endif -%}
 
-{%- if cookiecutter.build_system == "flit" %}
+{%- if cookiecutter.__build_system == "flit" %}
 [project]
 # Check https://flit.readthedocs.io/en/latest/pyproject_toml.html for all available sections
 name = "{{ cookiecutter.__pkg_name }}"
@@ -41,7 +41,7 @@ name = "{{ cookiecutter.__pkg_namespace }}"
 
 [project.urls]
 Source = "{{ cookiecutter.__repository_url }}"
-{% elif cookiecutter.build_system == "poetry"  %}
+{% elif cookiecutter.__build_system == "poetry"  %}
 [tool.poetry]
 # Check https://python-poetry.org/docs/pyproject/ for all available sections
 name = "{{ cookiecutter.__pkg_name }}"
@@ -77,7 +77,7 @@ default_section = "THIRDPARTY"
 src_paths = ["doc", "src", "tests"]
 
 [tool.coverage.run]
-source = ["ansys.{{ cookiecutter.__product_name_slug }}"]
+source = ["{{ cookiecutter.__coverage_source }}"]
 
 [tool.coverage.report]
 show_missing = true

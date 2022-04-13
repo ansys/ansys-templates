@@ -1,2 +1,2 @@
 cookiecutter==1.7.3
-tox==3.24.5
+tox==3.25.0
