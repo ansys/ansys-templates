@@ -70,16 +70,18 @@ def assert_project_structure(expected_structure, project_path):
 
     """
     expected_structure = sorted(expected_structure)
-    all_project_files = sorted([
+    current_structure = sorted([
         str(file.relative_to(project_path)) for file in
         project_path.glob("**/*") if file.is_file()
     ])
 
-    for actual_file, expected_file in zip(all_project_files, expected_structure):
+    for current_file, expected_file in zip(current_structure, expected_structure):
         try:
-            assert actual_file == expected_file
+            assert current_file == expected_file
         except AssertionError:
-            msg = f"File {actual_file} not equals to {expected_file}\n\n"
-            msg += f"Current structure = {all_project_files}\n"
+            msg = f"File {current_file} not equals to {expected_file}\n\n"
+            msg += f"Current structure = {current_structure}\n"
             msg += f"Expected structure = {expected_structure}\n"
             raise AssertionError(msg)
+
+    assert len(current_structure) == len(expected_structure)
