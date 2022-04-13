@@ -11,7 +11,10 @@
   "__requires_python": "{{ cookiecutter.requires_python }}",
   "repository_url": "",
   "__repository_url": "{{ cookiecutter.repository_url }}",
+  "__build_system": "setuptools",
   "max_linelength": "100",
   "__max_linelength": "{{ cookiecutter.max_linelength }}",
-  "__coverage_source": "src"
+  "__coverage_source": "{{ cookiecutter.__project_name_slug }}",
+  "__product_name_slug": "",
+  "__library_name_slug": ""
 }

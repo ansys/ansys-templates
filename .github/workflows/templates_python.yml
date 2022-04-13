@@ -72,7 +72,7 @@ jobs:
           #python -m flake8 doc src tests
           # Check unit tests
           python -m pip install -r requirements_tests.txt
-          pytest tests -vvv
+          pytest --cov=src tests
           # Check documentation
           python -m pip install -r requirements_doc.txt
           sphinx-build doc/source doc/build -v -W -b html
