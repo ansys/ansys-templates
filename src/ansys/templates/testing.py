@@ -54,3 +54,32 @@ def assert_files_in_baked_project(files_list, project_path):
     """
     for file in files_list:
         assert_file_in_baked_project(file, project_path)
+
+def assert_project_structure(expected_structure, project_path):
+    """Assert if project has desired structure.
+
+    If any additional files are encountered in the rendered project, it will
+    raise an AssertionError.
+
+    Parameters
+    ----------
+    expected_structure : list
+        A list of expected files path relative to the output project path.
+    project_path : ~pathlib.Path
+        Path to the output project path.
+
+    """
+    expected_structure = sorted(expected_structure)
+    all_project_files = sorted([
+        str(file.relative_to(project_path)) for file in
+        project_path.glob("**/*") if file.is_file()
+    ])
+
+    for actual_file, expected_file in zip(all_project_files, expected_structure):
+        try:
+            assert actual_file == expected_file
+        except AssertionError:
+            msg = f"File {actual_file} not equals to {expected_file}\n\n"
+            msg += f"Current structure = {all_project_files}\n"
+            msg += f"Expected structure = {expected_structure}\n"
+            raise AssertionError(msg)
