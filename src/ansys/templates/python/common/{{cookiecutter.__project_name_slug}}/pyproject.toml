@@ -77,7 +77,7 @@ default_section = "THIRDPARTY"
 src_paths = ["doc", "src", "tests"]
 
 [tool.coverage.run]
-source = ["ansys.{{ cookiecutter.__product_name_slug }}"]
+source = ["{{ cookiecutter.__coverage_source }}"]
 
 [tool.coverage.report]
 show_missing = true
