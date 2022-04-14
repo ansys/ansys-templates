@@ -2,6 +2,9 @@ from ansys.templates.utils import keep_files
 
 DESIRED_STRUCTURE = [
     ".coveragerc",
+    ".flake8",
+    ".gitignore",
+    ".pre-commit-config.yaml",
     "CHANGELOG.md",
     "CODE_OF_CONDUCT.md",
     "CONTRIBUTING.md",
@@ -13,8 +16,6 @@ DESIRED_STRUCTURE = [
     "doc/source/_templates/sidebar-nav-bs.html",
     "doc/source/_templates/README.md",
     "examples/README.md",
-    ".flake8",
-    ".gitignore",
     "LICENSE",
     "pyproject.toml",
     "README.rst",
