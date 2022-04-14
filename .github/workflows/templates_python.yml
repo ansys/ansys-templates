@@ -27,10 +27,10 @@ jobs:
 
         cfg:
           # All pybasic template tests
-          - {template: "pybasic", build-system: "setuptools", outdir: "pybasic0/pybasic"}
+          - {template: "pybasic", build-system: "setuptools", outdir: "pybasic_s0/pybasic"}
             
           # All pybasic template tests
-          - {template: "pyansys", build-system: "setuptools", outdir: "pyansys0/pyproduct-library"}
+          - {template: "pyansys", build-system: "setuptools", outdir: "pyansys_s0/pyproduct-library"}
 
           # All pyansys_advanced template tests
           - {template: "pyansys_advanced", build-system: "flit", outdir: "pyansys_a0/pyproduct-library"}
