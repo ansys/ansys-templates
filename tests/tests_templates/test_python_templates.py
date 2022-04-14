@@ -31,6 +31,7 @@ PYANSYS_VARS = PYANSYS_ADVANCED_VARS = dict(
 PYCOMMON_STRUCTURE = [
     ".coveragerc",
     ".flake8",
+    ".github/workflows/ci_cd.yml",
     ".gitignore",
     ".pre-commit-config.yaml",
     "azure-pipelines.yml",
@@ -60,17 +61,16 @@ PYCOMMON_STRUCTURE = [
 PYBASIC_STRUCTURE = deepcopy(PYCOMMON_STRUCTURE) + [
     f"src/{PYBASIC_VARS['project_name']}/__init__.py",
 ]
-[PYBASIC_STRUCTURE.remove(file) for file in [".pre-commit-config.yaml", "azure-pipelines.yml", "tox.ini"]]
+[PYBASIC_STRUCTURE.remove(file) for file in [".github/workflows/ci_cd.yml", ".pre-commit-config.yaml", "azure-pipelines.yml", "tox.ini"]]
 
 # Structure for pyansys projects
 PYANSYS_STRUCTURE = deepcopy(PYCOMMON_STRUCTURE) + [
     f"src/ansys/{PYANSYS_VARS['__product_name_slug']}/{PYANSYS_VARS['__library_name_slug']}/__init__.py",
 ]
-[PYANSYS_STRUCTURE.remove(file) for file in ["azure-pipelines.yml", "tox.ini"]]
+[PYANSYS_STRUCTURE.remove(file) for file in [".github/workflows/ci_cd.yml", "azure-pipelines.yml", "tox.ini"]]
 
 # Structure for pyansys-advanced projects
 PYANSYS_ADVANCED_STRUCTURE = deepcopy(PYCOMMON_STRUCTURE) + [
-    ".github/workflows/ci_cd.yml",
     f"src/ansys/{PYANSYS_VARS['__product_name_slug']}/{PYANSYS_VARS['__library_name_slug']}/__init__.py",
     "requirements/requirements_build.txt",
     "requirements/requirements_doc.txt",
