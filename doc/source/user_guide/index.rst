@@ -1,8 +1,8 @@
-User guide
+User Guide
 ==========
 
-This page contains various guides explaining how to use ``ansys-templates`` and
-contribute to the tool by adding new templates.
+This section explains how to use ``ansys-templates`` and
+contribute by adding new templates.
 
 .. toctree::
 
