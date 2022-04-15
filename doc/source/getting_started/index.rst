@@ -65,7 +65,7 @@ to the latest version with:
 
 .. code:: bash
 
-   python -m pipx upgrade pyansys-templates
+   python -m pipx upgrade ansys-templates
 
 
 Verify Your Installation
