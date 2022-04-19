@@ -123,15 +123,18 @@ def keep_files(files_list, project_path=Path(os.getcwd())):
     # Collect all the files in the project
     all_project_files = project_path.glob("**/*")
 
-    # Remove all undesired files
-    for file in all_project_files:
-        if str(file.relative_to(project_path)) not in files_list and file.is_file():
-            file.unlink()
+    # Fix path name according to OS flavor
+    separator, new_separator = ("/", "\\") if os.name != "posix" else ("/", "/")
+    desired_files = [file.replace(separator, new_separator) for file in files_list]
 
-    # Remove all undesired directories
+    folders = []
+    # Removing undesired files
     for file in all_project_files:
-        if str(file.relative_to(project_path)) not in files_list and file.is_dir():
-            file.rmdir()
+        if str(file.relative_to(project_path)).replace(separator, new_separator) not in desired_files:
+            file.unlink() if file.is_file() else folders.append(file)
+
+    # Removing undesired empty folders
+    [folder.rmdir() for folder in folders if not os.listdir(str(folder))]
 
 def bake_template(template_path, output_path, license_path=MIT_LICENSE, **cookiecutter_kwargs):
     """
