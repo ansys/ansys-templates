@@ -1,5 +1,6 @@
 """A collection of routines focused on testing."""
 
+import os
 
 from ansys.templates.utils import bake_template
 
@@ -69,11 +70,19 @@ def assert_project_structure(expected_structure, project_path):
         Path to the output project path.
 
     """
-    expected_structure = sorted(expected_structure)
-    current_structure = sorted([
-        str(file.relative_to(project_path)) for file in
-        project_path.glob("**/*") if file.is_file()
-    ])
+    # Fix path name according to OS flavor
+    separator, new_separator = ("/", "\\") if os.name != "posix" else ("/", "/")
+
+    # Sort expected and current structures
+    expected_structure = sorted(
+        [file.replace(separator, new_separator) for file in expected_structure]
+    )
+    current_structure = sorted(
+        [
+            str(file.relative_to(project_path)).replace(separator, new_separator)
+            for file in project_path.glob("**/*") if file.is_file()
+        ]
+    )
 
     try:
         for current_file, expected_file in zip(current_structure, expected_structure):
