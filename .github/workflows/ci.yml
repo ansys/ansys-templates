@@ -86,6 +86,10 @@ jobs:
       - name: Run Tox
         run: tox -e ${{ matrix.cfg.toxenv }}-smoke-cov
 
+      - name: Upload coverage to Codecov
+        uses: codecov/codecov-action@v2
+        if: matrix.cfg.python-version == '3.7'
+
   build:
     name: Build package
     runs-on: ubuntu-latest
