@@ -87,7 +87,6 @@ def main():
         DESIRED_STRUCTURE.append("docker/Dockerfile")
         DESIRED_STRUCTURE.append("docker/README.md")
 
-
     # Remove non-desired files
     if build_system == "setuptools":
         DESIRED_STRUCTURE.append("setup.py")
