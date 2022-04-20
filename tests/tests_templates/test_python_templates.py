@@ -7,26 +7,37 @@ from ansys.templates.testing import assert_project_structure, assert_template_ba
 from ansys.templates.utils import keep_files
 
 PYCOMMON_VARS = dict(
-    __project_name_slug = "common"
+    __project_name_slug="common"
 )
 
 PYBASIC_VARS = dict(
-    project_name = "pybasic",
-    __project_name_slug = "pybasic",
-    short_description = "A basic Python Package",
-    repository_url = "https://platform.domain/organization/pybasic",
-    requires_python = "3.7",
+    project_name="pybasic",
+    __project_name_slug="pybasic",
+    short_description="A basic Python Package",
+    repository_url="https://platform.domain/organization/pybasic",
+    requires_python="3.7",
 )
 
 PYANSYS_VARS = PYANSYS_ADVANCED_VARS = dict(
-    product_name = "product",
-    library_name = "library",
-    __product_name_slug = "product",
-    __library_name_slug = "library",
-    __project_name_slug = "pyproduct-library",
-    requires_python = "3.7",
+    product_name="product",
+    library_name="library",
+    __product_name_slug="product",
+    __library_name_slug="library",
+    __project_name_slug="pyproduct-library",
+    requires_python="3.7",
 )
 
+PYACE_VARS = dict(
+    project_name="my_company",
+    library_name="library",
+    ci_cd_platform="GitHub",
+    copyright="My Company",
+    enable_docker="Yes",
+    __project_name_slug = "project",
+    # __library_name_slug = "library",
+    # __project_name_slug = "pyproduct-library",
+    requires_python="3.7",
+)
 
 PYCOMMON_STRUCTURE = [
     ".coveragerc",
@@ -34,7 +45,7 @@ PYCOMMON_STRUCTURE = [
     ".github/workflows/ci_cd.yml",
     ".gitignore",
     ".pre-commit-config.yaml",
-    "azure-pipelines.yml",
+    "azure-pipeline.yml",
     "CHANGELOG.md",
     "CODE_OF_CONDUCT.md",
     "CONTRIBUTING.md",
@@ -61,13 +72,14 @@ PYCOMMON_STRUCTURE = [
 PYBASIC_STRUCTURE = deepcopy(PYCOMMON_STRUCTURE) + [
     f"src/{PYBASIC_VARS['project_name']}/__init__.py",
 ]
-[PYBASIC_STRUCTURE.remove(file) for file in [".github/workflows/ci_cd.yml", ".pre-commit-config.yaml", "azure-pipelines.yml", "tox.ini"]]
+[PYBASIC_STRUCTURE.remove(file) for file in
+ [".github/workflows/ci_cd.yml", ".pre-commit-config.yaml", "azure-pipeline.yml", "tox.ini"]]
 
 # Structure for pyansys projects
 PYANSYS_STRUCTURE = deepcopy(PYCOMMON_STRUCTURE) + [
     f"src/ansys/{PYANSYS_VARS['__product_name_slug']}/{PYANSYS_VARS['__library_name_slug']}/__init__.py",
 ]
-[PYANSYS_STRUCTURE.remove(file) for file in [".github/workflows/ci_cd.yml", "azure-pipelines.yml", "tox.ini"]]
+[PYANSYS_STRUCTURE.remove(file) for file in [".github/workflows/ci_cd.yml", "azure-pipeline.yml", "tox.ini"]]
 
 # Structure for pyansys-advanced projects
 PYANSYS_ADVANCED_STRUCTURE = deepcopy(PYCOMMON_STRUCTURE) + [
@@ -76,7 +88,91 @@ PYANSYS_ADVANCED_STRUCTURE = deepcopy(PYCOMMON_STRUCTURE) + [
     "requirements/requirements_doc.txt",
     "requirements/requirements_tests.txt",
 ]
-[PYANSYS_ADVANCED_STRUCTURE.remove(file) for file in ["azure-pipelines.yml", "setup.py", ".coveragerc", "requirements_build.txt", "requirements_doc.txt", "requirements_tests.txt"]]
+[PYANSYS_ADVANCED_STRUCTURE.remove(file) for file in
+ ["azure-pipeline.yml", "setup.py", ".coveragerc", "requirements_build.txt", "requirements_doc.txt",
+  "requirements_tests.txt"]]
+
+PYACE_FLASK_STRUCTURE = deepcopy(PYCOMMON_STRUCTURE) + [
+    "src/__init__.py",
+    "src/_version.py",
+    "src/server.py",
+    "src/blueprints/__init__.py",
+    "src/blueprints/health.py",
+    "src/blueprints/version.py",
+    "src/models/__init__.py",
+    "src/observability/__init__.py",
+    "src/observability/logger.py",
+    "src/static/swagger.json",
+    "docker/Dockerfile",
+    "docker/README.md",
+    "requirements/requirements_build.txt",
+    "requirements/requirements_doc.txt",
+    "requirements/requirements_tests.txt",
+    "tests/test_server.py",
+    "tests/conftest.py",
+    "docker-compose.yml",
+]
+[PYACE_FLASK_STRUCTURE.remove(file) for file in
+ ["azure-pipeline.yml", "setup.py", ".coveragerc", "requirements_build.txt", "requirements_doc.txt",
+  "requirements_tests.txt"]]
+
+PYACE_FAST_STRUCTURE = deepcopy(PYCOMMON_STRUCTURE) + [
+    "src/__init__.py",
+    "src/_version.py",
+    "src/server.py",
+    "src/models/__init__.py",
+    "src/observability/logger.py",
+    "docker/Dockerfile",
+    "docker/README.md",
+    "requirements/requirements_build.txt",
+    "requirements/requirements_doc.txt",
+    "requirements/requirements_tests.txt",
+    "tests/test_server.py",
+    "tests/conftest.py",
+    "docker-compose.yml",
+]
+[PYACE_FAST_STRUCTURE.remove(file) for file in
+ ["azure-pipeline.yml", "setup.py", ".coveragerc", "requirements_build.txt", "requirements_doc.txt",
+  "requirements_tests.txt"]]
+
+PYACE_GRPC_STRUCTURE = deepcopy(PYCOMMON_STRUCTURE) + [
+    "src/__init__.py",
+    "src/_version.py",
+    "src/server.py",
+    "src/client.py",
+    "src/observability/logger.py",
+    "src/services/__init__.py",
+    "src/services/pinger.py",
+    "src/stubs/__init__.py",
+    "docker/Dockerfile",
+    "docker/README.md",
+    "requirements/requirements_build.txt",
+    "requirements/requirements_doc.txt",
+    "requirements/requirements_tests.txt",
+    "protobufs/pingserver.proto",
+    "tests/test_server.py",
+    "tests/conftest.py",
+    "docker-compose.yml",
+]
+[PYACE_GRPC_STRUCTURE.remove(file) for file in
+ ["azure-pipeline.yml", "setup.py", ".coveragerc", "requirements_build.txt", "requirements_doc.txt",
+  "requirements_tests.txt"]]
+
+PYACE_PKG_STRUCTURE = deepcopy(PYCOMMON_STRUCTURE) + [
+    "src/__init__.py",
+    "src/logger.py",
+    "src/main.py",
+    "tests/__init__.py",
+    "tests/conftest.py",
+    "requirements/requirements_build.txt",
+    "requirements/requirements_doc.txt",
+    "requirements/requirements_tests.txt",
+    "Dockerfile",
+    "docker-compose.yaml",
+]
+[PYACE_PKG_STRUCTURE.remove(file) for file in
+ ["azure-pipeline.yml", "setup.py", ".coveragerc", "requirements_build.txt", "requirements_doc.txt",
+  "requirements_tests.txt"]]
 
 # A dictionary relating templates name with their variables and structure
 TEMPLATES_VARIABLES_AND_STRUCTURE = {
@@ -84,6 +180,10 @@ TEMPLATES_VARIABLES_AND_STRUCTURE = {
     "pybasic": [PYBASIC_VARS, PYBASIC_STRUCTURE],
     "pyansys": [PYANSYS_VARS, PYANSYS_STRUCTURE],
     "pyansys_advanced": [PYANSYS_ADVANCED_VARS, PYANSYS_ADVANCED_STRUCTURE],
+    "pyace-flask": [PYACE_VARS, PYACE_FLASK_STRUCTURE],
+    "pyace-grpc": [PYACE_VARS, PYACE_GRPC_STRUCTURE],
+    "pyace-fast": [PYACE_VARS, PYACE_FAST_STRUCTURE],
+    "pyace": [PYACE_VARS, PYACE_PKG_STRUCTURE],
 }
 
 

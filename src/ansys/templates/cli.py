@@ -74,7 +74,7 @@ def pyace():
 @new.command()
 def pyace_fast():
     """Create a FastAPI project initialized for any developer."""
-    create_project("pyace-fastapi")
+    create_project("pyace-fast")
 
 
 @new.command()

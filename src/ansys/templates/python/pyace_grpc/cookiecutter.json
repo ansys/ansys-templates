@@ -21,5 +21,8 @@
   "build_system": ["flit", "poetry", "setuptools"],
   "max_linelength": "100",
   "__max_linelength": "{{ cookiecutter.max_linelength }}",
-  "__coverage_source": ""
+  "__coverage_source": "",
+  "__product_name_slug": "",
+  "__short_description": "",
+  "__build_system": ""
 }

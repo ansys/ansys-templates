@@ -5,41 +5,43 @@ from pathlib import Path
 
 import isort
 
+from ansys.templates.utils import keep_files
+
 ALLOWED_BUILD_SYSTEMS = ["flit", "poetry", "setuptools"]
 """A list of all allowed build systems by the template."""
 
-
-def remove_tool_files(tool_name, basedir):
-    """
-    Remove files matching given glob expression within desired base directory.
-
-    Parameters
-    ----------
-    tool_name: str
-        Name of the tool used as build system.
-    basedir: Path
-        Base directory path.
-
-    """
-    for filepath in basedir.glob(f"**/*_{tool_name}*"):
-        filepath.unlink()
-
-
-def rename_tool_files(tool_name, basedir):
-    """
-    Rename tool filenames within desired base directory.
-
-    Parameters
-    ----------
-    tool_name: str
-        Name of the tool used as build system.
-    basedir: Path
-        Base directory path.
-
-    """
-    for original_filepath in basedir.glob(f"**/*_{tool_name}*"):
-        new_filename = original_filepath.name.replace(f"_{tool_name}", "")
-        original_filepath.rename(Path(original_filepath.parent, new_filename))
+DESIRED_STRUCTURE = [
+    "CHANGELOG.md",
+    "CODE_OF_CONDUCT.md",
+    "CONTRIBUTING.md",
+    "doc/Makefile",
+    "doc/make.bat",
+    "doc/source/conf.py",
+    "doc/source/index.rst",
+    "doc/source/_static/README.md",
+    "doc/source/_templates/sidebar-nav-bs.html",
+    "doc/source/_templates/README.md",
+    "examples/README.md",
+    ".flake8",
+    ".gitignore",
+    "LICENSE",
+    ".pre-commit-config.yaml",
+    "pyproject.toml",
+    "README.rst",
+    "requirements/requirements_build.txt",
+    "requirements/requirements_doc.txt",
+    "requirements/requirements_tests.txt",
+    "src/__init__.py",
+    "src/logger.py",
+    "src/main.py",
+    "tests/test_metadata.py",
+    "tox.ini",
+    "tests/__init__.py",
+    "tests/conftest.py",
+    "Dockerfile",
+    "docker-compose.yaml",
+]
+"""A list holding all desired files to be included in the project."""
 
 
 def main():
@@ -50,33 +52,10 @@ def main():
     # Get the desired build system
     build_system = "{{ cookiecutter.build_system }}"
 
-    # Remove non-desired build system files
-    for tool in ALLOWED_BUILD_SYSTEMS:
-        if tool != build_system:
-            remove_tool_files(tool, project_path)
-
-    # Remove ci/cd non-desired  files
-    ci_cd = "{{ cookiecutter.ci_cd_platform }}"
-    if ci_cd == 'GitHub':
-        Path(str(project_path / 'azure-pipeline.yml')).unlink()
-    if ci_cd == 'Azure DevOps':
-        shutil.rmtree(str(project_path / '.github'))
-
-    # Remove docker non desired files
-
-    enable_docekr = "{{ cookiecutter.enable_docker }}"
-    if enable_docekr == 'No':
-        for file in os.listdir(str(project_path)):
-            if file.startswith("docker"):
-                Path(file).unlink()
-
-    # Rename any files including tool name suffix
-    rename_tool_files(build_system, project_path)
-
     # Move all requirements files into a requirements/ directory
     os.mkdir(project_path / "requirements")
     requirements_files = [
-            f"requirements_{name}.txt" for name in ["build", "doc", "tests"]
+        f"requirements_{name}.txt" for name in ["build", "doc", "tests"]
     ]
     for file in requirements_files:
         shutil.move(str(project_path / file), str(project_path / "requirements"))
@@ -91,6 +70,25 @@ def main():
     ]
     for filepath in filepaths_list:
         isort.api.sort_file(filepath, isort_config)
+
+    # Remove ci/cd non-desired  files
+    ci_cd = "{{ cookiecutter.ci_cd_platform }}"
+    if ci_cd == 'GitHub':
+        DESIRED_STRUCTURE.append(".github/workflows/ci_cd.yml")
+    if ci_cd == 'Azure DevOps':
+        DESIRED_STRUCTURE.append("azure-pipeline.yml")
+
+    # Remove docker non desired files
+    enable_docker = "{{ cookiecutter.enable_docker }}"
+    if enable_docker == 'Yes':
+        DESIRED_STRUCTURE.append("Dockerfile")
+        DESIRED_STRUCTURE.append("docker-compose.yml")
+
+    # Remove non-desired files
+    if build_system == "setuptools":
+        DESIRED_STRUCTURE.append("setup.py")
+
+    keep_files(DESIRED_STRUCTURE)
 
 
 if __name__ == "__main__":

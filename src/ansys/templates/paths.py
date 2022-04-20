@@ -42,6 +42,6 @@ TEMPLATE_PATH_FINDER = {
     "pyace": PYTHON_TEMPLATES_PYACE_PATH,
     "pyace-grpc": PYTHON_TEMPLATES_PYACE_GRPC_PATH,
     "pyace-flask": PYTHON_TEMPLATES_PYACE_FLASK_PATH,
-    "pyace-fastapi": PYTHON_TEMPLATES_PYACE_FAST_PATH,
+    "pyace-fast": PYTHON_TEMPLATES_PYACE_FAST_PATH,
 }
 """A dictionary relating templates names with their paths."""
