@@ -37,6 +37,24 @@ jobs:
           - {template: "pyansys_advanced", build-system: "poetry", outdir: "pyansys_a1/pyproduct-library"}
           - {template: "pyansys_advanced", build-system: "setuptools", outdir: "pyansys_a2/pyproduct-library"}
 
+          # All pyace template tests
+          - {template: "pyace", build-system: "flit", outdir: "pyace_a0/project"}
+          - {template: "pyace", build-system: "poetry", outdir: "pyace_a1/project"}
+          - {template: "pyace", build-system: "setuptools", outdir: "pyace_a2/project"}
+
+          - {template: "pyace-flask", build-system: "flit", outdir: "pyace_a0/project"}
+          - {template: "pyace-flask", build-system: "poetry", outdir: "pyace_a1/project"}
+          - {template: "pyace-flask", build-system: "setuptools", outdir: "pyace_a2/project"}
+
+          - {template: "pyace-fast", build-system: "flit", outdir: "pyace_a0/project"}
+          - {template: "pyace-fast", build-system: "poetry", outdir: "pyace_a1/project"}
+          - {template: "pyace-fast", build-system: "setuptools", outdir: "pyace_a2/project"}
+
+          - {template: "pyace-grpc", build-system: "flit", outdir: "pyace_a0/project"}
+          - {template: "pyace-grpc", build-system: "poetry", outdir: "pyace_a1/project"}
+          - {template: "pyace-grpc", build-system: "setuptools", outdir: "pyace_a2/project"}
+
+
       fail-fast: false
 
     steps:
