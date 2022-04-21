@@ -65,7 +65,7 @@ jobs:
           mv output $HOME/baked_templates && ls $HOME/baked_templates
 
       - name: Install and test project
-        if: contains(fromJson('["pyansys_advanced", "pyace"]'), matrix.cfg.template) == 'False'
+        if: contains(fromJson('["pybasic", "pyansys"]'), matrix.cfg.template)
         run: |
           # Move to directory outside the current repository so tox does not
           # interfere with baked tox files
@@ -85,7 +85,7 @@ jobs:
           sphinx-build doc/source doc/build -v -W -b html
 
       - name: Install act
-        if: contains(fromJson('["pyansys_advanced", "pyace"]'), matrix.cfg.template)
+        if: contains(fromJson('["pybasic", "pyansys"]'), matrix.cfg.template) == false
         run: |
           sudo apt-get install build-essential gcc
           /bin/bash -c "$(curl -fsSL https://raw.githubusercontent.com/Homebrew/install/HEAD/install.sh)"
@@ -96,7 +96,7 @@ jobs:
           echo "-P ubuntu-latest=ghcr.io/catthehacker/ubuntu:act-latest" >> ~/.actrc
 
       - name: Test baked project
-        if: contains(fromJson('["pyansys_advanced", "pyace"]'), matrix.cfg.template)
+        if: contains(fromJson('["pybasic", "pyansys"]'), matrix.cfg.template) == false
         run: |
           # Change to template directory location
           cd "$HOME/baked_templates/test_template_python_${{ matrix.cfg.outdir }}"
