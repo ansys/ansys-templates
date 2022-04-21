@@ -8,14 +8,17 @@
 {{ cookiecutter.library_name }}
 """
 
-from logger import Logger
 from datetime import datetime
+
+from logger import Logger
 
 logger = Logger.init("{{ cookiecutter.project_name }}.{{ cookiecutter.library_name }}")
 
 
 def get_date_and_time():
-    return datetime.today().strftime('%Y-%m-%d-%H:%M:%S')
+    """Compute today's datetime."""
+    return datetime.today().strftime("%Y-%m-%d-%H:%M:%S")
 
-if __name__ == '__main__':
-    logger.info(f'Hello! Welcome, we are {get_date_and_time()}')
+
+if __name__ == "__main__":
+    logger.info(f"Hello! Welcome, we are {get_date_and_time()}")

@@ -35,5 +35,3 @@ async def health():
 @app.get("/version")
 async def version():
     return {"version": __version__}
-
-

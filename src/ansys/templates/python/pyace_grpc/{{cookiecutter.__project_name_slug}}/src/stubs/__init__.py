@@ -8,7 +8,8 @@
 {{ cookiecutter.library_name }}
 """
 
-import sys
 import os
 from pathlib import Path
-sys.path.insert(0, os.path.join(Path(os.path.dirname(os.path.realpath(__file__))).parent, 'stubs'))
+import sys
+
+sys.path.insert(0, os.path.join(Path(os.path.dirname(os.path.realpath(__file__))).parent, "stubs"))
