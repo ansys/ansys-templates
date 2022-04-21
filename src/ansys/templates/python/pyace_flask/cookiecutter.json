@@ -1,4 +1,3 @@
-
 {
   "project_name": "project",
   "__project_name_slug": "{{ cookiecutter.project_name | slugify(separator=('_')) }}",
@@ -23,5 +22,6 @@
   "max_linelength": "100",
   "__max_linelength": "{{ cookiecutter.max_linelength }}",
   "__coverage_source": "",
-  "__product_name_slug": ""
+  "__product_name_slug": "",
+  "__is_pyansys": "False"
 }
