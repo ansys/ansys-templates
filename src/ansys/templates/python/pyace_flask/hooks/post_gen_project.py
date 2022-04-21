@@ -7,9 +7,6 @@ import isort
 
 from ansys.templates.utils import keep_files
 
-ALLOWED_BUILD_SYSTEMS = ["flit", "poetry", "setuptools"]
-"""A list of all allowed build systems by the template."""
-
 DESIRED_STRUCTURE = [
     "CHANGELOG.md",
     "CODE_OF_CONDUCT.md",
@@ -31,6 +28,7 @@ DESIRED_STRUCTURE = [
     "requirements/requirements_build.txt",
     "requirements/requirements_doc.txt",
     "requirements/requirements_tests.txt",
+    "setup.py",
     "src/__init__.py",
     "src/_version.py",
     "src/server.py",
@@ -56,9 +54,6 @@ def main():
     """Entry point of the script."""
     # Get baked project location path
     project_path = Path(os.getcwd())
-
-    # Get the desired build system
-    build_system = "{{ cookiecutter.build_system }}"
 
     # Move all requirements files into a requirements/ directory
     os.mkdir(project_path / "requirements")
@@ -93,9 +88,6 @@ def main():
         DESIRED_STRUCTURE.append("docker/README.md")
 
     # Remove non-desired files
-    if build_system == "setuptools":
-        DESIRED_STRUCTURE.append("setup.py")
-
     keep_files(DESIRED_STRUCTURE)
 
 

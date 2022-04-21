@@ -113,7 +113,7 @@ PYACE_FLASK_STRUCTURE = deepcopy(PYCOMMON_STRUCTURE) + [
     "docker-compose.yml",
 ]
 [PYACE_FLASK_STRUCTURE.remove(file) for file in
- ["azure-pipeline.yml", "setup.py", ".coveragerc", "requirements_build.txt", "requirements_doc.txt",
+ ["azure-pipeline.yml", ".coveragerc", "requirements_build.txt", "requirements_doc.txt",
   "requirements_tests.txt"]]
 
 PYACE_FAST_STRUCTURE = deepcopy(PYCOMMON_STRUCTURE) + [
@@ -132,7 +132,7 @@ PYACE_FAST_STRUCTURE = deepcopy(PYCOMMON_STRUCTURE) + [
     "docker-compose.yml",
 ]
 [PYACE_FAST_STRUCTURE.remove(file) for file in
- ["azure-pipeline.yml", "setup.py", ".coveragerc", "requirements_build.txt", "requirements_doc.txt",
+ ["azure-pipeline.yml", ".coveragerc", "requirements_build.txt", "requirements_doc.txt",
   "requirements_tests.txt"]]
 
 PYACE_GRPC_STRUCTURE = deepcopy(PYCOMMON_STRUCTURE) + [
@@ -155,7 +155,7 @@ PYACE_GRPC_STRUCTURE = deepcopy(PYCOMMON_STRUCTURE) + [
     "docker-compose.yml",
 ]
 [PYACE_GRPC_STRUCTURE.remove(file) for file in
- ["azure-pipeline.yml", "setup.py", ".coveragerc", "requirements_build.txt", "requirements_doc.txt",
+ ["azure-pipeline.yml", ".coveragerc", "requirements_build.txt", "requirements_doc.txt",
   "requirements_tests.txt"]]
 
 PYACE_PKG_STRUCTURE = deepcopy(PYCOMMON_STRUCTURE) + [
@@ -171,7 +171,7 @@ PYACE_PKG_STRUCTURE = deepcopy(PYCOMMON_STRUCTURE) + [
     "docker-compose.yaml",
 ]
 [PYACE_PKG_STRUCTURE.remove(file) for file in
- ["azure-pipeline.yml", "setup.py", ".coveragerc", "requirements_build.txt", "requirements_doc.txt",
+ ["azure-pipeline.yml", ".coveragerc", "requirements_build.txt", "requirements_doc.txt",
   "requirements_tests.txt"]]
 
 # A dictionary relating templates name with their variables and structure
