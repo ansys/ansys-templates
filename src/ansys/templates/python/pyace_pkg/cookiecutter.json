@@ -9,7 +9,7 @@
   "copyright": "None",
   "__default_copyright": "{{ cookiecutter.copyright }}",
   "__pkg_name": "{{ cookiecutter.__project_name_slug | replace('_', '-') }}-{{ cookiecutter.__library_name_slug | replace('_', '-') }}",
-  "__pkg_namespace": "{{ cookiecutter.__project_name_slug }}.{{ cookiecutter.__library_name_slug }}",
+  "__pkg_namespace": "src",
   "version": "0.1.dev0",
   "__version": "{{ cookiecutter.version }}",
   "short_description": "A {{ cookiecutter.project_name }} Python project for {{ cookiecutter.project_name }} {{ cookiecutter.library_name }}",
