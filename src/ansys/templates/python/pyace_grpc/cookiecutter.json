@@ -14,15 +14,15 @@
   "version": "0.1.dev0",
   "__version": "{{ cookiecutter.version }}",
   "short_description": "A {{ cookiecutter.project_name }} Python project for {{ cookiecutter.project_name }} {{ cookiecutter.library_name }}",
+  "__short_description": "{{ cookiecutter.short_description }}",
   "repository_url": "https://github.com/pyansys/{{ cookiecutter.__project_name_slug }}",
   "__repository_url": "{{ cookiecutter.repository_url }}",
   "requires_python": ["3.7", "3.8", "3.9", "3.10"],
   "__requires_python": "{{ cookiecutter.requires_python }}",
   "build_system": ["flit", "poetry", "setuptools"],
+  "__build_system": "{{ cookiecutter.build_system }}",
   "max_linelength": "100",
   "__max_linelength": "{{ cookiecutter.max_linelength }}",
   "__coverage_source": "",
-  "__product_name_slug": "",
-  "__short_description": "",
-  "__build_system": ""
+  "__product_name_slug": ""
 }
