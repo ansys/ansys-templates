@@ -65,7 +65,7 @@ jobs:
           mv output $HOME/baked_templates && ls $HOME/baked_templates
 
       - name: Install and test project
-        if: matrix.cfg.template != 'pyansys_advanced'
+        if: contains(fromJson('["pyansys_advanced", "pyace"]'), matrix.cfg.template) == 'False'
         run: |
           # Move to directory outside the current repository so tox does not
           # interfere with baked tox files
