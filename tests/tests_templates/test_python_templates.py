@@ -190,6 +190,10 @@ TEMPLATES_VARIABLES_AND_STRUCTURE = {
 @pytest.mark.parametrize("build_system", ["flit", "poetry", "setuptools"])
 @pytest.mark.parametrize("template", TEMPLATES_VARIABLES_AND_STRUCTURE)
 def test_template_python(tmp_path, build_system, template):
+    # Skip if template does not support a particular build system
+    if build_system in ["poetry", "flit"] and template != "pyansys_advanced":
+        pytest.skip(f"Template {template} does not support {build_system}.")
+
     # Collect variables and expected structure
     VARIABLES, EXPECTED_STRUCTURE = TEMPLATES_VARIABLES_AND_STRUCTURE[template]
 
