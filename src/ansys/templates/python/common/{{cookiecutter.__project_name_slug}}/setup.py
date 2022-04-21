@@ -20,10 +20,10 @@ setup(
     long_description=open("README.rst").read(),
     install_requires=["importlib-metadata >=4.0"],
     python_requires=">={{ cookiecutter.__requires_python }}",
-    {%- if cookiecutter.__is_pyansys %}
+    {%- if cookiecutter.__is_pyansys == "True" %}
     packages=find_namespace_packages(where="src", include="ansys*"),
-    {%- else -%}
+    {%- else %}
     packages=find_namespace_packages(where="src"),
-    {%- endif -%}
+    {%- endif %}
     package_dir={"": "src"},
 )
