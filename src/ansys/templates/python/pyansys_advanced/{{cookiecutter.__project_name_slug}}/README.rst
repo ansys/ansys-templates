@@ -146,8 +146,8 @@ own virtual environment so anything being tested is isolated from the project in
 order to guarantee project's integrity. The following environments commands are provided:
 
 - **tox -e style**: will check for coding style quality.
-- **tox -e py3X**: being X the minor version of your Python environment. Checks for unit tests.
-- **tox -e py3X-coverage**: checks for unit testing and code coverage.
+- **tox -e py**: checks for unit tests.
+- **tox -e py-coverage**: checks for unit testing and code coverage.
 - **tox -e doc**: checs for documentation building process.
 
 
