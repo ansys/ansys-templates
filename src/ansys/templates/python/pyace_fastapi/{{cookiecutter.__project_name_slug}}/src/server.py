@@ -8,9 +8,9 @@
 {{ cookiecutter.library_name }}
 """
 from fastapi import FastAPI
-from observability.logger import Logger
-from _version import __version__
 
+from _version import __version__
+from observability.logger import Logger
 
 logger = Logger.init("{{ cookiecutter.__project_name_slug }}")
 
@@ -29,9 +29,11 @@ app = FastAPI(
 
 @app.get("/health")
 async def health():
+    """Check integrity of the server."""
     return "The {{ cookiecutter.library_name }} API server is healthy."
 
 
 @app.get("/version")
 async def version():
+    """Check current version."""
     return {"version": __version__}

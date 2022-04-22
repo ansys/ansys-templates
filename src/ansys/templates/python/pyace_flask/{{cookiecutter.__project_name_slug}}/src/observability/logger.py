@@ -6,14 +6,17 @@
 
 {{ cookiecutter.library_name }}
 """
+from datetime import datetime
 import logging
 import os
-from datetime import datetime
 
 
 class Logger(object):
+    """Logger class."""
+
     @classmethod
     def init(cls, name):
+        """Initialize instances for the Logger class."""
         formatter = logging.Formatter(
             "%(asctime)s %(name)s %(levelname)s %(threadName)-10s %(message)s"
         )

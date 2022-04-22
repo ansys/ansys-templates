@@ -12,8 +12,11 @@ import os
 
 
 class Logger(object):
+    """Logger class."""
+
     @classmethod
     def init(cls, name):
+        """Initialize logger instances."""
         formatter = logging.Formatter(
             "%(asctime)s %(name)s %(levelname)s %(threadName)-10s %(message)s"
         )

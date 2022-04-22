@@ -9,8 +9,8 @@
 """
 import argparse
 
-from flask import Flask, jsonify, request
-from flask_cors import CORS, cross_origin
+from flask import Flask
+from flask_cors import CORS
 from flask_swagger_ui import get_swaggerui_blueprint
 
 from blueprints.health import blueprint as health_endpoint
@@ -24,16 +24,14 @@ API_URL = "/static/swagger.json"
 SWAGGER_UI_BLUEPRINT = get_swaggerui_blueprint(
     SWAGGER_URL,
     API_URL,
-    config={
-        "app_name": "{{ cookiecutter.project_name }} {{ cookiecutter.library_name }} Api"
-    },
+    config={"app_name": "{{ cookiecutter.project_name }} {{ cookiecutter.library_name }} Api"},
 )
 
 logger = Logger.init("{{ cookiecutter.__project_name_slug }}")
 
 
 def create_app():
-    """Initialize the core application"""
+    """Initialize the core application."""
     app = Flask(__name__)
     CORS(app, resources=r"/api/*")
     app.config["CORS_HEADERS"] = "Content-Type"
@@ -45,13 +43,11 @@ def create_app():
 
 
 def serve(app, address, port, middleware=None):
-
+    """Serve the application."""
     if middleware is not None:
         middleware(app)
 
-    logger.info(
-        "{{ cookiecutter.project_name }} {{ cookiecutter.library_name }} Server starting..."
-    )
+    logger.info("{{ cookiecutter.project_name }} {{ cookiecutter.library_name }} Server starting...")
     app.run(host=address, port=port)
 
 

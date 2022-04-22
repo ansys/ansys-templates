@@ -6,12 +6,15 @@
 
 {{ cookiecutter.library_name }}
 """
+
 from flask import Blueprint, jsonify
+
 from _version import __version__
 
-blueprint = Blueprint('api_version', __name__, url_prefix='/api/version')
+blueprint = Blueprint("api_version", __name__, url_prefix="/api/version")
 
 
-@blueprint.route('/')
+@blueprint.route("/")
 def get_version():
-    return jsonify({'version': __version__})
+    """Get current version."""
+    return jsonify({"version": __version__})
