@@ -110,4 +110,4 @@ jobs:
           git config --local user.email "user@email-server.domain"
           git add . && git commit -m "Initialize repository"
           # Run act, ignore runner errors and look for real ones
-          act | grep -v -w "add-matcher"
+          if [[ ${{ matrix.cfg.template }} == "pyansys_advanced" ]]; then act | grep -v -w "add-matcher"; else act -j style | grep -v -w "add-matcher"; fi
