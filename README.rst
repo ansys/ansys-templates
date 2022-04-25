@@ -46,3 +46,30 @@ The main advantages of using this tool are:
 For information on using this tool, see the `Ansys Templates Documentation`_.
 
 .. _Ansys Templates Documentation: https://templates.pyansys.com/ 
+
+
+Rendered Templates Demos
+------------------------
+
+To have a better idea on how each template will look once it gets rendered,
+please refer to its demo branch:
+
+* Rendered example for `pybasic template`_
+* Rendered example for `pyansys template`_
+* Rendered example for `pyansys-advanced-flit template`_
+* Rendered example for `pyansys-advanced-poetry template`_
+* Rendered example for `pyansys-advanced-setuptools template`_
+* Rendered example for `pyace-fast template`_
+* Rendered example for `pyace-flask template`_
+* Rendered example for `pyace-grpc template`_
+* Rendered example for `pyace-pkg template`_
+
+.. _pybasic template: https://github.com/pyansys/ansys-templates/tree/demo/pybasic
+.. _pyansys template: https://github.com/pyansys/ansys-templates/tree/demo/pyansys
+.. _pyansys-advanced-flit template: https://github.com/pyansys/ansys-templates/tree/demo/pyansys-advanced-flit
+.. _pyansys-advanced-poetry template: https://github.com/pyansys/ansys-templates/tree/demo/pyansys-advanced-poetry
+.. _pyansys-advanced-setuptools template: https://github.com/pyansys/ansys-templates/tree/demo/pyansys-advanced-setuptools
+.. _pyace-fast template: https://github.com/pyansys/ansys-templates/tree/demo/pyace-fast
+.. _pyace-flask template: https://github.com/pyansys/ansys-templates/tree/demo/pyace-flask
+.. _pyace-grpc template: https://github.com/pyansys/ansys-templates/tree/demo/pyace-grpc
+.. _pyace-pkg template: https://github.com/pyansys/ansys-templates/tree/demo/pyace-pkg
