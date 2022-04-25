@@ -16,5 +16,6 @@
   "__max_linelength": "{{ cookiecutter.max_linelength }}",
   "__coverage_source": "{{ cookiecutter.__project_name_slug }}",
   "__product_name_slug": "",
-  "__library_name_slug": ""
+  "__library_name_slug": "",
+  "__is_pyansys": "False"
 }

@@ -1,0 +1,29 @@
+{%- if cookiecutter.copyright != "None" -%}
+// Copyright (c) {% now "utc", '%Y' %}, {{ cookiecutter.copyright }}. Unauthorised use, distribution or duplication is prohibited
+{% endif %}
+
+syntax = "proto3";
+
+package pingserver;
+
+// The ping service definition.
+service Pinger {
+  // Sends a ping to server
+  rpc PingServer (EmptyRequest) returns (PingReply) {}
+
+  rpc WhoPing (UserRequest) returns (PingReply) {}
+}
+
+
+message EmptyRequest {
+}
+// The request message containing the user's name.
+
+message UserRequest {
+  string name = 1;
+}
+
+// The response message containing the greetings
+message PingReply {
+  string message = 1;
+}
