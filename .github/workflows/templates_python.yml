@@ -27,21 +27,21 @@ jobs:
 
         cfg:
           # All pybasic template tests
-          - {template: "pybasic", build-system: "setuptools", outdir: "pybasic_s0/pybasic"}
+          - {name: "pybasic", template: "pybasic", build-system: "setuptools", outdir: "pybasic_s0/pybasic"}
             
           # All pybasic template tests
-          - {template: "pyansys", build-system: "setuptools", outdir: "pyansys_s0/pyproduct-library"}
+          - {name: "pyansys", template: "pyansys", build-system: "setuptools", outdir: "pyansys_s0/pyproduct-library"}
 
           # All pyansys_advanced template tests
-          - {template: "pyansys_advanced", build-system: "flit", outdir: "pyansys_a0/pyproduct-library"}
-          - {template: "pyansys_advanced", build-system: "poetry", outdir: "pyansys_a1/pyproduct-library"}
-          - {template: "pyansys_advanced", build-system: "setuptools", outdir: "pyansys_a2/pyproduct-library"}
+          - {name: "pyansys-advanced-flit", template: "pyansys_advanced", build-system: "flit", outdir: "pyansys_a0/pyproduct-library"}
+          - {name: "pyansys-advanced-poetry", template: "pyansys_advanced", build-system: "poetry", outdir: "pyansys_a1/pyproduct-library"}
+          - {name: "pyansys-advanced-setuptools", template: "pyansys_advanced", build-system: "setuptools", outdir: "pyansys_a2/pyproduct-library"}
 
           # All pyace template tests
-          - {template: "pyace", build-system: "setuptools", outdir: "pyace_set0/project"}
-          - {template: "pyace-flask", build-system: "setuptools", outdir: "pyace_fla2/project"}
-          - {template: "pyace-fast", build-system: "setuptools", outdir: "pyace_fas2/project"}
-          - {template: "pyace-grpc", build-system: "setuptools", outdir: "pyace_grp2/project"}
+          - {name: "pyace-pkg", template: "pyace", build-system: "setuptools", outdir: "pyace_set0/project"}
+          - {name: "pyace-flask", template: "pyace-flask", build-system: "setuptools", outdir: "pyace_fla2/project"}
+          - {name: "pyace-fast", template: "pyace-fast", build-system: "setuptools", outdir: "pyace_fas2/project"}
+          - {name: "pyace-grpc", template: "pyace-grpc", build-system: "setuptools", outdir: "pyace_grp2/project"}
 
 
       fail-fast: false
@@ -111,3 +111,26 @@ jobs:
           git add . && git commit -m "Initialize repository"
           # Run act, ignore runner errors and look for real ones
           if [[ ${{ matrix.cfg.template }} == "pyansys_advanced" ]]; then act | grep -v -w "add-matcher"; else act -j style | grep -v -w "add-matcher"; fi
+
+      - name: Move baked project to repo again
+        run: |
+          mv "$HOME/baked_templates/test_template_python_${{ matrix.cfg.outdir }}" baked_template
+          rm -rf baked_template/.git
+          # GitHub Apps are not allowed to deal with .github workflows
+          if [ -d "baked_template/.github" ]; then mv baked_template/.github baked_template/.github_demo; fi
+          ls -a baked_template
+
+      - name: Create demo branch
+        uses: peterjgrainger/action-create-branch@v2.0.1
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+        with:
+          branch: "demo/${{ matrix.cfg.name }}"
+
+      - name: Publish demo branch
+        uses: s0/git-publish-subdir-action@develop
+        env:
+          REPO: self
+          BRANCH: "demo/${{ matrix.cfg.name }}"
+          FOLDER: "baked_template"
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
