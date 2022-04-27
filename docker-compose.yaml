@@ -1,0 +1,21 @@
+version: '3.5'
+
+services:
+
+  library:
+    image: project/library
+    build:
+      context: .
+      dockerfile: ./Dockerfile
+    stdin_open: true
+    tty: true
+    networks:
+      - project
+
+
+
+
+
+networks:
+  project:
+    name: project-stream
