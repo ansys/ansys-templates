@@ -1,6 +1,6 @@
 [run]
 source =
-    {{ cookiecutter.__coverage_source }}
+    pybasic
 
 [report]
 show_missing = true

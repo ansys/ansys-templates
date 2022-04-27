@@ -1,7 +1,5 @@
 """
-{{ cookiecutter.product_name }}.
-
-{{ cookiecutter.library_name }}
+Pybasic.
 """
 
 try:
