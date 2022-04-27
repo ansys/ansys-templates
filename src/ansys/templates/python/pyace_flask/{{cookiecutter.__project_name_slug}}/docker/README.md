@@ -1,5 +1,0 @@
-## Containerized deployment  
-
-
-### Usage
-
