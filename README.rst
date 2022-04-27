@@ -1,26 +1,26 @@
-Welcome to Ansys Templates
-==========================
+Pyproduct library
+=================
 |pyansys| |python| |pypi| |GH-CI| |codecov| |MIT| |black|
 
 .. |pyansys| image:: https://img.shields.io/badge/Py-Ansys-ffc107.svg?logo=data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAABAAAAAQCAIAAACQkWg2AAABDklEQVQ4jWNgoDfg5mD8vE7q/3bpVyskbW0sMRUwofHD7Dh5OBkZGBgW7/3W2tZpa2tLQEOyOzeEsfumlK2tbVpaGj4N6jIs1lpsDAwMJ278sveMY2BgCA0NFRISwqkhyQ1q/Nyd3zg4OBgYGNjZ2ePi4rB5loGBhZnhxTLJ/9ulv26Q4uVk1NXV/f///////69du4Zdg78lx//t0v+3S88rFISInD59GqIH2esIJ8G9O2/XVwhjzpw5EAam1xkkBJn/bJX+v1365hxxuCAfH9+3b9/+////48cPuNehNsS7cDEzMTAwMMzb+Q2u4dOnT2vWrMHu9ZtzxP9vl/69RVpCkBlZ3N7enoDXBwEAAA+YYitOilMVAAAAAElFTkSuQmCC
    :target: https://docs.pyansys.com/
    :alt: PyAnsys
 
-.. |python| image:: https://img.shields.io/badge/Python-3.7%20%7C%203.8%20%7C%203.9%20%7C%203.10-blue
-   :target: https://pypi.org/project/ansys-templates/
+.. |python| image:: https://img.shields.io/badge/Python-%3E%3D3.7-blue
+   :target: https://pypi.org/project/pyproduct-library/
    :alt: Python
 
-.. |pypi| image:: https://img.shields.io/pypi/v/ansys-templates.svg?logo=python&logoColor=white
-   :target: https://pypi.org/project/ansys-templates/
+.. |pypi| image:: https://img.shields.io/pypi/v/pyproduct-library.svg?logo=python&logoColor=white
+   :target: https://pypi.org/project/pyproduct-library
    :alt: PyPI
 
-.. |codecov| image:: https://codecov.io/gh/pyansys/ansys-templates/branch/main/graph/badge.svg
-   :target: https://codecov.io/gh/pyansys/ansys-templates
+.. |codecov| image:: https://codecov.io/gh/pyansys/pyproduct-library/branch/main/graph/badge.svg
+   :target: https://codecov.io/gh/pyansys/pyproduct-library
    :alt: Codecov
 
-.. |GH-CI| image:: https://github.com/pyansys/ansys-templates/actions/workflows/ci.yml/badge.svg
-   :target: https://github.com/pyansys/ansys-templates/actions/workflows/ci.yml
-   :alt: CH-CI
+.. |GH-CI| image:: https://github.com/pyansys/pyproduct-library/actions/workflows/ci.yml/badge.svg
+   :target: https://github.com/pyansys/pyproduct-library/actions/workflows/ci.yml
+   :alt: GH-CI
 
 .. |MIT| image:: https://img.shields.io/badge/License-MIT-yellow.svg
    :target: https://opensource.org/licenses/MIT
@@ -31,45 +31,166 @@ Welcome to Ansys Templates
    :alt: Black
 
 
-The ``ansys-templates`` repository holds a collection of useful templates compliant
-with PyAnsys guidelines. It also provides the ``ansys-templates`` command line tool
-for interactively generating new projects based on previous templates.
-
-The main advantages of using this tool are:
-
-- Building process is fully interactive. There is no need to manually modify files.
-- Output of the project can easily be customized during the rendering process.
-- Generated projects are compliant with `PyAnsys Developer's Guidelines`_.
-
-.. _PyAnsys Developer's Guidelines: https://dev.docs.pyansys.com/
-
-For information on using this tool, see the `Ansys Templates Documentation`_.
-
-.. _Ansys Templates Documentation: https://templates.pyansys.com/ 
+A Python wrapper for Ansys product library
 
 
-Rendered Templates Demos
-------------------------
+How to install
+--------------
 
-To have a better idea on how each template will look once it gets rendered,
-please refer to its demo branch:
+At least two installation modes are provided: user and developer.
 
-* Rendered example for `pybasic template`_
-* Rendered example for `pyansys template`_
-* Rendered example for `pyansys-advanced-flit template`_
-* Rendered example for `pyansys-advanced-poetry template`_
-* Rendered example for `pyansys-advanced-setuptools template`_
-* Rendered example for `pyace-fast template`_
-* Rendered example for `pyace-flask template`_
-* Rendered example for `pyace-grpc template`_
-* Rendered example for `pyace-pkg template`_
+For users
+^^^^^^^^^
 
-.. _pybasic template: https://github.com/pyansys/ansys-templates/tree/demo/pybasic
-.. _pyansys template: https://github.com/pyansys/ansys-templates/tree/demo/pyansys
-.. _pyansys-advanced-flit template: https://github.com/pyansys/ansys-templates/tree/demo/pyansys-advanced-flit
-.. _pyansys-advanced-poetry template: https://github.com/pyansys/ansys-templates/tree/demo/pyansys-advanced-poetry
-.. _pyansys-advanced-setuptools template: https://github.com/pyansys/ansys-templates/tree/demo/pyansys-advanced-setuptools
-.. _pyace-fast template: https://github.com/pyansys/ansys-templates/tree/demo/pyace-fast
-.. _pyace-flask template: https://github.com/pyansys/ansys-templates/tree/demo/pyace-flask
-.. _pyace-grpc template: https://github.com/pyansys/ansys-templates/tree/demo/pyace-grpc
-.. _pyace-pkg template: https://github.com/pyansys/ansys-templates/tree/demo/pyace-pkg
+In order to install Pyproduct library, make sure you
+have the required build system tool. To do so, run:
+
+.. code:: bash
+
+    python -m pip install -U pip setuptools
+
+Then, you can simply execute:
+
+.. code:: bash
+
+    python -m pip install ansys-product-library
+
+For developers
+^^^^^^^^^^^^^^
+
+Installing Pyproduct library in developer mode allows
+you to modify the source and enhance it.
+
+Before contributing to the project, please refer to the `PyAnsys Developer's guide`_. You will 
+need to follow these steps:
+
+1. Start by cloning this repository:
+
+    .. code:: bash
+
+        git clone https://github.com/pyansys/pyproduct-library
+
+2. Create a fresh-clean Python environment and activate it:
+
+    .. code:: bash
+
+        # Create a virtual environment
+        python -m venv .venv
+
+        # Activate it in a Linux environment
+        python -m venv .venv && source .venv/bin/activate
+
+        # Activate it in a Windows CMD environment
+        source .venv\Scripts\activate.bat
+
+        # Activate it in a Windows Powershell environment
+        source .venv\Scripts\Activate.ps1
+
+
+3. Make sure you have the latest required build system and doc, testing, and CI tools:
+
+    .. code:: bash
+
+        python -m pip install -U pip setuptools tox
+        python -m pip install -r requirements/requirements_build.txt
+        python -m pip install -r requirements/requirements_doc.txt
+        python -m pip install -r requirements/requirements_tests.txt
+
+
+4. Install the project in editable mode:
+
+    .. code:: bash
+    
+        python -m pip install --editable ansys-product-library
+    
+    5. Finally, verify your development installation by running:
+
+    .. code:: bash
+        
+        tox
+
+
+How to testing
+--------------
+
+This project takes advantage of `tox`_. This tool allows to automate common
+development tasks (similar to Makefile) but it is oriented towards Python
+development. 
+
+Using tox
+^^^^^^^^^
+
+As Makefile has rules, `tox`_ has environments. In fact, the tool creates its
+own virtual environment so anything being tested is isolated from the project in
+order to guarantee project's integrity. The following environments commands are provided:
+
+- **tox -e style**: will check for coding style quality.
+- **tox -e py**: checks for unit tests.
+- **tox -e py-coverage**: checks for unit testing and code coverage.
+- **tox -e doc**: checs for documentation building process.
+
+
+Raw testing
+^^^^^^^^^^^
+
+If required, you can always call the style commands (`black`_, `isort`_,
+`flake8`_...) or unit testing ones (`pytest`_) from the command line. However,
+this does not guarantee that your project is being tested in an isolated
+environment, which is the reason why tools like `tox`_ exist.
+
+
+A note on pre-commit
+^^^^^^^^^^^^^^^^^^^^
+
+The style checks take advantage of `pre-commit`_. Developers are not forced but
+encouraged to install this tool via:
+
+.. code:: bash
+
+    python -m pip install pre-commit && pre-commit install
+
+
+Documentation
+-------------
+
+For building documentation, you can either run the usual rules provided in the
+`Sphinx`_ Makefile, such us:
+
+.. code:: bash
+
+    make -C doc/ html && your_browser_name doc/html/index.html
+
+However, the recommended way of checking documentation integrity is using:
+
+.. code:: bash
+
+    tox -e doc && your_browser_name .tox/doc_out/html/index.html
+
+
+Distributing
+------------
+
+If you would like to create either source or wheel files, start by installing
+the building requirements:
+
+.. code:: bash
+
+    python -m pip install -r requirements/requirements_build.txt
+
+Then, you can execute:
+
+.. code:: bash
+
+        python -m pip install -r requirements/requirements_build.txt
+        python -m build
+        python -m twine check dist/*
+
+.. LINKS AND REFERENCES
+.. _black: https://github.com/psf/black
+.. _flake8: https://flake8.pycqa.org/en/latest/
+.. _isort: https://github.com/PyCQA/isort
+.. _PyAnsys Developer's guide: https://dev.docs.pyansys.com/
+.. _pre-commit: https://pre-commit.com/
+.. _pytest: https://docs.pytest.org/en/stable/
+.. _Sphinx: https://www.sphinx-doc.org/en/master/
+.. _tox: https://tox.wiki/
