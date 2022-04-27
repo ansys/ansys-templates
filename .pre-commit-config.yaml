@@ -14,9 +14,6 @@ repos:
   rev: 4.0.1
   hooks:
   - id: flake8
-    args: [
-      tests,
-    ]
 
 - repo: https://github.com/codespell-project/codespell
   rev: v2.1.0
@@ -28,4 +25,4 @@ repos:
   hooks:
   - id: pydocstyle
     additional_dependencies: [toml]
-    exclude: ^src/ansys/templates/python/|^tests
+    exclude: "tests/"

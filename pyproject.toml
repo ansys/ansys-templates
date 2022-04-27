@@ -1,62 +1,43 @@
 [build-system]
-requires = ["flit_core >=3.2,<4"]
-build-backend = "flit_core.buildapi"
+requires = ["poetry-core>=1.0.0"]
+build-backend = "poetry.core.masonry.api"
 
-[project]
-name = "ansys-templates"
-version = "0.2.dev0"
-description = "Creates Python projects according to PyAnsys guidelines"
+[tool.poetry]
+# Check https://python-poetry.org/docs/pyproject/ for all available sections
+name = "ansys-product-library"
+version = "0.1.dev0"
+description = "A python wrapper for ansys product library"
+license = "MIT"
+authors = ["ANSYS, Inc. <ansys.support@ansys.com>"]
+maintainers = ["PyAnsys developers <pyansys.maintainers@ansys.com>"]
 readme = "README.rst"
-requires-python = ">=3.7"
-license = {file = "LICENSE"}
-authors = [
-    {name = "ANSYS, Inc.", email = "pyansys.support@ansys.com"},
-]
-maintainers = [
-    {name = "PyAnsys developers", email = "pyansys.maintainers@ansys.com"},
-]
-
+repository = "https://github.com/pyansys/pyproduct-library"
 classifiers = [
     "Development Status :: 4 - Beta",
     "Programming Language :: Python :: 3",
     "License :: OSI Approved :: MIT License",
     "Operating System :: OS Independent",
 ]
-dependencies = [
-    "importlib-metadata >=4.0",
-    "click>=7.0,<8.0.0",
-    "ansys-cookiecutter",
-    "isort>=5.10.1",
+packages = [
+    { include = "ansys", from = "src" },
 ]
 
-[tool.flit.module]
-name = "ansys.templates"
-
-[tool.flit.sdist]
-include = ["src/ansys/templates/pypkg/"]
-
-[project.scripts]
-ansys-templates = "ansys.templates.cli:main"
-
-[project.urls]
-Source = "https://github.com/pyansys/pyansys-template"
+[tool.poetry.dependencies]
+python = ">=3.7,<4.0"
+importlib-metadata = {version = "^4.0", python = "<3.8"}
 
 [tool.black]
-force-exclude = ["src/ansys/templates/python"]
-line-length = "100"
+line-length = 100
 
 [tool.isort]
 profile = "black"
 force_sort_within_sections = true
-line_length = "100"
+line_length = 100
 default_section = "THIRDPARTY"
-skip_glob = ["src/ansys/templates/python/*"] 
-filter_files = "true"
 src_paths = ["doc", "src", "tests"]
 
 [tool.coverage.run]
-source = ["ansys/templates"]
-omit = ["ansys/templates/python/*"]
+source = ["ansys.product"]
 
 [tool.coverage.report]
 show_missing = true
