@@ -1,0 +1,20 @@
+version: '3.9'
+
+services:
+  library-grpc-api:
+    image: project/library-grpc-api
+    build:
+      context: .
+      dockerfile: ./docker/Dockerfile
+    ports:
+      - "50051:50051"
+    networks:
+      - project
+
+
+
+
+
+networks:
+  project:
+    name: project-stream
