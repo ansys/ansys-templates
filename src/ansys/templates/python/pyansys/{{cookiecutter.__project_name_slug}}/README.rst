@@ -41,14 +41,14 @@ need to follow these steps:
         # Create a virtual environment
         python -m venv .venv
 
-        # Activate it in a Linux environment
-        python -m venv .venv && source .venv/bin/activate
+        # Activate it in a POSIX system
+        source .venv/bin/activate
 
-        # Activate it in a Windows CMD environment
-        source .venv\Scripts\activate.bat
+        # Activate it in Windows CMD environment
+        .venv\Scripts\activate.bat
 
-        # Activate it in a Windows Powershell environment
-        source .venv\Scripts\Activate.ps1
+        # Activate it in Windows Powershell
+        .venv\Scripts\Activate.ps1
 
 3. Make sure you have the latest version of `pip`_:
 

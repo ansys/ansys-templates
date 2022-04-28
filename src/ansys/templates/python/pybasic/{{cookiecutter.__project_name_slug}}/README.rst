@@ -38,15 +38,14 @@ guide`_. You will need to follow these steps:
         # Create a virtual environment
         python -m venv .venv
 
-        # Activate it in a Linux environment
-        python -m venv .venv && source .venv/bin/activate
+        # Activate it in a POSIX system
+        source .venv/bin/activate
 
-        # Activate it in a Windows CMD environment
-        source .venv\Scripts\activate.bat
+        # Activate it in Windows CMD environment
+        .venv\Scripts\activate.bat
 
-        # Activate it in a Windows Powershell environment
-        source .venv\Scripts\Activate.ps1
-
+        # Activate it in Windows Powershell
+        .venv\Scripts\Activate.ps1
 
 3. Make sure you have the latest version of `pip`_:
 
@@ -64,16 +63,16 @@ guide`_. You will need to follow these steps:
 
      .. code:: bash
 
-        python -m pip install -r requirements/requirements_build.txt
-        python -m pip install -r requirements/requirements_doc.txt
-        python -m pip install -r requirements/requirements_tests.txt
+        python -m pip install -r requirements_build.txt
+        python -m pip install -r requirements_doc.txt
+        python -m pip install -r requirements_tests.txt
 
 
 6. Finally, verify your development installation by running:
 
     .. code:: bash
         
-        python -m pip install -r requirements/requirements_tests.txt
+        python -m pip install -r requirements_tests.txt
         pytest tests -vv
 
 
@@ -94,7 +93,7 @@ For building documentation, you can either run the usual rules provided in the
 
 .. code:: bash
 
-    python -m pip install -r requirements/requirements_doc.txt
+    python -m pip install -r requirements_doc.txt
     make -C doc/ html
 
     # optionally view the generated documentation (on linux) with
@@ -109,7 +108,7 @@ the building requirements:
 
 .. code:: bash
 
-    python -m pip install -r requirements/requirements_build.txt
+    python -m pip install -r requirements_build.txt
 
 Then, you can execute:
 
