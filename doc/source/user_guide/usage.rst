@@ -45,7 +45,11 @@ The following templates are returned:
 
    pybasic: Create a basic Python Package.
    pyansys: Create a PyAnsys Python Package project.
-   pyansys_advanced: Create an advanced PyAnsys Python Package project.
+   pyansys-advanced: Create an advanced PyAnsys Python Package project.
+   pyace: Create a Python project for any method developers.
+   pyace-flask: Create a Flask project initialized for any developer.
+   pyace-grpc: Create gRPC project initialized for any developer.
+   pyace-fast: Create a FastAPI project initialized for any developer.
 
 
 Creating a New PyAnsys Project
