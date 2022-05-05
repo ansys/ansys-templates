@@ -95,6 +95,7 @@ def _include_license(license_path, project_path):
     """
     shutil.copyfile(license_path, project_path / "{{cookiecutter.__project_name_slug}}/LICENSE")
 
+
 def remove_file(filename, project_path=Path(os.getcwd())):
     """Remove desired file being given its relative path to project.
 
@@ -108,6 +109,7 @@ def remove_file(filename, project_path=Path(os.getcwd())):
     """
     filepath = project_path / filename
     filepath.unlink()
+
 
 def keep_files(files_list, project_path=Path(os.getcwd())):
     """Remove undesired files except given ones from project.
@@ -135,6 +137,7 @@ def keep_files(files_list, project_path=Path(os.getcwd())):
 
     # Removing undesired empty folders
     [folder.rmdir() for folder in folders if not os.listdir(str(folder))]
+
 
 def bake_template(template_path, output_path, license_path=MIT_LICENSE, **cookiecutter_kwargs):
     """

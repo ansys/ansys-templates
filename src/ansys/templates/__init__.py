@@ -16,6 +16,7 @@ AVAILABLE_TEMPLATES_AND_DESCRIPTION = {
     "pybasic": "Create a basic Python Package.",
     "pyansys": "Create a PyAnsys Python Package project.",
     "pyansys_advanced": "Create an advanced PyAnsys Python Package project.",
+    "pyansys_openapi_client": "Create an OpenAPI Client Package project.",
     "pyace": "Create a Python project for any method developers.",
     "pyace-flask": "Create a Flask project initialized for any developer.",
     "pyace-grpc": "Create gRPC project initialized for any developer.",

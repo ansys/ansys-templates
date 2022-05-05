@@ -66,6 +66,12 @@ def pyansys_advanced():
 
 
 @new.command()
+def pyansys_openapi_client():
+    """Create a PyAnsys OpenAPI Client Package project."""
+    create_project("pyansys_openapi_client")
+
+
+@new.command()
 def pyace():
     """Create a Python project for any method developers."""
     create_project("pyace")
