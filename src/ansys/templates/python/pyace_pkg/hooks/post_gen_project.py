@@ -73,7 +73,14 @@ def main():
     # Remove ci/cd non-desired  files
     ci_cd = "{{ cookiecutter.ci_cd_platform }}"
     if ci_cd == 'GitHub':
-        DESIRED_STRUCTURE.append(".github/workflows/ci_cd.yml")
+        DESIRED_STRUCTURE.extend(
+            [
+                ".github/labeler.yml",
+                ".github/labels.yml",
+                ".github/workflows/ci_cd.yml",
+                ".github/workflows/label.yml",
+            ]
+        )
     if ci_cd == 'Azure DevOps':
         DESIRED_STRUCTURE.append("azure-pipeline.yml")
 
