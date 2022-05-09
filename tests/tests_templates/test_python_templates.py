@@ -1,5 +1,5 @@
-import json
 from copy import deepcopy
+import json
 
 import pytest
 
