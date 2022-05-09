@@ -39,6 +39,7 @@ PYTHON_TEMPLATES_PYACE_FAST_PATH = PYTHON_TEMPLATES_PATH / "pyace_fastapi"
 """Path to the FastAPI based Python Project template."""
 
 TEMPLATE_PATH_FINDER = {
+    "common": PYTHON_TEMPLATES_COMMON_PATH,
     "pybasic": PYTHON_TEMPLATES_PYBASIC_PATH,
     "pyansys": PYTHON_TEMPLATES_PYANSYS_PATH,
     "pyansys_advanced": PYTHON_TEMPLATES_PYANSYS_ADVANCED_PATH,
