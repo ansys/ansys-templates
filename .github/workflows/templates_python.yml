@@ -39,7 +39,7 @@ jobs:
           - {name: "pyansys-advanced-setuptools", template: "pyansys_advanced", build-system: "setuptools", outdir: "pyansys_a2/pyproduct-library"}
           
           # PyAnsys OpenAPI Client template tests
-          - {name: "pyansys-openapi-client", template: "pyansys_openapi_client", build-system: "flit", outdir: "pyansys_oac/pyproduct-library-openapi"}
+          - {name: "pyansys-openapi-client", template: "pyansys_openapi_client", build-system: "flit", outdir: "pyansys_o0/pyproduct-library-openapi"}
 
           # All pyace template tests
           - {name: "pyace-pkg", template: "pyace", build-system: "setuptools", outdir: "pyace_set0/project"}
