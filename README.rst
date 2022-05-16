@@ -43,11 +43,11 @@ For users
 ^^^^^^^^^
 
 In order to install Pyproduct library, make sure you
-have the latest version of `pip`_. To do so, run:
+have the required build system tool. To do so, run:
 
 .. code:: bash
 
-    python -m pip install -U pip
+    python -m pip install -U pip poetry
 
 Then, you can simply execute:
 
@@ -163,29 +163,32 @@ However, the recommended way of checking documentation integrity is using:
 
 .. code:: bash
 
-    tox -e doc && your_browser_name .tox/doc_out/index.html
+    tox -e doc && your_browser_name .tox/doc_out/html/index.html
 
 
 Distributing
 ------------
 
 If you would like to create either source or wheel files, start by installing
-the building requirements and then executing the build module:
+the building requirements:
 
 .. code:: bash
 
     python -m pip install -r requirements/requirements_build.txt
-    python -m build
-    python -m twine check dist/*
 
+Then, you can execute:
+
+.. code:: bash
+
+        poetry build
+        python -m twine check dist/*
 
 .. LINKS AND REFERENCES
 .. _black: https://github.com/psf/black
 .. _flake8: https://flake8.pycqa.org/en/latest/
 .. _isort: https://github.com/PyCQA/isort
-.. _pip: https://pypi.org/project/pip/
-.. _pre-commit: https://pre-commit.com/
 .. _PyAnsys Developer's guide: https://dev.docs.pyansys.com/
+.. _pre-commit: https://pre-commit.com/
 .. _pytest: https://docs.pytest.org/en/stable/
 .. _Sphinx: https://www.sphinx-doc.org/en/master/
 .. _tox: https://tox.wiki/
