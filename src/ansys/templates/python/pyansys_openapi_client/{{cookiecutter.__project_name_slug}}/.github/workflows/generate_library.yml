@@ -7,7 +7,7 @@ on:
     branches:
     - main
     paths:
-    - 'yaml/{{ cookiecutter.yaml_file_name }}'
+    - 'yaml/{{ cookiecutter.__yaml_file_name }}'
     - 'pom.xml'
     - '.github/workflows/generate_library.yml'
 
