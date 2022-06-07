@@ -1,0 +1,10 @@
+ANSYS
+Ansys
+ansys
+CLI
+pipx
+pytest
+pybasic
+envs
+namespace
+cookiecutter

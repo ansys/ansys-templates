@@ -43,7 +43,7 @@ various templates folders.
    └── family_N/
 
 
-Be sure to check if there is already a family for the template you want
+Be sure to confirm if there is already a family for the template you want
 to add before creating a new one.
 
 
@@ -219,7 +219,7 @@ Only two hooks are allowed:
 
    Both hooks are executed once the cookiecutter context has been started. This
    implies that any file with a variable of the type ``{{ cookiecutter.some_var }}``
-   or Jinja2 syntax will not be rendered.
+   or Jinja2 syntax is not rendered.
 
 
 .. REFERENCES & LINKS
