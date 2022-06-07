@@ -33,7 +33,7 @@ jobs:
       - name: Running Vale
         uses: errata-ai/vale-action@reviewdog
         env:
-          GITHUB_TOKEN: ${{secrets.GITHUB_TOKEN}}
+          GITHUB_TOKEN: {{ '${{secrets.GITHUB_TOKEN}}' }}
         with:
           files: doc
           reporter: github-pr-check
