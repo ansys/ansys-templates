@@ -1,4 +1,4 @@
-User Guide
+User guide
 ==========
 
 This section explains how to use ``ansys-templates`` and

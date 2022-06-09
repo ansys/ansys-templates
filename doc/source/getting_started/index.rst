@@ -1,12 +1,12 @@
 .. _ref_getting_started:
 
-Getting Started
+Getting started
 ===============
 
 To successfully install ``ansys-templates``, carefully read all instructions on this page.
 
 
-Before Installing
+Before installing
 -----------------
 
 Several requirements must be met before you install
@@ -68,7 +68,7 @@ to the latest version with:
    python -m pipx upgrade ansys-templates
 
 
-Verify Your Installation
+Verify your installation
 ------------------------
 
 Once installed, you can verify your installation with:

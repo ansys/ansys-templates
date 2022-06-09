@@ -1,6 +1,7 @@
 ANSYS
 Ansys
 ansys
+PyAnsys
 CLI
 pipx
 pytest
