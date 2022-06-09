@@ -1,11 +1,11 @@
-How to Add a New Template
+How to add a new template
 =========================
 
 You can easily add new templates. However, before doing so, it is important that
 you read the Contributing section.
 
 
-Understanding the Templates Directory
+Understanding the templates directory
 -------------------------------------
 
 In ``ansys-templates``, all templates are placed in ``src/ansys/templates/``.
@@ -47,7 +47,7 @@ Be sure to confirm if there is already a family for the template you want
 to add before creating a new one.
 
 
-Adding a New Family of Templates
+Adding a new family of templates
 --------------------------------
 
 Start by creating a new directory in ``src/ansys/templates/`` with the name of
@@ -81,7 +81,7 @@ Inside this new family, you must create at least two different files:
     the ``common/{{cookiecutter.__project_name_slug}}`` directory.
 
 
-Adding a New Template to a Family
+Adding a new template to a family
 ---------------------------------
 
 To add a new template to a family, first create a new template folder. For example,
@@ -112,7 +112,7 @@ Inside the ``new_template/`` directory, you must create at least two different f
   directory.
 
 
-Adding a New Template to the CLI
+Adding a new template to the CLI
 ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 
 To have access to a newly template from the CLI (command line interface), you must do
@@ -135,7 +135,7 @@ the following:
            bake_template(TEMPLATE_PATH_FINDER["pyansys"], os.getcwd())
 
 
-Adding Unit Tests
+Adding unit tests
 """""""""""""""""
 
 Each template must have its own unit test script. To organize the test suite,
@@ -167,7 +167,7 @@ file:
         return all_common_files
 
 
-Add the Family to Tox envs
+Add the family to tox envs
 """"""""""""""""""""""""""
 
 If you created a new family, you must add it to the [tox] set of
@@ -198,7 +198,7 @@ Therefore, you need to create a YML file for a new family:
    versions if possible.
 
 
-Removing Undesired Files
+Removing undesired files
 ------------------------
 
 It is likely that there are some files coming from the ``common/``

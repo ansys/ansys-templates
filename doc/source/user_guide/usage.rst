@@ -1,7 +1,7 @@
 .. _ref_user_guide:
 
 
-How to Use ``ansys-templates``
+How to use ``ansys-templates``
 ==============================
 
 Because ``ansys-templates`` is a command line tool, its usage is intended via
@@ -28,7 +28,7 @@ The following help content is returned:
      version  Display current version.
 
 
-Listing All Templates
+Listing all templates
 ---------------------
 
 You can list all templates with:
@@ -52,7 +52,7 @@ The following templates are returned:
    pyace-fast: Create a FastAPI project initialized for any developer.
 
 
-Creating a New PyAnsys Project
+Creating a new PyAnsys project
 ------------------------------
 
 You can use a given template to create a new PyAnsys project with ``ansys-templates
@@ -75,7 +75,7 @@ information about how to use this command with:
 
    ansys-templates new --help
 
-Checking the Current Version
+Checking the current version
 ----------------------------
 
 Check the your current installed version of PyAnsys templates with:
