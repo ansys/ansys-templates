@@ -1,0 +1,63 @@
+name: Generate Library and Create PR
+
+on:
+  push:
+    tags:
+    - "*"
+    branches:
+    - main
+    paths:
+    - 'yaml/{{ cookiecutter.__yaml_file_name }}'
+    - 'pom.xml'
+    - '.github/workflows/generate_library.yml'
+
+jobs:
+  build:
+    runs-on: ubuntu-latest
+
+    steps:
+    - name: Get Bot Application Token
+      id: get_workflow_token
+      uses: peter-murray/workflow-application-token-action@v1
+      with:
+        application_id: {{ '${{ secrets.BOT_APPLICATION_ID }}' }}
+        application_private_key: {{ '${{ secrets.BOT_APPLICATION_PRIVATE_KEY }}' }}
+    
+    - uses: actions/checkout@v2
+      with:
+        token: {{ '${{ steps.get_workflow_token.outputs.token }}' }}
+    
+    - name: Set up JDK 11
+      uses: actions/setup-java@v2
+      with:
+        java-version: '11'
+        distribution: 'adopt'
+        cache: maven
+    
+    - name: Clean library folder
+      run: rm -rf {{ cookiecutter.__pkg_name }}
+      
+    - name: Build client library
+      run: mvn -Dbuild-id={{ '${{ github.run_number }}' }} -s .m2/settings.xml compile
+      env:
+        MAVEN_OPTS: "-Dlog4j2.formatMsgNoLookups=true"
+        SERVER_USERNAME: {{ '${{ secrets.REPO_USER }}' }}
+        SERVER_PASSWORD: {{ '${{ secrets.REPO_TOKEN }}' }}
+        
+    - name: Create Pull Request
+      uses: peter-evans/create-pull-request@v3
+      with:
+        commit-message: Update client library
+        committer: GitHub <noreply@github.com>
+        author: {{ '${{ github.actor }}' }} <{{ '${{ github.actor }}' }}@users.noreply.github.com>
+        signoff: false
+        branch: client-library-build
+        delete-branch: true
+        token: {{ '${{ steps.get_workflow_token.outputs.token }}' }}
+        title: 'Update client library'
+        body: |
+          Update library with new YAML interface definition
+        labels: |
+          automated
+        team-reviewers: |
+          Maintainers

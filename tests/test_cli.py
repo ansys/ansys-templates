@@ -37,7 +37,7 @@ def test_cli_main_new_group():
 
     for template, description in AVAILABLE_TEMPLATES_AND_DESCRIPTION.items():
         expected_output = (
-            f"  {template.replace('_', '-')}" + " " * (18 - len(template)) + f"{description[:45]}"
+            f"  {template.replace('_', '-')}" + " " * (24 - len(template)) + f"{description[:40]}"
         )
         assert expected_output in result.output
 

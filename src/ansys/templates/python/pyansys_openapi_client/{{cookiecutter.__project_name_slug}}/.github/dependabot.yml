@@ -1,0 +1,12 @@
+version: 2
+updates:
+  - package-ecosystem: "maven"
+    directory: "/"
+    schedule:
+      interval: "weekly"
+
+ updates:
+   - package-ecosystem: "pip"
+     directory: "/{{ cookiecutter.__pkg_name }}/"
+     schedule:
+       interval: "weekly"

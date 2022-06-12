@@ -1,4 +1,5 @@
 from copy import deepcopy
+import json
 
 import pytest
 
@@ -24,6 +25,15 @@ PYANSYS_VARS = PYANSYS_ADVANCED_VARS = dict(
     __product_name_slug="product",
     __library_name_slug="library",
     __project_name_slug="pyproduct-library",
+    requires_python="3.7",
+)
+
+PYANSYS_OPENAPI_VARS = dict(
+    product_name="product",
+    library_name="library",
+    __product_name_slug="product",
+    __library_name_slug="library",
+    __project_name_slug="pyproduct-library-openapi",
     requires_python="3.7",
 )
 
@@ -178,12 +188,29 @@ PYACE_PKG_STRUCTURE = deepcopy(PYCOMMON_STRUCTURE) + [
  ["azure-pipeline.yml", ".coveragerc", "requirements_build.txt", "requirements_doc.txt",
   "requirements_tests.txt"]]
 
+PYANSYS_OPENAPI_STRUCTURE = [
+    "CHANGELOG.md",
+    "CODE_OF_CONDUCT.md",
+    "CONTRIBUTING.md",
+    ".flake8",
+    ".github/workflows/build_and_test_library.yml",
+    ".github/workflows/generate_library.yml",
+    ".github/dependabot.yml",
+    ".gitignore",
+    "LICENSE",
+    ".pre-commit-config.yaml",
+    ".m2/settings.xml",
+    "yaml/library.yaml",
+    "pom.xml"
+]
+
 # A dictionary relating templates name with their variables and structure
 TEMPLATES_VARIABLES_AND_STRUCTURE = {
     "common": [PYCOMMON_VARS, PYCOMMON_STRUCTURE],
     "pybasic": [PYBASIC_VARS, PYBASIC_STRUCTURE],
     "pyansys": [PYANSYS_VARS, PYANSYS_STRUCTURE],
     "pyansys_advanced": [PYANSYS_ADVANCED_VARS, PYANSYS_ADVANCED_STRUCTURE],
+    "pyansys_openapi_client": [PYANSYS_OPENAPI_VARS, PYANSYS_OPENAPI_STRUCTURE],
     "pyace-flask": [PYACE_VARS, PYACE_FLASK_STRUCTURE],
     "pyace-grpc": [PYACE_VARS, PYACE_GRPC_STRUCTURE],
     "pyace-fast": [PYACE_VARS, PYACE_FAST_STRUCTURE],
@@ -194,8 +221,15 @@ TEMPLATES_VARIABLES_AND_STRUCTURE = {
 @pytest.mark.parametrize("build_system", ["flit", "poetry", "setuptools"])
 @pytest.mark.parametrize("template", TEMPLATES_VARIABLES_AND_STRUCTURE)
 def test_template_python(tmp_path, build_system, template):
+
+    # Get the list of supported build systems for the template
+    template_path = TEMPLATE_PATH_FINDER[template]
+    with open(template_path / "cookiecutter.json", 'r', encoding="utf-8") as fp:
+        config_json = json.load(fp)
+    supported_build_systems = config_json.get("build_system", ["setuptools"])
+
     # Skip if template does not support a particular build system
-    if build_system in ["poetry", "flit"] and template != "pyansys_advanced":
+    if build_system not in supported_build_systems:
         pytest.skip(f"Template {template} does not support {build_system}.")
 
     # Collect variables and expected structure
