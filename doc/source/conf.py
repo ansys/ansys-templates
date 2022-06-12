@@ -1,7 +1,7 @@
 """Sphinx documentation configuration file."""
 from datetime import datetime
 
-from pyansys_sphinx_theme import pyansys_logo_black
+from ansys_sphinx_theme import ansys_favicon, pyansys_logo_black
 
 from ansys.product.library import __version__
 
@@ -13,7 +13,7 @@ release = version = __version__
 
 # use the default pyansys logo
 html_logo = pyansys_logo_black
-html_theme = "pyansys_sphinx_theme"
+html_theme = "ansys_sphinx_theme"
 
 html_short_title = html_title = "ansys-product-library"
 
@@ -31,9 +31,11 @@ html_theme_options = {
 extensions = [
     "sphinx.ext.autodoc",
     "sphinx.ext.autosummary",
+    "notfound.extension",
     "numpydoc",
     "sphinx.ext.intersphinx",
     "sphinx_copybutton",
+    "sphinxcontrib.email",
 ]
 
 # Intersphinx mapping
@@ -74,6 +76,9 @@ numpydoc_validation_checks = {
 # static path
 html_static_path = ["_static"]
 
+# Favicon
+html_favicon = ansys_favicon
+
 # Add any paths that contain templates here, relative to this directory.
 templates_path = ["_templates"]
 
@@ -82,3 +87,6 @@ source_suffix = ".rst"
 
 # The master toctree document.
 master_doc = "index"
+
+# Obfuscate email links
+email_automode = True
