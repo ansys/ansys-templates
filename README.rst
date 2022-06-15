@@ -1,4 +1,4 @@
-Welcome to Ansys Templates
+Welcome to Ansys templates
 ==========================
 |pyansys| |python| |pypi| |GH-CI| |codecov| |MIT| |black|
 
@@ -47,8 +47,46 @@ For information on using this tool, see the `Ansys Templates Documentation`_.
 
 .. _Ansys Templates Documentation: https://templates.pyansys.com/ 
 
+.. image:: https://github.com/pyansys/ansys-templates/raw/docs/template-features/doc/source/_static/basic_usage.gif
 
-Rendered Templates Demos
+
+How to install
+--------------
+...
+
+
+Basic commands
+--------------
+The following commands 
+
+
+Template features
+-----------------
+The following table summarizes the main properties for each of the templates
+available in ``ansys-templates``:
+
++-------------------------+-----------------------+-----------------+---------+----------+----------------+---------+
+| Template                | setup.py              | pyproject.toml  | CI      | tox.ini  | requirements/  | Docker  |
++=========================+=======================+=================+=========+==========+================+=========+
+| pybasic                 | ``X``                 |                 |         |          |                |         |
++-------------------------+-----------------------+-----------------+---------+----------+----------------+---------+
+| pyansys                 |  ``X``                |  ``X``          |  ``X``  |          |                |         |
++-------------------------+-----------------------+-----------------+---------+----------+----------------+---------+
+| pyansys_advanced        |  ``X``                |  ``X``          |  ``X``  |  ``X``   |  ``X``         |         |
++-------------------------+-----------------------+-----------------+---------+----------+----------------+---------+
+| pyansys_openapi_client  |                       |                 |         |          |                |         |
++-------------------------+-----------------------+-----------------+---------+----------+----------------+---------+
+| pyace                   |  ``X``                |  ``X``          |  ``X``  |  ``X``   |  ``X``         |  ``X``  |
++-------------------------+-----------------------+-----------------+---------+----------+----------------+---------+
+| pyace_fast              |  ``X``                |  ``X``          |  ``X``  |  ``X``   |  ``X``         |  ``X``  |
++-------------------------+-----------------------+-----------------+---------+----------+----------------+---------+
+| pyace_flask             |  ``X``                |  ``X``          |  ``X``  |  ``X``   |  ``X``         |  ``X``  |
++-------------------------+-----------------------+-----------------+---------+----------+----------------+---------+
+| pyace_grpc              |  ``X``                |  ``X``          |  ``X``  |  ``X``   |  ``X``         |  ``X``  |
++-------------------------+-----------------------+-----------------+---------+----------+----------------+---------+
+
+
+Rendered templates demos
 ------------------------
 
 To have a better idea on how each template will look once it gets rendered,
