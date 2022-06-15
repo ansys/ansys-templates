@@ -1,4 +1,4 @@
-Welcome to Ansys Templates
+Welcome to Ansys templates
 ==========================
 |pyansys| |python| |pypi| |GH-CI| |codecov| |MIT| |black|
 
@@ -47,29 +47,94 @@ For information on using this tool, see the `Ansys Templates Documentation`_.
 
 .. _Ansys Templates Documentation: https://templates.pyansys.com/ 
 
+.. image:: https://github.com/pyansys/ansys-templates/raw/main/doc/source/_static/basic_usage.gif
 
-Rendered Templates Demos
-------------------------
 
-To have a better idea on how each template will look once it gets rendered,
-please refer to its demo branch:
+How to install
+--------------
+Users can install ``ansys-templates`` by running:
 
-* Rendered example for `pybasic template`_
-* Rendered example for `pyansys template`_
-* Rendered example for `pyansys-advanced-flit template`_
-* Rendered example for `pyansys-advanced-poetry template`_
-* Rendered example for `pyansys-advanced-setuptools template`_
-* Rendered example for `pyace-fast template`_
-* Rendered example for `pyace-flask template`_
-* Rendered example for `pyace-grpc template`_
-* Rendered example for `pyace-pkg template`_
+.. code-block:: text
+        
+    python -m pip install ansys-templates
 
-.. _pybasic template: https://github.com/pyansys/ansys-templates/tree/demo/pybasic
-.. _pyansys template: https://github.com/pyansys/ansys-templates/tree/demo/pyansys
-.. _pyansys-advanced-flit template: https://github.com/pyansys/ansys-templates/tree/demo/pyansys-advanced-flit
-.. _pyansys-advanced-poetry template: https://github.com/pyansys/ansys-templates/tree/demo/pyansys-advanced-poetry
-.. _pyansys-advanced-setuptools template: https://github.com/pyansys/ansys-templates/tree/demo/pyansys-advanced-setuptools
-.. _pyace-fast template: https://github.com/pyansys/ansys-templates/tree/demo/pyace-fast
-.. _pyace-flask template: https://github.com/pyansys/ansys-templates/tree/demo/pyace-flask
-.. _pyace-grpc template: https://github.com/pyansys/ansys-templates/tree/demo/pyace-grpc
-.. _pyace-pkg template: https://github.com/pyansys/ansys-templates/tree/demo/pyace-pkg
+The usage of `pipx`_ is encouraged too. See `installing ansys-templates using
+pipx`_.
+
+.. _pipx: https://pypa.github.io/pipx/
+.. _installing ansys-templates using pipx: https://templates.pyansys.com/getting_started/index.html#installing-pipx
+
+
+Basic commands
+--------------
+The following commands are provided with ``ansys-templates``:
+
+- ``ansys-templates --help``: lists information about the tool.
+- ``ansys-templates list``: lists all available templates.
+- ``ansys-templates new <template name>``: creates a new project from template.
+
+
+Available templates
+-------------------
+Available templates in ``ansys-templates`` are:
+
+- ``pybasic``: Create a basic Python Package.
+- ``pyansys``: Create a PyAnsys Python Package project.
+- ``pyansys-advanced``: Create an advanced PyAnsys Python Package project.
+- ``pyansys-openapi-client``: Create an OpenAPI Client Package project.
+- ``pyace``: Create a Python project for any method developers.
+- ``pyace-flask``: Create a Flask project initialized for any developer.
+- ``pyace-grpc``: Create gRPC project initialized for any developer.
+- ``pyace-fast``: Create a FastAPI project initialized for any developer.
+
+
+Template features
+-----------------
+The following table summarizes the main properties for each of the templates
+available in ``ansys-templates``:
+
++-------------------------+-----------------------+-----------------+---------+----------+----------------+---------+
+| Template                | setup.py              | pyproject.toml  | Actions | tox.ini  | requirements/  | Docker  |
++=========================+=======================+=================+=========+==========+================+=========+
+| pybasic                 | ``X``                 |                 |         |          |                |         |
++-------------------------+-----------------------+-----------------+---------+----------+----------------+---------+
+| pyansys                 |  ``X``                |  ``X``          |  ``X``  |          |                |         |
++-------------------------+-----------------------+-----------------+---------+----------+----------------+---------+
+| pyansys-advanced        |  ``X``                |  ``X``          |  ``X``  |  ``X``   |  ``X``         |         |
++-------------------------+-----------------------+-----------------+---------+----------+----------------+---------+
+| pyansys-openapi-client  |                       |                 |         |          |                |         |
++-------------------------+-----------------------+-----------------+---------+----------+----------------+---------+
+| pyace                   |  ``X``                |  ``X``          |  ``X``  |  ``X``   |  ``X``         |  ``X``  |
++-------------------------+-----------------------+-----------------+---------+----------+----------------+---------+
+| pyace-fast              |  ``X``                |  ``X``          |  ``X``  |  ``X``   |  ``X``         |  ``X``  |
++-------------------------+-----------------------+-----------------+---------+----------+----------------+---------+
+| pyace-flask             |  ``X``                |  ``X``          |  ``X``  |  ``X``   |  ``X``         |  ``X``  |
++-------------------------+-----------------------+-----------------+---------+----------+----------------+---------+
+| pyace-grpc              |  ``X``                |  ``X``          |  ``X``  |  ``X``   |  ``X``         |  ``X``  |
++-------------------------+-----------------------+-----------------+---------+----------+----------------+---------+
+
+
+Demo branches
+-------------
+To have a better idea on how each template will look once it gets rendered, see
+its corresponding demonstration branch.
+
+* Demo branch for `pybasic`_
+* Demo branch for `pyansys`_
+* Demo branch for `pyansys-advanced using flit`_
+* Demo branch for `pyansys-advanced using poetry`_
+* Demo branch for `pyansys-advanced using setuptools`_
+* Demo branch for `pyace`_
+* Demo branch for `pyace-fast`_
+* Demo branch for `pyace-flask`_
+* Demo branch for `pyace-grpc`_
+
+.. _pybasic: https://github.com/pyansys/ansys-templates/tree/demo/pybasic
+.. _pyansys: https://github.com/pyansys/ansys-templates/tree/demo/pyansys
+.. _pyansys-advanced using flit: https://github.com/pyansys/ansys-templates/tree/demo/pyansys-advanced-flit
+.. _pyansys-advanced using poetry: https://github.com/pyansys/ansys-templates/tree/demo/pyansys-advanced-poetry
+.. _pyansys-advanced using setuptools: https://github.com/pyansys/ansys-templates/tree/demo/pyansys-advanced-setuptools
+.. _pyace: https://github.com/pyansys/ansys-templates/tree/demo/pyace-pkg
+.. _pyace-fast: https://github.com/pyansys/ansys-templates/tree/demo/pyace-fast
+.. _pyace-flask: https://github.com/pyansys/ansys-templates/tree/demo/pyace-flask
+.. _pyace-grpc: https://github.com/pyansys/ansys-templates/tree/demo/pyace-grpc
