@@ -43,13 +43,11 @@ namespace, meaning that a ``src/library/`` layout is produced instead of the
 
 Main features of this package are:
 
-- Does not use Ansys namespace, as it generates a  ``src/library`` layout.
+- Uses a  ``src/library`` layout.
 - Uses a ``setup.py`` file for project configuration.
-- Includes a ``pyrpoject.toml`` for tools configuration.
-- Includes ``doc/`` and ``tests/``.
-- No GitHub workflows (actions).
+- Includes a ``pyproject.toml`` for tools configuration.
+- Includes ``doc/`` and ``tests/`` directories.
 - All ``requirements_*.txt`` are contained in the base directory.
-- No ``tox.ini`` file.
 
 
 .. admonition:: Link to demo
@@ -66,11 +64,10 @@ Main features of this package are:
 
 - Uses Ansys namespace by creating a ``src/ansys/product/library``.
 - Uses a ``setup.py`` file for project configuration.
-- Includes a ``pyrpoject.toml`` for tools configuration.
-- Includes ``doc/`` and ``tests/``.
+- Includes a ``pyproject.toml`` for tools configuration.
+- Includes ``doc/`` and ``tests/`` directories.
 - Includes GitHub workflows (actions).
 - All ``requirements_*.txt`` are contained in the base directory.
-- No ``tox.ini`` file.
 
 .. admonition:: Link to demo
 
@@ -85,7 +82,7 @@ PyAnsys guidelines and the most modern techniques in Python packaging.
 Main features of this package are:
 
 - Uses Ansys namespace by creating a ``src/ansys/product/library``.
-- Includes a ``pyrpoject.toml`` for project and tools configuration.
+- Includes a ``pyproject.toml`` for project and tools configuration.
 - Allows for the selection of the build-system between `flit`_, `poetry`_ or `setuptools`_.
 - Includes ``doc/`` and ``tests/``.
 - Includes GitHub workflows (actions).
@@ -121,7 +118,7 @@ ACE guidelines.
 Main features of this package are:
 
 - Uses a ``src/`` layout.
-- Includes a ``pyrpoject.toml`` for project and tools configuration.
+- Includes a ``pyproject.toml`` for project and tools configuration.
 - Allows for the selection of the build-system between `flit`_, `poetry`_ or `setuptools`_.
 - Includes ``doc/`` and ``tests/``.
 - Allows CI platform selection between GitHub and Azure DevOps.
@@ -143,7 +140,7 @@ Main features of this package are:
 
 - Focused on `FastAPI`_ development.
 - Uses a ``src/`` layout.
-- Includes a ``pyrpoject.toml`` for project and tools configuration.
+- Includes a ``pyproject.toml`` for project and tools configuration.
 - Allows for the selection of the build-system between `flit`_, `poetry`_ or `setuptools`_.
 - Includes ``doc/`` and ``tests/``.
 - Allows CI platform selection between GitHub and Azure DevOps.
@@ -165,7 +162,7 @@ Main features of this package are:
 
 - Focused on `Flask`_ development.
 - Uses a ``src/`` layout.
-- Includes a ``pyrpoject.toml`` for project and tools configuration.
+- Includes a ``pyproject.toml`` for project and tools configuration.
 - Allows for the selection of the build-system between `flit`_, `poetry`_ or `setuptools`_.
 - Includes ``doc/`` and ``tests/``.
 - Allows CI platform selection between GitHub and Azure DevOps.
@@ -187,7 +184,7 @@ Main features of this package are:
 
 - Focused on `GRPC`_ development.
 - Uses a ``src/`` layout.
-- Includes a ``pyrpoject.toml`` for project and tools configuration.
+- Includes a ``pyproject.toml`` for project and tools configuration.
 - Allows for the selection of the build-system between `flit`_, `poetry`_ or `setuptools`_.
 - Includes ``doc/`` and ``tests/``.
 - Allows CI platform selection between GitHub and Azure DevOps.
