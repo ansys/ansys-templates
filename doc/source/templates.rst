@@ -9,7 +9,7 @@ For quick-reference, the following table provides an overview of the main
 capabilities and features of each template:
 
 +-------------------------+-----------------------+-----------------+---------+----------+----------------+---------+
-| Template                | setup.py              | pyproject.toml  | CI      | tox.ini  | requirements/  | Docker  |
+| Template                | setup.py              | pyproject.toml  | Actions | tox.ini  | requirements/  | Docker  |
 +=========================+=======================+=================+=========+==========+================+=========+
 | pybasic                 | ``X``                 |                 |         |          |                |         |
 +-------------------------+-----------------------+-----------------+---------+----------+----------------+---------+
