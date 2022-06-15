@@ -1,0 +1,21 @@
+{
+  "project_name": "",
+  "__project_name_slug": "{{ cookiecutter.project_name | slugify(separator=('_')) }}",
+  "version": "0.1.dev0",
+  "__version": "{{ cookiecutter.version }}",
+  "short_description": "",
+  "__short_description": "{{ cookiecutter.short_description | capitalize }}",
+  "__pkg_name": "{{ cookiecutter.__project_name_slug | replace('_', '-')}}",
+  "__pkg_namespace": "{{ cookiecutter.__project_name_slug }}",
+  "requires_python": ["3.7", "3.8", "3.9", "3.10"],
+  "__requires_python": "{{ cookiecutter.requires_python }}",
+  "repository_url": "",
+  "__repository_url": "{{ cookiecutter.repository_url }}",
+  "__build_system": "setuptools",
+  "max_linelength": "100",
+  "__max_linelength": "{{ cookiecutter.max_linelength }}",
+  "__coverage_source": "{{ cookiecutter.__project_name_slug }}",
+  "__product_name_slug": "",
+  "__library_name_slug": "",
+  "__is_pyansys": "False"
+}
