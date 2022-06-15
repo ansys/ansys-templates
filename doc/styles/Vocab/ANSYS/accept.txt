@@ -2,6 +2,7 @@ ANSYS
 Ansys
 ansys
 PyAnsys
+pyansys
 CLI
 pipx
 pytest
@@ -9,3 +10,8 @@ pybasic
 envs
 namespace
 cookiecutter
+pyace
+pyace-fast
+pyace-flask
+pyace-grpc
+setuptools

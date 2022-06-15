@@ -15,17 +15,17 @@ capabilities and features of each template:
 +-------------------------+-----------------------+-----------------+---------+----------+----------------+---------+
 | pyansys                 |  ``X``                |  ``X``          |  ``X``  |          |                |         |
 +-------------------------+-----------------------+-----------------+---------+----------+----------------+---------+
-| pyansys_advanced        |  ``X``                |  ``X``          |  ``X``  |  ``X``   |  ``X``         |         |
+| pyansys-advanced        |  ``X``                |  ``X``          |  ``X``  |  ``X``   |  ``X``         |         |
 +-------------------------+-----------------------+-----------------+---------+----------+----------------+---------+
-| pyansys_openapi_client  |                       |                 |         |          |                |         |
+| pyansys-openapi-client  |                       |                 |         |          |                |         |
 +-------------------------+-----------------------+-----------------+---------+----------+----------------+---------+
 | pyace                   |  ``X``                |  ``X``          |  ``X``  |  ``X``   |  ``X``         |  ``X``  |
 +-------------------------+-----------------------+-----------------+---------+----------+----------------+---------+
-| pyace_fast              |  ``X``                |  ``X``          |  ``X``  |  ``X``   |  ``X``         |  ``X``  |
+| pyace-fast              |  ``X``                |  ``X``          |  ``X``  |  ``X``   |  ``X``         |  ``X``  |
 +-------------------------+-----------------------+-----------------+---------+----------+----------------+---------+
-| pyace_flask             |  ``X``                |  ``X``          |  ``X``  |  ``X``   |  ``X``         |  ``X``  |
+| pyace-flask             |  ``X``                |  ``X``          |  ``X``  |  ``X``   |  ``X``         |  ``X``  |
 +-------------------------+-----------------------+-----------------+---------+----------+----------------+---------+
-| pyace_grpc              |  ``X``                |  ``X``          |  ``X``  |  ``X``   |  ``X``         |  ``X``  |
+| pyace-grpc              |  ``X``                |  ``X``          |  ``X``  |  ``X``   |  ``X``         |  ``X``  |
 +-------------------------+-----------------------+-----------------+---------+----------+----------------+---------+
 
 .. note::
@@ -127,7 +127,7 @@ Main features of this package are:
 - Allows CI platform selection between GitHub and Azure DevOps.
 - All ``requirements_*.txt`` are contained in a ``requirements_/`` directory.
 - Includes a ``tox.ini`` file.
-- Abiity to integrate Docker within the project.
+- Ability to integrate Docker within the project.
 
 .. admonition:: Link to demo
 
@@ -149,7 +149,7 @@ Main features of this package are:
 - Allows CI platform selection between GitHub and Azure DevOps.
 - All ``requirements_*.txt`` are contained in a ``requirements_/`` directory.
 - Includes a ``tox.ini`` file.
-- Abiity to integrate Docker within the project.
+- Ability to integrate Docker within the project.
 
 .. admonition:: Link to demo
 
@@ -171,7 +171,7 @@ Main features of this package are:
 - Allows CI platform selection between GitHub and Azure DevOps.
 - All ``requirements_*.txt`` are contained in a ``requirements_/`` directory.
 - Includes a ``tox.ini`` file.
-- Abiity to integrate Docker within the project.
+- Ability to integrate Docker within the project.
 
 .. admonition:: Link to demo
 
@@ -193,7 +193,7 @@ Main features of this package are:
 - Allows CI platform selection between GitHub and Azure DevOps.
 - All ``requirements_*.txt`` are contained in a ``requirements_/`` directory.
 - Includes a ``tox.ini`` file.
-- Abiity to integrate Docker within the project.
+- Ability to integrate Docker within the project.
 
 .. admonition:: Link to demo
 
