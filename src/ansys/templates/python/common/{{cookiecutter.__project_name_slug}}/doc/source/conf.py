@@ -2,7 +2,7 @@
 from datetime import datetime
 
 from {{cookiecutter.__pkg_namespace}} import __version__
-from pyansys_sphinx_theme import pyansys_logo_black
+from ansys_sphinx_theme import pyansys_logo_black
 
 # Project information
 project = "{{ cookiecutter.__pkg_name }}"
@@ -12,7 +12,7 @@ release = version = __version__
 
 # use the default pyansys logo
 html_logo = pyansys_logo_black
-html_theme = "pyansys_sphinx_theme"
+html_theme = "ansys_sphinx_theme"
 
 html_short_title = html_title = "{{ cookiecutter.__pkg_name }}"
 
