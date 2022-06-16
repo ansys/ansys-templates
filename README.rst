@@ -18,8 +18,8 @@ Pyproduct library
    :target: https://codecov.io/gh/pyansys/pyproduct-library
    :alt: Codecov
 
-.. |GH-CI| image:: https://github.com/pyansys/pyproduct-library/actions/workflows/ci.yml/badge.svg
-   :target: https://github.com/pyansys/pyproduct-library/actions/workflows/ci.yml
+.. |GH-CI| image:: https://github.com/pyansys/pyproduct-library/actions/workflows/ci_cd.yml/badge.svg
+   :target: https://github.com/pyansys/pyproduct-library/actions/workflows/ci_cd.yml
    :alt: GH-CI
 
 .. |MIT| image:: https://img.shields.io/badge/License-MIT-yellow.svg
