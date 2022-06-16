@@ -18,8 +18,8 @@ Py{{ cookiecutter.product_name }} {{ cookiecutter.library_name }}
    :target: https://codecov.io/gh/pyansys/{{cookiecutter.__project_name_slug}}
    :alt: Codecov
 
-.. |GH-CI| image:: https://github.com/pyansys/{{cookiecutter.__project_name_slug}}/actions/workflows/ci.yml/badge.svg
-   :target: https://github.com/pyansys/{{cookiecutter.__project_name_slug}}/actions/workflows/ci.yml
+.. |GH-CI| image:: https://github.com/pyansys/{{cookiecutter.__project_name_slug}}/actions/workflows/ci_cd.yml/badge.svg
+   :target: https://github.com/pyansys/{{cookiecutter.__project_name_slug}}/actions/workflows/ci_cd.yml
    :alt: GH-CI
 
 .. |MIT| image:: https://img.shields.io/badge/License-MIT-yellow.svg
