@@ -15,6 +15,7 @@ DESIRED_STRUCTURE = [
     ".github/workflows/build_and_test_library.yml",
     ".github/workflows/generate_library.yml",
     ".github/dependabot.yml",
+    ".gitattributes",
     ".gitignore",
     "LICENSE",
     ".pre-commit-config.yaml",
