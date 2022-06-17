@@ -31,6 +31,7 @@ DESIRED_STRUCTURE = [
     ".github/labels.yml",
     ".github/workflows/ci_cd.yml",
     ".github/workflows/label.yml",
+    ".gitattributes",
     ".gitignore",
     "LICENSE",
     ".pre-commit-config.yaml",

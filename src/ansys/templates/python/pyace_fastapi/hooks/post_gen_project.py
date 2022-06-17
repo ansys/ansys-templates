@@ -26,6 +26,7 @@ DESIRED_STRUCTURE = [
     "docker/Dockerfile",
     "docker/README.md",
     ".flake8",
+    ".gitattributes",
     ".gitignore",
     "LICENSE",
     ".pre-commit-config.yaml",

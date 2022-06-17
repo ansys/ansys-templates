@@ -19,6 +19,7 @@ DESIRED_STRUCTURE = [
     "doc/source/_templates/README.md",
     "examples/README.md",
     ".flake8",
+    ".gitattributes",
     ".gitignore",
     "LICENSE",
     "pyproject.toml",

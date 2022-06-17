@@ -3,6 +3,7 @@ from ansys.templates.utils import keep_files
 DESIRED_STRUCTURE = [
     ".coveragerc",
     ".flake8",
+    ".gitattributes",
     ".gitignore",
     ".pre-commit-config.yaml",
     "CHANGELOG.md",
