@@ -1,0 +1,13 @@
+version: 2
+updates:
+  - package-ecosystem: "pip"
+    {%- if cookiecutter.__template_name in ["pybasic", "pyansys"] %}
+    directory: "/"
+    {%- else -%}
+    directory: "/requirements"
+    {%- endif -%}
+    schedule:
+      interval: "daily"
+    labels:
+      - "maintenance"
+      - "dependencies"
