@@ -1,4 +1,5 @@
 {
+  "__template_name": "pyansys-openapi-client",
   "product_name": "product",
   "__product_name_slug": "{{ cookiecutter.product_name | slugify(separator=('_')) }}",
   "library_name": "library",
