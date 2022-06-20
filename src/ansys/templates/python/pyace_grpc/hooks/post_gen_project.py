@@ -82,6 +82,7 @@ def main():
     if ci_cd == 'GitHub':
         DESIRED_STRUCTURE.extend(
             [
+                ".github/dependabot.yml",
                 ".github/labeler.yml",
                 ".github/labels.yml",
                 ".github/workflows/ci_cd.yml",

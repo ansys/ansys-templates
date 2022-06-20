@@ -27,6 +27,7 @@ DESIRED_STRUCTURE = [
     "doc/source/_templates/README.md",
     "examples/README.md",
     ".flake8",
+    ".github/dependabot.yml",
     ".github/labeler.yml",
     ".github/labels.yml",
     ".github/workflows/ci_cd.yml",
