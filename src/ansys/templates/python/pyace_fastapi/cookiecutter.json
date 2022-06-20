@@ -1,4 +1,5 @@
 {
+  "__template_name": "pyace-fastapi",
   "project_name": "project",
   "__project_name_slug": "{{ cookiecutter.project_name | slugify(separator=('_')) }}",
   "library_name": "library",

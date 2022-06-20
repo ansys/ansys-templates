@@ -52,6 +52,7 @@ PYACE_VARS = dict(
 PYCOMMON_STRUCTURE = [
     ".coveragerc",
     ".flake8",
+    ".github/dependabot.yml",
     ".github/labeler.yml",
     ".github/labels.yml",
     ".github/workflows/ci_cd.yml",
@@ -91,13 +92,13 @@ PYBASIC_STRUCTURE = deepcopy(PYCOMMON_STRUCTURE) + [
     f"src/{PYBASIC_VARS['project_name']}/__init__.py",
 ]
 [PYBASIC_STRUCTURE.remove(file) for file in
- [".github/labeler.yml", ".github/labels.yml", ".github/workflows/label.yml", ".github/workflows/ci_cd.yml", ".pre-commit-config.yaml", "azure-pipeline.yml", "tox.ini"]]
+ [".github/dependabot.yml", ".github/labeler.yml", ".github/labels.yml", ".github/workflows/label.yml", ".github/workflows/ci_cd.yml", ".pre-commit-config.yaml", "azure-pipeline.yml", "tox.ini"]]
 
 # Structure for pyansys projects
 PYANSYS_STRUCTURE = deepcopy(PYCOMMON_STRUCTURE) + [
     f"src/ansys/{PYANSYS_VARS['__product_name_slug']}/{PYANSYS_VARS['__library_name_slug']}/__init__.py",
 ]
-[PYANSYS_STRUCTURE.remove(file) for file in [".github/labeler.yml", ".github/labels.yml", ".github/workflows/label.yml", ".github/workflows/ci_cd.yml", "azure-pipeline.yml", "tox.ini"]]
+[PYANSYS_STRUCTURE.remove(file) for file in [".github/dependabot.yml", ".github/labeler.yml", ".github/labels.yml", ".github/workflows/label.yml", ".github/workflows/ci_cd.yml", "azure-pipeline.yml", "tox.ini"]]
 
 # Structure for pyansys-advanced projects
 PYANSYS_ADVANCED_STRUCTURE = deepcopy(PYCOMMON_STRUCTURE) + [
