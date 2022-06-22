@@ -10,15 +10,19 @@ on:
 env:
   MAIN_PYTHON_VERSION : '3.10'
 
+concurrency:
+  group: ${{ github.workflow }}-${{ github.ref }}
+  cancel-in-progress: true
+
 jobs:
 
   style:
     name: Code style
     runs-on: ubuntu-latest
     steps:
-      - uses: actions/checkout@v2
+      - uses: actions/checkout@v3
       - name: Set up Python
-        uses: actions/setup-python@v2
+        uses: actions/setup-python@v3
         with:
           python-version: ${{ env.MAIN_PYTHON_VERSION }}
       - name: Install dependencies
@@ -31,7 +35,7 @@ jobs:
     name: Documentation Style Check
     runs-on: ubuntu-latest
     steps:
-      - uses: actions/checkout@v2
+      - uses: actions/checkout@v3
 
       - name: Running Vale
         uses: errata-ai/vale-action@reviewdog
@@ -50,10 +54,10 @@ jobs:
     runs-on: ubuntu-latest
     needs: docs-style
     steps:
-      - uses: actions/checkout@v2
+      - uses: actions/checkout@v3
 
       - name: Set up Python
-        uses: actions/setup-python@v2
+        uses: actions/setup-python@v3
         with:
           python-version: ${{ env.MAIN_PYTHON_VERSION }}
 
@@ -65,7 +69,7 @@ jobs:
         run: tox -e doc
 
       - name: Upload Documentation
-        uses: actions/upload-artifact@v2.2.1
+        uses: actions/upload-artifact@v3
         with:
           name: Documentation
           path: .tox/doc_out/
@@ -97,9 +101,9 @@ jobs:
       fail-fast: false
 
     steps:
-      - uses: actions/checkout@v2
+      - uses: actions/checkout@v3
       - name: Set up Python ${{ matrix.cfg.python-version }}
-        uses: actions/setup-python@v2
+        uses: actions/setup-python@v3
         with:
           python-version: ${{ matrix.cfg.python-version }}
 
@@ -118,9 +122,9 @@ jobs:
     needs: [tests, style]
     runs-on: ubuntu-latest
     steps:
-      - uses: actions/checkout@v2
+      - uses: actions/checkout@v3
       - name: Set up Python
-        uses: actions/setup-python@v2
+        uses: actions/setup-python@v3
         with:
           python-version: ${{ env.MAIN_PYTHON_VERSION }}
       - name: Install dependencies
@@ -131,7 +135,7 @@ jobs:
         run: |
           python -m build && python -m twine check dist/*
       - name: Upload wheel and sdist to artifacts
-        uses: actions/upload-artifact@v2
+        uses: actions/upload-artifact@v3
         with:
           name: pyasys-templates-packages
           path: dist/
@@ -144,9 +148,9 @@ jobs:
     runs-on: ubuntu-latest
   
     steps:
-      - uses: actions/download-artifact@v2
+      - uses: actions/download-artifact@v3
       - name: Set up Python
-        uses: actions/setup-python@v2
+        uses: actions/setup-python@v3
         with:
           python-version: ${{ env.MAIN_PYTHON_VERSION }}
       - name: Display structure of downloaded files
