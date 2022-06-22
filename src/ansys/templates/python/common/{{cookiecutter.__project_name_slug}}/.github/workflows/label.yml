@@ -6,6 +6,9 @@ on:
     paths:
       - '../labels.yml'
 
+concurrency:
+  group: {{ '${{ github.workflow }}-${{ github.ref }}' }}
+  cancel-in-progress: true
 
 jobs:
 
@@ -13,7 +16,7 @@ jobs:
     name: Syncer
     runs-on: ubuntu-latest
     steps:
-      - uses: actions/checkout@v2
+      - uses: actions/checkout@v3
       - uses: micnncim/action-label-syncer@v1
         env:
           GITHUB_TOKEN: {{ '${{ secrets.GITHUB_TOKEN }}' }}
