@@ -1,7 +1,7 @@
 {
   "__template_name": "doc-project",
   "project_name": "",
-  "__project_name_slug": "{{ cookiecutter.project_name | slugify(separator=('_')) }}",
+  "__project_name_slug": "{{ cookiecutter.project_name }}",
   "version": "0.1.dev0",
   "__version": "{{ cookiecutter.version }}",
   "short_description": "",

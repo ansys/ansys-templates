@@ -12,7 +12,11 @@ from ansys_sphinx_theme import pyansys_logo_black as logo
 {%- endif -%}
 
 # Project information
-project = "{{ cookiecutter.project_name }}"
+{%- if cookiecutter.__template_name in ["doc-project"] -%}
+project = "{{ cookiecutter.__project_name_slug }}"
+{%- else -%}
+project = "{{ cookiecutter.__pkg_name }}"
+{%- endif -%}
 copyright = f"(c) {datetime.now().year} ANSYS, Inc. All rights reserved"
 author = "ANSYS, Inc."
 release = version = "{{ cookiecutter.__version }}"
@@ -20,7 +24,7 @@ release = version = "{{ cookiecutter.__version }}"
 # Select desired logo, theme, and declare the html title
 html_logo = logo
 html_theme = "ansys_sphinx_theme"
-html_short_title = html_title = "{{ cookiecutter.project_name }}"
+html_short_title = html_title = "{{ cookiecutter.__project_name_slug }}"
 
 # specify the location of your github repo
 html_theme_options = {
