@@ -20,6 +20,8 @@
   "__requires_python": "{{ cookiecutter.requires_python }}",
   "build_system": "flit",
   "__build_system": "flit",
+  "__logo": "",
+  "__logo_color": "",
   "max_linelength": "100",
   "__max_linelength": "{{ cookiecutter.max_linelength }}",
   "__coverage_source": "ansys.{{ cookiecutter.__product_name_slug }}",

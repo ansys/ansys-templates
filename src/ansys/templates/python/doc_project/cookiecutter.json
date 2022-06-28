@@ -15,7 +15,7 @@
   "__build_system": "",
   "logo": ["Ansys", "PyAnsys"],
   "__logo": "{{ cookiecutter.logo | lower }}",
-  "logo_color": ["Light", "Dark"],
+  "logo_color": ["white", "black"],
   "__logo_color": "{{ cookiecutter.logo_color }}",
   "max_linelength": "100",
   "__max_linelength": "",
