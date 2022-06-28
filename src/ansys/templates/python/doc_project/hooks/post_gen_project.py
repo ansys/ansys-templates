@@ -1,8 +1,10 @@
 from ansys.templates.utils import keep_files
 
 
+ALLOWED_BUILD_SYSTEMS = ["flit", "poetry", "setuptools"]
+"""A list of all allowed build systems by the template."""
+
 DESIRED_STRUCTURE = [
-    ".coveragerc",
     "CHANGELOG.md",
     "CODE_OF_CONDUCT.md",
     "CONTRIBUTING.md",
@@ -25,16 +27,19 @@ DESIRED_STRUCTURE = [
     "README.rst",
     "requirements_build.txt",
     "requirements_doc.txt",
-    "requirements_tests.txt",
-    "setup.py",
-    "src/{{ cookiecutter.__project_name_slug }}/__init__.py",
-    "tests/test_metadata.py",
 ]
 """A list holding all desired files to be included in the project."""
 
 
 def main():
     """Entry point of the script."""
+    # Get the desired build system
+    build_system = "{{ cookiecutter.build_system }}"
+
+    # Remove non-desired files
+    if build_system == "setuptools":
+        DESIRED_STRUCTURE.append("setup.py")
+
     # Apply the desired structure to the project
     keep_files(DESIRED_STRUCTURE)
 
