@@ -21,9 +21,9 @@ jobs:
     name: Code style
     runs-on: ubuntu-latest
     steps:
-      - uses: actions/checkout@v2
+      - uses: actions/checkout@v3
       - name: Set up Python
-        uses: actions/setup-python@v2
+        uses: actions/setup-python@v3
         with:
           python-version: ${{ env.MAIN_PYTHON_VERSION }}
       - name: Install dependencies
@@ -55,10 +55,10 @@ jobs:
     needs: [style, docs-style]
     runs-on: ubuntu-latest
     steps:
-      - uses: actions/checkout@v2
+      - uses: actions/checkout@v3
 
       - name: Set up Python
-        uses: actions/setup-python@v2
+        uses: actions/setup-python@v3
         with:
           python-version: ${{ env.MAIN_PYTHON_VERSION }}
 
@@ -83,14 +83,14 @@ jobs:
           make -C doc pdf
 
       - name: Upload HTML documentation
-        uses: actions/upload-artifact@v2.2.4
+        uses: actions/upload-artifact@v3.1.0
         with:
           name: HTML-Documentation
           path: .tox/doc_out_html/
           retention-days: 7
 
       - name: Upload PDF Documentation
-        uses: actions/upload-artifact@v2.2.4
+        uses: actions/upload-artifact@v3.1.0
         with:
           name: PDF-Documentation
           path: doc/build/latex/*.pdf
@@ -111,9 +111,9 @@ jobs:
     needs: [style, docs-style, docs]
     runs-on: ubuntu-latest
     steps:
-      - uses: actions/checkout@v2
+      - uses: actions/checkout@v3
 
-      - uses: actions/download-artifact@v2
+      - uses: actions/download-artifact@v3
 
       - name: Display structure of downloaded files
         run: ls -R
