@@ -38,9 +38,9 @@ jobs:
           - {name: "pyansys", template: "pyansys", build-system: "setuptools", outdir: "pyansys_s0/pyproduct-library"}
 
           # All pyansys_advanced template tests
-          - {name: "pyansys-advanced-flit", template: "pyansys_advanced", build-system: "flit", outdir: "pyansys_a0/pyproduct-library"}
-          - {name: "pyansys-advanced-poetry", template: "pyansys_advanced", build-system: "poetry", outdir: "pyansys_a1/pyproduct-library"}
-          - {name: "pyansys-advanced-setuptools", template: "pyansys_advanced", build-system: "setuptools", outdir: "pyansys_a2/pyproduct-library"}
+          - {name: "pyansys-advanced-flit", template: "pyansys-advanced", build-system: "flit", outdir: "pyansys_a0/pyproduct-library"}
+          - {name: "pyansys-advanced-poetry", template: "pyansys-advanced", build-system: "poetry", outdir: "pyansys_a1/pyproduct-library"}
+          - {name: "pyansys-advanced-setuptools", template: "pyansys-advanced", build-system: "setuptools", outdir: "pyansys_a2/pyproduct-library"}
 
           # All pyace template tests
           - {name: "pyace-pkg", template: "pyace", build-system: "setuptools", outdir: "pyace_set0/project"}
