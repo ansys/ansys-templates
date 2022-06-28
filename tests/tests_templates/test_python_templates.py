@@ -233,13 +233,11 @@ DOC_PROJECT_STRUCTURE = [
     "doc/source/_templates/sidebar-nav-bs.html",
     "doc/source/_templates/README.md",
     "examples/README.md",
-    ".flake8",
     ".gitignore",
     "LICENSE",
-    "pyproject.toml",
     "README.rst",
-    "requirements_build.txt",
-    "requirements_doc.txt",
+    "requirements/requirements_build.txt",
+    "requirements/requirements_doc.txt",
 ]
 
 # A dictionary relating templates name with their variables and structure

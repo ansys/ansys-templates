@@ -1,3 +1,8 @@
+"""Post-processing script for cleaning the raw rendered project."""
+import os
+import shutil
+from pathlib import Path
+
 from ansys.templates.utils import keep_files
 
 
@@ -20,25 +25,27 @@ DESIRED_STRUCTURE = [
     "doc/source/_templates/sidebar-nav-bs.html",
     "doc/source/_templates/README.md",
     "examples/README.md",
-    ".flake8",
     ".gitignore",
     "LICENSE",
-    "pyproject.toml",
     "README.rst",
-    "requirements_build.txt",
-    "requirements_doc.txt",
+    "requirements/requirements_build.txt",
+    "requirements/requirements_doc.txt",
 ]
 """A list holding all desired files to be included in the project."""
 
 
 def main():
     """Entry point of the script."""
-    # Get the desired build system
-    build_system = "{{ cookiecutter.build_system }}"
+    # Get baked project location path
+    project_path = Path(os.getcwd())
 
-    # Remove non-desired files
-    if build_system == "setuptools":
-        DESIRED_STRUCTURE.append("setup.py")
+    # Move all requirements files into a requirements/ directory
+    os.mkdir(project_path / "requirements")
+    requirements_files = [
+            f"requirements_{name}.txt" for name in ["build", "doc"]
+    ]
+    for file in requirements_files:
+        shutil.move(str(project_path / file), str(project_path / "requirements"))
 
     # Apply the desired structure to the project
     keep_files(DESIRED_STRUCTURE)
