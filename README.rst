@@ -1,140 +1,131 @@
-Welcome to Ansys templates
-==========================
-|pyansys| |python| |pypi| |GH-CI| |codecov| |MIT| |black|
-
-.. |pyansys| image:: https://img.shields.io/badge/Py-Ansys-ffc107.svg?logo=data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAABAAAAAQCAIAAACQkWg2AAABDklEQVQ4jWNgoDfg5mD8vE7q/3bpVyskbW0sMRUwofHD7Dh5OBkZGBgW7/3W2tZpa2tLQEOyOzeEsfumlK2tbVpaGj4N6jIs1lpsDAwMJ278sveMY2BgCA0NFRISwqkhyQ1q/Nyd3zg4OBgYGNjZ2ePi4rB5loGBhZnhxTLJ/9ulv26Q4uVk1NXV/f///////69du4Zdg78lx//t0v+3S88rFISInD59GqIH2esIJ8G9O2/XVwhjzpw5EAam1xkkBJn/bJX+v1365hxxuCAfH9+3b9/+////48cPuNehNsS7cDEzMTAwMMzb+Q2u4dOnT2vWrMHu9ZtzxP9vl/69RVpCkBlZ3N7enoDXBwEAAA+YYitOilMVAAAAAElFTkSuQmCC
-   :target: https://docs.pyansys.com/
-   :alt: PyAnsys
-
-.. |python| image:: https://img.shields.io/badge/Python-3.7%20%7C%203.8%20%7C%203.9%20%7C%203.10-blue
-   :target: https://pypi.org/project/ansys-templates/
-   :alt: Python
-
-.. |pypi| image:: https://img.shields.io/pypi/v/ansys-templates.svg?logo=python&logoColor=white
-   :target: https://pypi.org/project/ansys-templates/
-   :alt: PyPI
-
-.. |codecov| image:: https://codecov.io/gh/pyansys/ansys-templates/branch/main/graph/badge.svg
-   :target: https://codecov.io/gh/pyansys/ansys-templates
-   :alt: Codecov
-
-.. |GH-CI| image:: https://github.com/pyansys/ansys-templates/actions/workflows/ci.yml/badge.svg
-   :target: https://github.com/pyansys/ansys-templates/actions/workflows/ci.yml
-   :alt: CH-CI
-
-.. |MIT| image:: https://img.shields.io/badge/License-MIT-yellow.svg
-   :target: https://opensource.org/licenses/MIT
-   :alt: MIT
-
-.. |black| image:: https://img.shields.io/badge/code%20style-black-000000.svg?style=flat
-   :target: https://github.com/psf/black
-   :alt: Black
+doc-project
+===========
 
 
-The ``ansys-templates`` repository holds a collection of useful templates compliant
-with PyAnsys guidelines. It also provides the ``ansys-templates`` command line tool
-for interactively generating new projects based on previous templates.
-
-The main advantages of using this tool are:
-
-- Building process is fully interactive. There is no need to manually modify files.
-- Output of the project can easily be customized during the rendering process.
-- Generated projects are compliant with `PyAnsys Developer's Guidelines`_.
-
-.. _PyAnsys Developer's Guidelines: https://dev.docs.pyansys.com/
-
-For information on using this tool, see the `Ansys Templates Documentation`_.
-
-.. _Ansys Templates Documentation: https://templates.pyansys.com/ 
-
-.. image:: https://github.com/pyansys/ansys-templates/raw/main/doc/source/_static/basic_usage.gif
 
 
 How to install
 --------------
-Users can install ``ansys-templates`` by running:
 
-.. code-block:: text
+At least two installation modes are provided: user and developer.
+
+For users
+^^^^^^^^^
+
+User installation can be performed by running:
+
+.. code:: bash
+
+    python -m pip install 
+
+For developers
+^^^^^^^^^^^^^^
+
+Before contributing to the project, please refer to the `PyAnsys Developer's
+guide`_. You will need to follow these steps:
+
+1. Start by cloning this repository:
+
+    .. code:: bash
+
+        git clone https://github.com/pyansys/doc-project
+
+2. Create a fresh-clean Python environment and activate it. Refer to the
+   official `venv`_ documentation if you require further information:
+
+    .. code:: bash
+
+        # Create a virtual environment
+        python -m venv .venv
+
+        # Activate it in a POSIX system
+        source .venv/bin/activate
+
+        # Activate it in Windows CMD environment
+        .venv\Scripts\activate.bat
+
+        # Activate it in Windows Powershell
+        .venv\Scripts\Activate.ps1
+
+3. Make sure you have the latest version of `pip`_:
+
+    .. code:: bash
+
+        python -m pip install -U pip
+
+4. Install the project in editable mode:
+
+    .. code:: bash
+    
+        python -m pip install --editable 
+
+5. Install additional requirements (if needed):
+
+     .. code:: bash
+
+        python -m pip install -r requirements_build.txt
+        python -m pip install -r requirements_doc.txt
+        python -m pip install -r requirements_tests.txt
+
+
+6. Finally, verify your development installation by running:
+
+    .. code:: bash
         
-    python -m pip install ansys-templates
-
-The usage of `pipx`_ is encouraged too. See `installing ansys-templates using
-pipx`_.
-
-.. _pipx: https://pypa.github.io/pipx/
-.. _installing ansys-templates using pipx: https://templates.pyansys.com/getting_started/index.html#installing-pipx
+        python -m pip install -r requirements_tests.txt
+        pytest tests -vv
 
 
-Basic commands
---------------
-The following commands are provided with ``ansys-templates``:
-
-- ``ansys-templates --help``: lists information about the tool.
-- ``ansys-templates list``: lists all available templates.
-- ``ansys-templates new <template name>``: creates a new project from template.
-
-
-Available templates
--------------------
-Available templates in ``ansys-templates`` are:
-
-- ``pybasic``: Create a basic Python Package.
-- ``pyansys``: Create a PyAnsys Python Package project.
-- ``pyansys-advanced``: Create an advanced PyAnsys Python Package project.
-- ``pyansys-openapi-client``: Create an OpenAPI Client Package project.
-- ``pyace``: Create a Python project for any method developers.
-- ``pyace-flask``: Create a Flask project initialized for any developer.
-- ``pyace-grpc``: Create gRPC project initialized for any developer.
-- ``pyace-fast``: Create a FastAPI project initialized for any developer.
-
-
-Template features
+Style and Testing
 -----------------
-The following table summarizes the main properties for each of the templates
-available in ``ansys-templates``:
 
-+-------------------------+-----------------------+-----------------+---------+----------+----------------+---------+
-| Template                | setup.py              | pyproject.toml  | Actions | tox.ini  | requirements/  | Docker  |
-+=========================+=======================+=================+=========+==========+================+=========+
-| pybasic                 | ``X``                 |                 |         |          |                |         |
-+-------------------------+-----------------------+-----------------+---------+----------+----------------+---------+
-| pyansys                 |  ``X``                |  ``X``          |  ``X``  |          |                |         |
-+-------------------------+-----------------------+-----------------+---------+----------+----------------+---------+
-| pyansys-advanced        |  ``X``                |  ``X``          |  ``X``  |  ``X``   |  ``X``         |         |
-+-------------------------+-----------------------+-----------------+---------+----------+----------------+---------+
-| pyansys-openapi-client  |                       |                 |         |          |                |         |
-+-------------------------+-----------------------+-----------------+---------+----------+----------------+---------+
-| pyace                   |  ``X``                |  ``X``          |  ``X``  |  ``X``   |  ``X``         |  ``X``  |
-+-------------------------+-----------------------+-----------------+---------+----------+----------------+---------+
-| pyace-fast              |  ``X``                |  ``X``          |  ``X``  |  ``X``   |  ``X``         |  ``X``  |
-+-------------------------+-----------------------+-----------------+---------+----------+----------------+---------+
-| pyace-flask             |  ``X``                |  ``X``          |  ``X``  |  ``X``   |  ``X``         |  ``X``  |
-+-------------------------+-----------------------+-----------------+---------+----------+----------------+---------+
-| pyace-grpc              |  ``X``                |  ``X``          |  ``X``  |  ``X``   |  ``X``         |  ``X``  |
-+-------------------------+-----------------------+-----------------+---------+----------+----------------+---------+
+If required, you can always call the style commands (`black`_, `isort`_,
+`flake8`_...) or unit testing ones (`pytest`_) from the command line. However,
+this does not guarantee that your project is being tested in an isolated
+environment, which is another reason to use tools like `tox`_.
 
 
-Demo branches
+Documentation
 -------------
-To have a better idea on how each template will look once it gets rendered, see
-its corresponding demonstration branch.
 
-* Demo branch for `pybasic`_
-* Demo branch for `pyansys`_
-* Demo branch for `pyansys-advanced using flit`_
-* Demo branch for `pyansys-advanced using poetry`_
-* Demo branch for `pyansys-advanced using setuptools`_
-* Demo branch for `pyace`_
-* Demo branch for `pyace-fast`_
-* Demo branch for `pyace-flask`_
-* Demo branch for `pyace-grpc`_
+For building documentation, you can either run the usual rules provided in the
+`Sphinx`_ Makefile, such us:
 
-.. _pybasic: https://github.com/pyansys/ansys-templates/tree/demo/pybasic
-.. _pyansys: https://github.com/pyansys/ansys-templates/tree/demo/pyansys
-.. _pyansys-advanced using flit: https://github.com/pyansys/ansys-templates/tree/demo/pyansys-advanced-flit
-.. _pyansys-advanced using poetry: https://github.com/pyansys/ansys-templates/tree/demo/pyansys-advanced-poetry
-.. _pyansys-advanced using setuptools: https://github.com/pyansys/ansys-templates/tree/demo/pyansys-advanced-setuptools
-.. _pyace: https://github.com/pyansys/ansys-templates/tree/demo/pyace-pkg
-.. _pyace-fast: https://github.com/pyansys/ansys-templates/tree/demo/pyace-fast
-.. _pyace-flask: https://github.com/pyansys/ansys-templates/tree/demo/pyace-flask
-.. _pyace-grpc: https://github.com/pyansys/ansys-templates/tree/demo/pyace-grpc
+.. code:: bash
+
+    python -m pip install -r requirements_doc.txt
+    make -C doc/ html
+
+    # optionally view the generated documentation (on linux) with
+    your_browser_name doc/html/index.html
+
+
+Distributing
+------------
+
+If you would like to create either source or wheel files, start by installing
+the building requirements:
+
+.. code:: bash
+
+    python -m pip install -r requirements_build.txt
+
+Then, you can execute:
+
+    .. code:: bash
+
+        python -m build
+        python -m twine check dist/*
+
+
+.. LINKS AND REFERENCES
+.. _black: https://github.com/psf/black
+.. _flake8: https://flake8.pycqa.org/en/latest/
+.. _isort: https://github.com/PyCQA/isort
+.. _PyAnsys Developer's guide: https://dev.docs.pyansys.com/
+.. _pre-commit: https://pre-commit.com/
+.. _pytest: https://docs.pytest.org/en/stable/
+.. _Sphinx: https://www.sphinx-doc.org/en/master/
+.. _pip: https://pypi.org/project/pip/
+.. _tox: https://tox.wiki/
+.. _venv: https://docs.python.org/3/library/venv.html
