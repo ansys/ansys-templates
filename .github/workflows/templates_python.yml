@@ -113,7 +113,7 @@ jobs:
           # Create a fresh Python environment, install dependencies and baked project
           python -m venv .venv && source .venv/bin/activate
           python -m pip install --upgrade pip ${{ matrix.cfg.build-system }} tox pre-commit
-          python -m pip install -e .
+          if [[ ${{ matrix.cfg.template }} != "doc-project" ]]; then python -m pip install -e .; fi
           # Initialize template as Git repository so pre-commit can be used
           git init
           git config --local user.name "User"
