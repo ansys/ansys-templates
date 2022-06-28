@@ -1,17 +1,17 @@
 """Sphinx documentation configuration file."""
 from datetime import datetime
 
-from ansys_sphinx_theme import ansys_logo_white as logo  # Project information
+from ansys_sphinx_theme import (
+    ansys_logo_white as logo,  # Project informationproject = "project-library"copyright = f"(c) {datetime.now().year} ANSYS, Inc. All rights reserved"
+)
 
-project = "my_company"
-copyright = f"(c) {datetime.now().year} ANSYS, Inc. All rights reserved"
 author = "ANSYS, Inc."
 release = version = "0.1.dev0"
 
 # Select desired logo, theme, and declare the html title
 html_logo = logo
 html_theme = "ansys_sphinx_theme"
-html_short_title = html_title = "my_company"
+html_short_title = html_title = "project"
 
 # specify the location of your github repo
 html_theme_options = {
