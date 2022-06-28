@@ -33,8 +33,11 @@ DESIRED_STRUCTURE = [
     ".gitignore",
     "LICENSE",
     "README.rst",
+    ".pre-commit-config.yaml",
+    "ignore_words.txt",
     "requirements/requirements_build.txt",
     "requirements/requirements_doc.txt",
+    "tox.ini",
 ]
 """A list holding all desired files to be included in the project."""
 
