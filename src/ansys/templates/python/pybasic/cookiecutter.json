@@ -15,6 +15,8 @@
   "__build_system": "setuptools",
   "max_linelength": "100",
   "__max_linelength": "{{ cookiecutter.max_linelength }}",
+  "__logo": "pyansys",
+  "__logo_color": "black",
   "__coverage_source": "{{ cookiecutter.__project_name_slug }}",
   "__product_name_slug": "",
   "__library_name_slug": "",

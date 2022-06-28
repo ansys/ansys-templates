@@ -44,10 +44,17 @@ PYACE_VARS = dict(
     copyright="My Company",
     enable_docker="Yes",
     __project_name_slug = "project",
-    # __library_name_slug = "library",
-    # __project_name_slug = "pyproduct-library",
     requires_python="3.7",
 )
+
+DOC_PROJECT_VARS = dict(
+    project_name="doc-project",
+    __project_name_slug = "doc-project",
+    logo="Ansys",
+    logo_color="black",
+    requires_python="3.7",
+)
+
 
 PYCOMMON_STRUCTURE = [
     ".coveragerc",
@@ -210,17 +217,46 @@ PYANSYS_OPENAPI_STRUCTURE = [
     "pom.xml"
 ]
 
+DOC_PROJECT_STRUCTURE = [
+    "CHANGELOG.md",
+    "CODE_OF_CONDUCT.md",
+    "CONTRIBUTING.md",
+    "doc/Makefile",
+    "doc/make.bat",
+    "doc/.vale.ini",
+    "doc/styles/.gitignore",
+    "doc/styles/Vocab/ANSYS/accept.txt",
+    "doc/styles/Vocab/ANSYS/reject.txt",
+    "doc/source/conf.py",
+    "doc/source/index.rst",
+    "doc/source/_static/README.md",
+    "doc/source/_templates/sidebar-nav-bs.html",
+    "doc/source/_templates/README.md",
+    "examples/README.md",
+    ".github/dependabot.yml",
+    ".github/labeler.yml",
+    ".github/labels.yml",
+    ".github/workflows/ci_cd.yml",
+    ".github/workflows/label.yml",
+    ".gitignore",
+    "LICENSE",
+    "README.rst",
+    "requirements/requirements_build.txt",
+    "requirements/requirements_doc.txt",
+]
+
 # A dictionary relating templates name with their variables and structure
 TEMPLATES_VARIABLES_AND_STRUCTURE = {
     "common": [PYCOMMON_VARS, PYCOMMON_STRUCTURE],
     "pybasic": [PYBASIC_VARS, PYBASIC_STRUCTURE],
     "pyansys": [PYANSYS_VARS, PYANSYS_STRUCTURE],
-    "pyansys_advanced": [PYANSYS_ADVANCED_VARS, PYANSYS_ADVANCED_STRUCTURE],
-    "pyansys_openapi_client": [PYANSYS_OPENAPI_VARS, PYANSYS_OPENAPI_STRUCTURE],
+    "pyansys-advanced": [PYANSYS_ADVANCED_VARS, PYANSYS_ADVANCED_STRUCTURE],
+    "pyansys-openapi-client": [PYANSYS_OPENAPI_VARS, PYANSYS_OPENAPI_STRUCTURE],
     "pyace-flask": [PYACE_VARS, PYACE_FLASK_STRUCTURE],
     "pyace-grpc": [PYACE_VARS, PYACE_GRPC_STRUCTURE],
     "pyace-fast": [PYACE_VARS, PYACE_FAST_STRUCTURE],
     "pyace": [PYACE_VARS, PYACE_PKG_STRUCTURE],
+    "doc-project": [DOC_PROJECT_VARS, DOC_PROJECT_STRUCTURE],
 }
 
 
@@ -249,7 +285,7 @@ def test_template_python(tmp_path, build_system, template):
     project_path = tmp_path.joinpath(outdir_name)
 
     # Update variables if required
-    if template == "pyansys_advanced":
+    if template == "pyansys-advanced":
         VARIABLES["build_system"] = build_system
 
     # Assert no errors were raised during template rendering process
@@ -257,7 +293,7 @@ def test_template_python(tmp_path, build_system, template):
 
     # The pyansys-advanced template does not ship with some files included in
     # the common/ directory
-    if template == "pyansys_advanced" and build_system == "setuptools":
+    if template == "pyansys-advanced" and build_system == "setuptools":
         EXPECTED_STRUCTURE.append("setup.py")
     elif template == "common":
         keep_files(EXPECTED_STRUCTURE, project_path)
