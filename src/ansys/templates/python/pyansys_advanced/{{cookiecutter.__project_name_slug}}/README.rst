@@ -75,13 +75,13 @@ you to modify the source and enhance it.
 Before contributing to the project, please refer to the `PyAnsys Developer's guide`_. You will 
 need to follow these steps:
 
-1. Start by cloning this repository:
+#. Start by cloning this repository:
 
     .. code:: bash
 
         git clone {{ cookiecutter.repository_url }}
 
-2. Create a fresh-clean Python environment and activate it:
+#. Create a fresh-clean Python environment and activate it:
 
     .. code:: bash
 
@@ -97,7 +97,7 @@ need to follow these steps:
         # Activate it in Windows Powershell
         .venv\Scripts\Activate.ps1
 
-3. Make sure you have the latest required build system and doc, testing, and CI tools:
+#. Make sure you have the latest required build system and doc, testing, and CI tools:
 
     .. code:: bash
 
@@ -107,7 +107,7 @@ need to follow these steps:
         python -m pip install -r requirements/requirements_tests.txt
 
 
-4. Install the project in editable mode:
+#. Install the project in editable mode:
 
     {% if cookiecutter.build_system in ["flit", "setuptools"] -%}
     
@@ -123,7 +123,7 @@ need to follow these steps:
         
     {% endif -%}
 
-5. Finally, verify your development installation by running:
+#. Finally, verify your development installation by running:
 
     .. code:: bash
         
