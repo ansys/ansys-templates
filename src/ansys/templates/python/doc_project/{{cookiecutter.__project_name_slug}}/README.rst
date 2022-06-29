@@ -24,13 +24,13 @@ For developers
 Before contributing to the project, please refer to the `PyAnsys Developer's
 guide`_. You will need to follow these steps:
 
-1. Start by cloning this repository:
+#. Start by cloning this repository:
 
     .. code:: bash
 
         git clone {{ cookiecutter.repository_url }}
 
-2. Create a fresh-clean Python environment and activate it. Refer to the
+#. Create a fresh-clean Python environment and activate it. Refer to the
    official `venv`_ documentation if you require further information:
 
     .. code:: bash
@@ -47,19 +47,19 @@ guide`_. You will need to follow these steps:
         # Activate it in Windows Powershell
         .venv\Scripts\Activate.ps1
 
-3. Make sure you have the latest version of `pip`_:
+#. Make sure you have the latest version of `pip`_:
 
     .. code:: bash
 
         python -m pip install -U pip
 
-4. Install the project in editable mode:
+#. Install the project in editable mode:
 
     .. code:: bash
     
         python -m pip install --editable {{ cookiecutter.__pkg_name }}
 
-5. Install additional requirements (if needed):
+#. Install additional requirements (if needed):
 
      .. code:: bash
 
@@ -68,7 +68,7 @@ guide`_. You will need to follow these steps:
         python -m pip install -r requirements_tests.txt
 
 
-6. Finally, verify your development installation by running:
+#. Finally, verify your development installation by running:
 
     .. code:: bash
         

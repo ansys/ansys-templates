@@ -99,7 +99,7 @@ Main features of this package are:
 - Includes GitHub workflows (actions).
 - All ``requirements_*.txt`` are contained in the base directory.
 
-To create a new project using this template by running:
+To create a new project using this template, run:
 
 .. code-block:: text
 
@@ -125,7 +125,7 @@ Main features of this package are:
 - All ``requirements_*.txt`` are contained in a ``requirements_/`` directory.
 - Includes a ``tox.ini`` file.
 
-To create a new project using this template by running:
+To create a new project using this template, run:
 
 .. code-block:: text
 
@@ -146,7 +146,7 @@ Main features of this package are:
 - Customizable ``pom.xml`` file.
 - Customizable ``.m2/settings.xml`` file.
 
-To create a new project using this template by running:
+To create a new project using this template, run:
 
 .. code-block:: text
 
@@ -173,7 +173,7 @@ Main features of this package are:
 - Includes a ``tox.ini`` file.
 - Ability to integrate Docker within the project.
 
-To create a new project using this template by running:
+To create a new project using this template, run:
 
 .. code-block:: text
 
@@ -201,8 +201,7 @@ Main features of this package are:
 - Includes a ``tox.ini`` file.
 - Ability to integrate Docker within the project.
 
-To create a new project using this template by running:
-
+To create a new project using this template, run:
 .. code-block:: text
 
     ansys-templates new pyace-fast
@@ -229,7 +228,7 @@ Main features of this package are:
 - Includes a ``tox.ini`` file.
 - Ability to integrate Docker within the project.
 
-To create a new project using this template by running:
+To create a new project using this template, run:
 
 .. code-block:: text
 
@@ -257,8 +256,7 @@ Main features of this package are:
 - Includes a ``tox.ini`` file.
 - Ability to integrate Docker within the project.
 
-To create a new project using this template by running:
-
+To create a new project using this template, run:
 .. code-block:: text
 
     ansys-templates new pyace-grpc
