@@ -9,14 +9,14 @@ from ansys_sphinx_theme import ansys_logo_black as logo
 from ansys_sphinx_theme import pyansys_logo_white as logo
 {%- elif cookiecutter.__logo == "pyansys" and cookiecutter.__logo_color == "black" %}
 from ansys_sphinx_theme import pyansys_logo_black as logo
-{%- endif -%}
+{%- endif %}
 
 # Project information
-{%- if cookiecutter.__template_name in ["doc-project"] -%}
+{%- if cookiecutter.__template_name in ["doc-project"] %}
 project = "{{ cookiecutter.__project_name_slug }}"
-{%- else -%}
+{%- else %}
 project = "{{ cookiecutter.__pkg_name }}"
-{%- endif -%}
+{%- endif %}
 copyright = f"(c) {datetime.now().year} ANSYS, Inc. All rights reserved"
 author = "ANSYS, Inc."
 release = version = "{{ cookiecutter.__version }}"
@@ -32,11 +32,11 @@ html_theme_options = {
     "show_prev_next": False,
     "show_breadcrumbs": True,
     "additional_breadcrumbs": [
-        {%- if cookiecutter.__logo == "ansys" -%}
+        {%- if cookiecutter.__logo == "ansys" %}
         ("Ansys", "https://dev.docs.ansys.com/"),
-        {%- elif cookiecutter.__logo == "pyansys" -%}
+        {%- elif cookiecutter.__logo == "pyansys" %}
         ("PyAnsys", "https://docs.pyansys.com/"),
-        {%- endif -%}
+        {%- endif %}
     ],
 }
 
