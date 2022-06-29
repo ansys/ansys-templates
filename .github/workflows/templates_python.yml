@@ -121,6 +121,7 @@ jobs:
           git add . && git commit -m "Initialize repository"
           # Run act, ignore runner errors and look for real ones
           if [[ ${{ matrix.cfg.template }} == "pyansys_advanced" ]]; then act | grep -v -w "add-matcher"; else act -j style | grep -v -w "add-matcher"; fi
+          if [[ ${{ matrix.cfg.template }} == "doc-project" ]]; then act | grep -v -w "add-matcher"; else act -j style doc | grep -v -w "add-matcher"; fi
 
       - name: Move baked project to repo again
         if: matrix.python-version == '3.7'
