@@ -19,7 +19,7 @@
   "logo_color": ["white", "black"],
   "__logo_color": "{{ cookiecutter.logo_color }}",
   "max_linelength": "100",
-  "__max_linelength": "",
+  "__max_linelength": "{{ cookiecutter.max_linelength }}",
   "__coverage_source": "",
   "__product_name_slug": "",
   "__library_name_slug": "",

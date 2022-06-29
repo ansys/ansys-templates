@@ -3,6 +3,8 @@ import os
 import shutil
 from pathlib import Path
 
+import isort
+
 from ansys.templates.utils import keep_files
 
 
@@ -54,6 +56,17 @@ def main():
     ]
     for file in requirements_files:
         shutil.move(str(project_path / file), str(project_path / "requirements"))
+
+    # Apply isort with desired config
+    isort_config = isort.settings.Config(
+        line_length="{{ cookiecutter.__max_linelength }}",
+        profile="black",
+    )
+    filepaths_list = [
+        project_path / "doc/source/conf.py",
+    ]
+    for filepath in filepaths_list:
+        isort.api.sort_file(filepath, isort_config)
 
     # Apply the desired structure to the project
     keep_files(DESIRED_STRUCTURE)
