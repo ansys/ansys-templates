@@ -1,6 +1,7 @@
 {
   "__template_name": "doc-project",
   "project_name": "",
+  "__project_name": "{{ cookiecutter.project_name }} | lower",
   "__project_name_slug": "{{ cookiecutter.project_name }}",
   "version": "0.1.dev0",
   "__version": "{{ cookiecutter.version }}",
@@ -16,8 +17,7 @@
   "__build_system": "{{ cookiecutter.build_system }}",
   "logo": ["Ansys", "PyAnsys"],
   "__logo": "{{ cookiecutter.logo | lower }}",
-  "logo_color": ["white", "black"],
-  "__logo_color": "{{ cookiecutter.logo_color }}",
+  "__logo_color": "black",
   "max_linelength": "100",
   "__max_linelength": "{{ cookiecutter.max_linelength }}",
   "__coverage_source": "",
