@@ -16,7 +16,7 @@ Code style can be checked by running:
 
     tox -e style
 
-Previous commnad will run `pre-commit`_ for checking code quality.
+Previous command will run `pre-commit`_ for checking code quality.
 
 
 Documentation
