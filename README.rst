@@ -7,115 +7,33 @@ doc-project
 How to install
 --------------
 
-At least two installation modes are provided: user and developer.
 
-For users
-^^^^^^^^^
+Code Style
+----------
+Code style can be checked by running:
 
-User installation can be performed by running:
+.. code-block:: text
 
-.. code:: bash
+    tox -e style
 
-    python -m pip install 
-
-For developers
-^^^^^^^^^^^^^^
-
-Before contributing to the project, please refer to the `PyAnsys Developer's
-guide`_. You will need to follow these steps:
-
-#. Start by cloning this repository:
-
-    .. code:: bash
-
-        git clone https://github.com/pyansys/doc-project
-
-#. Create a fresh-clean Python environment and activate it. Refer to the
-   official `venv`_ documentation if you require further information:
-
-    .. code:: bash
-
-        # Create a virtual environment
-        python -m venv .venv
-
-        # Activate it in a POSIX system
-        source .venv/bin/activate
-
-        # Activate it in Windows CMD environment
-        .venv\Scripts\activate.bat
-
-        # Activate it in Windows Powershell
-        .venv\Scripts\Activate.ps1
-
-#. Make sure you have the latest version of `pip`_:
-
-    .. code:: bash
-
-        python -m pip install -U pip
-
-#. Install the project in editable mode:
-
-    .. code:: bash
-    
-        python -m pip install --editable 
-
-#. Install additional requirements (if needed):
-
-     .. code:: bash
-
-        python -m pip install -r requirements_build.txt
-        python -m pip install -r requirements_doc.txt
-        python -m pip install -r requirements_tests.txt
-
-
-#. Finally, verify your development installation by running:
-
-    .. code:: bash
-        
-        python -m pip install -r requirements_tests.txt
-        pytest tests -vv
-
-
-Style and Testing
------------------
-
-If required, you can always call the style commands (`black`_, `isort`_,
-`flake8`_...) or unit testing ones (`pytest`_) from the command line. However,
-this does not guarantee that your project is being tested in an isolated
-environment, which is another reason to use tools like `tox`_.
+Previous commnad will run `pre-commit`_ for checking code quality.
 
 
 Documentation
 -------------
+Documentation can be rendered by running:
 
-For building documentation, you can either run the usual rules provided in the
-`Sphinx`_ Makefile, such us:
+.. code-block:: text
 
-.. code:: bash
+    tox -e doc
 
-    python -m pip install -r requirements_doc.txt
-    make -C doc/ html
+The resultant HTML files can be inspected using your favorite web browser:
 
-    # optionally view the generated documentation (on linux) with
-    your_browser_name doc/html/index.html
+.. code-block:: text
 
+    <browser> .tox/doc_out_html/index.html
 
-Distributing
-------------
-
-If you would like to create either source or wheel files, start by installing
-the building requirements:
-
-.. code:: bash
-
-    python -m pip install -r requirements_build.txt
-
-Then, you can execute:
-
-    .. code:: bash
-
-        python -m build
-        python -m twine check dist/*
+Previous will open the rendered documentation in the desired browser.
 
 
 .. LINKS AND REFERENCES
