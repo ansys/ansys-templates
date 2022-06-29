@@ -40,7 +40,7 @@ capabilities and features of each template:
 ``doc-project`` template
 ------------------------
 This template renders a documentation project based on Sphinx. You can chose
-between an Ansys or PyAnsys logos together with the color theme.
+between Ansys or PyAnsys logos together with the color theme.
 
 Main features of this package are:
 
