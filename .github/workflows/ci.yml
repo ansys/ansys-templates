@@ -77,7 +77,7 @@ jobs:
 
       - name: Deploy to gh-pages
         if: github.event_name == 'push' && contains(github.ref, 'refs/tags')
-        uses: JamesIves/github-pages-deploy-action@3.7.1
+        uses: JamesIves/github-pages-deploy-action@4.3.4
         with:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
           BRANCH: gh-pages
@@ -135,7 +135,7 @@ jobs:
         run: |
           python -m build && python -m twine check dist/*
       - name: Upload wheel and sdist to artifacts
-        uses: actions/upload-artifact@v3
+        uses: actions/upload-artifact@v3.1.0
         with:
           name: pyasys-templates-packages
           path: dist/
