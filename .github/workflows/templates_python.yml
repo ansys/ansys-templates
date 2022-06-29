@@ -37,21 +37,21 @@ jobs:
           - {name: "doc-project", template: "doc-project", build-system: "setuptools", outdir: "doc_proje2/doc-project"}
 
           # All pybasic template tests
-          # - {name: "pybasic", template: "pybasic", build-system: "setuptools", outdir: "pybasic_s0/pybasic"}
-          #   
-          # # All pybasic template tests
-          # - {name: "pyansys", template: "pyansys", build-system: "setuptools", outdir: "pyansys_s0/pyproduct-library"}
+          - {name: "pybasic", template: "pybasic", build-system: "setuptools", outdir: "pybasic_s0/pybasic"}
+            
+          # All pybasic template tests
+          - {name: "pyansys", template: "pyansys", build-system: "setuptools", outdir: "pyansys_s0/pyproduct-library"}
 
           # # All pyansys_advanced template tests
-          # - {name: "pyansys-advanced-flit", template: "pyansys-advanced", build-system: "flit", outdir: "pyansys_a0/pyproduct-library"}
-          # - {name: "pyansys-advanced-poetry", template: "pyansys-advanced", build-system: "poetry", outdir: "pyansys_a1/pyproduct-library"}
-          # - {name: "pyansys-advanced-setuptools", template: "pyansys-advanced", build-system: "setuptools", outdir: "pyansys_a2/pyproduct-library"}
+          - {name: "pyansys-advanced-flit", template: "pyansys-advanced", build-system: "flit", outdir: "pyansys_a0/pyproduct-library"}
+          - {name: "pyansys-advanced-poetry", template: "pyansys-advanced", build-system: "poetry", outdir: "pyansys_a1/pyproduct-library"}
+          - {name: "pyansys-advanced-setuptools", template: "pyansys-advanced", build-system: "setuptools", outdir: "pyansys_a2/pyproduct-library"}
 
           # # All pyace template tests
-          # - {name: "pyace-pkg", template: "pyace", build-system: "setuptools", outdir: "pyace_set0/project"}
-          # - {name: "pyace-flask", template: "pyace-flask", build-system: "setuptools", outdir: "pyace_fla2/project"}
-          # - {name: "pyace-fast", template: "pyace-fast", build-system: "setuptools", outdir: "pyace_fas2/project"}
-          # - {name: "pyace-grpc", template: "pyace-grpc", build-system: "setuptools", outdir: "pyace_grp2/project"}
+          - {name: "pyace-pkg", template: "pyace", build-system: "setuptools", outdir: "pyace_set0/project"}
+          - {name: "pyace-flask", template: "pyace-flask", build-system: "setuptools", outdir: "pyace_fla2/project"}
+          - {name: "pyace-fast", template: "pyace-fast", build-system: "setuptools", outdir: "pyace_fas2/project"}
+          - {name: "pyace-grpc", template: "pyace-grpc", build-system: "setuptools", outdir: "pyace_grp2/project"}
 
 
       fail-fast: false
