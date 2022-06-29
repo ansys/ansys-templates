@@ -1,10 +1,11 @@
 """Sphinx documentation configuration file."""
 from datetime import datetime
 
-from ansys_sphinx_theme import (
-    ansys_logo_white as logo,  # Project informationproject = "project-library"copyright = f"(c) {datetime.now().year} ANSYS, Inc. All rights reserved"
-)
+from ansys_sphinx_theme import ansys_logo_white as logo
 
+# Project information
+project = "project-library"
+copyright = f"(c) {datetime.now().year} ANSYS, Inc. All rights reserved"
 author = "ANSYS, Inc."
 release = version = "0.1.dev0"
 
@@ -18,7 +19,9 @@ html_theme_options = {
     "github_url": "https://github.com/pyansys/project",
     "show_prev_next": False,
     "show_breadcrumbs": True,
-    "additional_breadcrumbs": [("Ansys", "https://dev.docs.ansys.com/"),],
+    "additional_breadcrumbs": [
+        ("Ansys", "https://dev.docs.ansys.com/"),
+    ],
 }
 
 # Sphinx extensions
