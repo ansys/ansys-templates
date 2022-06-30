@@ -48,6 +48,12 @@ def new():
 
 
 @new.command()
+def doc_project():
+    """Create a documentation project using Sphinx."""
+    create_project("doc-project")
+
+
+@new.command()
 def pybasic():
     """Create a basic Python Package."""
     create_project("pybasic")
@@ -62,13 +68,13 @@ def pyansys():
 @new.command()
 def pyansys_advanced():
     """Create an advanced PyAnsys Python Package project."""
-    create_project("pyansys_advanced")
+    create_project("pyansys-advanced")
 
 
 @new.command()
 def pyansys_openapi_client():
     """Create an OpenAPI Client Package project."""
-    create_project("pyansys_openapi_client")
+    create_project("pyansys-openapi-client")
 
 
 @new.command()

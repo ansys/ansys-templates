@@ -32,17 +32,22 @@ jobs:
 
         cfg:
           # All pybasic template tests
+          - {name: "doc-project", template: "doc-project", build-system: "flit", outdir: "doc_proje0/doc-project"}
+          - {name: "doc-project", template: "doc-project", build-system: "poetry", outdir: "doc_proje1/doc-project"}
+          - {name: "doc-project", template: "doc-project", build-system: "setuptools", outdir: "doc_proje2/doc-project"}
+
+          # All pybasic template tests
           - {name: "pybasic", template: "pybasic", build-system: "setuptools", outdir: "pybasic_s0/pybasic"}
             
           # All pybasic template tests
           - {name: "pyansys", template: "pyansys", build-system: "setuptools", outdir: "pyansys_s0/pyproduct-library"}
 
-          # All pyansys_advanced template tests
-          - {name: "pyansys-advanced-flit", template: "pyansys_advanced", build-system: "flit", outdir: "pyansys_a0/pyproduct-library"}
-          - {name: "pyansys-advanced-poetry", template: "pyansys_advanced", build-system: "poetry", outdir: "pyansys_a1/pyproduct-library"}
-          - {name: "pyansys-advanced-setuptools", template: "pyansys_advanced", build-system: "setuptools", outdir: "pyansys_a2/pyproduct-library"}
+          # # All pyansys_advanced template tests
+          - {name: "pyansys-advanced-flit", template: "pyansys-advanced", build-system: "flit", outdir: "pyansys_a0/pyproduct-library"}
+          - {name: "pyansys-advanced-poetry", template: "pyansys-advanced", build-system: "poetry", outdir: "pyansys_a1/pyproduct-library"}
+          - {name: "pyansys-advanced-setuptools", template: "pyansys-advanced", build-system: "setuptools", outdir: "pyansys_a2/pyproduct-library"}
 
-          # All pyace template tests
+          # # All pyace template tests
           - {name: "pyace-pkg", template: "pyace", build-system: "setuptools", outdir: "pyace_set0/project"}
           - {name: "pyace-flask", template: "pyace-flask", build-system: "setuptools", outdir: "pyace_fla2/project"}
           - {name: "pyace-fast", template: "pyace-fast", build-system: "setuptools", outdir: "pyace_fas2/project"}
@@ -108,7 +113,7 @@ jobs:
           # Create a fresh Python environment, install dependencies and baked project
           python -m venv .venv && source .venv/bin/activate
           python -m pip install --upgrade pip ${{ matrix.cfg.build-system }} tox pre-commit
-          python -m pip install -e .
+          if [[ ${{ matrix.cfg.template }} != "doc-project" ]]; then python -m pip install -e .; fi
           # Initialize template as Git repository so pre-commit can be used
           git init
           git config --local user.name "User"
@@ -116,6 +121,7 @@ jobs:
           git add . && git commit -m "Initialize repository"
           # Run act, ignore runner errors and look for real ones
           if [[ ${{ matrix.cfg.template }} == "pyansys_advanced" ]]; then act | grep -v -w "add-matcher"; else act -j style | grep -v -w "add-matcher"; fi
+          if [[ ${{ matrix.cfg.template }} == "doc-project" ]]; then act | grep -v -w "add-matcher"; else act -j style doc | grep -v -w "add-matcher"; fi
 
       - name: Move baked project to repo again
         if: matrix.python-version == '3.7'
@@ -128,7 +134,7 @@ jobs:
 
       - name: Create demo branch
         if: matrix.python-version == '3.7'
-        uses: peterjgrainger/action-create-branch@v2.0.1
+        uses: peterjgrainger/action-create-branch@v2.2.0
         env:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
         with:

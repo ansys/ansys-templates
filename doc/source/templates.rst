@@ -11,6 +11,8 @@ capabilities and features of each template:
 +-------------------------+-----------------------+-----------------+---------+----------+----------------+---------+
 | Template                | setup.py              | pyproject.toml  | Actions | tox.ini  | requirements/  | Docker  |
 +=========================+=======================+=================+=========+==========+================+=========+
+| doc-project             |                       |                 |  ``X``  |  ``X``   |  ``X``         |         |
++-------------------------+-----------------------+-----------------+---------+----------+----------------+---------+
 | pybasic                 | ``X``                 |                 |         |          |                |         |
 +-------------------------+-----------------------+-----------------+---------+----------+----------------+---------+
 | pyansys                 |  ``X``                |  ``X``          |  ``X``  |          |                |         |
@@ -35,6 +37,29 @@ capabilities and features of each template:
    better idea on the final project layout.
 
 
+``doc-project`` template
+------------------------
+This template renders a documentation project based on Sphinx. You can chose
+between Ansys or PyAnsys logos together with the color theme.
+
+Main features of this package are:
+
+- Ability to choose between Ansys or PyAnsys logos.
+- Includes GitHub workflows (actions).
+- All ``requirements_*.txt`` are contained in a ``requirements_/`` directory.
+- Includes a ``tox.ini`` file.
+
+To create a new project using this template by running:
+
+.. code-block:: text
+
+    ansys-templates new doc-project
+
+.. admonition:: Link to demo
+
+    https://github.com/pyansys/ansys-templates/tree/demo/doc-project
+
+
 ``pybasic`` template
 --------------------
 This template renders to a basic Python project. It does not follow the Ansys
@@ -49,6 +74,11 @@ Main features of this package are:
 - Includes ``doc/`` and ``tests/`` directories.
 - All ``requirements_*.txt`` are contained in the base directory.
 
+To create a new project using this template by running:
+
+.. code-block:: text
+
+    ansys-templates new pybasic
 
 .. admonition:: Link to demo
 
@@ -68,6 +98,12 @@ Main features of this package are:
 - Includes ``doc/`` and ``tests/`` directories.
 - Includes GitHub workflows (actions).
 - All ``requirements_*.txt`` are contained in the base directory.
+
+To create a new project using this template, run:
+
+.. code-block:: text
+
+    ansys-templates new pyansys
 
 .. admonition:: Link to demo
 
@@ -89,6 +125,12 @@ Main features of this package are:
 - All ``requirements_*.txt`` are contained in a ``requirements_/`` directory.
 - Includes a ``tox.ini`` file.
 
+To create a new project using this template, run:
+
+.. code-block:: text
+
+    ansys-templates new pyansys-advanced
+
 .. admonition:: Link to demo
 
     https://github.com/pyansys/ansys-templates/tree/demo/pyansys-advanced
@@ -104,10 +146,15 @@ Main features of this package are:
 - Customizable ``pom.xml`` file.
 - Customizable ``.m2/settings.xml`` file.
 
+To create a new project using this template, run:
+
+.. code-block:: text
+
+    ansys-templates new pyansys-openapi-client
 
 .. admonition:: Link to demo
 
-    This project does not have a demo branch.
+    This template does not have a demo available for the moment.
 
 
 ``pyace`` template
@@ -125,6 +172,12 @@ Main features of this package are:
 - All ``requirements_*.txt`` are contained in a ``requirements_/`` directory.
 - Includes a ``tox.ini`` file.
 - Ability to integrate Docker within the project.
+
+To create a new project using this template, run:
+
+.. code-block:: text
+
+    ansys-templates new pyace-pkg
 
 .. admonition:: Link to demo
 
@@ -148,6 +201,11 @@ Main features of this package are:
 - Includes a ``tox.ini`` file.
 - Ability to integrate Docker within the project.
 
+To create a new project using this template, run:
+.. code-block:: text
+
+    ansys-templates new pyace-fast
+
 .. admonition:: Link to demo
 
     https://github.com/pyansys/ansys-templates/tree/demo/pyace-fast
@@ -169,6 +227,12 @@ Main features of this package are:
 - All ``requirements_*.txt`` are contained in a ``requirements_/`` directory.
 - Includes a ``tox.ini`` file.
 - Ability to integrate Docker within the project.
+
+To create a new project using this template, run:
+
+.. code-block:: text
+
+    ansys-templates new pyace-flask
 
 .. admonition:: Link to demo
 
@@ -192,10 +256,14 @@ Main features of this package are:
 - Includes a ``tox.ini`` file.
 - Ability to integrate Docker within the project.
 
+To create a new project using this template, run:
+.. code-block:: text
+
+    ansys-templates new pyace-grpc
+
 .. admonition:: Link to demo
 
     https://github.com/pyansys/ansys-templates/tree/demo/pyace-grpc
-
 
 .. Links and references
 

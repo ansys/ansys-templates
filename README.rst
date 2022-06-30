@@ -78,6 +78,7 @@ Available templates
 -------------------
 Available templates in ``ansys-templates`` are:
 
+- ``doc-project``: Create a documentation project using Sphinx.
 - ``pybasic``: Create a basic Python Package.
 - ``pyansys``: Create a PyAnsys Python Package project.
 - ``pyansys-advanced``: Create an advanced PyAnsys Python Package project.
@@ -96,6 +97,8 @@ available in ``ansys-templates``:
 +-------------------------+-----------------------+-----------------+---------+----------+----------------+---------+
 | Template                | setup.py              | pyproject.toml  | Actions | tox.ini  | requirements/  | Docker  |
 +=========================+=======================+=================+=========+==========+================+=========+
+| doc-project             |                       |                 |  ``X``  |  ``X``   |  ``X``         |         |
++-------------------------+-----------------------+-----------------+---------+----------+----------------+---------+
 | pybasic                 | ``X``                 |                 |         |          |                |         |
 +-------------------------+-----------------------+-----------------+---------+----------+----------------+---------+
 | pyansys                 |  ``X``                |  ``X``          |  ``X``  |          |                |         |
@@ -119,6 +122,7 @@ Demo branches
 To have a better idea on how each template will look once it gets rendered, see
 its corresponding demonstration branch.
 
+* Demo branch for `doc-project`_
 * Demo branch for `pybasic`_
 * Demo branch for `pyansys`_
 * Demo branch for `pyansys-advanced using flit`_
@@ -129,6 +133,7 @@ its corresponding demonstration branch.
 * Demo branch for `pyace-flask`_
 * Demo branch for `pyace-grpc`_
 
+.. _doc-project: https://github.com/pyansys/ansys-templates/tree/demo/doc-project
 .. _pybasic: https://github.com/pyansys/ansys-templates/tree/demo/pybasic
 .. _pyansys: https://github.com/pyansys/ansys-templates/tree/demo/pyansys
 .. _pyansys-advanced using flit: https://github.com/pyansys/ansys-templates/tree/demo/pyansys-advanced-flit

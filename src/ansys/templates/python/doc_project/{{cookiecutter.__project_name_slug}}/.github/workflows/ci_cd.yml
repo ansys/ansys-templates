@@ -1,0 +1,126 @@
+name: CI
+
+on:
+  pull_request:
+  push:
+    tags:
+      - "*"
+    branches:
+      - main
+
+env:
+  MAIN_PYTHON_VERSION: '{{ cookiecutter.__requires_python }}'
+
+concurrency:
+  group: {{ '${{ github.workflow }}-${{ github.ref }}' }}
+  cancel-in-progress: true
+
+jobs:
+
+  style:
+    name: Code style
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v3
+      - name: Set up Python
+        uses: actions/setup-python@v4
+        with:
+          python-version: {{ '${{ env.MAIN_PYTHON_VERSION }}' }}
+      - name: Install dependencies
+        run: |
+          python -m pip install --upgrade pip tox
+      - name: Test with tox
+        run: tox -e style
+
+  docs-style:
+    name: Documentation Style Check
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v3
+  
+      - name: Running Vale
+        uses: errata-ai/vale-action@reviewdog
+        env:
+          GITHUB_TOKEN: {{ '${{secrets.GITHUB_TOKEN}}' }}
+        with:
+          files: doc
+          reporter: github-pr-check
+          level: error
+          filter_mode: nofilter
+          fail_on_error: true
+          vale_flags: "--config=doc/.vale.ini"
+
+  docs:
+    name: Documentation
+    needs: [style, docs-style]
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v3
+
+      - name: Set up Python
+        uses: actions/setup-python@v4
+        with:
+          python-version: {{ '${{ env.MAIN_PYTHON_VERSION }}' }}
+
+      - name: Install system dependencies
+        run: |
+          sudo apt-get update
+          sudo apt-get install -y texlive-latex-extra latexmk nodejs npm graphviz
+          npm install -g @mermaid-js/mermaid-cli
+
+      - name: Install Python dependencies
+        run: |
+          python -m pip install --upgrade pip tox
+
+      - name: Build HTML documentation
+        run: tox -e doc
+
+      - name: Build PDF Documentation
+        run: |
+          sudo apt update
+          sudo apt-get install -y texlive-latex-extra latexmk
+          python -m pip install -r requirements/requirements_doc.txt
+          make -C doc pdf
+
+      - name: Upload HTML documentation
+        uses: actions/upload-artifact@v3.1.0
+        with:
+          name: HTML-Documentation
+          path: .tox/doc_out_html/
+          retention-days: 7
+
+      - name: Upload PDF Documentation
+        uses: actions/upload-artifact@v3.1.0
+        with:
+          name: PDF-Documentation
+          path: doc/build/latex/*.pdf
+          retention-days: 7
+
+      - name: Deploy to gh-pages
+        if: github.event_name == 'push'
+        uses: JamesIves/github-pages-deploy-action@4.3.4
+        with:
+          GITHUB_TOKEN: {{ '${{ secrets.GITHUB_TOKEN }}' }}
+          BRANCH: gh-pages
+          FOLDER: .tox/doc_out_html/
+          CLEAN: true
+          SINGLE_COMMIT: true
+
+  release:
+    if: github.event_name == 'push' && contains(github.ref, 'refs/tags')
+    needs: [style, docs-style, docs]
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v3
+
+      - uses: actions/download-artifact@v3
+
+      - name: Display structure of downloaded files
+        run: ls -R
+
+      - name: Release
+        uses: softprops/action-gh-release@v1
+        with:
+          generate_release_notes: true
+          files: |
+            ./*PDF*/*.pdf

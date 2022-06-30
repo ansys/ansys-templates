@@ -1,20 +1,30 @@
 """Sphinx documentation configuration file."""
 from datetime import datetime
 
-from {{cookiecutter.__pkg_namespace}} import __version__
-from ansys_sphinx_theme import pyansys_logo_black
+{%- if cookiecutter.__logo == "ansys" and cookiecutter.__logo_color == "white" %}
+from ansys_sphinx_theme import ansys_logo_white as logo
+{%- elif cookiecutter.__logo == "ansys" and cookiecutter.__logo_color == "black" %}
+from ansys_sphinx_theme import ansys_logo_black as logo
+{%- elif cookiecutter.__logo == "pyansys" and cookiecutter.__logo_color == "white" %}
+from ansys_sphinx_theme import pyansys_logo_white as logo
+{%- elif cookiecutter.__logo == "pyansys" and cookiecutter.__logo_color == "black" %}
+from ansys_sphinx_theme import pyansys_logo_black as logo
+{%- endif %}
 
 # Project information
+{%- if cookiecutter.__template_name in ["doc-project"] %}
+project = "{{ cookiecutter.__project_name_slug }}"
+{%- else %}
 project = "{{ cookiecutter.__pkg_name }}"
+{%- endif %}
 copyright = f"(c) {datetime.now().year} ANSYS, Inc. All rights reserved"
 author = "ANSYS, Inc."
-release = version = __version__
+release = version = "{{ cookiecutter.__version }}"
 
-# use the default pyansys logo
-html_logo = pyansys_logo_black
+# Select desired logo, theme, and declare the html title
+html_logo = logo
 html_theme = "ansys_sphinx_theme"
-
-html_short_title = html_title = "{{ cookiecutter.__pkg_name }}"
+html_short_title = html_title = "{{ cookiecutter.__project_name_slug }}"
 
 # specify the location of your github repo
 html_theme_options = {
@@ -22,7 +32,11 @@ html_theme_options = {
     "show_prev_next": False,
     "show_breadcrumbs": True,
     "additional_breadcrumbs": [
+        {%- if cookiecutter.__logo == "ansys" %}
+        ("Ansys", "https://dev.docs.ansys.com/"),
+        {%- elif cookiecutter.__logo == "pyansys" %}
         ("PyAnsys", "https://docs.pyansys.com/"),
+        {%- endif %}
     ],
 }
 

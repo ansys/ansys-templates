@@ -14,6 +14,9 @@ PYTHON_TEMPLATES_PATH = _PATHS_MODULE / "python"
 PYTHON_TEMPLATES_COMMON_PATH = PYTHON_TEMPLATES_PATH / "common"
 """Path to the Python common template."""
 
+PYTHON_TEMPLATES_DOC_PROJECT = PYTHON_TEMPLATES_PATH / "doc_project"
+"""Path to the documentation project template."""
+
 PYTHON_TEMPLATES_PYBASIC_PATH = PYTHON_TEMPLATES_PATH / "pybasic"
 """Path to the basic Python Package template."""
 
@@ -40,10 +43,11 @@ PYTHON_TEMPLATES_PYACE_FAST_PATH = PYTHON_TEMPLATES_PATH / "pyace_fastapi"
 
 TEMPLATE_PATH_FINDER = {
     "common": PYTHON_TEMPLATES_COMMON_PATH,
+    "doc-project": PYTHON_TEMPLATES_DOC_PROJECT,
     "pybasic": PYTHON_TEMPLATES_PYBASIC_PATH,
     "pyansys": PYTHON_TEMPLATES_PYANSYS_PATH,
-    "pyansys_advanced": PYTHON_TEMPLATES_PYANSYS_ADVANCED_PATH,
-    "pyansys_openapi_client": PYTHON_TEMPLATES_PYANSYS_OPENAPI_CLIENT_PATH,
+    "pyansys-advanced": PYTHON_TEMPLATES_PYANSYS_ADVANCED_PATH,
+    "pyansys-openapi-client": PYTHON_TEMPLATES_PYANSYS_OPENAPI_CLIENT_PATH,
     "pyace": PYTHON_TEMPLATES_PYACE_PATH,
     "pyace-grpc": PYTHON_TEMPLATES_PYACE_GRPC_PATH,
     "pyace-flask": PYTHON_TEMPLATES_PYACE_FLASK_PATH,
