@@ -32,9 +32,6 @@ dependencies = [
 [tool.flit.module]
 name = "ansys.templates"
 
-[tool.flit.sdist]
-include = ["src/ansys/templates/pypkg/"]
-
 [project.scripts]
 ansys-templates = "ansys.templates.cli:main"
 
