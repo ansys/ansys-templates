@@ -14,12 +14,12 @@ Welcome to Ansys templates
    :target: https://pypi.org/project/ansys-templates/
    :alt: PyPI
 
-.. |codecov| image:: https://codecov.io/gh/pyansys/ansys-templates/branch/main/graph/badge.svg
-   :target: https://codecov.io/gh/pyansys/ansys-templates
+.. |codecov| image:: https://codecov.io/gh/ansys/ansys-templates/branch/main/graph/badge.svg
+   :target: https://codecov.io/gh/ansys/ansys-templates
    :alt: Codecov
 
-.. |GH-CI| image:: https://github.com/pyansys/ansys-templates/actions/workflows/ci.yml/badge.svg
-   :target: https://github.com/pyansys/ansys-templates/actions/workflows/ci.yml
+.. |GH-CI| image:: https://github.com/ansys/ansys-templates/actions/workflows/ci.yml/badge.svg
+   :target: https://github.com/ansys/ansys-templates/actions/workflows/ci.yml
    :alt: CH-CI
 
 .. |MIT| image:: https://img.shields.io/badge/License-MIT-yellow.svg
@@ -47,7 +47,7 @@ For information on using this tool, see the `Ansys Templates Documentation`_.
 
 .. _Ansys Templates Documentation: https://templates.pyansys.com/ 
 
-.. image:: https://github.com/pyansys/ansys-templates/raw/main/doc/source/_static/basic_usage.gif
+.. image:: https://github.com/ansys/ansys-templates/raw/main/doc/source/_static/basic_usage.gif
 
 
 How to install
@@ -133,13 +133,13 @@ its corresponding demonstration branch.
 * Demo branch for `pyace-flask`_
 * Demo branch for `pyace-grpc`_
 
-.. _doc-project: https://github.com/pyansys/ansys-templates/tree/demo/doc-project
-.. _pybasic: https://github.com/pyansys/ansys-templates/tree/demo/pybasic
-.. _pyansys: https://github.com/pyansys/ansys-templates/tree/demo/pyansys
-.. _pyansys-advanced using flit: https://github.com/pyansys/ansys-templates/tree/demo/pyansys-advanced-flit
-.. _pyansys-advanced using poetry: https://github.com/pyansys/ansys-templates/tree/demo/pyansys-advanced-poetry
-.. _pyansys-advanced using setuptools: https://github.com/pyansys/ansys-templates/tree/demo/pyansys-advanced-setuptools
-.. _pyace: https://github.com/pyansys/ansys-templates/tree/demo/pyace-pkg
-.. _pyace-fast: https://github.com/pyansys/ansys-templates/tree/demo/pyace-fast
-.. _pyace-flask: https://github.com/pyansys/ansys-templates/tree/demo/pyace-flask
-.. _pyace-grpc: https://github.com/pyansys/ansys-templates/tree/demo/pyace-grpc
+.. _doc-project: https://github.com/ansys/ansys-templates/tree/demo/doc-project
+.. _pybasic: https://github.com/ansys/ansys-templates/tree/demo/pybasic
+.. _pyansys: https://github.com/ansys/ansys-templates/tree/demo/pyansys
+.. _pyansys-advanced using flit: https://github.com/ansys/ansys-templates/tree/demo/pyansys-advanced-flit
+.. _pyansys-advanced using poetry: https://github.com/ansys/ansys-templates/tree/demo/pyansys-advanced-poetry
+.. _pyansys-advanced using setuptools: https://github.com/ansys/ansys-templates/tree/demo/pyansys-advanced-setuptools
+.. _pyace: https://github.com/ansys/ansys-templates/tree/demo/pyace-pkg
+.. _pyace-fast: https://github.com/ansys/ansys-templates/tree/demo/pyace-fast
+.. _pyace-flask: https://github.com/ansys/ansys-templates/tree/demo/pyace-flask
+.. _pyace-grpc: https://github.com/ansys/ansys-templates/tree/demo/pyace-grpc

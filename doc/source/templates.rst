@@ -57,7 +57,7 @@ To create a new project using this template by running:
 
 .. admonition:: Link to demo
 
-    https://github.com/pyansys/ansys-templates/tree/demo/doc-project
+    https://github.com/ansys/ansys-templates/tree/demo/doc-project
 
 
 ``pybasic`` template
@@ -82,7 +82,7 @@ To create a new project using this template by running:
 
 .. admonition:: Link to demo
 
-    https://github.com/pyansys/ansys-templates/tree/demo/pybasic
+    https://github.com/ansys/ansys-templates/tree/demo/pybasic
 
 
 ``pyansys`` template
@@ -107,7 +107,7 @@ To create a new project using this template, run:
 
 .. admonition:: Link to demo
 
-    https://github.com/pyansys/ansys-templates/tree/demo/pyansys
+    https://github.com/ansys/ansys-templates/tree/demo/pyansys
 
 
 ``pyansys-advanced`` template
@@ -133,7 +133,7 @@ To create a new project using this template, run:
 
 .. admonition:: Link to demo
 
-    https://github.com/pyansys/ansys-templates/tree/demo/pyansys-advanced
+    https://github.com/ansys/ansys-templates/tree/demo/pyansys-advanced
 
 
 ``pyansys-openapi-client`` template
@@ -181,7 +181,7 @@ To create a new project using this template, run:
 
 .. admonition:: Link to demo
 
-    https://github.com/pyansys/ansys-templates/tree/demo/pyace-pkg
+    https://github.com/ansys/ansys-templates/tree/demo/pyace-pkg
 
 
 ``pyace-fast`` template
@@ -208,7 +208,7 @@ To create a new project using this template, run:
 
 .. admonition:: Link to demo
 
-    https://github.com/pyansys/ansys-templates/tree/demo/pyace-fast
+    https://github.com/ansys/ansys-templates/tree/demo/pyace-fast
 
 
 ``pyace-flask`` template
@@ -236,7 +236,7 @@ To create a new project using this template, run:
 
 .. admonition:: Link to demo
 
-    https://github.com/pyansys/ansys-templates/tree/demo/pyace-flask
+    https://github.com/ansys/ansys-templates/tree/demo/pyace-flask
 
 
 ``pyace-grpc`` template
@@ -263,7 +263,7 @@ To create a new project using this template, run:
 
 .. admonition:: Link to demo
 
-    https://github.com/pyansys/ansys-templates/tree/demo/pyace-grpc
+    https://github.com/ansys/ansys-templates/tree/demo/pyace-grpc
 
 .. Links and references
 
