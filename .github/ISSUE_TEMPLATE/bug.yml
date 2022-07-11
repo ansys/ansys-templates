@@ -1,0 +1,70 @@
+name: 🐞 Bug, problem, error
+description: Fill a bug report here
+title: "Bug located in ..."
+labels: ["bug"]
+assignees: [""]
+
+body:
+
+  - type: checkboxes
+    id: new-bug
+    attributes:
+      label: '🔍 Before submitting the issue'
+      description: Please, make sure the following conditions are met
+      options:
+      - label: I have searched among the existing issues
+        required: true
+      - label: I am using a Python virtual environment
+        required: true
+
+  - type: textarea
+    id: bug-description
+    attributes:
+      label: '🐞 Description of the bug'
+      placeholder: Describe what bug you encountered and what should have happened.
+    validations:
+      required: true
+
+  - type: textarea
+    id: steps-to-reproduce
+    attributes:
+      label: '📝 Steps to reproduce'
+      placeholder: Please write the steps to reproduce the issue.
+    validations:
+      required: true
+
+  - type: dropdown
+    id: os-name
+    attributes:
+      label: '💻 Which operating system are you using?'
+      multiple: false
+      options:
+       - 'Windows'
+       - 'MacOS'
+       - 'Linux'
+    validations:
+      required: true
+
+  - type: dropdown
+    id: python-version
+    attributes:
+      label: '🐍 Which Python version are you using?'
+      description: Run `python --version` to verify your Python version
+      multiple: false
+      options:
+       - '3.7'
+       - '3.8'
+       - '3.9'
+       - '3.10'
+    validations:
+      required: true
+
+  - type: textarea
+    id: installed-packages
+    attributes:
+      label: '📦 Installed packages'
+      description: Run `python -m pip freeze` to list installed packages
+      placeholder: Paste the output of `python -m pip freeze` here.
+      render: shell
+    validations:
+      required: true
