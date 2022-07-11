@@ -1,6 +1,6 @@
 """Sphinx documentation configuration file."""
 
-from ansys_sphinx_theme import pyansys_logo_black
+from ansys_sphinx_theme import ansys_logo_black
 
 from ansys.templates import __version__
 
@@ -11,7 +11,7 @@ author = "ANSYS, Inc."
 release = version = __version__
 
 # use the default pyansys logo
-html_logo = pyansys_logo_black
+html_logo = ansys_logo_black
 html_theme = "ansys_sphinx_theme"
 
 # specify the location of your github repo
