@@ -1,0 +1,29 @@
+name: 💡 New feature
+description: Enhancements to the code
+title: "Add ..."
+labels: ["enhancement"]
+assignees: [""]
+
+body:
+
+  - type: textarea
+    id: feature-description
+    attributes:
+      label: '📝 Description of the feature'
+      placeholder: Describe what feature you devised and why it is useful for the project
+    validations:
+      required: true
+
+  - type: textarea
+    id: implementation-description
+    attributes:
+      label: '💡 Steps for implementing the feature'
+    validations:
+      required: false
+
+  - type: textarea
+    id: references
+    attributes:
+      label: '🔗 Useful links and references'
+    validations:
+      required: false
