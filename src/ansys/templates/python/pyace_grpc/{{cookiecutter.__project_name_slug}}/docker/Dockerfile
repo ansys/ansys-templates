@@ -1,3 +1,4 @@
+# ---------------------------
 FROM python:{{ cookiecutter.requires_python }}-slim AS base
 
 ENV PYTHONDONTWRITEBYTECODE=1
@@ -7,37 +8,38 @@ RUN apt-get update \
     && apt-get install -y \ 
     && rm -rf /var/lib/apt/lists/*
 
-RUN mkdir /app
-RUN mkdir /src
+WORKDIR /app
 
-COPY ../protobufs/ /app/src/protobufs/
-COPY ../src/ /app/src/
-COPY requirements/requirements_build.txt /app/src/
+COPY requirements/requirements_build.txt .
 
-WORKDIR /app/src
+RUN pip install --no-cache-dir --upgrade pip && \
+    pip install --no-cache-dir -r requirements_build.txt
 
-RUN python -m pip install --no-cache-dir --upgrade pip
-RUN python -m pip install --no-cache-dir -r requirements_build.txt
-RUN python -m grpc_tools.protoc -I ./protobufs --python_out=./stubs \
-    --grpc_python_out=./stubs ./protobufs/*.proto
 
+COPY protobufs/ /src/protobufs/
+RUN python -m grpc_tools.protoc  \ 
+    -I ./src/protobufs  \ 
+    --python_out=./src/stubs \ 
+    --grpc_python_out=./src/stubs  \ 
+    ./src/protobufs/*.proto
+
+# ---------------------------
 FROM base AS test
 
-COPY requirements/requirements_tests.txt ./
+COPY requirements/requirements_tests.txt .
 
-RUN pip install --no-cache-dir -r requirements_tests.txt
+RUN pip install --no-cache-dir -r requirements_test.txt
 
-COPY /tests ../tests/
-
-WORKDIR /app
+COPY . .
 
 RUN pytest tests
 
-
+# ---------------------------
 FROM base AS final
-
 LABEL org.opencontainers.image.authors={{ cookiecutter.__project_name_slug }}
 
 EXPOSE 50051
+
+COPY src .
 
 ENTRYPOINT [ "python", "server.py" ]
