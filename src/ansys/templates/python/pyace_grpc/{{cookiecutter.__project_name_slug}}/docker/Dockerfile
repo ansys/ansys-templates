@@ -1,4 +1,4 @@
-FROM python:{{ cookiecutter.requires_python }} AS base
+FROM python:{{ cookiecutter.requires_python }}-slim AS base
 
 ENV PYTHONDONTWRITEBYTECODE=1
 ENV PYTHONUNBUFFERED=1
@@ -17,7 +17,7 @@ WORKDIR /app/src
 RUN python -m pip install --no-cache-dir --upgrade pip
 RUN python -m pip install --no-cache-dir -r requirements_build.txt
 RUN python -m grpc_tools.protoc -I ./protobufs --python_out=./stubs \
-           --grpc_python_out=./stubs ./protobufs/*.proto
+    --grpc_python_out=./stubs ./protobufs/*.proto
 
 FROM base AS test
 

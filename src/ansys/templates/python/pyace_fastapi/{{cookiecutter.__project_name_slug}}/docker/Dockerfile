@@ -1,4 +1,4 @@
-FROM python:{{ cookiecutter.requires_python }} AS base
+FROM python:{{ cookiecutter.requires_python }}-slim AS base
 
 ENV PYTHONDONTWRITEBYTECODE=1
 ENV PYTHONUNBUFFERED=1
