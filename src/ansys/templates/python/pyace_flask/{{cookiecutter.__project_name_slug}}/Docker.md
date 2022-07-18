@@ -30,7 +30,7 @@ $ docker run \
     $env:UserName/{{cookiecutter.__project_name_slug}}
 ```
 
-#### Run
+#### Diagnose
 
 ```sh
 $ docker run \
