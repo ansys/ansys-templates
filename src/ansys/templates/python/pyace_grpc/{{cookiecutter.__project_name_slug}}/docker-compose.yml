@@ -5,7 +5,7 @@ services:
     image: {{ cookiecutter.__project_name_slug }}/{{ cookiecutter.__library_name_slug }}-grpc-api
     build:
       context: .
-      dockerfile: ./docker/Dockerfile
+      dockerfile: ./Dockerfile
     ports:
       - "50051:50051"
     networks:

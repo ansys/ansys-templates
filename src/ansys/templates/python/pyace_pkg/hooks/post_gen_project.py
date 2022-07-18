@@ -40,9 +40,7 @@ DESIRED_STRUCTURE = [
     "tests/test_metadata.py",
     "tox.ini",
     "tests/__init__.py",
-    "tests/conftest.py",
-    "Dockerfile",
-    "docker-compose.yaml",
+    "tests/conftest.py"
 ]
 """A list holding all desired files to be included in the project."""
 
@@ -89,8 +87,9 @@ def main():
     # Remove docker non desired files
     enable_docker = "{{ cookiecutter.enable_docker }}"
     if enable_docker == 'Yes':
-        DESIRED_STRUCTURE.append("Dockerfile")
         DESIRED_STRUCTURE.append("docker-compose.yml")
+        DESIRED_STRUCTURE.append("Dockerfile")
+        DESIRED_STRUCTURE.append(".dockerignore")
 
     # Remove non-desired files
     keep_files(DESIRED_STRUCTURE)
