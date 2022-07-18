@@ -36,7 +36,7 @@ RUN pytest tests
 
 FROM base AS final
 
-LABEL org.opencontainers.image.authors=ericsson
+LABEL org.opencontainers.image.authors={{ cookiecutter.__project_name_slug }}
 
 EXPOSE 50051
 
