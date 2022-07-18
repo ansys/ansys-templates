@@ -15,13 +15,14 @@ COPY requirements/requirements_build.txt .
 RUN pip install --no-cache-dir --upgrade pip && \
     pip install --no-cache-dir -r requirements_build.txt
 
+RUN mkdir stubs
 
-COPY protobufs/ /src/protobufs/
-RUN python -m grpc_tools.protoc  \ 
-    -I ./src/protobufs  \ 
-    --python_out=./src/stubs \ 
-    --grpc_python_out=./src/stubs  \ 
-    ./src/protobufs/*.proto
+ADD protobufs/ ./protobufs/
+RUN python -m grpc_tools.protoc  \
+    -I ./protobufs  \ 
+    --python_out=./stubs \
+    --grpc_python_out=./stubs  \
+    ./protobufs/*.proto
 
 # ---------------------------
 FROM base AS test
