@@ -2,29 +2,56 @@
 
 ### Usage
 
+#### Build
+
 ```sh
-# Build
 $ docker build \
     -t $USER/{{cookiecutter.__project_name_slug}} \
     .
 ```
 
+```ps1
+> docker build `
+    -t $env:UserName/{{cookiecutter.__project_name_slug}} `
+    .
+```
+
+#### Run
+
 ```sh
-# Run
 $ docker run \
     -it \
     $USER/{{cookiecutter.__project_name_slug}}
 ```
 
+```ps1
+> docker run `
+    -it `
+    $env:UserName/{{cookiecutter.__project_name_slug}}
+```
+
+#### Run
+
 ```sh
-# Diagnose
 $ docker run \
     -it \
     --entrypoint=bash \
     $USER/{{cookiecutter.__project_name_slug}}
 ```
 
+```ps1
+> docker run `
+    -it `
+    --entrypoint=bash `
+    $env:UserName/{{cookiecutter.__project_name_slug}}
+```
+
+#### Compose
+
 ```sh
-# Deploy through docker-compose
 $ docker-compose up --build
+```
+
+```ps1
+> docker-compose up --build
 ```
