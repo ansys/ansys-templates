@@ -89,6 +89,7 @@ def main():
     if enable_docker == 'Yes':
         DESIRED_STRUCTURE.append("docker-compose.yml")
         DESIRED_STRUCTURE.append("Dockerfile")
+        DESIRED_STRUCTURE.append("Docker.md")
         DESIRED_STRUCTURE.append(".dockerignore")
 
     # Remove non-desired files

@@ -129,7 +129,7 @@ PYACE_FLASK_STRUCTURE = deepcopy(PYCOMMON_STRUCTURE) + [
     "src/observability/__init__.py",
     "src/observability/logger.py",
     "src/static/swagger.json",
-    "docker-compose.yaml",
+    "docker-compose.yml",
     "Dockerfile",
     "Docker.md",
     ".dockerignore",
@@ -149,7 +149,7 @@ PYACE_FAST_STRUCTURE = deepcopy(PYCOMMON_STRUCTURE) + [
     "src/server.py",
     "src/models/__init__.py",
     "src/observability/logger.py",
-    "docker-compose.yaml",
+    "docker-compose.yml",
     "Dockerfile",
     "Docker.md",
     ".dockerignore",
@@ -196,7 +196,7 @@ PYACE_PKG_STRUCTURE = deepcopy(PYCOMMON_STRUCTURE) + [
     "requirements/requirements_build.txt",
     "requirements/requirements_doc.txt",
     "requirements/requirements_tests.txt",
-    "docker-compose.yaml",
+    "docker-compose.yml",
     "Dockerfile",
     ".dockerignore"
 ]

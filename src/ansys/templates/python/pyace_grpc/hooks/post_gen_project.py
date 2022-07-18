@@ -47,8 +47,7 @@ DESIRED_STRUCTURE = [
     "tox.ini",
     "protobufs/pingerserver.proto",
     "tests/test_server.py",
-    "tests/conftest.py",
-    "docker-compose.yml",
+    "tests/conftest.py"
 ]
 """A list holding all desired files to be included in the project."""
 
