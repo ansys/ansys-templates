@@ -3,7 +3,9 @@ FROM python:{{ cookiecutter.requires_python }}-slim AS base
 ENV PYTHONDONTWRITEBYTECODE=1
 ENV PYTHONUNBUFFERED=1
 
-RUN apt-get update && apt-get install -y
+RUN apt-get update \ 
+    && apt-get install -y \ 
+    && rm -rf /var/lib/apt/lists/*
 
 RUN mkdir /app
 RUN mkdir /src
