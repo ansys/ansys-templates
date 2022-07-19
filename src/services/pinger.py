@@ -6,20 +6,20 @@ my_company.
 
 library
 """
-import pingserver_pb2
-import pingserver_pb2_grpc
+from stubs.pingserver_pb2 import PingReply
+from stubs.pingserver_pb2_grpc import PingerServicer
 
 NumberPing = 0
 
 
-class Pinger(pingserver_pb2_grpc.PingerServicer):
+class Pinger(PingerServicer):
     """Pinger class."""
 
     def PingServer(self, request, context):
         """Ping the server."""
         global NumberPing
         NumberPing += 1
-        return pingserver_pb2.PingReply(
+        return PingReply(
             message=f"Hello, the server is healthy and it had been pinged {NumberPing} times!"
         )
 
@@ -27,4 +27,4 @@ class Pinger(pingserver_pb2_grpc.PingerServicer):
         """Check who ping the server."""
         global NumberPing
         NumberPing += 1
-        return pingserver_pb2.PingReply(message=f"Hello, the server is pinged by {request.name}!")
+        return PingReply(message=f"Hello, the server is pinged by {request.name}!")

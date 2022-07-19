@@ -5,7 +5,7 @@ services:
     image: project/library-grpc-api
     build:
       context: .
-      dockerfile: ./docker/Dockerfile
+      dockerfile: ./Dockerfile
     ports:
       - "50051:50051"
     networks:
