@@ -5,7 +5,7 @@ services:
     image: project/library-api
     build:
       context: .
-      dockerfile: ./docker/Dockerfile
+      dockerfile: ./Dockerfile
     ports:
       - "50050:80"
     networks:
