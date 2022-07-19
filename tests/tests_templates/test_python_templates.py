@@ -198,6 +198,7 @@ PYACE_PKG_STRUCTURE = deepcopy(PYCOMMON_STRUCTURE) + [
     "requirements/requirements_tests.txt",
     "docker-compose.yml",
     "Dockerfile",
+    "Docker.md",
     ".dockerignore"
 ]
 [PYACE_PKG_STRUCTURE.remove(file) for file in
