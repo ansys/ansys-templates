@@ -21,12 +21,14 @@ $ docker build \
 ```sh
 $ docker run \
     -it \
+    --rm \
     $USER/{{cookiecutter.__project_name_slug}}
 ```
 
 ```ps1
 > docker run `
     -it `
+    --rm `
     $env:UserName/{{cookiecutter.__project_name_slug}}
 ```
 
@@ -35,6 +37,7 @@ $ docker run \
 ```sh
 $ docker run \
     -it \
+    --rm \
     --entrypoint=bash \
     $USER/{{cookiecutter.__project_name_slug}}
 ```
@@ -42,6 +45,7 @@ $ docker run \
 ```ps1
 > docker run `
     -it `
+    --rm `
     --entrypoint=bash `
     $env:UserName/{{cookiecutter.__project_name_slug}}
 ```
