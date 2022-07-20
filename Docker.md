@@ -21,12 +21,14 @@ $ docker build \
 ```sh
 $ docker run \
     -it \
+    --rm \
     $USER/project
 ```
 
 ```ps1
 > docker run `
     -it `
+    --rm `
     $env:UserName/project
 ```
 
@@ -35,6 +37,7 @@ $ docker run \
 ```sh
 $ docker run \
     -it \
+    --rm \
     --entrypoint=bash \
     $USER/project
 ```
@@ -42,6 +45,7 @@ $ docker run \
 ```ps1
 > docker run `
     -it `
+    --rm `
     --entrypoint=bash `
     $env:UserName/project
 ```
