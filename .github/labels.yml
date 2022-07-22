@@ -12,7 +12,7 @@
 
 - name: enhancement
   description: New features or code improvements
-  color: FFD827
+  color: ffD827
 
 - name: good first issue
   description: Easy to solve for newcomers
@@ -25,3 +25,7 @@
 - name: release
   description: Anything related to an incoming release
   color: ffffff
+
+- name: new template
+  description: Request for a new template
+  color: 000000
