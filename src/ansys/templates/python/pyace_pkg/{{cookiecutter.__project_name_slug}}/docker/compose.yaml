@@ -1,13 +1,14 @@
 version: '3.9'
 
 services:
-  {{ cookiecutter.library_name }}-api:
-    image: {{ cookiecutter.__project_name_slug }}/{{ cookiecutter.__library_name_slug }}-api
+
+  {{ cookiecutter.library_name }}:
+    image: {{ cookiecutter.__project_name_slug }}/{{ cookiecutter.__library_name_slug }}
     build:
-      context: .
-      dockerfile: ./Dockerfile
-    ports:
-      - "5000:5000"
+      context: ..
+      dockerfile: ./docker/Dockerfile
+    stdin_open: true
+    tty: true
     networks:
       - {{ cookiecutter.__project_name_slug }}
 

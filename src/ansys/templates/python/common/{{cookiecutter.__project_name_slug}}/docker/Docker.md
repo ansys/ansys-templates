@@ -6,12 +6,14 @@
 
 ```sh
 $ docker build \
+    -f docker/Dockerfile \
     -t $USER/{{cookiecutter.__project_name_slug}} \
     .
 ```
 
 ```ps1
 > docker build `
+    -f docker/Dockerfile `
     -t $env:UserName/{{cookiecutter.__project_name_slug}} `
     .
 ```
@@ -53,9 +55,15 @@ $ docker run \
 #### Compose
 
 ```sh
-$ docker-compose up --build
+$ docker-compose \
+    -f docker/compose.yaml \
+    up \
+    --build
 ```
 
 ```ps1
-> docker-compose up --build
+> docker-compose `
+    -f docker/compose.yaml `
+    up `
+    --build
 ```

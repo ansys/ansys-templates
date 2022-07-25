@@ -4,10 +4,10 @@ services:
   {{ cookiecutter.library_name }}-api:
     image: {{ cookiecutter.__project_name_slug }}/{{ cookiecutter.__library_name_slug }}-api
     build:
-      context: .
-      dockerfile: ./Dockerfile
+      context: ..
+      dockerfile: ./docker/Dockerfile
     ports:
-      - "50050:80"
+      - "5000:5000"
     networks:
       - {{ cookiecutter.__project_name_slug }}
 

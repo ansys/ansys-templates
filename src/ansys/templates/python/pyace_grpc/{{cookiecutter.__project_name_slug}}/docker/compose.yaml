@@ -1,14 +1,13 @@
 version: '3.9'
 
 services:
-
-  {{ cookiecutter.library_name }}:
-    image: {{ cookiecutter.__project_name_slug }}/{{ cookiecutter.__library_name_slug }}
+  {{ cookiecutter.library_name }}-grpc-api:
+    image: {{ cookiecutter.__project_name_slug }}/{{ cookiecutter.__library_name_slug }}-grpc-api
     build:
-      context: .
-      dockerfile: ./Dockerfile
-    stdin_open: true
-    tty: true
+      context: ..
+      dockerfile: ./docker/Dockerfile
+    ports:
+      - "50051:50051"
     networks:
       - {{ cookiecutter.__project_name_slug }}
 
