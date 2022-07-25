@@ -1,13 +1,13 @@
 version: '3.9'
 
 services:
-  {{ cookiecutter.library_name }}-api:
-    image: {{ cookiecutter.__project_name_slug }}/{{ cookiecutter.__library_name_slug }}-api
+  {{ cookiecutter.library_name }}-grpc-api:
+    image: {{ cookiecutter.__project_name_slug }}/{{ cookiecutter.__library_name_slug }}-grpc-api
     build:
-      context: .
+      context: ..
       dockerfile: ./docker/Dockerfile
     ports:
-      - "50050:80"
+      - "50051:50051"
     networks:
       - {{ cookiecutter.__project_name_slug }}
 
@@ -16,7 +16,7 @@ services:
   # OPENTELEMETRY COLLECTOR
 
   otel-collector:
-    image: otel/opentelemetry-collector-contrib:latest
+    image: otel/opentelemetry-collector-contrib:0.55.0
     command: [ "--config=/etc/otel-collector-config.yaml" ]
     volumes:
       - ./_deploy/otel-collector-config.yaml:/etc/otel-collector-config.yaml

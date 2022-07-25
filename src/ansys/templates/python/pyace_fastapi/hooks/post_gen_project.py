@@ -23,8 +23,6 @@ DESIRED_STRUCTURE = [
     "doc/source/_templates/sidebar-nav-bs.html",
     "doc/source/_templates/README.md",
     "examples/README.md",
-    "docker/Dockerfile",
-    "docker/README.md",
     ".flake8",
     ".gitattributes",
     ".gitignore",
@@ -44,8 +42,7 @@ DESIRED_STRUCTURE = [
     "tests/test_metadata.py",
     "tests/test_server.py",
     "tests/conftest.py",
-    "tox.ini",
-    "docker-compose.yml",
+    "tox.ini"
 ]
 """A list holding all desired files to be included in the project."""
 
@@ -92,8 +89,10 @@ def main():
     # Remove docker non desired files
     enable_docker = "{{ cookiecutter.enable_docker }}"
     if enable_docker == 'Yes':
+        DESIRED_STRUCTURE.append("docker/compose.yaml")
         DESIRED_STRUCTURE.append("docker/Dockerfile")
-        DESIRED_STRUCTURE.append("docker/README.md")
+        DESIRED_STRUCTURE.append("docker/Docker.md")
+        DESIRED_STRUCTURE.append(".dockerignore")
 
     # Remove non-desired files
     keep_files(DESIRED_STRUCTURE)

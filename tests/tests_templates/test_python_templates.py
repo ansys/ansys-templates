@@ -129,14 +129,15 @@ PYACE_FLASK_STRUCTURE = deepcopy(PYCOMMON_STRUCTURE) + [
     "src/observability/__init__.py",
     "src/observability/logger.py",
     "src/static/swagger.json",
+    "docker/compose.yaml",
     "docker/Dockerfile",
-    "docker/README.md",
+    "docker/Docker.md",
+    ".dockerignore",
     "requirements/requirements_build.txt",
     "requirements/requirements_doc.txt",
     "requirements/requirements_tests.txt",
     "tests/test_server.py",
-    "tests/conftest.py",
-    "docker-compose.yml",
+    "tests/conftest.py"
 ]
 [PYACE_FLASK_STRUCTURE.remove(file) for file in
  ["azure-pipeline.yml", ".coveragerc", "requirements_build.txt", "requirements_doc.txt",
@@ -148,14 +149,15 @@ PYACE_FAST_STRUCTURE = deepcopy(PYCOMMON_STRUCTURE) + [
     "src/server.py",
     "src/models/__init__.py",
     "src/observability/logger.py",
+    "docker/compose.yaml",
     "docker/Dockerfile",
-    "docker/README.md",
+    "docker/Docker.md",
+    ".dockerignore",
     "requirements/requirements_build.txt",
     "requirements/requirements_doc.txt",
     "requirements/requirements_tests.txt",
     "tests/test_server.py",
-    "tests/conftest.py",
-    "docker-compose.yml",
+    "tests/conftest.py"
 ]
 [PYACE_FAST_STRUCTURE.remove(file) for file in
  ["azure-pipeline.yml", ".coveragerc", "requirements_build.txt", "requirements_doc.txt",
@@ -170,15 +172,16 @@ PYACE_GRPC_STRUCTURE = deepcopy(PYCOMMON_STRUCTURE) + [
     "src/services/__init__.py",
     "src/services/pinger.py",
     "src/stubs/__init__.py",
+    "docker/compose.yaml",
     "docker/Dockerfile",
-    "docker/README.md",
+    "docker/Docker.md",
+    ".dockerignore",
     "requirements/requirements_build.txt",
     "requirements/requirements_doc.txt",
     "requirements/requirements_tests.txt",
     "protobufs/pingserver.proto",
     "tests/test_server.py",
     "tests/conftest.py",
-    "docker-compose.yml",
 ]
 [PYACE_GRPC_STRUCTURE.remove(file) for file in
  ["azure-pipeline.yml", ".coveragerc", "requirements_build.txt", "requirements_doc.txt",
@@ -193,8 +196,10 @@ PYACE_PKG_STRUCTURE = deepcopy(PYCOMMON_STRUCTURE) + [
     "requirements/requirements_build.txt",
     "requirements/requirements_doc.txt",
     "requirements/requirements_tests.txt",
-    "Dockerfile",
-    "docker-compose.yaml",
+    "docker/compose.yaml",
+    "docker/Dockerfile",
+    "docker/Docker.md",
+    ".dockerignore"
 ]
 [PYACE_PKG_STRUCTURE.remove(file) for file in
  ["azure-pipeline.yml", ".coveragerc", "requirements_build.txt", "requirements_doc.txt",
