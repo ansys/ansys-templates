@@ -1,12 +1,12 @@
-version: '3.5'
+version: '3.9'
 
 services:
 
   library:
     image: project/library
     build:
-      context: .
-      dockerfile: ./Dockerfile
+      context: ..
+      dockerfile: ./docker/Dockerfile
     stdin_open: true
     tty: true
     networks:
