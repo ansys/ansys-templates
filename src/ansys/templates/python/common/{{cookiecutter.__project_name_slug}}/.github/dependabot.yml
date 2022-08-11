@@ -1,11 +1,11 @@
 version: 2
 updates:
   - package-ecosystem: "pip"
-    {%- if cookiecutter.__template_name in ["pybasic", "pyansys"] %}
+    {%- if cookiecutter.__template_name in ["pybasic", "pyansys"] or cookiecutter.__build_system == "poetry" %}
     directory: "/"
     {%- else -%}
     directory: "/requirements"
-    {%- endif -%}
+    {%- endif %}
     schedule:
       interval: "daily"
     labels:
