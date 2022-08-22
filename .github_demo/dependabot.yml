@@ -1,8 +1,6 @@
 version: 2
 updates:
-  - package-ecosystem: "pip"
-    directory: "/"
-    schedule:
+  - package-ecosystem: "pip"directory: "/requirements"schedule:
       interval: "daily"
     labels:
       - "maintenance"
