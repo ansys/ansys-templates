@@ -6,7 +6,7 @@ Welcome to Ansys templates
    :target: https://docs.pyansys.com/
    :alt: PyAnsys
 
-.. |python| image:: https://img.shields.io/badge/Python-3.7%20%7C%203.8%20%7C%203.9%20%7C%203.10-blue
+.. |python| image:: https://img.shields.io/pypi/pyversions/ansys-templates?logo=pypi
    :target: https://pypi.org/project/ansys-templates/
    :alt: Python
 
