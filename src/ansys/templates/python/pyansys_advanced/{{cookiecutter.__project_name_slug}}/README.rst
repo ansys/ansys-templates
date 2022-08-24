@@ -6,7 +6,7 @@ Py{{ cookiecutter.product_name }} {{ cookiecutter.library_name }}
    :target: https://docs.pyansys.com/
    :alt: PyAnsys
 
-.. |python| image:: https://img.shields.io/badge/Python-%3E%3D{{cookiecutter.__requires_python}}-blue
+.. |python| image:: https://img.shields.io/pypi/pyversions/{{cookiecutter.__project_name_slug}}?logo=pypi
    :target: https://pypi.org/project/{{cookiecutter.__project_name_slug}}/
    :alt: Python
 
