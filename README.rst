@@ -6,7 +6,7 @@ Pyproduct library
    :target: https://docs.pyansys.com/
    :alt: PyAnsys
 
-.. |python| image:: https://img.shields.io/badge/Python-%3E%3D3.7-blue
+.. |python| image:: https://img.shields.io/pypi/pyversions/pyproduct-library?logo=pypi
    :target: https://pypi.org/project/pyproduct-library/
    :alt: Python
 
