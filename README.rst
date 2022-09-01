@@ -26,54 +26,54 @@ guide`_. You will need to follow these steps:
 
 #. Start by cloning this repository:
 
-    .. code:: bash
+   .. code:: bash
 
-        git clone https://platform.domain/organization/pybasic
+      git clone https://platform.domain/organization/pybasic
 
 #. Create a fresh-clean Python environment and activate it. Refer to the
    official `venv`_ documentation if you require further information:
 
-    .. code:: bash
+   .. code:: bash
 
-        # Create a virtual environment
-        python -m venv .venv
+      # Create a virtual environment
+      python -m venv .venv
 
-        # Activate it in a POSIX system
-        source .venv/bin/activate
+      # Activate it in a POSIX system
+      source .venv/bin/activate
 
-        # Activate it in Windows CMD environment
-        .venv\Scripts\activate.bat
+      # Activate it in Windows CMD environment
+      .venv\Scripts\activate.bat
 
-        # Activate it in Windows Powershell
-        .venv\Scripts\Activate.ps1
+      # Activate it in Windows Powershell
+      .venv\Scripts\Activate.ps1
 
 #. Make sure you have the latest version of `pip`_:
 
-    .. code:: bash
+   .. code:: bash
 
-        python -m pip install -U pip
+      python -m pip install -U pip
 
 #. Install the project in editable mode:
 
-    .. code:: bash
+   .. code:: bash
     
-        python -m pip install --editable pybasic
+      python -m pip install --editable pybasic
 
 #. Install additional requirements (if needed):
 
-     .. code:: bash
+   .. code:: bash
 
-        python -m pip install -r requirements_build.txt
-        python -m pip install -r requirements_doc.txt
-        python -m pip install -r requirements_tests.txt
+      python -m pip install -r requirements_build.txt
+      python -m pip install -r requirements_doc.txt
+      python -m pip install -r requirements_tests.txt
 
 
 #. Finally, verify your development installation by running:
 
-    .. code:: bash
+   .. code:: bash
         
-        python -m pip install -r requirements_tests.txt
-        pytest tests -vv
+      python -m pip install -r requirements_tests.txt
+      pytest tests -vv
 
 
 Style and Testing
