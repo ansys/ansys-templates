@@ -29,53 +29,53 @@ need to follow these steps:
 
 #. Start by cloning this repository:
 
-    .. code:: bash
+   .. code:: bash
 
-        git clone https://github.com/pyansys/pyproduct-library
+      git clone https://github.com/pyansys/pyproduct-library
 
 #. Create a fresh-clean Python environment and activate it. Refer to the
    official `venv`_ documentation if you require further information:
 
-    .. code:: bash
+   .. code:: bash
 
-        # Create a virtual environment
-        python -m venv .venv
+      # Create a virtual environment
+      python -m venv .venv
 
-        # Activate it in a POSIX system
-        source .venv/bin/activate
+      # Activate it in a POSIX system
+      source .venv/bin/activate
 
-        # Activate it in Windows CMD environment
-        .venv\Scripts\activate.bat
+      # Activate it in Windows CMD environment
+      .venv\Scripts\activate.bat
 
-        # Activate it in Windows Powershell
-        .venv\Scripts\Activate.ps1
+      # Activate it in Windows Powershell
+      .venv\Scripts\Activate.ps1
 
 #. Make sure you have the latest version of `pip`_:
 
-    .. code:: bash
+   .. code:: bash
 
-        python -m pip install -U pip
+      python -m pip install -U pip
 
 #. Install the project in editable mode:
 
-    .. code:: bash
+   .. code:: bash
     
-        python -m pip install --editable ansys-product-library
+      python -m pip install --editable ansys-product-library
 
 #. Install additional requirements (if needed):
 
-     .. code:: bash
+   .. code:: bash
 
-        python -m pip install -r requirements/requirements_build.txt
-        python -m pip install -r requirements/requirements_doc.txt
-        python -m pip install -r requirements/requirements_tests.txt
+      python -m pip install -r requirements/requirements_build.txt
+      python -m pip install -r requirements/requirements_doc.txt
+      python -m pip install -r requirements/requirements_tests.txt
 
 #. Finally, verify your development installation by running:
 
-    .. code:: bash
+   .. code:: bash
         
-        python -m pip install -r requirements/requirements_tests.txt
-        pytest tests -v
+      python -m pip install -r requirements/requirements_tests.txt
+      pytest tests -v
 
 
 Style and Testing
@@ -113,10 +113,10 @@ the building requirements:
 
 Then, you can execute:
 
-    .. code:: bash
+.. code:: bash
 
-        python -m build
-        python -m twine check dist/*
+    python -m build
+    python -m twine check dist/*
 
 
 .. LINKS AND REFERENCES
