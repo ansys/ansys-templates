@@ -79,7 +79,7 @@ need to follow these steps:
 
     .. code:: bash
 
-        git clone {{ cookiecutter.repository_url }}
+      git clone {{ cookiecutter.repository_url }}
 
 #. Create a fresh-clean Python environment and activate it:
 
