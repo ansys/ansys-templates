@@ -97,12 +97,9 @@ jobs:
       - name: Install act
         if: contains(fromJson('["pybasic", "pyansys"]'), matrix.cfg.template) == false
         run: |
-          sudo apt-get install build-essential gcc
-          /bin/bash -c "$(curl -fsSL https://raw.githubusercontent.com/Homebrew/install/HEAD/install.sh)"
-          test -d ~/.linuxbrew && eval "$(~/.linuxbrew/bin/brew shellenv)"
-          test -d /home/linuxbrew/.linuxbrew && eval "$(/home/linuxbrew/.linuxbrew/bin/brew shellenv)"
-          test -r ~/.bash_profile && echo "eval \"\$($(brew --prefix)/bin/brew shellenv)\"" >> ~/.bash_profile
-          brew install act
+          sudo apt-get install build-essential gcc wget
+          wget -qO act.tar.gz https://github.com/nektos/act/releases/latest/download/act_Linux_x86_64.tar.gz
+          sudo tar xf act.tar.gz -C /usr/local/bin act
           echo "-P ubuntu-latest=ghcr.io/catthehacker/ubuntu:act-latest" >> ~/.actrc
 
       - name: Test baked project
