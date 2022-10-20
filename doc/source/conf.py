@@ -18,6 +18,11 @@ html_theme = "ansys_sphinx_theme"
 html_theme_options = {
     "github_url": "https://github.com/pyansys/pyansys-template",
     "show_prev_next": False,
+    "switcher": {
+        "json_url": "https://raw.githubusercontent.com/ansys/ansys-templates/gh-pages/release/version_mapper.json",
+        "version_match": "dev" if version.endswith("dev0") else version,
+    },
+    "navbar_end": ["version-switcher"]
 }
 
 # Sphinx extensions
