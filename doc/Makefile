@@ -24,3 +24,9 @@ clean:
 	rm -rf $(BUILDDIR)
 	rm -rf $(SOURCEDIR)/examples
 	find . -type d -name "_autosummary" -exec rm -rf {} +
+
+# Customized pdf fov svg format images
+pdf:
+	@$(SPHINXBUILD) -M latex "$(SOURCEDIR)" "$(BUILDDIR)" $(SPHINXOPTS) $(O)
+	cd build/latex && latexmk -r latexmkrc -pdf *.tex -interaction=nonstopmode || true
+	(test -f build/latex/pyansys*.pdf && echo pdf exists) || exit 1
