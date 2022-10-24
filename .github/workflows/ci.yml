@@ -115,7 +115,7 @@ jobs:
         run: |
           python -m build && python -m twine check dist/*
       - name: Upload wheel and sdist to artifacts
-        uses: actions/upload-artifact@v3.1.0
+        uses: actions/upload-artifact@v3.1.1
         with:
           name: pyasys-templates-packages
           path: dist/
