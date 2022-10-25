@@ -1,6 +1,6 @@
 """Sphinx documentation configuration file."""
 
-from ansys_sphinx_theme import ansys_logo_black, ansys_favicon
+from ansys_sphinx_theme import ansys_favicon, ansys_logo_black
 
 from ansys.templates import __version__
 
