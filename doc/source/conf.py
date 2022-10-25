@@ -22,7 +22,7 @@ html_theme_options = {
         "json_url": "https://raw.githubusercontent.com/ansys/ansys-templates/gh-pages/release/version_mapper.json",
         "version_match": "dev" if version.endswith("dev0") else version,
     },
-    "navbar_end": ["version-switcher"]
+    "navbar_end": ["version-switcher","theme-switcher", "navbar-icon-links",]
 }
 
 # Sphinx extensions
