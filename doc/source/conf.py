@@ -10,6 +10,13 @@ copyright = "(c) 2022 ANSYS, Inc. All rights reserved"
 author = "ANSYS, Inc."
 release = version = __version__
 
+def get_version_match(semver):
+    """Evaluate the version match for the multi-documentation."""
+    if semver.endswith("dev0"):
+        return "dev"
+    major, minor, _ = semver.split(".")
+    return ".".join([major, minor])
+
 # use the default pyansys logo
 html_logo = ansys_logo_black
 html_favicon = ansys_favicon
@@ -22,7 +29,7 @@ html_theme_options = {
     "show_prev_next": False,
     "switcher": {
         "json_url": "https://raw.githubusercontent.com/ansys/ansys-templates/gh-pages/release/version_mapper.json",
-        "version_match": "dev" if version.endswith("dev0") else version,
+        "version_match": get_version_match(__version__),
     },
     "navbar_end": ["version-switcher", "theme-switcher", "navbar-icon-links"]
 }
