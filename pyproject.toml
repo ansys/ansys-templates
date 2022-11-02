@@ -4,7 +4,7 @@ build-backend = "flit_core.buildapi"
 
 [project]
 name = "ansys-templates"
-version = "0.2.2"
+version = "0.2.3"
 description = "Creates Python projects according to PyAnsys guidelines"
 readme = "README.rst"
 requires-python = ">=3.7"
@@ -39,7 +39,7 @@ include = ["src/ansys/templates/pypkg/"]
 ansys-templates = "ansys.templates.cli:main"
 
 [project.urls]
-Source = "https://github.com/pyansys/pyansys-template"
+Source = "https://github.com/ansys/ansys-templates"
 
 [tool.black]
 force-exclude = ["src/ansys/templates/python"]

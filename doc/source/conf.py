@@ -1,6 +1,6 @@
 """Sphinx documentation configuration file."""
 
-from pyansys_sphinx_theme import pyansys_logo_black
+from ansys_sphinx_theme import pyansys_logo_black
 
 from ansys.templates import __version__
 
@@ -10,14 +10,28 @@ copyright = "(c) 2022 ANSYS, Inc. All rights reserved"
 author = "ANSYS, Inc."
 release = version = __version__
 
+
+def get_version_match(semver):
+    """Evaluate the version match for the multi-documentation."""
+    if semver.endswith("dev0"):
+        return "dev"
+    major, minor, _ = semver.split(".")
+    return ".".join([major, minor])
+
+
 # use the default pyansys logo
 html_logo = pyansys_logo_black
-html_theme = "pyansys_sphinx_theme"
+html_theme = "ansys_sphinx_theme"
 
 # specify the location of your github repo
 html_theme_options = {
     "github_url": "https://github.com/pyansys/pyansys-template",
     "show_prev_next": False,
+    "switcher": {
+        "json_url": "https://raw.githubusercontent.com/ansys/ansys-templates/gh-pages/release/version_mapper.json",
+        "version_match": get_version_match(__version__),
+    },
+    "navbar_end": ["version-switcher", "theme-switcher", "navbar-icon-links"],
 }
 
 # Sphinx extensions
