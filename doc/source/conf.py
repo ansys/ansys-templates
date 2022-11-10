@@ -10,6 +10,13 @@ copyright = "(c) 2022 ANSYS, Inc. All rights reserved"
 author = "ANSYS, Inc."
 release = version = __version__
 
+def get_version_match(semver):
+    """Evaluate the version match for the multi-documentation."""
+    if semver.endswith("dev0"):
+        return "dev"
+    major, minor, _ = semver.split(".")
+    return ".".join([major, minor])
+
 # use the default pyansys logo
 html_logo = pyansys_logo_black
 html_theme = "ansys_sphinx_theme"
