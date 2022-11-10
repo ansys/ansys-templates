@@ -14,10 +14,15 @@ release = version = __version__
 html_logo = pyansys_logo_black
 html_theme = "ansys_sphinx_theme"
 
-# specify the location of your github repo
+# Specify the location of your github repo
 html_theme_options = {
     "github_url": "https://github.com/pyansys/pyansys-template",
     "show_prev_next": False,
+    "switcher": {
+        "json_url": "https://raw.githubusercontent.com/ansys/ansys-templates/gh-pages/release/versions.json",
+        "version_match": get_version_match(__version__),
+    },
+    "navbar_end": ["version-switcher", "theme-switcher", "navbar-icon-links"]
 }
 
 # Sphinx extensions
