@@ -34,7 +34,6 @@ jobs:
 
   doc-deploy-stable:
     name: Doc stable version deploy
-    if: github.event_name == 'push' && contains(github.ref, 'refs/tags')
     runs-on: ubuntu-latest
     needs: doc-build
     steps:
