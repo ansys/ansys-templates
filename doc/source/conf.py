@@ -1,20 +1,17 @@
 """Sphinx documentation configuration file."""
 from datetime import datetime
-
-from ansys.product.library import __version__
-from pyansys_sphinx_theme import pyansys_logo_black
+from ansys_sphinx_theme import pyansys_logo_black as logo
 
 # Project information
 project = "ansys-product-library"
 copyright = f"(c) {datetime.now().year} ANSYS, Inc. All rights reserved"
 author = "ANSYS, Inc."
-release = version = __version__
+release = version = "0.1.dev0"
 
-# use the default pyansys logo
-html_logo = pyansys_logo_black
-html_theme = "pyansys_sphinx_theme"
-
-html_short_title = html_title = "ansys-product-library"
+# Select desired logo, theme, and declare the html title
+html_logo = logo
+html_theme = "ansys_sphinx_theme"
+html_short_title = html_title = "pyproduct-library"
 
 # specify the location of your github repo
 html_theme_options = {
