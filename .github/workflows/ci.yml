@@ -51,7 +51,7 @@ jobs:
 
   tests:
     name: Smoke tests
-    needs: style
+    needs: code-style
     runs-on: ${{ matrix.os }}
     strategy:
       matrix:
