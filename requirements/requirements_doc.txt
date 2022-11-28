@@ -1,4 +1,4 @@
 Sphinx==5.3.0
 numpydoc==1.5.0
 sphinx-copybutton==0.5
-git+https://github.com/ansys/ansys-sphinx-theme.git@6f4d5f34339d05f7cb2f8cb5ed70f7f457de6f30
+git+https://github.com/ansys/ansys-sphinx-theme.git@feat/modify-annoncement
