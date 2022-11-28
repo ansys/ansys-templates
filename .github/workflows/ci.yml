@@ -6,7 +6,7 @@ on:
 env:
   MAIN_PYTHON_VERSION : '3.10'
   pyansys-actions: 'pyansys/actions/.github/workflows'
-  cname: 'templates.ansys.com'
+  DOCUMENTATION_CNAME: 'templates.ansys.com'
 
 concurrency:
   group: ${{ github.workflow }}-${{ github.ref }}
@@ -19,14 +19,14 @@ jobs:
     runs-on: ubuntu-latest
     steps:
       - name: "Run PyAnsys code style checks"
-        uses: pyansys/actions/code-style@main
+        uses: pyansys/actions/code-style@v1
 
   doc-build:
     name: Doc building
     runs-on: ubuntu-latest
     steps:
       - name: "Run Ansys documentation building action"
-        uses: pyansys/actions/doc-build@main
+        uses: pyansys/actions/doc-build@v1
 
   doc-deploy-stable:
     name: Doc stable version deploy
@@ -34,9 +34,9 @@ jobs:
     needs: doc-build
     steps:
       - name: "Deploy stable documentation"
-        uses: pyansys/actions/doc-deploy-stable@main
+        uses: pyansys/actions/doc-deploy-stable@v1
         with:
-            cname: ${{ env.cname }}
+            cname: ${{ env.DOCUMENTATION_CNAME }}
             token: ${{ secrets.GITHUB_TOKEN }}
 
   tests:
