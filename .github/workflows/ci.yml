@@ -19,14 +19,14 @@ jobs:
     runs-on: ubuntu-latest
     steps:
       - name: "Run PyAnsys code style checks"
-        uses: pyansys/actions/code-style@main
+        uses: pyansys/actions/code-style@v2
 
   doc-build:
     name: Doc building
     runs-on: ubuntu-latest
     steps:
       - name: "Run Ansys documentation building action"
-        uses: pyansys/actions/doc-build@main
+        uses: pyansys/actions/doc-build@v2
 
   doc-deploy-stable:
     name: Doc stable version deploy
@@ -34,7 +34,7 @@ jobs:
     needs: doc-build
     steps:
       - name: "Deploy stable documentation"
-        uses: pyansys/actions/doc-deploy-stable@main
+        uses: pyansys/actions/doc-deploy-stable@v2
         with:
             cname: ${{ env.cname }}
             token: ${{ secrets.GITHUB_TOKEN }}
