@@ -131,7 +131,7 @@ jobs:
 
       - name: Create demo branch
         if: matrix.python-version == '3.7'
-        uses: peterjgrainger/action-create-branch@v2
+        uses: peterjgrainger/action-create-branch@v2.4.0
         env:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
         with:
