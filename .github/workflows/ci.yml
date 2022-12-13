@@ -9,8 +9,8 @@ on:
 
 env:
   MAIN_PYTHON_VERSION : '3.10'
-  pyansys-actions: 'pyansys/actions/.github/workflows'
-  cname: 'templates.ansys.com'
+  LIBRARY_NAME: 'ansys-templates'
+  DOCUMENTATION_CNAME: 'templates.ansys.com'
 
 concurrency:
   group: ${{ github.workflow }}-${{ github.ref }}
@@ -23,14 +23,14 @@ jobs:
     runs-on: ubuntu-latest
     steps:
       - name: "Run PyAnsys code style checks"
-        uses: pyansys/actions/code-style@main
+        uses: pyansys/actions/code-style@v2
 
   doc-style:
     name: Doc style
     runs-on: ubuntu-latest
     steps:
       - name: "Run Ansys documentation style checks"
-        uses: pyansys/actions/doc-style@main
+        uses: pyansys/actions/doc-style@v2
         with:
           token: ${{ secrets.GITHUB_TOKEN }}
 
@@ -40,7 +40,7 @@ jobs:
     needs: doc-style
     steps:
       - name: "Run Ansys documentation building action"
-        uses: pyansys/actions/doc-build@main
+        uses: pyansys/actions/doc-build@v2
 
   doc-deploy-development:
     name: Doc dev version deploy
@@ -49,9 +49,9 @@ jobs:
     needs: doc-build
     steps:
       - name: "Deploy developers documentation"
-        uses: pyansys/actions/doc-deploy-dev@main
+        uses: pyansys/actions/doc-deploy-dev@v2
         with:
-            cname: ${{ env.cname }}
+            cname: ${{ env.DOCUMENTATION_CNAME }}
             token: ${{ secrets.GITHUB_TOKEN }}
 
   doc-deploy-stable:
@@ -61,9 +61,9 @@ jobs:
     needs: doc-deploy-development
     steps:
       - name: "Deploy stable documentation"
-        uses: pyansys/actions/doc-deploy-stable@main
+        uses: pyansys/actions/doc-deploy-stable@v2
         with:
-            cname: ${{ env.cname }}
+            cname: ${{ env.DOCUMENTATION_CNAME }}
             token: ${{ secrets.GITHUB_TOKEN }}
 
   tests:
@@ -97,57 +97,38 @@ jobs:
         uses: codecov/codecov-action@v3
         if: matrix.cfg.python-version ==  ${{ env.MAIN_PYTHON_VERSION }}
 
-  build:
-    name: Build package
+  build-library:
+    name: "Build library basic example"
     needs: [doc-deploy-stable, tests]
     runs-on: ubuntu-latest
     steps:
-      - uses: actions/checkout@v3
-      - name: Set up Python
-        uses: actions/setup-python@v4
+      - name: "Build library source and wheel artifacts"
+        uses: pyansys/actions/build-library@v2
         with:
-          python-version: ${{ env.MAIN_PYTHON_VERSION }}
-      - name: Install dependencies
-        run: |
-          python -m pip install --upgrade pip pipx
-          python -m pip install -r requirements/requirements_build.txt
-      - name: Build wheel and sdist
-        run: |
-          python -m build && python -m twine check dist/*
-      - name: Upload wheel and sdist to artifacts
-        uses: actions/upload-artifact@v3.1.1
-        with:
-          name: pyasys-templates-packages
-          path: dist/
-          retention-days: 7
+          library-name: ${{ env.LIBRARY_NAME }}
 
   release:
-    name: Release
+    name: "Release to private and public PyPI and to GitHub"
     if: github.event_name == 'push' && contains(github.ref, 'refs/tags')
-    needs: build
     runs-on: ubuntu-latest
-  
+    needs: [build-library]
     steps:
-      - uses: actions/download-artifact@v3
-      - name: Set up Python
-        uses: actions/setup-python@v4
+ 
+      - name: "Release to the private PyPI repository"
+        uses: pyansys/actions/release-pypi-private@v2
         with:
-          python-version: ${{ env.MAIN_PYTHON_VERSION }}
-      - name: Display structure of downloaded files
-        run: ls -R
-      - name: Install dependencies
-        run: |
-          python -m pip install --upgrade pip twine
-      - name: Publish to PyPI
-        env:
-          TWINE_USERNAME: __token__
-          TWINE_PASSWORD: ${{ secrets.PYPI_TOKEN }}
-        run: |
-          python -m twine upload --skip-existing ./**/*.whl
-          python -m twine upload --skip-existing ./**/*.tar.gz
-      - name: Publish to GitHub
-        uses: softprops/action-gh-release@v1
+          library-name: ${{ env.LIBRARY_NAME }}
+          twine-username: "__token__"
+          twine-token: ${{ secrets.PYANSYS_PYPI_PRIVATE_PAT }}
+ 
+      - name: "Release to the public PyPI repository"
+        uses: pyansys/actions/release-pypi-public@v2
         with:
-          files: |
-            ./**/*.whl
-            ./**/*.tar.gz
+          library-name: ${{ env.LIBRARY_NAME }}
+          twine-username: "__token__"
+          twine-token: ${{ secrets.PYPI_TOKEN }}
+ 
+      - name: "Release to GitHub"
+        uses: pyansys/actions/release-github@v2
+        with:
+          library-name: ${{ env.LIBRARY_NAME }}
