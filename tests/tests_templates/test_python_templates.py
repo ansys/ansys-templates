@@ -303,6 +303,9 @@ def test_template_python(tmp_path, build_system, template):
     # the common/ directory
     if template == "pyansys-advanced" and build_system == "setuptools":
         EXPECTED_STRUCTURE.append("setup.py")
+    elif template == "pyansys-advanced" and build_system == "poetry":
+        EXPECTED_STRUCTURE = deepcopy(EXPECTED_STRUCTURE)
+        [EXPECTED_STRUCTURE.remove(f"requirements/requirements_{name}.txt") for name in ["build", "doc", "tests"]]
     elif template == "common":
         keep_files(EXPECTED_STRUCTURE, project_path)
 

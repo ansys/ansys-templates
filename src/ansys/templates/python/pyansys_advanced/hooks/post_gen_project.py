@@ -5,7 +5,7 @@ from pathlib import Path
 
 import isort
 
-from ansys.templates.utils import keep_files
+from ansys.templates.utils import keep_files, remove_file
 
 ALLOWED_BUILD_SYSTEMS = ["flit", "poetry", "setuptools"]
 """A list of all allowed build systems by the template."""
@@ -56,12 +56,19 @@ def main():
     build_system = "{{ cookiecutter.build_system }}"
 
     # Move all requirements files into a requirements/ directory
-    os.mkdir(project_path / "requirements")
     requirements_files = [
-            f"requirements_{name}.txt" for name in ["build", "doc", "tests"]
+        f"requirements_{name}.txt" for name in ["build", "doc", "tests"]
     ]
-    for file in requirements_files:
-        shutil.move(str(project_path / file), str(project_path / "requirements"))
+    if build_system == "poetry":
+        # Poetry required and extra dependencies are collected inside the
+        # 'pyproject.toml' file. Thus, there is no need to have requirements
+        # files
+        for file in requirements_files:
+            remove_file(file, project_path)
+    else:
+        os.mkdir(project_path / "requirements")
+        for file in requirements_files:
+            shutil.move(str(project_path / file), str(project_path / "requirements"))
 
     # Apply isort with desired config
     isort_config = isort.settings.Config(
