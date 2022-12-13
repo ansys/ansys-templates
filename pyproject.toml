@@ -26,6 +26,25 @@ packages = [
 python = ">=3.7,<4.0"
 importlib-metadata = {version = "^4.0", python = "<3.8"}
 
+# Optional documentation dependencies
+Sphinx = {version = "==5.1.1", optional = true}
+numpydoc = {version = "==1.4.0", optional = true}
+ansys-sphinx-theme = {version = "==0.4.2", optional = true}
+sphinx-copybutton = {version = "==0.5.0", optional = true}
+
+# Optional testing dependencies
+pytest = {version = "==7.1.2", optional = true}
+pytest-cov = {version = "==3.0.0", optional = true}
+
+# Optional build requirements
+build = {version = "==0.8.0", optional = true}
+twine = {version = "==4.0.1", optional = true}
+
+[tool.poetry.extras]
+dist = ["build", "twine"]
+tests = ["pytest", "pytest-cov"]
+doc = ["Sphinx", "numpydoc", "ansys-sphinx-theme", "sphinx-copybutton"]
+
 [tool.black]
 line-length = 100
 
