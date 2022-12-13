@@ -59,7 +59,7 @@ def main():
     requirements_files = [
         f"requirements_{name}.txt" for name in ["build", "doc", "tests"]
     ]
-    if build_system is "poetry":
+    if build_system == "poetry":
         # Poetry required and extra dependencies are collected inside the
         # 'pyproject.toml' file. Thus, there is no need to have requirements
         # files
