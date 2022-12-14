@@ -19,6 +19,6 @@ du.configure_upload(app, UPLOAD_DIRECTORY)
 
 # !IMPORTANT Keeping the import line here to adapt with dash_uploader config, moving the import above will fail the
 # dash uploader configuration
-from ansys.solutions.{{cookiecutter.solution_package_name}}.ui.page import layout
+from ansys.solutions.{{ cookiecutter.__solution_name_slug }}.ui.page import layout
 
 app.layout = layout

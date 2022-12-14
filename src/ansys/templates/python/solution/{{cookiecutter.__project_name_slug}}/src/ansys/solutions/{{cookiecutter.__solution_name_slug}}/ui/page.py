@@ -2,11 +2,11 @@
 
 from ansys_dash_treeview import AnsysDashTreeview
 from ansys.saf.glow.client.dashclient import DashClient
-from ansys.solutions.{{cookiecutter.solution_package_name}}.solution.definition import (
-    {{cookiecutter.solution_class_name}},
+from ansys.solutions.{{ cookiecutter.__solution_name_slug }}.solution.definition import (
+    {{ cookiecutter._solution_definition_name }},
 )
-from ansys.solutions.{{cookiecutter.solution_package_name}}.ui import first
-from ansys.solutions.{{cookiecutter.solution_package_name}}.ui import other
+from ansys.solutions.{{ cookiecutter.__solution_name_slug }}.ui import first
+from ansys.solutions.{{ cookiecutter.__solution_name_slug }}.ui import other
 import dash_bootstrap_components as dbc
 from dash_extensions.enrich import Input, Output, callback, callback_context, dcc, html
 from dash_iconify import DashIconify
@@ -99,7 +99,7 @@ def return_to_portal(pathname):
     prevent_initial_call=True,
 )
 def display_page(pathname, value):
-    project = DashClient[{{cookiecutter.solution_class_name}}].get_project(pathname)
+    project = DashClient[{{ cookiecutter._solution_definition_name }}].get_project(pathname)
     triggered_id = callback_context.triggered[0]["prop_id"].split(".")[0]
     error_message = None
 

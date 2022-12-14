@@ -7,8 +7,8 @@ Introduction
 
 Ansys Solutions {{cookiecutter.solution_name}}
 
-  * Project name: **{{cookiecutter.solution_package_name}}**
-  * Package name: **ansys-solutions-{{cookiecutter.solution_package_name}}**
+  * Project name: **{{ cookiecutter.__project_name_slug }}**
+  * Package name: **{{ cookiecutter.__pkg_name }}**
 
 Installation
 ============
@@ -43,13 +43,13 @@ Setup the default configuration
 
   .. code:: bash
 
-    git clone https://github.com/Solution-Applications/{{cookiecutter.solution_package_name}}.git
+    git clone https://github.com/Solution-Applications/{{ cookiecutter.__project_name_slug }}.git
 
 2. Navigate to the cloned project directory:
 
   .. code:: bash
 
-    cd {{cookiecutter.solution_package_name}}
+    cd {{ cookiecutter.__project_name_slug }}
 
 3. Install TOML:
 
@@ -102,7 +102,7 @@ To start the application, navigate to the root of the repository and run:
 
     .. code:: bash
 
-      saf -d src/ansys/solutions devrun {{cookiecutter.solution_name}}
+      saf -d src/ansys/solutions devrun {{ cookiecutter.__solution_name_slug }}
 
 Code style check
 ================
