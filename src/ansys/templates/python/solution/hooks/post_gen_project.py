@@ -1,7 +1,18 @@
 from ansys.templates.utils import keep_files
 
 
-DESIRED_STRUCTURE = []
+DESIRED_STRUCTURE = [
+    ".flake8",
+    ".gitattributes",
+    ".gitignore",
+    ".pre-commit-config.yaml",
+    "CHANGELOG.md",
+    "CODE_OF_CONDUCT.md",
+    "CONTRIBUTING.md",
+    "pyproject.toml",
+    "README.rst",
+    "tox.ini",
+]
 """A list holding all desired files to be included in the project."""
 
 
