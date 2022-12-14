@@ -1,0 +1,128 @@
+name: CI/CD
+
+on:
+  pull_request:
+  workflow_dispatch:
+
+env:
+  MAIN_PYTHON_VERSION: '3.7'
+  POETRY_VERSION: 1.2.0
+  CHECK_COVERAGE_RATIO: false
+  COVERAGE_RATIO: 80
+  CHECK_CODE_STYLE: false
+
+concurrency:
+  group: ${{ github.workflow }}-${{ github.ref }}
+  cancel-in-progress: true
+
+jobs:
+
+  env-setup:
+    name: Setup Dynamic Environment Variables
+    runs-on: ubuntu-latest
+    outputs:
+      MAIN_PYTHON_VERSION: ${{ steps.set-output-defaults.outputs.MAIN_PYTHON_VERSION }}
+      POETRY_VERSION: ${{ steps.set-output-defaults.outputs.POETRY_VERSION }}
+      CHECK_COVERAGE_RATIO: ${{ steps.set-output-defaults.outputs.CHECK_COVERAGE_RATIO }}
+      COVERAGE_RATIO: ${{ steps.set-output-defaults.outputs.COVERAGE_RATIO }}
+      CHECK_CODE_STYLE: ${{ steps.set-output-defaults.outputs.CHECK_CODE_STYLE }}
+    steps:
+      - name: set outputs with default values
+        id: set-output-defaults
+        run: |  
+          echo "::set-output name=MAIN_PYTHON_VERSION::${{ env.MAIN_PYTHON_VERSION }}"
+          echo "::set-output name=POETRY_VERSION::${{ env.POETRY_VERSION }}"
+          echo "::set-output name=CHECK_COVERAGE_RATIO::${{ env.CHECK_COVERAGE_RATIO }}"
+          echo "::set-output name=COVERAGE_RATIO::${{ env.COVERAGE_RATIO }}"
+          echo "::set-output name=CHECK_CODE_STYLE::${{ env.CHECK_CODE_STYLE }}"
+
+  copyright-check:
+    name: Check copyright
+    uses: Solution-Applications/organization-pipeline-components/.github/workflows/check-copyright.yml@main
+    secrets: inherit
+
+  doc-style:
+    name: Check doc style
+    needs: [env-setup]
+    uses: Solution-Applications/organization-pipeline-components/.github/workflows/check-doc-style.yml@main
+
+  doc-build:
+    name: Build documentation
+    needs: [env-setup, doc-style]
+    uses: Solution-Applications/organization-pipeline-components/.github/workflows/build-doc.yml@main
+    with:
+      documentation-artifact: {{cookiecutter.solution_package_name}}-documentation
+      python-version: ${{needs.env-setup.outputs.MAIN_PYTHON_VERSION}}
+
+  doc-deploy:
+    name: Deploy documentation
+    needs: [doc-build]
+    uses: Solution-Applications/organization-pipeline-components/.github/workflows/deploy-doc.yml@main
+    secrets: inherit
+    with:
+      documentation-artifact: {{cookiecutter.solution_package_name}}-documentation
+      branch: gh-pages
+
+  code-style:
+    if: ${{needs.env-setup.outputs.CHECK_CODE_STYLE == 'true'}}
+    name: Check code style
+    needs: [env-setup]
+    uses: Solution-Applications/organization-pipeline-components/.github/workflows/check-code-style.yml@main
+    with:
+      python-version: ${{needs.env-setup.outputs.MAIN_PYTHON_VERSION}}
+
+  unit-tests:
+    name: Run unit tests
+    needs: [env-setup]
+    uses: Solution-Applications/organization-pipeline-components/.github/workflows/unit-tests.yml@main
+    secrets: inherit
+    with:
+      python-version: ${{needs.env-setup.outputs.MAIN_PYTHON_VERSION}}
+      poetry-version: ${{needs.env-setup.outputs.POETRY_VERSION}}
+      check-coverage-ratio: ${{needs.env-setup.outputs.CHECK_COVERAGE_RATIO}}
+      coverage-ratio: ${{needs.env-setup.outputs.COVERAGE_RATIO}}
+
+  build:
+    name: Build 
+    needs: [env-setup]
+    uses: Solution-Applications/organization-pipeline-components/.github/workflows/build.yml@main
+    secrets: inherit
+    with:
+      install-mode: poetry
+      poetry-version: ${{needs.env-setup.outputs.POETRY_VERSION}}
+      python-version: ${{needs.env-setup.outputs.MAIN_PYTHON_VERSION}}
+      artifact-name: {{cookiecutter.solution_package_name}}-wheel
+      retention-days: 7
+
+  Release:
+    name: Release
+    if: |
+      github.event_name == 'push' &&
+      contains(github.ref, 'refs/tags')
+    needs: [copyright-check, doc-style, doc-build, doc-deploy, unit-tests, build]
+    runs-on: ubuntu-latest
+    steps:
+      - name: Set up Python
+        uses: actions/setup-python@v4
+        with:
+          python-version: ${{ env.MAIN_PYTHON_VERSION }}
+      - name: Install dependencies
+        run: |
+          python -m pip install --upgrade pip twine
+      - name: Download artifacts from CI session
+        uses: actions/download-artifact@v3
+      - name: Display structure of downloaded files
+        run: ls -R
+      - name: Publish to private PyPI
+        env:
+          TWINE_USERNAME: PAT
+          TWINE_PASSWORD: ${{ secrets.SOLUTIONS_PRIVATE_PYPI_PAT }}
+          TWINE_REPOSITORY_URL: https://pkgs.dev.azure.com/pyansys/_packaging/ansys-solutions/pypi/upload/
+        run: |
+          twine upload --skip-existing ./**/*.whl
+      - name: Publish to GitHub
+        uses: softprops/action-gh-release@v1
+        with:
+          files: |
+            ./**/*.whl
+            ./**/*.tar.gz

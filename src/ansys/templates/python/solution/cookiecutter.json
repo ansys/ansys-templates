@@ -1,0 +1,31 @@
+{
+  "__template_name": "solution",
+  "project_name": "",
+  "__project_name_slug": "{{ cookiecutter.project_name | slugify(separator=('_')) }}",
+  "solution_name": "",
+  "solution_display_name": "",
+  "_solution_definition_name": "{{ cookiecutter.solution_name.capitalize() }}Solution",
+  "version": "0.1.dev0",
+  "__version": "{{ cookiecutter.version }}",
+  "short_description": "",
+  "__short_description": "{{ cookiecutter.short_description | capitalize }}",
+  "__pkg_name": "ansys-solutions-{{ cookiecutter.solution_name.lower().replace('_', '-') }}",
+  "__pkg_namespace": "{{ cookiecutter.__project_name_slug }}",
+  "requires_python": ["3.7", "3.8", "3.9"],
+  "__requires_python": "{{ cookiecutter.requires_python }}",
+  "repository_url": "",
+  "__repository_url": "{{ cookiecutter.repository_url }}",
+  "__build_system": "poetry",
+  "max_linelength": "120",
+  "__max_linelength": "{{ cookiecutter.max_linelength }}",
+  "__logo": "solutions",
+  "__logo_color": "black",
+  "__coverage_source": "{{ cookiecutter.__project_name_slug }}",
+  "__product_name_slug": "",
+  "__library_name_slug": "",
+  "__is_pyansys": "False",
+  "_copy_without_render": [
+      "*.html",
+      "*.github"
+  ]
+}
