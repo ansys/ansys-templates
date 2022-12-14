@@ -46,7 +46,7 @@ toml = {version = "*"}
 tox = {version = "*"} 
 
 [tool.poetry.plugins."console_scripts"]
-{{cookiecutter.solution_package_name}}_main = "ansys.solutions.{{cookiecutter.solution_package_name}}.main:main"
+{{ cookiecutter.__solution_name_slug }}_main = "ansys.solutions.{{ cookiecutter.__solution_name_slug }}.main:main"
 
 [tool.black]
 line-length = 120
