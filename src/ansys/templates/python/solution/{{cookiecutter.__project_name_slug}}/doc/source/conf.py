@@ -4,10 +4,13 @@
 
 # ==================================================== [Imports] ==================================================== #
 
+import os
 from datetime import datetime
 from pathlib import Path
 
 import toml
+
+from ansys_sphinx_theme import get_version_match
 
 # ============================================== [Project Information] ============================================== #
 
@@ -20,6 +23,8 @@ project = package_configuration["tool"]["poetry"]["name"]
 copyright = f"(c) {datetime.now().year} ANSYS, Inc. All rights reserved"
 author = "ANSYS, Inc."
 release = version = package_configuration["tool"]["poetry"]["version"]
+cname = os.getenv("DOCUMENTATION_CNAME", "nocname.com")
+
 
 # ============================================ [Options for HTML output] ============================================ #
 
@@ -40,6 +45,11 @@ html_theme_options = {
     "additional_breadcrumbs": [
         ("PyAnsys", "https://docs.pyansys.com/"),
     ],
+    "switcher": {
+        "json_url": f"{cname}/release/versions.json",
+        "version_match": get_version_match(version),
+    },
+    "navbar_end": ["version-switcher", "theme-switcher", "navbar-icon-links"],
 }
 
 # Sphinx extensions
