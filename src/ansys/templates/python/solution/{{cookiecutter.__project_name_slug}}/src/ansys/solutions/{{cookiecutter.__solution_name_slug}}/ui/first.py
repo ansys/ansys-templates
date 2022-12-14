@@ -1,7 +1,7 @@
 # ©2022, ANSYS Inc. Unauthorized use, distribution or duplication is prohibited.
 
 from ansys.saf.glow.client.dashclient import DashClient
-from ansys.solutions.{{ cookiecutter.__solution_name_slug }}.solution.definition import {{cookiecutter._solution_definition_name}}
+from ansys.solutions.{{ cookiecutter.__solution_name_slug }}.solution.definition import {{cookiecutter.__solution_definition_name}}
 from ansys.solutions.{{ cookiecutter.__solution_name_slug }}.solution.first_step import FirstStep
 from dash_extensions.enrich import Input, Output, State, callback, dcc, html
 
@@ -27,7 +27,7 @@ def layout(step: FirstStep):
     prevent_initial_call=True,
 )
 def calculate(n_clicks, first_arg, second_arg, pathname):
-    project = DashClient[{{cookiecutter._solution_definition_name}}].get_project(pathname)
+    project = DashClient[{{cookiecutter.__solution_definition_name}}].get_project(pathname)
     step = project.steps.first_step
     step.first_arg = first_arg
     step.second_arg = second_arg

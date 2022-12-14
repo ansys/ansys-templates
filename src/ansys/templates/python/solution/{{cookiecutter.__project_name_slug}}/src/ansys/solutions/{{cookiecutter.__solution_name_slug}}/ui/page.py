@@ -3,7 +3,7 @@
 from ansys_dash_treeview import AnsysDashTreeview
 from ansys.saf.glow.client.dashclient import DashClient
 from ansys.solutions.{{ cookiecutter.__solution_name_slug }}.solution.definition import (
-    {{ cookiecutter._solution_definition_name }},
+    {{ cookiecutter.__solution_definition_name }},
 )
 from ansys.solutions.{{ cookiecutter.__solution_name_slug }}.ui import first
 from ansys.solutions.{{ cookiecutter.__solution_name_slug }}.ui import other
@@ -99,7 +99,7 @@ def return_to_portal(pathname):
     prevent_initial_call=True,
 )
 def display_page(pathname, value):
-    project = DashClient[{{ cookiecutter._solution_definition_name }}].get_project(pathname)
+    project = DashClient[{{ cookiecutter.__solution_definition_name }}].get_project(pathname)
     triggered_id = callback_context.triggered[0]["prop_id"].split(".")[0]
     error_message = None
 
