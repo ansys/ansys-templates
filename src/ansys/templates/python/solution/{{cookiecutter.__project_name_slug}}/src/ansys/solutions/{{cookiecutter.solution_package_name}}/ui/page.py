@@ -7,9 +7,8 @@ from ansys.solutions.{{cookiecutter.solution_package_name}}.solution.definition 
 )
 from ansys.solutions.{{cookiecutter.solution_package_name}}.ui import first
 from ansys.solutions.{{cookiecutter.solution_package_name}}.ui import other
-from dash import Input, Output, State, callback, dcc, html
 import dash_bootstrap_components as dbc
-from dash_extensions.enrich import ALL, Input, Output, State, callback, callback_context, dcc, html
+from dash_extensions.enrich import Input, Output, callback, callback_context, dcc, html
 from dash_iconify import DashIconify
 
 

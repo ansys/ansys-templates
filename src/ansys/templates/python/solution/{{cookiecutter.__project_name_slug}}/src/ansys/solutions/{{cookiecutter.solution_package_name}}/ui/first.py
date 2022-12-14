@@ -3,9 +3,7 @@
 from ansys.saf.glow.client.dashclient import DashClient
 from ansys.solutions.{{cookiecutter.solution_package_name}}.solution.definition import {{cookiecutter.solution_class_name}}
 from ansys.solutions.{{cookiecutter.solution_package_name}}.solution.first_step import FirstStep
-from dash_extensions.enrich import ALL, Input, Output, State, callback, callback_context, dcc, html
-
-
+from dash_extensions.enrich import Input, Output, State, callback, dcc, html
 
 def layout(step: FirstStep):
     return html.Div([
