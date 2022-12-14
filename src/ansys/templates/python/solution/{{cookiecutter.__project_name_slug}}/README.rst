@@ -61,7 +61,7 @@ Setup the default configuration
 
   .. code:: bash
 
-    python setup_environment.py -d all -t 3.27.1
+    python setup_environment.py -d all
 
 5. Activate the virtual environment:
 
