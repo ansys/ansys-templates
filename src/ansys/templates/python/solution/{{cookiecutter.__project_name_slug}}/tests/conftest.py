@@ -13,4 +13,3 @@ tests_directory = Path(__file__).parent.absolute()
 project_directory = Path(__file__).parent.parent.absolute()
 
 # =================================================== [Functions] =================================================== #
-
