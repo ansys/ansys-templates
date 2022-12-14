@@ -3,6 +3,7 @@
   "project_name": "",
   "__project_name_slug": "{{ cookiecutter.project_name | slugify(separator=('_')) }}",
   "solution_name": "",
+  "__solution_name_slug": "{{ cookiecutter.solution_name.lower().replace('_', '-') }}",
   "solution_display_name": "",
   "_solution_definition_name": "{{ cookiecutter.solution_name.capitalize() }}Solution",
   "version": "0.1.dev0",
