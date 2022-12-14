@@ -9,6 +9,7 @@ on:
 
 env:
   MAIN_PYTHON_VERSION: '3.7'
+  DOCUMENTATION_CNAME: 'TODO'
   POETRY_VERSION: 1.1.15
   TOX_VERSION: 3.27.1
   POETRY_HTTP_BASIC_PYANSYS_PRIVATE_PYPI_USERNAME: 'PAT'
@@ -54,12 +55,13 @@ jobs:
     needs: [build-doc]
     runs-on: ubuntu-latest
     steps:
-      - name: Deploy documentation
-        uses: Solution-Applications/actions/deploy-doc@v0.0.1
+      - name: Deploy stable documentation
+        uses: pyansys/actions/doc-deploy-stable@v2
         with:
-          gh-token: ${{ secrets.GITHUB_TOKEN }}
-          documentation-artifact: html-documentation
-          branch: gh-pages
+            doc-artifact-name: 'html-documentation'
+            cname: ${{ env.DOCUMENTATION_CNAME }}
+            token: ${{ secrets.GITHUB_TOKEN }}
+            python-version: ${{ env.MAIN_PYTHON_VERSION }}
 
   check-copyright:
     name: Check copyright
