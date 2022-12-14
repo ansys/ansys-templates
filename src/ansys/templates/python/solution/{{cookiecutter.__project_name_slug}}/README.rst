@@ -123,7 +123,7 @@ All-in-one checks using pre-commit
 ----------------------------------
 
 All those checks can be triggered with one single tool: ``pre-commit``. ``pre-commit`` is a GIT hook allowing to trigger all the code style commands at once at the point when you perform a git commit.
-``pre-commit`` prevents you from forgetting to run the required actions against your code and it ensures the exact smae style policies are applied. The code style policy is defined in the 
+``pre-commit`` prevents you from forgetting to run the required actions against your code and it ensures the exact same style policies are applied. The code style policy is defined in the 
 ``.pre-commit-config.yaml`` at project root. 
 
 Developers are not forced but encouraged to install ``pre-commit`` via:
