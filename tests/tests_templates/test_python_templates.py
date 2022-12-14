@@ -58,7 +58,7 @@ DOC_PROJECT_VARS = dict(
 SOLUTION_VARS = dict(
     project_name="solution",
     __project_name_slug="solution",
-    short_description="A Solution based on the Solution Application Framwork.",
+    short_description="A Solution based on the Solution Application Framework.",
     requires_python="3.7",
 )
 
