@@ -4,9 +4,9 @@ import os
 
 import click
 
-from ansys.templates import AVAILABLE_TEMPLATES_AND_DESCRIPTION, __version__
-from ansys.templates.paths import TEMPLATE_PATH_FINDER
-from ansys.templates.utils import bake_template
+from ansys.solutions.templates import AVAILABLE_TEMPLATES_AND_DESCRIPTION, __version__
+from ansys.solutions.templates.paths import TEMPLATE_PATH_FINDER
+from ansys.solutions.templates.utils import bake_template
 
 
 def create_project(template):
@@ -99,3 +99,8 @@ def pyace_flask():
 def pyace_grpc():
     """Create gRPC project initialized for any developer."""
     create_project("pyace-grpc")
+
+@new.command()
+def solution():
+    """Create a Solution based on the Solution Application Framework."""
+    create_project("solution")
