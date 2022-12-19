@@ -4,10 +4,7 @@ import json
 import pytest
 
 from ansys.templates.paths import PYTHON_TEMPLATES_COMMON_PATH, TEMPLATE_PATH_FINDER
-from ansys.templates.testing import (
-    assert_project_structure,
-    assert_template_baking_process,
-)
+from ansys.templates.testing import assert_project_structure, assert_template_baking_process
 from ansys.templates.utils import keep_files
 
 PYCOMMON_VARS = dict(
