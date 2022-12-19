@@ -4,9 +4,9 @@ import os
 
 import click
 
-from ansys.solutions.templates import AVAILABLE_TEMPLATES_AND_DESCRIPTION, __version__
-from ansys.solutions.templates.paths import TEMPLATE_PATH_FINDER
-from ansys.solutions.templates.utils import bake_template
+from ansys.templates import AVAILABLE_TEMPLATES_AND_DESCRIPTION, __version__
+from ansys.templates.paths import TEMPLATE_PATH_FINDER
+from ansys.templates.utils import bake_template
 
 
 def create_project(template):

@@ -1,4 +1,4 @@
-from ansys.solutions.templates.utils import keep_files
+from ansys.templates.utils import keep_files
 
 
 DESIRED_STRUCTURE = [
