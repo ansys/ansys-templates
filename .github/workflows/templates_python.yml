@@ -53,6 +53,8 @@ jobs:
           - {name: "pyace-fast", template: "pyace-fast", build-system: "setuptools", outdir: "pyace_fas2/project"}
           - {name: "pyace-grpc", template: "pyace-grpc", build-system: "setuptools", outdir: "pyace_grp2/project"}
 
+          # All solution template tests
+          - {name: "solution", template: "solution", build-system: "poetry", outdir: "solution_1/solution"}
 
       fail-fast: false
 
