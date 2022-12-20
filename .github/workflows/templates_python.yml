@@ -69,63 +69,13 @@ jobs:
 
       - name: Bake ${{ matrix.cfg.template }}
         run: |
-          # Bake only the desired templates
           export TEMPLATE=${{ matrix.cfg.template }}
           tox -e ${{ matrix.toxenv }}-${{ matrix.toxextra }}-template
-          mv output $HOME/baked_templates && ls $HOME/baked_templates
-
-      - name: Install and test project
-        if: contains(fromJson('["pybasic", "pyansys"]'), matrix.cfg.template)
-        run: |
-          # Move to directory outside the current repository so tox does not
-          # interfere with baked tox files
-          cd "$HOME/baked_templates/test_template_python_${{ matrix.cfg.outdir }}"
-          python -m pip install --upgrade pip
-          python -m pip install -e .
-          # Check code style
-          #python -m pip install -r requirements_style.txt
-          #python -m black --line-length {{ cookiecutter.__max_linelength }} doc src tests
-          #python -m isort --profile black --line-length {{ cookiecutter.__max_linelength }} doc src tests
-          #python -m flake8 doc src tests
-          # Check unit tests
-          python -m pip install -r requirements_tests.txt
-          pytest --cov=src tests
-          # Check documentation
-          python -m pip install -r requirements_doc.txt
-          sphinx-build doc/source doc/build -v -W -b html
-
-      - name: Install act
-        if: contains(fromJson('["pybasic", "pyansys"]'), matrix.cfg.template) == false
-        run: |
-          sudo apt-get install build-essential gcc wget
-          wget -qO act.tar.gz https://github.com/nektos/act/releases/latest/download/act_Linux_x86_64.tar.gz
-          sudo tar xf act.tar.gz -C /usr/local/bin act
-          echo "-P ubuntu-latest=ghcr.io/catthehacker/ubuntu:act-latest" >> ~/.actrc
-
-      - name: Test baked project
-        if: contains(fromJson('["pybasic", "pyansys"]'), matrix.cfg.template) == false
-        run: |
-          # Change to template directory location
-          cd "$HOME/baked_templates/test_template_python_${{ matrix.cfg.outdir }}"
-          # Create a fresh Python environment, install dependencies and baked project
-          python -m venv .venv && source .venv/bin/activate
-          python -m pip install --upgrade pip ${{ matrix.cfg.build-system }} tox pre-commit
-          if [[ ${{ matrix.cfg.template }} != "doc-project" ]]; then python -m pip install -e .; fi
-          # Initialize template as Git repository so pre-commit can be used
-          git config --global init.defaultBranch <name>
-          git init
-          git config --local user.name "User"
-          git config --local user.email "user@email-server.domain"
-          git add . && git commit -m "Initialize repository"
-          # Run act, ignore runner errors and look for real ones
-          if [[ ${{ matrix.cfg.template }} == "pyansys_advanced" ]]; then act | grep -v -w "add-matcher"; else act -j code-style | grep -v -w "add-matcher"; fi
-          if [[ ${{ matrix.cfg.template }} == "doc-project" ]]; then act | grep -v -w "add-matcher"; else act -j code-style doc-build | grep -v -w "add-matcher"; fi
 
       - name: Move baked project to repo again
         if: matrix.python-version == '3.7'
         run: |
-          mv "$HOME/baked_templates/test_template_python_${{ matrix.cfg.outdir }}" baked_template
-          rm -rf baked_template/.git
+          mv "output/test_template_python_${{ matrix.cfg.outdir }}" baked_template
           # GitHub Apps are not allowed to deal with .github workflows
           if [ -d "baked_template/.github" ]; then mv baked_template/.github baked_template/.github_demo; fi
           ls -a baked_template
