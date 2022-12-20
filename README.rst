@@ -135,6 +135,8 @@ its corresponding demonstration branch.
 * Demo branch for `pyace-fast`_
 * Demo branch for `pyace-flask`_
 * Demo branch for `pyace-grpc`_
+* Demo branch for `solution`_
+
 
 .. _doc-project: https://github.com/ansys/ansys-templates/tree/demo/doc-project
 .. _pybasic: https://github.com/ansys/ansys-templates/tree/demo/pybasic
@@ -146,3 +148,4 @@ its corresponding demonstration branch.
 .. _pyace-fast: https://github.com/ansys/ansys-templates/tree/demo/pyace-fast
 .. _pyace-flask: https://github.com/ansys/ansys-templates/tree/demo/pyace-flask
 .. _pyace-grpc: https://github.com/ansys/ansys-templates/tree/demo/pyace-grpc
+.. _solution: https://github.com/ansys/ansys-templates/tree/demo/solution
