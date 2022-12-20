@@ -41,6 +41,9 @@ name = "{{ cookiecutter.__pkg_namespace }}"
 
 [project.urls]
 Source = "{{ cookiecutter.__repository_url }}"
+Tracker = "{{ cookiecutter.__repository_url }}/issues"
+Homepage = "{{ cookiecutter.__repository_url }}"
+
 {% elif cookiecutter.__build_system == "poetry"  %}
 [tool.poetry]
 # Check https://python-poetry.org/docs/pyproject/ for all available sections

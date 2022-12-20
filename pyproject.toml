@@ -51,7 +51,10 @@ name = "ansys.templates"
 ansys-templates = "ansys.templates.cli:main"
 
 [project.urls]
-Source = "https://github.com/pyansys/pyansys-template"
+Source = "https://github.com/ansys-templates/ansys-templates"
+Homepage = "https://templates.ansys.com/"
+Documentation = "https://templates.ansys.com/"
+Tracker = "https://github.com/ansys/ansys-templates/issues"
 
 [tool.black]
 force-exclude = ["src/ansys/templates/python"]
