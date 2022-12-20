@@ -32,6 +32,9 @@ name = "ansys.product.library"
 
 [project.urls]
 Source = "https://github.com/pyansys/pyproduct-library"
+Tracker = "https://github.com/pyansys/pyproduct-library/issues"
+Homepage = "https://github.com/pyansys/pyproduct-library"
+
 
 [tool.black]
 line-length = 100
