@@ -57,6 +57,7 @@ DOC_PROJECT_VARS = dict(
 
 SOLUTION_VARS = dict(
     __solution_name_slug="solution",
+    __project_name_slug="solution",
 )
 
 PYCOMMON_STRUCTURE = [
@@ -329,7 +330,8 @@ def test_template_python(tmp_path, build_system, template):
     template_path = TEMPLATE_PATH_FINDER[template]
     with open(template_path / "cookiecutter.json", 'r', encoding="utf-8") as fp:
         config_json = json.load(fp)
-    supported_build_systems = config_json.get("build_system", ["setuptools"])
+    default_build_system = "setuptools" if template != "solution" else "poetry"
+    supported_build_systems = config_json.get("build_system", [default_build_system])
 
     # Skip if template does not support a particular build system
     if build_system not in supported_build_systems:
