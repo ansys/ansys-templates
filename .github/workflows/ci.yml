@@ -42,23 +42,11 @@ jobs:
       - name: "Run Ansys documentation building action"
         uses: pyansys/actions/doc-build@v2
 
-  doc-deploy-development:
-    name: Doc dev version deploy
-    if: github.event_name == 'push'
-    runs-on: ubuntu-latest
-    needs: doc-build
-    steps:
-      - name: "Deploy developers documentation"
-        uses: pyansys/actions/doc-deploy-dev@v2
-        with:
-            cname: ${{ env.DOCUMENTATION_CNAME }}
-            token: ${{ secrets.GITHUB_TOKEN }}
-
   doc-deploy-stable:
     name: Doc stable version deploy
     if: github.event_name == 'push' && contains(github.ref, 'refs/tags')
     runs-on: ubuntu-latest
-    needs: doc-deploy-development
+    needs: doc-build
     steps:
       - name: "Deploy stable documentation"
         uses: pyansys/actions/doc-deploy-stable@v2
