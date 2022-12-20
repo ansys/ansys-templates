@@ -9,6 +9,9 @@ on:
 
 env:
   MAIN_PYTHON_VERSION: '{{ cookiecutter.__requires_python }}'
+  DOCUMENTATION_CNAME: '{{ cookiecutter.__product_name_slug }}.docs.pyansys.com'
+  LIBRARY_NAME: '{{ cookiecutter.__pkg_namespace | replace(".", "-") }}'
+  LIBRARY_NAMESPACE: '{{ cookiecutter.__pkg_namespace }}'
 
 concurrency:
   group: {{ '${{ github.workflow }}-${{ github.ref }}' }}
@@ -16,45 +19,30 @@ concurrency:
 
 jobs:
 
-  style:
-    name: Code style
+  code-style:
+    name: "Code style"
     runs-on: ubuntu-latest
     steps:
-      - uses: actions/checkout@v3
-      - name: Set up Python
-        uses: actions/setup-python@v4
+      - uses: pyansys/actions/code-style@v2
         with:
           python-version: {{ '${{ env.MAIN_PYTHON_VERSION }}' }}
-      - name: Install dependencies
-        run: |
-          python -m pip install --upgrade pip {{ cookiecutter.__build_system }} tox
-      - name: Test with tox
-        run: tox -e style
 
-  docs-style:
-    name: Documentation Style Check
+  doc-style:
+    name: "Documentation style"
     runs-on: ubuntu-latest
     steps:
-      - uses: actions/checkout@v3
-  
-      - name: Running Vale
-        uses: errata-ai/vale-action@reviewdog
-        env:
-          GITHUB_TOKEN: {{ '${{secrets.GITHUB_TOKEN}}' }}
+      - uses: pyansys/actions/doc-style@v2
         with:
-          files: doc
-          reporter: github-pr-check
-          level: error
-          filter_mode: nofilter
-          fail_on_error: true
-          vale_flags: "--config=doc/.vale.ini"
+          token: {{ '${{ secrets.GITHUB_TOKEN }}' }}
 
-  tests:
-    name: Tests and coverage
+  smoke-tests:
+    name: "Build and Smoke tests"
     runs-on: {{ '${{ matrix.os }}' }}
+    needs: [code-style]
     strategy:
+      fail-fast: false
       matrix:
-        os: [windows-latest, ubuntu-latest]
+        os: [ubuntu-latest, windows-latest]
         {% set required_minor = cookiecutter.__requires_python[2:] | int %}
         {%- set python_versions = [ ] -%}
         {%- for minor in range(7, 11) -%}
@@ -63,55 +51,71 @@ jobs:
         {%- endif -%}
         {%- endfor -%}
         python-version: {{ python_versions }}
-      fail-fast: false
-
     steps:
-      - uses: actions/checkout@v3
-      - name: Set up Python {{ '${{ matrix.python-version }}' }}
-        uses: actions/setup-python@v4
+      - uses: pyansys/actions/build-wheelhouse@v2
         with:
+          library-name: {{ '${{ env.LIBRARY_NAME }}' }}
+          library-namespace: {{ '${{ env.LIBRARY_NAMESPACE }}' }}
+          operating-system: {{ '${{ matrix.os }}' }}
           python-version: {{ '${{ matrix.python-version }}' }}
-      - name: Install dependencies
-        run: |
-          python -m pip install --upgrade pip {{ cookiecutter.__build_system }} tox tox-gh-actions
-      - name: Test with tox
-        # Only the tox environment specified in the tox.ini gh-actions is run
-        run: tox
 
-
-  docs:
-    name: Documentation
-    runs-on: ubuntu-latest
-    needs: docs-style
+  tests:
+    name: "Tests"
+    runs-on: {{ '${{ matrix.os }}' }}
+    needs: [smoke-tests]
+    strategy:
+      matrix:
+       os: [ubuntu-latest, windows-latest]
+       {% set required_minor = cookiecutter.__requires_python[2:] | int %}
+       {%- set python_versions = [ ] -%}
+       {%- for minor in range(7, 11) -%}
+       {%- if minor >= required_minor -%}
+       {{ python_versions.append("3." + minor | string ) or ''}}
+       {%- endif -%}
+       {%- endfor -%}
+       python-version: {{ python_versions }}
+      fail-fast: false
     steps:
-      - uses: actions/checkout@v3
-      - name: Set up Python
-        uses: actions/setup-python@v4
+      - uses: pyansys/actions/tests-pytest@v2
+        with:
+          pytest-extra-args: "--cov=ansys --cov-report=term --cov-report=html:.cov/html"
+
+  doc-build:
+    name: "Build documentation"
+    runs-on: ubuntu-latest
+    needs: [doc-style]
+    steps:
+      - uses: pyansys/actions/doc-build@v2
         with:
           python-version: {{ '${{ env.MAIN_PYTHON_VERSION }}' }}
-      - name: Install dependencies
-        run: |
-          python -m pip install --upgrade pip {{ cookiecutter.__build_system }} tox
-      - name: Generate the documentation with tox
-        run: tox -e doc
 
+  doc-deploy-dev:
+    name: "Deploy development documentation"
+    runs-on: ubuntu-latest
+    needs: [doc-build]
+    if: github.event_name == 'push'
+    steps:
+      - uses: pyansys/actions/doc-deploy-dev@v2
+        with:
+          cname: {{ '${{ env.DOCUMENTATION_CNAME }}' }}
+          token: {{ '${{ secrets.GITHUB_TOKEN }}' }}
 
-  build:
-    name: Build library
+  doc-deploy-stable:
+    name: "Deploy stable documentation"
+    runs-on: ubuntu-latest
+    needs: [doc-deploy-dev]
+    if: github.event_name == 'push' && contains(github.ref, 'refs/tags')
+    steps:
+      - uses: pyansys/actions/doc-deploy-stable@v2
+        with:
+          cname: {{ '${{ env.DOCUMENTATION_CNAME }}' }}
+          token: {{ '${{ secrets.GITHUB_TOKEN }}' }}
+
+  build-library:
+    name: "Build library basic example"
     runs-on: ubuntu-latest
     steps:
-      - uses: actions/checkout@v3
-      - name: Set up Python
-        uses: actions/setup-python@v4
+      - uses: pyansys/actions/build-library@v2
         with:
+          library-name: {{ '${{ env.LIBRARY_NAME }}' }}
           python-version: {{ '${{ env.MAIN_PYTHON_VERSION }}' }}
-      - name: Install dependencies and build the library
-        run: |
-          python -m pip install --upgrade pip {{ cookiecutter.__build_system }}
-          python -m pip install -r requirements/requirements_build.txt
-          {% if cookiecutter.__build_system in ["flit", "poetry"] -%}
-          {{ cookiecutter.__build_system }} build
-          {% elif cookiecutter.__build_system == "setuptools" -%}
-          python -m build
-          {% endif -%}
-          python -m twine check dist/*
