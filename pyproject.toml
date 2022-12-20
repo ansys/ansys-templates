@@ -32,6 +32,18 @@ dependencies = [
     "isort>=5.10.1",
 ]
 
+[project.optional-dependencies]
+tests = [
+    "pytest==7.2.0",
+    "pytest-cov==4.0.0",
+]
+doc = [
+    "ansys-sphinx-theme==0.8.0",
+    "numpydoc==1.5.0",
+    "sphinx==5.3.0",
+    "sphinx-copybutton==0.5.1",
+]
+
 [tool.flit.module]
 name = "ansys.templates"
 
