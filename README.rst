@@ -87,6 +87,7 @@ Available templates in ``ansys-templates`` are:
 - ``pyace-flask``: Create a Flask project initialized for any developer.
 - ``pyace-grpc``: Create gRPC project initialized for any developer.
 - ``pyace-fast``: Create a FastAPI project initialized for any developer.
+- ``solution``: Create a Solution based on the Solution Application Framework.
 
 
 Template features
@@ -114,6 +115,8 @@ available in ``ansys-templates``:
 | pyace-flask             |  ``X``                |  ``X``          |  ``X``  |  ``X``   |  ``X``         |  ``X``  |
 +-------------------------+-----------------------+-----------------+---------+----------+----------------+---------+
 | pyace-grpc              |  ``X``                |  ``X``          |  ``X``  |  ``X``   |  ``X``         |  ``X``  |
++-------------------------+-----------------------+-----------------+---------+----------+----------------+---------+
+| solution                |                       |  ``X``          |  ``X``  |  ``X``   |  ``X``         |         |
 +-------------------------+-----------------------+-----------------+---------+----------+----------------+---------+
 
 

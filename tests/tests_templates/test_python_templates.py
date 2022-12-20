@@ -55,6 +55,9 @@ DOC_PROJECT_VARS = dict(
     requires_python="3.7",
 )
 
+SOLUTION_VARS = dict(
+    __solution_name_slug="solution",
+)
 
 PYCOMMON_STRUCTURE = [
     ".coveragerc",
@@ -253,6 +256,55 @@ DOC_PROJECT_STRUCTURE = [
     "tox.ini",
 ]
 
+# Structure for solution projects
+SOLUTION_STRUCTURE = [
+    "CHANGELOG.md",
+    "CODE_OF_CONDUCT.md",
+    "CONTRIBUTING.md",
+    "doc/Makefile",
+    "doc/make.bat",
+    "doc/.vale.ini",
+    "doc/styles/.gitignore",
+    "doc/styles/Vocab/ANSYS/accept.txt",
+    "doc/styles/Vocab/ANSYS/reject.txt",
+    "doc/source/conf.py",
+    "doc/source/index.rst",
+    "doc/source/_static/README.md",
+    "doc/source/_templates/sidebar-nav-bs.html",
+    "doc/source/_templates/README.md",
+    "examples/README.md",
+    "LICENSE.rst",
+    "pyproject.toml",
+    "README.rst",
+    "requirements/requirements_build.txt",
+    "requirements/requirements_doc.txt",
+    "requirements/requirements_style.txt",
+    "requirements/requirements_tests.txt",
+    "setup_environment.py",
+    f"src/ansys/solutions/{SOLUTION_VARS['__solution_name_slug']}/__init__.py",
+    f"src/ansys/solutions/{SOLUTION_VARS['__solution_name_slug']}/main.py",
+    f"src/ansys/solutions/{SOLUTION_VARS['__solution_name_slug']}/scripts/README.md",
+    f"src/ansys/solutions/{SOLUTION_VARS['__solution_name_slug']}/solution/definition.py",
+    f"src/ansys/solutions/{SOLUTION_VARS['__solution_name_slug']}/solution/first_step.py",
+    f"src/ansys/solutions/{SOLUTION_VARS['__solution_name_slug']}/solution/other_step.py",
+    f"src/ansys/solutions/{SOLUTION_VARS['__solution_name_slug']}/ui/app.py",
+    f"src/ansys/solutions/{SOLUTION_VARS['__solution_name_slug']}/ui/first.py",
+    f"src/ansys/solutions/{SOLUTION_VARS['__solution_name_slug']}/ui/other.py",
+    f"src/ansys/solutions/{SOLUTION_VARS['__solution_name_slug']}/ui/page.py",
+    f"src/ansys/solutions/{SOLUTION_VARS['__solution_name_slug']}/ui/assets/style.css",
+    f"src/ansys/solutions/{SOLUTION_VARS['__solution_name_slug']}/ui/assets/Graphics/ansys-solutions-horizontal-logo.png",
+    "tests/conftest.py",
+    "tests/common_test_files/README.md",
+    "tests/integration/test_dummy.py",
+    "tests/unit/test_dummy.py",
+    "tox.ini",
+    ".flake8",
+    ".github/workflows/ci_cd.yml",
+    ".gitignore",
+    ".pre-commit-config.yaml",
+    ".vscode/launch.json",
+]
+
 # A dictionary relating templates name with their variables and structure
 TEMPLATES_VARIABLES_AND_STRUCTURE = {
     "common": [PYCOMMON_VARS, PYCOMMON_STRUCTURE],
@@ -265,6 +317,7 @@ TEMPLATES_VARIABLES_AND_STRUCTURE = {
     "pyace-fast": [PYACE_VARS, PYACE_FAST_STRUCTURE],
     "pyace": [PYACE_VARS, PYACE_PKG_STRUCTURE],
     "doc-project": [DOC_PROJECT_VARS, DOC_PROJECT_STRUCTURE],
+    "solution": [SOLUTION_VARS, SOLUTION_STRUCTURE],
 }
 
 

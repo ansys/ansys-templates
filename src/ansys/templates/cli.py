@@ -99,3 +99,8 @@ def pyace_flask():
 def pyace_grpc():
     """Create gRPC project initialized for any developer."""
     create_project("pyace-grpc")
+
+@new.command()
+def solution():
+    """Create a Solution based on the Solution Application Framework."""
+    create_project("solution")
