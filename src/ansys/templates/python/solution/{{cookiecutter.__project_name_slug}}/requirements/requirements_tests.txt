@@ -1,0 +1,14 @@
+coverage==6.4.1
+docker
+filelock==3.8.0
+flake8
+mock==4.0.3
+pyright
+pytest==7.1.2
+pytest-cov==3.0.0
+pytest-dependency==0.5.1
+pytest-flakes==4.0.5
+pytest-pep8
+pytest-pythonpath
+pytest-xdist==3.0.2
+selenium

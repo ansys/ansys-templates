@@ -1,0 +1,10 @@
+ansys-sphinx-theme==0.8.0
+numpydoc==1.4.0
+sphinx==5.3.0
+sphinx-copybutton==0.5.1
+sphinx_design==0.3.0
+sphinx-gallery==0.11.1
+sphinx_mdinclude==0.5.3
+sphinx-tabs==3.4.1
+sphinx_toolbox==3.2.0
+sphinxcontrib-mermaid>=0.7.1

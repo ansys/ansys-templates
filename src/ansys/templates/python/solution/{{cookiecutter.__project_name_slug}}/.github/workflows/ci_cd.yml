@@ -1,0 +1,134 @@
+name: CI-CD
+
+on:
+  pull_request:
+    branches:
+      - main
+    types: [opened, labeled, unlabeled, synchronize, closed]
+  workflow_dispatch:
+
+env:
+  MAIN_PYTHON_VERSION: '3.7'
+  DOCUMENTATION_CNAME: '{{ cookiecutter.__solution_name_slug }}.docs.solutions.ansys.com'
+  POETRY_VERSION: 1.1.15
+  TOX_VERSION: 3.27.1
+  POETRY_HTTP_BASIC_PYANSYS_PRIVATE_PYPI_USERNAME: 'PAT'
+  POETRY_HTTP_BASIC_PYANSYS_PRIVATE_PYPI_PASSWORD: ${{ secrets.PYANSYS_PRIVATE_PYPI_PAT }}
+  POETRY_HTTP_BASIC_SOLUTIONS_PRIVATE_PYPI_USERNAME: 'PAT'
+  POETRY_HTTP_BASIC_SOLUTIONS_PRIVATE_PYPI_PASSWORD: ${{ secrets.SOLUTIONS_PRIVATE_PYPI_PAT }}
+
+concurrency:
+  group: ${{ github.workflow }}-${{ github.ref }}
+  cancel-in-progress: true
+
+jobs:
+
+  check-doc-style:
+    if: |
+      contains(github.event.pull_request.labels.*.name, 'documentation') &&
+      github.event_name == 'pull_request' ||
+      github.event_name == 'push' &&
+      contains(github.ref, 'refs/tags')
+    name: Check documentation style
+    runs-on: ubuntu-latest
+    steps:
+      - name: Check documentation style
+        uses: Solution-Applications/actions/check-doc-style@v0.0.1
+        with:
+          gh-token: ${{ secrets.GITHUB_TOKEN }}
+
+  build-doc:
+    name: Build documentation
+    needs: [check-doc-style]
+    runs-on: ubuntu-latest
+    steps:
+      - name: Build documentation
+        uses: Solution-Applications/actions/build-doc@v0.0.1
+        with:
+          python-version: ${{ env.MAIN_PYTHON_VERSION }}
+          documentation-artifact: html-documentation
+
+  deploy-doc:
+    if: |
+      contains(github.event.pull_request.labels.*.name, 'documentation') &&
+      github.event_name == 'pull_request' &&
+      github.event.pull_request.merged == true ||
+      github.event_name == 'push' &&
+      contains(github.ref, 'refs/tags')
+    name: Deploy documentation
+    needs: [build-doc]
+    runs-on: ubuntu-latest
+    steps:
+      - name: Deploy stable documentation
+        uses: pyansys/actions/doc-deploy-stable@v2
+        with:
+            doc-artifact-name: 'html-documentation'
+            cname: ${{ env.DOCUMENTATION_CNAME }}
+            token: ${{ secrets.GITHUB_TOKEN }}
+            python-version: ${{ env.MAIN_PYTHON_VERSION }}
+
+  check-copyright:
+    name: Check copyright
+    runs-on: ubuntu-latest
+    steps:
+      - name: Check copyright
+        uses: Solution-Applications/actions/check-copyright@v0.0.1
+        with:
+          token: ${{ secrets.WORKFLOW_TOKEN }}
+
+  check-code-style:
+    name: Check code style
+    needs: [check-copyright]
+    runs-on: ubuntu-latest
+    steps:
+      - name: Check code style
+        uses: Solution-Applications/actions/check-code-style@v0.0.1
+        with:
+          python-version: ${{ env.MAIN_PYTHON_VERSION }}
+          tox-version: ${{ env.TOX_VERSION }}
+
+  build:
+    name: Build 
+    needs: [check-code-style]
+    runs-on: ubuntu-latest
+    steps:
+      - name: Build
+        uses: Solution-Applications/actions/build@v0.0.1
+        with:
+          python-version: ${{ env.MAIN_PYTHON_VERSION }}
+          artifact-name: wheel
+          poetry-version: ${{ env.POETRY_VERSION }}
+          retention-days: 7
+
+  run-tests:
+    name: Run tests
+    needs: [build]
+    runs-on: ubuntu-latest
+    strategy:
+      matrix:
+        python-version: ['3.7', '3.8']
+      fail-fast: false
+    steps:
+      - name: Run tests
+        uses: Solution-Applications/actions/run-tests@v0.0.1
+        with:
+          python-version: ${{ env.MAIN_PYTHON_VERSION }}
+          poetry-version: ${{ env.POETRY_VERSION }}
+          tox-version: ${{ env.TOX_VERSION }}
+          check-coverage-ratio: 'false'
+          min-coverage-ratio: 80
+          retention-days: 7
+
+  release:
+    if: |
+      github.event_name == 'push' &&
+      contains(github.ref, 'refs/tags')
+    name: Release
+    needs: [deploy-doc, run-tests]
+    runs-on: ubuntu-latest
+    steps:
+      - name: Release
+        uses: Solution-Applications/actions/release@v0.0.1
+        with:
+          python-version: ${{ env.MAIN_PYTHON_VERSION }}
+          solutions-pypi-token: ${{ secrets.SOLUTIONS_PRIVATE_PYPI_PAT }}

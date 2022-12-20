@@ -1,0 +1,66 @@
+[build-system]
+requires = ["poetry-core>=1.0.0,<1.3.0", "setuptools>=65.0"]
+build-backend = "poetry.core.masonry.api"
+
+[tool.poetry]
+name = "{{cookiecutter.__pkg_name}}"
+version = "{{cookiecutter.__version}}"
+description = "{{cookiecutter.__short_description}}"
+license = "Proprietary"
+authors = ["ANSYS, Inc. <solution-applications.maintainers@ansys.com>"]
+maintainers = ["ANSYS, Inc. <solution-applications.maintainers@ansys.com>"]
+readme = "README.rst"
+repository = "{{ cookiecutter.__repository_url }}"
+documentation = "{{ cookiecutter.__repository_url }}"
+keywords = ["Ansys Solutions"]
+classifiers = [
+    "Development Status :: 3 - Alpha",
+    "Intended Audience :: Other Audience",
+    "License :: Other/Proprietary License",
+    "Natural Language :: English",
+    "Operating System :: Microsoft :: Windows",
+    "Private :: Do Not Upload",
+    "Programming Language :: Python :: 3",
+    "Topic :: Scientific/Engineering"
+]
+packages = [
+    { include = "ansys", from = "src" },
+]
+
+[[tool.poetry.source]]
+name = "solutions-private-pypi"
+url = "https://pkgs.dev.azure.com/pyansys/_packaging/ansys-solutions/pypi/simple/"
+default = false
+secondary = true
+
+[tool.poetry.dependencies]
+python = ">=3.7, <3.9"
+ansys-dash-treeview = {version = "0.0.1.dev0", source = "solutions-private-pypi"}
+ansys-saf-glow = {version = "0.*", source = "solutions-private-pypi" }
+ansys-saf-portal = {version = "0.*", source = "solutions-private-pypi"}
+dash = {version = "2.6.1"}
+dash_bootstrap_components = {version = "1.2.1"}
+dash-extensions = {version = "0.1.3"}
+dash-iconify = {version = "0.1.2"}
+dash-uploader = {version = "0.6.0"} 
+toml = {version = "*"}
+tox = {version = "*"} 
+
+[tool.poetry.plugins."console_scripts"]
+{{ cookiecutter.__solution_name_slug }}_main = "ansys.solutions.{{ cookiecutter.__solution_name_slug }}.main:main"
+
+[tool.black]
+line-length = {{ cookiecutter.__max_linelength }}
+
+[tool.isort]
+profile = "black"
+force_sort_within_sections = true
+line_length = {{ cookiecutter.__max_linelength }}
+default_section = "THIRDPARTY"
+src_paths = ["doc", "src", "tests"]
+
+[tool.coverage.run]
+source = ["ansys.solutions"]
+
+[tool.coverage.report]
+show_missing = true
