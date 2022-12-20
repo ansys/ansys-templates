@@ -12,7 +12,7 @@ __pycache__/
 
 # Distribution / packaging
 .Python
-build/
+# build/
 develop-eggs/
 dist/
 downloads/
@@ -29,6 +29,7 @@ share/python-wheels/
 .installed.cfg
 *.egg
 MANIFEST
+*.whl
 
 # PyInstaller
 #  Usually these files are written by a python script from a template
@@ -43,13 +44,15 @@ pip-delete-this-directory.txt
 # Unit test / coverage reports
 htmlcov/
 .tox/
+{toxworkdir}/
 .nox/
-.cov
 .coverage
 .coverage.*
 .cache
 nosetests.xml
 coverage.xml
+coverage.json
+coverage.lcov
 *.cover
 *.py,cover
 .hypothesis/
@@ -87,6 +90,9 @@ target/
 profile_default/
 ipython_config.py
 
+# VS Code
+# .vscode/
+
 # pyenv
 #   For a library or package, you might want to ignore these files since the code is
 #   intended to run in multiple environments; otherwise, check them in:
@@ -104,7 +110,7 @@ ipython_config.py
 #   This is especially recommended for binary packages to ensure reproducibility, and is more
 #   commonly ignored for libraries.
 #   https://python-poetry.org/docs/basic-usage/#commit-your-poetrylock-file-to-version-control
-#poetry.lock
+# poetry.lock
 
 # PEP 582; used by e.g. github.com/David-OConnor/pyflow
 __pypackages__/
@@ -154,12 +160,6 @@ cython_debug/
 #  be found at https://github.com/github/gitignore/blob/main/Global/JetBrains.gitignore
 #  and can be added to the global gitignore or merged into this file.  For a more nuclear
 #  option (not recommended) you can uncomment the following to ignore the entire idea folder.
-.idea/
-
-# Visual Studio
-.vs/
+#.idea/
 
 # End of https://www.toptal.com/developers/gitignore/api/python
-
-# Ignore baked output cookies from debugging
-output/

@@ -1,148 +1,247 @@
-Welcome to Ansys templates
-==========================
-|pyansys| |python| |pypi| |GH-CI| |codecov| |MIT| |black|
+#######################################
+Ansys Solutions 
+#######################################
 
-.. |pyansys| image:: https://img.shields.io/badge/Py-Ansys-ffc107.svg?logo=data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAABAAAAAQCAIAAACQkWg2AAABDklEQVQ4jWNgoDfg5mD8vE7q/3bpVyskbW0sMRUwofHD7Dh5OBkZGBgW7/3W2tZpa2tLQEOyOzeEsfumlK2tbVpaGj4N6jIs1lpsDAwMJ278sveMY2BgCA0NFRISwqkhyQ1q/Nyd3zg4OBgYGNjZ2ePi4rB5loGBhZnhxTLJ/9ulv26Q4uVk1NXV/f///////69du4Zdg78lx//t0v+3S88rFISInD59GqIH2esIJ8G9O2/XVwhjzpw5EAam1xkkBJn/bJX+v1365hxxuCAfH9+3b9/+////48cPuNehNsS7cDEzMTAwMMzb+Q2u4dOnT2vWrMHu9ZtzxP9vl/69RVpCkBlZ3N7enoDXBwEAAA+YYitOilMVAAAAAElFTkSuQmCC
-   :target: https://docs.pyansys.com/
-   :alt: PyAnsys
+Introduction
+============
 
-.. |python| image:: https://img.shields.io/pypi/pyversions/ansys-templates?logo=pypi
-   :target: https://pypi.org/project/ansys-templates/
-   :alt: Python
+Ansys Solutions 
 
-.. |pypi| image:: https://img.shields.io/pypi/v/ansys-templates.svg?logo=python&logoColor=white
-   :target: https://pypi.org/project/ansys-templates/
-   :alt: PyPI
+  * Solution name: **solution**
+  * Package name: **ansys-solutions-**
 
-.. |codecov| image:: https://codecov.io/gh/ansys/ansys-templates/branch/main/graph/badge.svg
-   :target: https://codecov.io/gh/ansys/ansys-templates
-   :alt: Codecov
+Installation
+============
 
-.. |GH-CI| image:: https://github.com/ansys/ansys-templates/actions/workflows/ci.yml/badge.svg
-   :target: https://github.com/ansys/ansys-templates/actions/workflows/ci.yml
-   :alt: CH-CI
-
-.. |MIT| image:: https://img.shields.io/badge/License-MIT-yellow.svg
-   :target: https://opensource.org/licenses/MIT
-   :alt: MIT
-
-.. |black| image:: https://img.shields.io/badge/code%20style-black-000000.svg?style=flat
-   :target: https://github.com/psf/black
-   :alt: Black
-
-
-The ``ansys-templates`` repository holds a collection of useful templates compliant
-with PyAnsys guidelines. It also provides the ``ansys-templates`` command line tool
-for interactively generating new projects based on previous templates.
-
-The main advantages of using this tool are:
-
-- Building process is fully interactive. There is no need to manually modify files.
-- Output of the project can easily be customized during the rendering process.
-- Generated projects are compliant with `PyAnsys Developer's Guidelines`_.
-
-.. _PyAnsys Developer's Guidelines: https://dev.docs.pyansys.com/
-
-For information on using this tool, see the `Ansys Templates Documentation`_.
-
-.. _Ansys Templates Documentation: https://templates.ansys.com/
-
-.. image:: https://github.com/ansys/ansys-templates/raw/main/doc/source/_static/basic_usage.gif
-
-
-How to install
---------------
-Users can install ``ansys-templates`` by running:
-
-.. code-block:: text
-        
-    python -m pip install ansys-templates
-
-The usage of `pipx`_ is encouraged too. See `installing ansys-templates using
-pipx`_.
-
-.. _pipx: https://pypa.github.io/pipx/
-.. _installing ansys-templates using pipx: https://templates.pyansys.com/getting_started/index.html#installing-pipx
-
-
-Basic commands
---------------
-The following commands are provided with ``ansys-templates``:
-
-- ``ansys-templates --help``: lists information about the tool.
-- ``ansys-templates list``: lists all available templates.
-- ``ansys-templates new <template name>``: creates a new project from template.
-
-
-Available templates
--------------------
-Available templates in ``ansys-templates`` are:
-
-- ``doc-project``: Create a documentation project using Sphinx.
-- ``pybasic``: Create a basic Python Package.
-- ``pyansys``: Create a PyAnsys Python Package project.
-- ``pyansys-advanced``: Create an advanced PyAnsys Python Package project.
-- ``pyansys-openapi-client``: Create an OpenAPI Client Package project.
-- ``pyace``: Create a Python project for any method developers.
-- ``pyace-flask``: Create a Flask project initialized for any developer.
-- ``pyace-grpc``: Create gRPC project initialized for any developer.
-- ``pyace-fast``: Create a FastAPI project initialized for any developer.
-- ``solution``: Create a Solution based on the Solution Application Framework.
-
-
-Template features
------------------
-The following table summarizes the main properties for each of the templates
-available in ``ansys-templates``:
-
-+-------------------------+-----------------------+-----------------+---------+----------+----------------+---------+
-| Template                | setup.py              | pyproject.toml  | Actions | tox.ini  | requirements/  | Docker  |
-+=========================+=======================+=================+=========+==========+================+=========+
-| doc-project             |                       |                 |  ``X``  |  ``X``   |  ``X``         |         |
-+-------------------------+-----------------------+-----------------+---------+----------+----------------+---------+
-| pybasic                 | ``X``                 |                 |         |          |                |         |
-+-------------------------+-----------------------+-----------------+---------+----------+----------------+---------+
-| pyansys                 |  ``X``                |  ``X``          |  ``X``  |          |                |         |
-+-------------------------+-----------------------+-----------------+---------+----------+----------------+---------+
-| pyansys-advanced        |  ``X``                |  ``X``          |  ``X``  |  ``X``   |  ``X``         |         |
-+-------------------------+-----------------------+-----------------+---------+----------+----------------+---------+
-| pyansys-openapi-client  |                       |                 |         |          |                |         |
-+-------------------------+-----------------------+-----------------+---------+----------+----------------+---------+
-| pyace                   |  ``X``                |  ``X``          |  ``X``  |  ``X``   |  ``X``         |  ``X``  |
-+-------------------------+-----------------------+-----------------+---------+----------+----------------+---------+
-| pyace-fast              |  ``X``                |  ``X``          |  ``X``  |  ``X``   |  ``X``         |  ``X``  |
-+-------------------------+-----------------------+-----------------+---------+----------+----------------+---------+
-| pyace-flask             |  ``X``                |  ``X``          |  ``X``  |  ``X``   |  ``X``         |  ``X``  |
-+-------------------------+-----------------------+-----------------+---------+----------+----------------+---------+
-| pyace-grpc              |  ``X``                |  ``X``          |  ``X``  |  ``X``   |  ``X``         |  ``X``  |
-+-------------------------+-----------------------+-----------------+---------+----------+----------------+---------+
-| solution                |                       |  ``X``          |  ``X``  |  ``X``   |  ``X``         |         |
-+-------------------------+-----------------------+-----------------+---------+----------+----------------+---------+
-
-
-Demo branches
+Prerequisites
 -------------
-To have a better idea on how each template will look once it gets rendered, see
-its corresponding demonstration branch.
 
-* Demo branch for `doc-project`_
-* Demo branch for `pybasic`_
-* Demo branch for `pyansys`_
-* Demo branch for `pyansys-advanced using flit`_
-* Demo branch for `pyansys-advanced using poetry`_
-* Demo branch for `pyansys-advanced using setuptools`_
-* Demo branch for `pyace`_
-* Demo branch for `pyace-fast`_
-* Demo branch for `pyace-flask`_
-* Demo branch for `pyace-grpc`_
+Python version support
+~~~~~~~~~~~~~~~~~~~~~~
 
-.. _doc-project: https://github.com/ansys/ansys-templates/tree/demo/doc-project
-.. _pybasic: https://github.com/ansys/ansys-templates/tree/demo/pybasic
-.. _pyansys: https://github.com/ansys/ansys-templates/tree/demo/pyansys
-.. _pyansys-advanced using flit: https://github.com/ansys/ansys-templates/tree/demo/pyansys-advanced-flit
-.. _pyansys-advanced using poetry: https://github.com/ansys/ansys-templates/tree/demo/pyansys-advanced-poetry
-.. _pyansys-advanced using setuptools: https://github.com/ansys/ansys-templates/tree/demo/pyansys-advanced-setuptools
-.. _pyace: https://github.com/ansys/ansys-templates/tree/demo/pyace-pkg
-.. _pyace-fast: https://github.com/ansys/ansys-templates/tree/demo/pyace-fast
-.. _pyace-flask: https://github.com/ansys/ansys-templates/tree/demo/pyace-flask
-.. _pyace-grpc: https://github.com/ansys/ansys-templates/tree/demo/pyace-grpc
+Officially Python 3.7 to 3.9.
+
+Private PyPI server
+~~~~~~~~~~~~~~~~~~~
+
+Connection to Ansys-Solutions private PyPI server is required. Access is controlled via a ``Personal Access Token (PAT)`` which is available
+in the `Solutions Developer's Guide <https://dev-docs.solutions.ansys.com/index.html>`_. To declare the PAT on your system:
+
+  1. Visit the Getting Started section in the `Solutions Developer's Guide <https://dev-docs.solutions.ansys.com/index.html>`_, navigate to the Private PyPI servers section
+     and copy the token related to Ansys-Solutions PyPI.
+  2. Create a system environment variable named SOLUTIONS_PRIVATE_PYPI_PAT and assign the token.
+  
+Setup the development environment
+---------------------------------
+
+This procedure is intended for software developers that will contribute to the package maintenance and development. 
+
+Setup the default configuration
+~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+
+1. Setup the Python environment:
+
+  .. code:: bash
+
+    python setup_environment.py -d all
+
+2. Activate the virtual environment:
+
+  * For Linux system:
+
+    .. code:: bash
+
+      source .venv/bin/activate
+
+  * For Windows CMD:
+
+    .. code:: bash
+
+      .venv\Scripts\activate.bat
+
+  * For Windows Powershell:
+
+    .. code:: bash
+
+      .venv\Scripts\Activate.ps1
+
+From now on, all the commands listed in the documentation must be executed within the virtual environment.
+
+Update dependencies
+~~~~~~~~~~~~~~~~~~~
+
+You can add dependencies to the package by updating the [tool.poetry.dependencies] section in the pyproject.toml. file.
+Each time the dependencies are changed it is important to update the virtual environment by running the following command:
+
+  .. code:: bash
+
+    poetry install
+
+Start the application
+=====================
+
+To start the application:
+
+  .. code:: bash
+
+    saf run
+
+Code style check
+================
+
+In this project, the following code style checks are required:
+
+  * black 
+
+  * isort
+
+  * flake8
+
+  * codespell
+
+  * pydocstyle
+
+All-in-one checks using pre-commit
+----------------------------------
+
+All those checks can be triggered with one single tool: ``pre-commit``. ``pre-commit`` is a GIT hook allowing to trigger all the code style commands at once at the point when you perform a git commit.
+``pre-commit`` prevents you from forgetting to run the required actions against your code and it ensures the exact same style policies are applied. The code style policy is defined in the 
+``.pre-commit-config.yaml`` at project root. 
+
+Developers are not forced but encouraged to install ``pre-commit`` via:
+
+  .. code:: bash
+
+    python -m pip install pre-commit
+        
+  .. code:: bash
+        
+    pre-commit install
+
+To run pre-commit:
+
+  .. code:: bash
+
+    pre-commit run --all-files --show-diff-on-failure
+
+How to remove ``pre-commit``? 
+
+  * Navigate to the git directory at the root of the repository
+
+  * Select the hooks directory
+
+  * Remove pre-commit file
+
+Sequential checks
+-----------------
+
+Install code style requirements:
+
+  .. code:: bash
+
+    python -m pip install -r requirements/requirements_style.txt
+
+Run black:
+
+  .. code:: bash
+
+    python -m black .
+
+Run isort:
+
+  .. code:: bash
+
+    python -m isort .
+
+Run flake8:
+
+  .. code:: bash
+
+    python -m flake8 .
+
+Run codespell:
+
+  .. code:: bash
+
+    python -m codespell .
+
+Testing
+=======
+
+**Unit tests** and **Integration tests** are executed via the ``pytest`` framework. 
+
+To run the unit tests:
+
+  .. code:: bash
+
+    pytest tests/unit
+
+To run the integration tests:
+
+  .. code:: bash
+
+    pytest tests/integration
+
+To run all the tests:
+
+  .. code:: bash
+
+    pytest
+
+To compute the coverage ratio and to generate a report:
+
+  .. code:: bash
+
+    pytest -p no:faulthandler --cov=ansys.solutions --cov-report=term --cov-report=xml --cov-report=html -vvv
+
+To run the tests against multiple Python versions automatically:
+
+  .. code:: bash
+
+    tox -e py
+
+Documentation
+=============
+
+Run the following command:
+
+  .. code:: bash
+
+    sphinx-build doc/source doc/build/html --color -vW -bhtml
+
+Build
+=====
+
+Using the build module
+----------------------
+
+Build the package:
+
+  .. code:: bash
+
+    python -m build
+
+Using poetry 
+------------
+
+Build the package:
+
+  .. code:: bash
+
+    poetry build
+
+Automation using TOX
+====================
+
+``tox`` is a tool for automating all the commands listed above from code styling to testing and build. ``tox`` creates its own virtual environment so anything
+being tested is isolated from the project in order to guarantee project's integrity. The following environments commands are provided:
+
+  * **tox -e style**: will check for coding style quality.
+
+  * **tox -e py**: checks for unit tests.
+
+  * **tox -e py-coverage**: checks for unit testing and code coverage.
+
+  * **tox -e doc**: checks for documentation building process.
+
+  * **tox -e build**: checks source code build.

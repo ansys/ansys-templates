@@ -1,33 +1,55 @@
+# ©2022, ANSYS Inc. Unauthorized use, distribution or duplication is prohibited.
+
 """Sphinx documentation configuration file."""
 
+# ==================================================== [Imports] ==================================================== #
+
 import os
+from datetime import datetime
+from pathlib import Path
 
-from ansys_sphinx_theme import ansys_favicon, ansys_logo_black, get_version_match
+import toml
 
-from ansys.templates import __version__
+from ansys_sphinx_theme import get_version_match
+
+# ============================================== [Project Information] ============================================== #
+
+package_configuration = toml.load(
+    Path(__file__).parent.parent.parent.absolute() / "pyproject.toml"
+)
 
 # Project information
-project = "ansys-templates"
-copyright = "(c) 2022 ANSYS, Inc. All rights reserved"
+project = package_configuration["tool"]["poetry"]["name"]
+copyright = f"(c) {datetime.now().year} ANSYS, Inc. All rights reserved"
 author = "ANSYS, Inc."
-release = version = __version__
+release = version = package_configuration["tool"]["poetry"]["version"]
 cname = os.getenv("DOCUMENTATION_CNAME", "nocname.com")
 
-# use the default pyansys logo
-html_logo = ansys_logo_black
-html_favicon = ansys_favicon
+
+# ============================================ [Options for HTML output] ============================================ #
+
+# Select desired logo, theme, and declare the html title
+html_logo = str(
+    Path(__file__).parent.absolute()
+    / "_static"
+    / "ansys-solutions-logo-black-background.png"
+)
 html_theme = "ansys_sphinx_theme"
-html_title = "ansys-templates"
+html_short_title = html_title = package_configuration["tool"]["poetry"]["name"]
 
 # specify the location of your github repo
 html_theme_options = {
-    "github_url": "https://github.com/pyansys/pyansys-template",
+    "github_url": package_configuration["tool"]["poetry"]["repository"],
     "show_prev_next": False,
+    "show_breadcrumbs": True,
+    "additional_breadcrumbs": [
+        ("PyAnsys", "https://docs.pyansys.com/"),
+    ],
     "switcher": {
-        "json_url": f"https://{cname}/release/versions.json",
-        "version_match": get_version_match(__version__),
+        "json_url": f"{cname}/release/versions.json",
+        "version_match": get_version_match(version),
     },
-    "navbar_end": ["version-switcher", "theme-switcher", "navbar-icon-links"]
+    "navbar_end": ["version-switcher", "theme-switcher", "navbar-icon-links"],
 }
 
 # Sphinx extensions
@@ -37,18 +59,11 @@ extensions = [
     "numpydoc",
     "sphinx.ext.intersphinx",
     "sphinx_copybutton",
+    "sphinx_tabs.tabs"
 ]
 
 # Intersphinx mapping
-intersphinx_mapping = {
-    "python": ("https://docs.python.org/dev", None),
-    # kept here as an example
-    # "scipy": ("https://docs.scipy.org/doc/scipy/reference", None),
-    # "numpy": ("https://numpy.org/devdocs", None),
-    # "matplotlib": ("https://matplotlib.org/stable", None),
-    # "pandas": ("https://pandas.pydata.org/pandas-docs/stable", None),
-    # "pyvista": ("https://docs.pyvista.org/", None),
-}
+intersphinx_mapping = {"python": ("https://docs.python.org/dev", None)}
 
 # numpydoc configuration
 numpydoc_show_class_members = False
@@ -71,7 +86,6 @@ numpydoc_validation_checks = {
     "RT02",  # The first line of the Returns section should contain only the
     # type, unless multiple values are being returned"
 }
-
 
 # static path
 html_static_path = ["_static"]

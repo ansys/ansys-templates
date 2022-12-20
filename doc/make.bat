@@ -1,5 +1,4 @@
-@echo OFF
-setlocal
+@ECHO OFF
 
 pushd %~dp0
 
@@ -13,7 +12,6 @@ set BUILDDIR=_build
 
 if "%1" == "" goto help
 if "%1" == "clean" goto clean
-if "%1" == "pdf" goto pdf
 
 %SPHINXBUILD% >NUL 2>NUL
 if errorlevel 9009 (
@@ -38,12 +36,6 @@ goto end
 
 :help
 %SPHINXBUILD% -M help %SOURCEDIR% %BUILDDIR% %SPHINXOPTS% %O%
-
-:pdf
-	%SPHINXBUILD% -M latex %SOURCEDIR% %BUILDDIR% %SPHINXOPTS% %O%
-	cd "%BUILDDIR%\latex"
-	for %%f in (*.tex) do (
-	pdflatex "%%f" --interaction=nonstopmode)
 
 :end
 popd
