@@ -112,6 +112,7 @@ jobs:
           python -m pip install --upgrade pip ${{ matrix.cfg.build-system }} tox pre-commit
           if [[ ${{ matrix.cfg.template }} != "doc-project" ]]; then python -m pip install -e .; fi
           # Initialize template as Git repository so pre-commit can be used
+          git config --global init.defaultBranch <name>
           git init
           git config --local user.name "User"
           git config --local user.email "user@email-server.domain"
