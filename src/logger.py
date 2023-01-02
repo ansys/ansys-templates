@@ -1,5 +1,5 @@
 """Logger module."""
-# Copyright (c) 2022, My Company. Unauthorised use, distribution or duplication is prohibited
+# Copyright (c) 2023, My Company. Unauthorised use, distribution or duplication is prohibited
 
 from datetime import datetime
 import logging
