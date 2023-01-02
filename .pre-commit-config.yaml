@@ -16,9 +16,11 @@ repos:
   - id: flake8
 
 - repo: https://github.com/codespell-project/codespell
-  rev: v2.1.0
+  rev: v2.2.2
   hooks:
   - id: codespell
+    exclude: ".tmp"
+    args: ["--ignore-words=.codespell.ignore", "--exclude-file=.codespell.exclude"]
 
 - repo: https://github.com/pycqa/pydocstyle
   rev: 6.1.1

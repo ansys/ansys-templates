@@ -4,13 +4,11 @@
 
 # ==================================================== [Imports] ==================================================== #
 
+from ansys_sphinx_theme import ansys_favicon, get_version_match
 import os
 from datetime import datetime
 from pathlib import Path
-
 import toml
-
-from ansys_sphinx_theme import get_version_match
 
 # ============================================== [Project Information] ============================================== #
 
@@ -25,7 +23,6 @@ author = "ANSYS, Inc."
 release = version = package_configuration["tool"]["poetry"]["version"]
 cname = os.getenv("DOCUMENTATION_CNAME", "nocname.com")
 
-
 # ============================================ [Options for HTML output] ============================================ #
 
 # Select desired logo, theme, and declare the html title
@@ -35,6 +32,7 @@ html_logo = str(
     / "ansys-solutions-logo-black-background.png"
 )
 html_theme = "ansys_sphinx_theme"
+html_favicon = ansys_favicon
 html_short_title = html_title = package_configuration["tool"]["poetry"]["name"]
 
 # specify the location of your github repo
@@ -94,7 +92,7 @@ html_static_path = ["_static"]
 templates_path = ["_templates"]
 
 # The suffix(es) of source filenames.
-source_suffix = ".rst"
+source_suffix = [".rst", ".md"]
 
 # The master toctree document.
 master_doc = "index"
