@@ -5,10 +5,12 @@ from ansys.solutions.{{ cookiecutter.__solution_name_slug }}.solution.first_step
 from ansys.solutions.{{ cookiecutter.__solution_name_slug }}.solution.other_step import OtherStep
 
 class Steps(StepsModel):
+    """Worflow definition."""
     first_step: FirstStep
     other_step: OtherStep
 
 
 class {{ cookiecutter.__solution_definition_name }}(Solution):
+    """Solution definition."""
     display_name = "{{ cookiecutter.solution_display_name.replace('"', '') }}"
     steps: Steps

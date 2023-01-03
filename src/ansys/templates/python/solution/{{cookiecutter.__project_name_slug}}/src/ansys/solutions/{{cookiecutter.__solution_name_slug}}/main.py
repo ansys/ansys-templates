@@ -6,6 +6,7 @@ from ansys.solutions.{{ cookiecutter.__solution_name_slug }}.ui import app
 
 
 def main():
+    """Entry point."""
     glow_main("{{ cookiecutter.__solution_name_slug }}", definition, app)
 
 

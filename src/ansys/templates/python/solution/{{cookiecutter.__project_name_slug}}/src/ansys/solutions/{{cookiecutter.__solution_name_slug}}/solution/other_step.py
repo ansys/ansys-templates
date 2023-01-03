@@ -4,4 +4,5 @@ from ansys.saf.glow.solution import StepModel
 
 
 class OtherStep(StepModel):
+    """Other step."""
     id: str = "hey"

@@ -3,4 +3,5 @@
 from dash_extensions.enrich import html
 
 def layout():
+    """Layout."""
     return html.Div([])

@@ -99,6 +99,7 @@ def return_to_portal(pathname):
     prevent_initial_call=True,
 )
 def display_page(pathname, value):
+    """Display page."""
     project = DashClient[{{ cookiecutter.__solution_definition_name }}].get_project(pathname)
     triggered_id = callback_context.triggered[0]["prop_id"].split(".")[0]
     error_message = None
