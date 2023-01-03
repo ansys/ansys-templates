@@ -1,9 +1,11 @@
 # ©2022, ANSYS Inc. Unauthorized use, distribution or duplication is prohibited.
 
 from ansys.saf.glow.client.dashclient import DashClient
+from dash_extensions.enrich import Input, Output, State, callback, dcc, html
+
 from ansys.solutions.{{ cookiecutter.__solution_name_slug }}.solution.definition import {{cookiecutter.__solution_definition_name}}
 from ansys.solutions.{{ cookiecutter.__solution_name_slug }}.solution.first_step import FirstStep
-from dash_extensions.enrich import Input, Output, State, callback, dcc, html
+
 
 def layout(step: FirstStep):
     """Layout."""

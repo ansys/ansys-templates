@@ -1,15 +1,15 @@
 # ©2022, ANSYS Inc. Unauthorized use, distribution or duplication is prohibited.
 
-from ansys_dash_treeview import AnsysDashTreeview
 from ansys.saf.glow.client.dashclient import DashClient
-from ansys.solutions.{{ cookiecutter.__solution_name_slug }}.solution.definition import (
-    {{ cookiecutter.__solution_definition_name }},
-)
-from ansys.solutions.{{ cookiecutter.__solution_name_slug }}.ui import first
-from ansys.solutions.{{ cookiecutter.__solution_name_slug }}.ui import other
+from ansys_dash_treeview import AnsysDashTreeview
 import dash_bootstrap_components as dbc
 from dash_extensions.enrich import Input, Output, callback, callback_context, dcc, html
 from dash_iconify import DashIconify
+
+from ansys.solutions.{{ cookiecutter.__solution_name_slug }}.solution.definition import (
+    {{ cookiecutter.__solution_definition_name }},
+)
+from ansys.solutions.{{ cookiecutter.__solution_name_slug }}.ui import first, other
 
 
 step_list = [
