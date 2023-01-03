@@ -6,7 +6,7 @@ from ansys.solutions.{{ cookiecutter.__solution_name_slug }}.solution.first_step
 from ansys.solutions.{{ cookiecutter.__solution_name_slug }}.solution.other_step import OtherStep
 
 class Steps(StepsModel):
-    """Worflow definition."""
+    """Workflow definition."""
     first_step: FirstStep
     other_step: OtherStep
 
