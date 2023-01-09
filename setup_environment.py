@@ -60,7 +60,7 @@ def parser():
         nargs="+",
         help="List of dependency types to be installed.",
         default=[],
-        choices=["run", "doc", "tests", "build", "style", "all"],
+        choices=["run", "doc", "tests", "build", "all"],
         required=False,
     )
     optional_inputs.add_argument(
@@ -95,7 +95,7 @@ def parser():
         "--sources-directory",
         type=Path,
         help="Path to sources directory.",
-        default=Path(__file__).parent.parent.absolute() / "src",
+        default=Path(__file__).parent.absolute() / "src",
         required=False,
     )
     optional_inputs.add_argument(
@@ -125,7 +125,7 @@ def check_inputs(args):
     """Check inputs consistency."""
     # Rework dependencies argument if all option is selected
     if "all" in args.dependencies:
-        args.dependencies = ["run", "doc", "tests", "build", "style"]
+        args.dependencies = ["run", "doc", "tests", "build"]
     # Activate build dependencies if build is required
     if args.build:
         if "run" not in args.dependencies and args.build_method == "build-system":
@@ -134,15 +134,18 @@ def check_inputs(args):
             args.dependencies.append("build")
     # Check if configuration file is available when run dependencies are activated
     if "run" in args.dependencies:
-        if not os.path.exists("pyproject.toml"):
+        configuration_file = Path(__file__).parent.absolute() / "pyproject.toml"
+        if not os.path.exists(configuration_file):
             raise FileNotFoundError(
                 "%s require a configuration file. No %s file detected."
                 % (args.build_system.title(), configuration_file)
             )
     # Check if requirement file is available when optional dependencies are activated
-    for requirement_type in ["doc", "tests", "build", "style"]:
+    for requirement_type in ["doc", "tests", "build"]:
         if requirement_type in args.dependencies:
-            requirement_file = f"requirements/requirements_{requirement_type}.txt"
+            requirement_file = (
+                Path(__file__).parent.absolute() / "requirements" / f"requirements_{requirement_type}.txt"
+            )
             if not os.path.exists(requirement_file):
                 raise FileNotFoundError(f"Missing {requirement_file}")
     # Convert package data paths to absolute
@@ -179,9 +182,10 @@ def check_inputs(args):
             raise FileExistsError(f"Source directory {args.sources_directory} does not exist.")
     # Check TOML consistency
     if "run" in args.dependencies:
-        package_config = toml.load("pyproject.toml")
+        configuration_file = Path(__file__).parent.absolute() / "pyproject.toml"
+        package_config = toml.load(configuration_file)
         if "readme" in package_config["tool"]["poetry"].keys():
-            readme_file = package_config["tool"]["poetry"]["readme"]
+            readme_file = Path(__file__).parent.absolute() / package_config["tool"]["poetry"]["readme"]
             if not os.path.exists(readme_file):
                 raise FileNotFoundError(
                     "A README file is declared in the configuration file but is missing in the project."
@@ -197,7 +201,6 @@ def show_parameters(args):
     sys.stdout.write("Doc dependencies         : %s\n" % ("yes" if "doc" in args.dependencies else "no"))
     sys.stdout.write("Tests dependencies       : %s\n" % ("yes" if "tests" in args.dependencies else "no"))
     sys.stdout.write("Build dependencies       : %s\n" % ("yes" if "build" in args.dependencies else "no"))
-    sys.stdout.write("Style dependencies       : %s\n" % ("yes" if "style" in args.dependencies else "no"))
     sys.stdout.write("Build system             : %s\n" % (args.build_system))
     sys.stdout.write("Build system version     : %s\n" % (args.build_system_version))
     sys.stdout.write("Build distribution       : %s\n" % ("yes" if args.build else "no"))
@@ -229,9 +232,9 @@ def get_private_sources(config_file):
     return private_sources
 
 
-def get_package_data(config_file):
+def get_package_data():
     """Get list of package data to include in the source distribution."""
-    package_config = toml.load(config_file)
+    package_config = toml.load("pyproject.toml")
     try:
         package_data = package_config["tool"]["poetry"]["include"]
     except:
@@ -291,9 +294,8 @@ def install_package_dependencies(args):
 
 
 def install_optional_dependencies(dependency_group):
-    """Install optional requirements (doc, tests, build or style)."""
-    file = os.path.join("requirements", f"requirements_{dependency_group}.txt")
-    command = f".venv/Scripts/python -m pip install -r {file}"
+    """Install optional requirements (doc, tests, or build)."""
+    command = ".venv/Scripts/python -m pip install -r requirements/requirements_%s.txt" % (dependency_group)
     subprocess.run(command, check=True)
 
 
@@ -327,12 +329,6 @@ def main():
     """Sequence of operations leading to the complete Python ecosystem."""
     # Start timer
     time_on = time.time()
-    # Get current working directory
-    working_directory = os.getcwd()
-    # Get installation directory
-    install_directory = Path(__file__).parent.absolute()
-    # Move to install directory
-    os.chdir(install_directory)
     # Read command line inputs
     args = parser()
     # Check inputs consistency
@@ -405,7 +401,7 @@ def main():
     sys.stdout.write("\n")
 
     # Install optional dependencies
-    for dependency_group in ["doc", "tests", "build", "style"]:
+    for dependency_group in ["doc", "tests", "build"]:
         sys.stdout.write("Install %s dependencies\n" % (dependency_group))
         if dependency_group in args.dependencies:
             install_optional_dependencies(dependency_group)
@@ -430,15 +426,12 @@ def main():
         sys.stdout.write("Skipped\n")
     sys.stdout.write("\n")
 
-    # Back to current working directory
-    os.chdir(install_directory)
-
     # Compute execution time
     elapsed_time = (time.time() - time_on) / 60  # in minutes
 
     sys.stdout.write("\n")
-    sys.stdout.write("You are all set!\n")
-    sys.stdout.write("Navigate to project root and activate your environment with one these commands:\n")
+    sys.stdout.write("You are all set! \n")
+    sys.stdout.write("Activate your environment with one these commands:\n")
     sys.stdout.write(f"   - For Windows CMD       : {args.venv_name}/Scripts/activate.bat\n")
     sys.stdout.write(f"   - For Windows Powershell: {args.venv_name}/Scripts/Activate.ps1\n")
     sys.stdout.write("Enjoy!\n")
