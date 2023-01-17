@@ -271,10 +271,8 @@ def configure_build_system(args):
         # Store credentials
         if args.credentials_management == "keyring":
             command = ".venv/Scripts/poetry config repositories.%s %s" % (source["name"], source["url"])
-            print(command)
             subprocess.run(command)
             command = ".venv/Scripts/poetry config http-basic.%s PAT %s" % (source["name"], token)
-            print(command)
             subprocess.run(command)
         elif args.credentials_management == "env-vars":
             # Format source name to comply with Poetry environment variable syntax
