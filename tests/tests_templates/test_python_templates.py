@@ -260,7 +260,7 @@ DOC_PROJECT_STRUCTURE = [
 # Structure for solution projects
 SOLUTION_STRUCTURE = [
     ".github/workflows/ci.yml",
-    ".vscode/launch.json"
+    ".vscode/launch.json",
     "doc/source/_static/ansys-solutions-logo-black-background.png",
     "doc/source/_static/README.md",
     "doc/source/_templates/README.md",
