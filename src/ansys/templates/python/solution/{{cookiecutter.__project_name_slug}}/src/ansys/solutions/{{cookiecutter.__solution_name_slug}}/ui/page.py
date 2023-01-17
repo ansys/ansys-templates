@@ -9,18 +9,18 @@ from dash_iconify import DashIconify
 from ansys.solutions.{{ cookiecutter.__solution_name_slug }}.solution.definition import (
     {{ cookiecutter.__solution_definition_name }},
 )
-from ansys.solutions.{{ cookiecutter.__solution_name_slug }}.ui import first, other
+from ansys.solutions.{{ cookiecutter.__solution_name_slug }}.ui import first_page, other_page
 
 
 step_list = [
     {
-        "key": "first",
-        "text": "First",
+        "key": "first_page",
+        "text": "First Page",
         "depth": 0,
     },
     {
-        "key": "other",
-        "text": "Other",
+        "key": "other_page",
+        "text": "Other Page",
         "depth": 0,
     }
 ]
@@ -105,17 +105,17 @@ def display_page(pathname, value):
     error_message = None
 
     if triggered_id == "url":
-        return first.layout(project.steps.first_step)
+        return first_page.layout(project.steps.first_step)
 
     if triggered_id == "navigation_tree":
 
         if value is None:
             page_layout = html.H1("Welcome!")
 
-        elif value == "first":
-            page_layout = first.layout(project.steps.first_step)
-        elif value == "other":
-            page_layout = other.layout()
+        elif value == "first_page":
+            page_layout = first_page.layout(project.steps.first_step)
+        elif value == "other_page":
+            page_layout = other_page.layout()
      
         return page_layout
 
