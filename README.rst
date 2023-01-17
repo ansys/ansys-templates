@@ -27,8 +27,9 @@ Private PyPI server
 Connection to Ansys-Solutions private PyPI server is required. Access is controlled via a ``Personal Access Token (PAT)`` which is available
 in the `Solutions Developer's Guide <https://dev-docs.solutions.ansys.com/index.html>`_. To declare the PAT on your system:
 
-  1. Visit the Getting Started section in the `Solutions Developer's Guide <https://dev-docs.solutions.ansys.com/index.html>`_, navigate to the Private PyPI servers section
-     and copy the token related to Ansys-Solutions PyPI.
+  1. Visit the `Connecting to the private PyPI <https://dev-docs.solutions.ansys.com/how_to/get_started_org.html#connecting-to-the-private-pypi>`_ section of the `Solutions Developer's Guide <https://dev-docs.solutions.ansys.com/index.html>`_,
+     navigate to the Private PyPI servers section and copy the token related to Ansys-Solutions PyPI.
+
   2. Create a system environment variable named SOLUTIONS_PRIVATE_PYPI_PAT and assign the token.
   
 Setup the development environment
