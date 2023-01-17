@@ -366,3 +366,4 @@ def test_template_python(tmp_path, build_system, template):
 
     # Check that all common files are included in baked project
     assert_project_structure(EXPECTED_STRUCTURE, project_path)
+
