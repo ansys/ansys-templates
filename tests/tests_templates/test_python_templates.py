@@ -300,7 +300,7 @@ SOLUTION_STRUCTURE = [
     "tests/unit/test_unit_dummy.py",
     "tox.ini",
     ".flake8",
-    ".github/workflows/ci.yml",
+    ".github/workflows/ci_cd.yml",
     ".gitignore",
     ".pre-commit-config.yaml",
     ".vscode/launch.json",
