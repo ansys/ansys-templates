@@ -27,14 +27,6 @@ DESIRED_STRUCTURE = [
     f"src/ansys/solutions/{{ cookiecutter.__solution_name_slug }}/solution/intro_step.py",
     f"src/ansys/solutions/{{ cookiecutter.__solution_name_slug }}/solution/first_step.py",
     f"src/ansys/solutions/{{ cookiecutter.__solution_name_slug }}/solution/second_step.py",
-    f"src/ansys/solutions/{{ cookiecutter.__solution_name_slug }}/ui/assets/Graphics/ansys-solutions-horizontal-logo.png",
-    f"src/ansys/solutions/{{ cookiecutter.__solution_name_slug }}/ui/assets/Graphics/solution-workflow-sketch.png",
-    f"src/ansys/solutions/{{ cookiecutter.__solution_name_slug }}/ui/assets/style.css",
-    f"src/ansys/solutions/{{ cookiecutter.__solution_name_slug }}/ui/app.py",
-    f"src/ansys/solutions/{{ cookiecutter.__solution_name_slug }}/ui/intro_page.py",
-    f"src/ansys/solutions/{{ cookiecutter.__solution_name_slug }}/ui/first_page.py",
-    f"src/ansys/solutions/{{ cookiecutter.__solution_name_slug }}/ui/second_page.py",
-    f"src/ansys/solutions/{{ cookiecutter.__solution_name_slug }}/ui/page.py",
     f"src/ansys/solutions/{{ cookiecutter.__solution_name_slug }}/__init__.py",
     f"src/ansys/solutions/{{ cookiecutter.__solution_name_slug }}/main.py",
     "tests/common_test_files/README.md",
@@ -58,6 +50,22 @@ DESIRED_STRUCTURE = [
 ]
 """A list holding all desired files to be included in the project."""
 
+UI_STRUCTURE = [
+    f"src/ansys/solutions/{{ cookiecutter.__solution_name_slug }}/ui/assets/Graphics/ansys-solutions-horizontal-logo.png",
+    f"src/ansys/solutions/{{ cookiecutter.__solution_name_slug }}/ui/assets/Graphics/solution-workflow-sketch.png",
+    f"src/ansys/solutions/{{ cookiecutter.__solution_name_slug }}/ui/assets/style.css",
+    f"src/ansys/solutions/{{ cookiecutter.__solution_name_slug }}/ui/app.py",
+    f"src/ansys/solutions/{{ cookiecutter.__solution_name_slug }}/ui/intro_page.py",
+    f"src/ansys/solutions/{{ cookiecutter.__solution_name_slug }}/ui/first_page.py",
+    f"src/ansys/solutions/{{ cookiecutter.__solution_name_slug }}/ui/second_page.py",
+    f"src/ansys/solutions/{{ cookiecutter.__solution_name_slug }}/ui/page.py",
+]
+
+# Add UI structure to desired structure if applicable
+if "{{ cookiecutter.no_ui }}" == "False":
+    DESIRED_STRUCTURE = DESIRED_STRUCTURE + UI_STRUCTURE
+
+print(DESIRED_STRUCTURE)
 
 def main():
     """Entry point of the script."""

@@ -6,6 +6,7 @@
 from dash_extensions.enrich import Input, Output, State, callback, dcc, html
 
 from ansys.saf.glow.client.dashclient import DashClient
+from ansys.solutions.{{ cookiecutter.__solution_name_slug }}.solution.definition import {{cookiecutter.__solution_definition_name}}
 from ansys.solutions.{{ cookiecutter.__solution_name_slug }}.solution.first_step import FirstStep
 
 

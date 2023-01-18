@@ -5,7 +5,6 @@
 
 from dash_extensions.enrich import dcc, html
 
-from ansys.solutions.{{ cookiecutter.__solution_name_slug }}.solution.definition import {{cookiecutter.__solution_definition_name}}
 from ansys.solutions.{{ cookiecutter.__solution_name_slug }}.solution.second_step import SecondStep
 
 
