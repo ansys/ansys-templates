@@ -1,6 +1,6 @@
 # ©2022, ANSYS Inc. Unauthorized use, distribution or duplication is prohibited.
 
-"""Initialzation of the frontend layout across all the steps."""
+"""Initialization of the frontend layout across all the steps."""
 
 
 from ansys.saf.glow.client.dashclient import DashClient
