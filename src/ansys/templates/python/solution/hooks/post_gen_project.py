@@ -65,7 +65,6 @@ UI_STRUCTURE = [
 if "{{ cookiecutter.no_ui }}" == "False":
     DESIRED_STRUCTURE = DESIRED_STRUCTURE + UI_STRUCTURE
 
-print(DESIRED_STRUCTURE)
 
 def main():
     """Entry point of the script."""
