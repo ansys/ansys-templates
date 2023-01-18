@@ -429,7 +429,7 @@ def main():
     sys.stdout.write("\n")
 
     # Back to current working directory
-    os.chdir(install_directory)
+    os.chdir(working_directory)
 
     # Compute execution time
     elapsed_time = (time.time() - time_on) / 60  # in minutes

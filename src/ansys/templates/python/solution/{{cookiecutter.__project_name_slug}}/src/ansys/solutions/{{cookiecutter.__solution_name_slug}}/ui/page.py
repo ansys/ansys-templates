@@ -12,18 +12,23 @@ from dash_iconify import DashIconify
 from ansys.solutions.{{ cookiecutter.__solution_name_slug }}.solution.definition import (
     {{ cookiecutter.__solution_definition_name }},
 )
-from ansys.solutions.{{ cookiecutter.__solution_name_slug }}.ui import first_page, second_page
+from ansys.solutions.{{ cookiecutter.__solution_name_slug }}.ui import intro_page, first_page, second_page
 
 
 step_list = [
     {
-        "key": "first_page",
-        "text": "First Page",
+        "key": "intro",
+        "text": "Introduction",
         "depth": 0,
     },
     {
-        "key": "second_page",
-        "text": "Second Page",
+        "key": "first_step",
+        "text": "First Step",
+        "depth": 0,
+    },
+    {
+        "key": "second_step",
+        "text": "Second Step",
         "depth": 0,
     }
 ]
@@ -73,6 +78,7 @@ layout = html.Div(
             direction = "horizontal",
             gap = 3,
         ),
+        html.Br(),
         dbc.Row(
             [
                 dbc.Col(
@@ -88,7 +94,13 @@ layout = html.Div(
                     width=2,
                     style={"background-color": "rgba(242, 242, 242, 0.6)"},  # Ansys grey
                 ),
-                dbc.Col(html.Div(id="page-content", style={"padding-right": "4%", "padding-top": "1%"}), width=10),
+                dbc.Col(
+                    html.Div(
+                        id="page-content",
+                        style={"padding-right": "1%"}
+                    ),
+                    width=10
+                ),
             ],
         ),
     ]
@@ -127,7 +139,7 @@ def return_to_portal(pathname):
 
 
 @callback(
-    Output("project-name", "value"),
+    Output("project-name", "children"),
     Input("url", "pathname"),
 )
 def display_poject_name(pathname):
@@ -156,8 +168,10 @@ def display_page(pathname, value):
     if triggered_id == "navigation_tree":
         if value is None:
             page_layout = html.H1("Welcome!")
-        elif value == "first_page":
+        elif value == "intro_step":
+            page_layout = intro_page.layout(project.steps.intro_step)
+        elif value == "first_step":
             page_layout = first_page.layout(project.steps.first_step)
-        elif value == "second_page":
+        elif value == "second_step":
             page_layout = second_page.layout(project.steps.second_step)
         return page_layout
