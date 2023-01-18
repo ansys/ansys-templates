@@ -5,6 +5,7 @@
   "solution_name": "",
   "__solution_name_slug": "{{ cookiecutter.solution_name.lower().replace('-', '_') }}",
   "solution_display_name": "",
+  "no_ui": ["False", "True"],
   "__solution_definition_name": "{{ cookiecutter.__solution_name_slug.title() }}Solution",
   "__version": "0.1.dev0",
   "__short_description": "",
