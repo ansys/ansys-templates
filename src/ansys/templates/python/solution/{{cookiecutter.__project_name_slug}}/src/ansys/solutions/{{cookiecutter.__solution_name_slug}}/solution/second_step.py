@@ -3,7 +3,7 @@
 """Backend of the second step."""
 
 
-from ansys.saf.glow.solution import StepModel, StepSpec, transaction
+from ansys.saf.glow.solution import StepModel
 
 
 class SecondStep(StepModel):
