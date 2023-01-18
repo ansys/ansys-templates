@@ -17,7 +17,7 @@ from ansys.solutions.{{ cookiecutter.__solution_name_slug }}.ui import intro_pag
 
 step_list = [
     {
-        "key": "intro",
+        "key": "intro_step",
         "text": "Introduction",
         "depth": 0,
     },
@@ -164,7 +164,7 @@ def display_page(pathname, value):
     project = DashClient[{{ cookiecutter.__solution_definition_name }}].get_project(pathname)
     triggered_id = callback_context.triggered[0]["prop_id"].split(".")[0]
     if triggered_id == "url":
-        return first_page.layout(project.steps.first_step)
+        return intro_page.layout(project.steps.intro_step)
     if triggered_id == "navigation_tree":
         if value is None:
             page_layout = html.H1("Welcome!")
