@@ -1,14 +1,18 @@
 # ©2022, ANSYS Inc. Unauthorized use, distribution or duplication is prohibited.
 
+"""Solution definition module."""
+
+
 from ansys.saf.glow.solution import Solution, StepsModel
 
 from ansys.solutions.{{ cookiecutter.__solution_name_slug }}.solution.first_step import FirstStep
-from ansys.solutions.{{ cookiecutter.__solution_name_slug }}.solution.other_step import OtherStep
+from ansys.solutions.{{ cookiecutter.__solution_name_slug }}.solution.second_step import SecondStep
+
 
 class Steps(StepsModel):
     """Workflow definition."""
     first_step: FirstStep
-    other_step: OtherStep
+    second_step: SecondStep
 
 
 class {{ cookiecutter.__solution_definition_name }}(Solution):

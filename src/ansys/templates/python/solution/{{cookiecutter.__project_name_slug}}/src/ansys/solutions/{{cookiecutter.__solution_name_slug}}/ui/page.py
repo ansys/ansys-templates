@@ -1,5 +1,8 @@
 # ©2022, ANSYS Inc. Unauthorized use, distribution or duplication is prohibited.
 
+"""Initialzation of the frontend layout across all the steps."""
+
+
 from ansys.saf.glow.client.dashclient import DashClient
 from ansys_dash_treeview import AnsysDashTreeview
 import dash_bootstrap_components as dbc
@@ -9,7 +12,7 @@ from dash_iconify import DashIconify
 from ansys.solutions.{{ cookiecutter.__solution_name_slug }}.solution.definition import (
     {{ cookiecutter.__solution_definition_name }},
 )
-from ansys.solutions.{{ cookiecutter.__solution_name_slug }}.ui import first_page, other_page
+from ansys.solutions.{{ cookiecutter.__solution_name_slug }}.ui import first_page, second_page
 
 
 step_list = [
@@ -19,23 +22,59 @@ step_list = [
         "depth": 0,
     },
     {
-        "key": "other_page",
-        "text": "Other Page",
+        "key": "second_page",
+        "text": "Second Page",
         "depth": 0,
     }
 ]
 
+
 layout = html.Div(
     [
-        # represents the browser address bar and doesn't render anything
-        dcc.Location(id="url", refresh=False),
-        html.Img(src=r"/assets/Graphics/ansys-solutions-horizontal-logo.png"),
-        # here we are rendering the step in its non-persisted form
-        # just to initialize the layout so the callbacks can function
-        # you could avoid this by suppressing callback errors - that's your call!
-        html.Div(id="return-to-portal"),
+        dcc.Location(id="url", refresh=False), # represents the browser address bar and doesn't render anything
+        dbc.Stack(
+            [
+                html.Div(
+                    [
+                        html.Img(
+                        src = r"/assets/Graphics/ansys-solutions-horizontal-logo.png",
+                        style={'width': '80%'}
+                    )
+                    ],
+                ),
+                html.Div(
+                    [
+                        dbc.Button(
+                            "Project Name:",
+                            id = "project-name",
+                            disabled = True,
+                            style={
+                                "color": "rgba(0, 0, 0, 1)",
+                                "background-color": "rgba(255, 255, 255, 1)",
+                                "border-color": "rgba(0, 0, 0, 1)"
+                            },
+                        )
+                    ],
+                    className="ms-auto",
+                ),
+                html.Div(
+                    [
+                        dbc.Button(
+                            "Back to Projects",
+                            id = "return-button",
+                            className = "me-2",
+                            n_clicks = 0,
+                            style = {"background-color": "rgba(0, 0, 0, 1)", "border-color": "rgba(0, 0, 0, 1)"},
+                        ),
+                    ],
+                    className = "bg-light border"
+                )
+            ],
+            direction = "horizontal",
+            gap = 3,
+        ),
         dbc.Row(
-            children=[
+            [
                 dbc.Col(
                     AnsysDashTreeview(
                         id="navigation_tree",
@@ -87,6 +126,16 @@ def return_to_portal(pathname):
     return children
 
 
+@callback(
+    Output("project-name", "value"),
+    Input("url", "pathname"),
+)
+def display_poject_name(pathname):
+    """Display current project name."""
+    project = DashClient[{{cookiecutter.__solution_definition_name}}].get_project(pathname)
+    return f"Project Name: {project.project_display_name}"
+
+
 # this callback is essential for initializing the step based on the persisted
 # state of the project when the browser first displays the project to the user
 # given the project's URL
@@ -99,24 +148,16 @@ def return_to_portal(pathname):
     prevent_initial_call=True,
 )
 def display_page(pathname, value):
-    """Display page."""
+    """Display page content."""
     project = DashClient[{{ cookiecutter.__solution_definition_name }}].get_project(pathname)
     triggered_id = callback_context.triggered[0]["prop_id"].split(".")[0]
-    error_message = None
-
     if triggered_id == "url":
         return first_page.layout(project.steps.first_step)
-
     if triggered_id == "navigation_tree":
-
         if value is None:
             page_layout = html.H1("Welcome!")
-
         elif value == "first_page":
             page_layout = first_page.layout(project.steps.first_step)
-        elif value == "other_page":
-            page_layout = other_page.layout()
-     
+        elif value == "second_page":
+            page_layout = second_page.layout(project.steps.second_step)
         return page_layout
-
-

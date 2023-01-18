@@ -1,41 +1,111 @@
 # ©2022, ANSYS Inc. Unauthorized use, distribution or duplication is prohibited.
 
-from ansys.saf.glow.client.dashclient import DashClient
-from dash_extensions.enrich import Input, Output, State, callback, dcc, html
+"""Frontend of the first step."""
 
-from ansys.solutions.{{ cookiecutter.__solution_name_slug }}.solution.definition import {{cookiecutter.__solution_definition_name}}
+import base64
+import dash_bootstrap_components as dbc
+from dash_extensions.enrich import dcc, html
+import os
+from pathlib import Path
+
 from ansys.solutions.{{ cookiecutter.__solution_name_slug }}.solution.first_step import FirstStep
 
 
 def layout(step: FirstStep):
-    """Layout."""
-    return html.Div([
-        html.Div(["First Argument: ", dcc.Input(id="first-arg", value=step.first_arg, type="number")]),
-        html.Div(["Second Argument: ", dcc.Input(id="second-arg", value=step.second_arg, type="number")]),
-        html.Button("Calculate", id="calculate", n_clicks=0),
-        html.P(id="result", children=f"Result:{step.result}"),
-    ])
+    """Layout of the first step UI."""
 
+    solution_workflow_sketch_encoded = base64.b64encode(
+        open(
+            os.path.join(Path(__file__).parent.absolute(), "assets", "Graphics", "solution-workflow-sketch.png"), "rb"
+        ).read()
+    )
 
-# This is an example callback which stores entered data and executes a method.
-# This is the only place where user entered data is persisted in this Dash app.
-# Notice that the project is referenced by a call to get_project and
-# the url is a State argument to the callback
-@callback(
-    Output("result", "children"),
-    Input("calculate", "n_clicks"),
-    State("first-arg", "value"),
-    State("second-arg", "value"),
-    State("url", "pathname"),
-    prevent_initial_call=True,
-)
-def calculate(n_clicks, first_arg, second_arg, pathname):
-    """Callback function to trigger the computation."""
-    project = DashClient[{{cookiecutter.__solution_definition_name}}].get_project(pathname)
-    step = project.steps.first_step
-    step.first_arg = first_arg
-    step.second_arg = second_arg
-    step.calculate()
-    return f"Result:{step.result}"
+    return html.Div(
+        dbc.Container(
+            [
+                html.H1("Add a title.", className="display-3", style={"font-size": "35px"}),
+                html.P(
+                    "Add a short sentence to describe the goal of the solution.",
+                    className="lead",
+                    style={"font-size": "20px"},
+                ),
+                html.Hr(className="my-2"),
+                dbc.Row(
+                    [
+                        dbc.Col(
+                            [
+                                dbc.Row(
+                                    [
+                                        dcc.Markdown(
+                                            """
+                                            **Description**
 
+                                            Information needed.
+                                            """,
+                                            className="lead",
+                                            style={
+                                                "textAlign": "left",
+                                                "marginLeft": "auto",
+                                                "marginRight": "auto",
+                                                "font-size": "15px",
+                                            },
+                                        ),
+                                        html.Br(),
+                                        dcc.Markdown(
+                                            """
+                                            **Customer goals**
 
+                                            Information needed.
+                                            """,
+                                            className="lead",
+                                            style={
+                                                "textAlign": "left",
+                                                "font-size": "15px",
+                                            },
+                                        ),
+                                        html.Br(),
+                                        dcc.Markdown(
+                                            """
+                                            **Engineering goals**
+
+                                            Information needed.
+                                            """,
+                                            className="lead",
+                                            style={
+                                                "textAlign": "left",
+                                                "font-size": "15px",
+                                            },
+                                        ),
+                                    ]
+                                )
+                            ],
+                            width=6,
+                        ),
+                        dbc.Col(
+                            [
+                                dbc.Row(
+                                    [
+                                        dbc.Card(
+                                            [
+                                                dbc.CardImg(
+                                                    src="data:image/png;base64,{}".format(
+                                                        solution_workflow_sketch_encoded.decode()
+                                                    ),
+                                                ),
+                                                dbc.CardFooter("This is the introduction image."),
+                                            ],
+                                            style={"width": "50rem"},
+                                        )
+                                    ]
+                                )
+                            ],
+                            width=6,
+                        ),
+                    ]
+                ),
+            ],
+            fluid=True,
+            className="py-3",
+        ),
+        className="p-3 bg-light rounded-3",
+    )
