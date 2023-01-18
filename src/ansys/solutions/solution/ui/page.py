@@ -1,26 +1,26 @@
 # ©2022, ANSYS Inc. Unauthorized use, distribution or duplication is prohibited.
 
-from ansys.saf.glow.client.dashclient import DashClient
 from ansys_dash_treeview import AnsysDashTreeview
+from ansys.saf.glow.client.dashclient import DashClient
+from ansys.solutions.solution.solution.definition import (
+    SolutionSolution,
+)
+from ansys.solutions.solution.ui import first
+from ansys.solutions.solution.ui import other
 import dash_bootstrap_components as dbc
 from dash_extensions.enrich import Input, Output, callback, callback_context, dcc, html
 from dash_iconify import DashIconify
 
-from ansys.solutions.solution.solution.definition import (
-    SolutionSolution,
-)
-from ansys.solutions.solution.ui import first_page, other_page
-
 
 step_list = [
     {
-        "key": "first_page",
-        "text": "First Page",
+        "key": "first",
+        "text": "First",
         "depth": 0,
     },
     {
-        "key": "other_page",
-        "text": "Other Page",
+        "key": "other",
+        "text": "Other",
         "depth": 0,
     }
 ]
@@ -99,23 +99,22 @@ def return_to_portal(pathname):
     prevent_initial_call=True,
 )
 def display_page(pathname, value):
-    """Display page."""
     project = DashClient[SolutionSolution].get_project(pathname)
     triggered_id = callback_context.triggered[0]["prop_id"].split(".")[0]
     error_message = None
 
     if triggered_id == "url":
-        return first_page.layout(project.steps.first_step)
+        return first.layout(project.steps.first_step)
 
     if triggered_id == "navigation_tree":
 
         if value is None:
             page_layout = html.H1("Welcome!")
 
-        elif value == "first_page":
-            page_layout = first_page.layout(project.steps.first_step)
-        elif value == "other_page":
-            page_layout = other_page.layout()
+        elif value == "first":
+            page_layout = first.layout(project.steps.first_step)
+        elif value == "other":
+            page_layout = other.layout()
      
         return page_layout
 

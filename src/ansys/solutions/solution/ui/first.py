@@ -1,14 +1,11 @@
 # ©2022, ANSYS Inc. Unauthorized use, distribution or duplication is prohibited.
 
 from ansys.saf.glow.client.dashclient import DashClient
-from dash_extensions.enrich import Input, Output, State, callback, dcc, html
-
 from ansys.solutions.solution.solution.definition import SolutionSolution
 from ansys.solutions.solution.solution.first_step import FirstStep
-
+from dash_extensions.enrich import Input, Output, State, callback, dcc, html
 
 def layout(step: FirstStep):
-    """Layout."""
     return html.Div([
         html.Div(["First Argument: ", dcc.Input(id="first-arg", value=step.first_arg, type="number")]),
         html.Div(["Second Argument: ", dcc.Input(id="second-arg", value=step.second_arg, type="number")]),
@@ -30,7 +27,6 @@ def layout(step: FirstStep):
     prevent_initial_call=True,
 )
 def calculate(n_clicks, first_arg, second_arg, pathname):
-    """Callback function to trigger the computation."""
     project = DashClient[SolutionSolution].get_project(pathname)
     step = project.steps.first_step
     step.first_arg = first_arg

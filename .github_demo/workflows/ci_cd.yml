@@ -1,10 +1,11 @@
-name: CI
+name: CI-CD
 
 on:
   pull_request:
     branches:
       - main
-    types: [opened, reopened, labeled, unlabeled, synchronize, ready_for_review, closed]
+    types: [opened, labeled, unlabeled, synchronize, closed]
+  workflow_dispatch:
 
 env:
   MAIN_PYTHON_VERSION: '3.7'
@@ -24,9 +25,12 @@ jobs:
 
   check-doc-style:
     if: |
-      github.event.pull_request.draft == false
+      contains(github.event.pull_request.labels.*.name, 'documentation') &&
+      github.event_name == 'pull_request' ||
+      github.event_name == 'push' &&
+      contains(github.ref, 'refs/tags')
     name: Check documentation style
-    runs-on: [ubuntu-latest]
+    runs-on: ubuntu-latest
     steps:
       - name: Check documentation style
         uses: Solution-Applications/actions/check-doc-style@v0.0.1
@@ -34,11 +38,9 @@ jobs:
           gh-token: ${{ secrets.GITHUB_TOKEN }}
 
   build-doc:
-    if: |
-      github.event.pull_request.draft == false
     name: Build documentation
-    runs-on: [ubuntu-latest]
     needs: [check-doc-style]
+    runs-on: ubuntu-latest
     steps:
       - name: Build documentation
         uses: Solution-Applications/actions/build-doc@v0.0.1
@@ -48,11 +50,14 @@ jobs:
 
   deploy-doc:
     if: |
-      github.event.pull_request.draft == false &&
-      github.event.pull_request.merged == true
+      contains(github.event.pull_request.labels.*.name, 'documentation') &&
+      github.event_name == 'pull_request' &&
+      github.event.pull_request.merged == true ||
+      github.event_name == 'push' &&
+      contains(github.ref, 'refs/tags')
     name: Deploy documentation
-    runs-on: [ubuntu-latest]
     needs: [build-doc]
+    runs-on: ubuntu-latest
     steps:
       - name: Deploy stable documentation
         uses: pyansys/actions/doc-deploy-stable@v2
@@ -63,23 +68,18 @@ jobs:
             python-version: ${{ env.MAIN_PYTHON_VERSION }}
 
   check-copyright:
-    if: |
-      github.event.pull_request.draft == false &&
-      github.event.pull_request.merged == false
     name: Check copyright
-    runs-on: [ubuntu-latest]
+    runs-on: ubuntu-latest
     steps:
       - name: Check copyright
         uses: Solution-Applications/actions/check-copyright@v0.0.1
         with:
-          gh-token: ${{ secrets.WORKFLOW_TOKEN }}
+          token: ${{ secrets.WORKFLOW_TOKEN }}
 
   check-code-style:
-    if: |
-      github.event.pull_request.draft == false &&
-      github.event.pull_request.merged == false
     name: Check code style
-    runs-on: [ubuntu-latest]
+    needs: [check-copyright]
+    runs-on: ubuntu-latest
     steps:
       - name: Check code style
         uses: Solution-Applications/actions/check-code-style@v0.0.1
@@ -88,26 +88,22 @@ jobs:
           tox-version: ${{ env.TOX_VERSION }}
 
   build:
-    if: |
-      github.event.pull_request.draft == false
     name: Build 
-    runs-on: [windows-latest]
+    needs: [check-code-style]
+    runs-on: ubuntu-latest
     steps:
       - name: Build
         uses: Solution-Applications/actions/build@v0.0.1
         with:
           python-version: ${{ env.MAIN_PYTHON_VERSION }}
           artifact-name: wheel
-          run-in-venv: true
           poetry-version: ${{ env.POETRY_VERSION }}
           retention-days: 7
 
   run-tests:
-    if: |
-      github.event.pull_request.draft == false &&
-      github.event.pull_request.merged == false
     name: Run tests
-    runs-on: [windows-latest]
+    needs: [build]
+    runs-on: ubuntu-latest
     strategy:
       matrix:
         python-version: ['3.7', '3.8']
@@ -116,27 +112,23 @@ jobs:
       - name: Run tests
         uses: Solution-Applications/actions/run-tests@v0.0.1
         with:
-          python-version: ${{ matrix.python-version }}
+          python-version: ${{ env.MAIN_PYTHON_VERSION }}
           poetry-version: ${{ env.POETRY_VERSION }}
           tox-version: ${{ env.TOX_VERSION }}
-          check-coverage-ratio: false
+          check-coverage-ratio: 'false'
           min-coverage-ratio: 80
-          run-in-venv: true
           retention-days: 7
 
   release:
     if: |
-      github.event.pull_request.draft == false &&
-      contains(github.event.pull_request.labels.*.name, 'release') && 
-      github.event.pull_request.merged == true
+      github.event_name == 'push' &&
+      contains(github.ref, 'refs/tags')
     name: Release
-    needs: [build]
-    runs-on: [ubuntu-latest]
+    needs: [deploy-doc, run-tests]
+    runs-on: ubuntu-latest
     steps:
       - name: Release
         uses: Solution-Applications/actions/release@v0.0.1
         with:
           python-version: ${{ env.MAIN_PYTHON_VERSION }}
-          gh-token: ${{ secrets.WORKFLOW_TOKEN }}
           solutions-pypi-token: ${{ secrets.SOLUTIONS_PRIVATE_PYPI_PAT }}
-          solutions-pypi-repository-url: https://pkgs.dev.azure.com/pyansys/_packaging/ansys-solutions/pypi/upload/
