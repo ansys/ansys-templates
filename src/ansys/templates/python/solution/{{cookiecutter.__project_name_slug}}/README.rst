@@ -19,7 +19,7 @@ Prerequisites
 Python version support
 ~~~~~~~~~~~~~~~~~~~~~~
 
-Officially Python 3.7 to 3.9.
+Officially Python 3.7 to 3.8.
 
 Private PyPI server
 ~~~~~~~~~~~~~~~~~~~
