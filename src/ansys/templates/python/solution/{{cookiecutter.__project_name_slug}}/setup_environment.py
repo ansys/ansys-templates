@@ -1,11 +1,7 @@
 # ©2022, ANSYS Inc. Unauthorized use, distribution or duplication is prohibited.
 
 """
-A Python script to setup the Python ecosystem of a solution or framework.
-
-Platform      : OS independent
-Python version: >= 3.7, <= 3.9
-
+A Python script to automatize the setup of the Python ecosystem of a solution or framework.
 """
 
 # ==================================================== [Imports] ==================================================== #
@@ -160,9 +156,8 @@ def check_inputs(args):
         if args.venv_name != ".venv":
             old_name = args.venv_name
             args.venv_name = ".venv"
-            sys.stdout.write(
-                "Warning: Poetry expects the name of the virtual environment name to be .venv.\n%s is renamed %s.\n"
-                % (old_name, args.venv_name)
+            print(
+                f"Warning: Poetry expects the name of the virtual environment name to be .venv. {old_name} is renamed {args.venv_name}."
             )
     # Check if src structure is defined
     if "run" in args.dependencies:
@@ -190,20 +185,20 @@ def check_inputs(args):
 
 def show_parameters(args):
     """Display the parameters to the console before proceeding to work."""
-    sys.stdout.write("OS                       : %s\n" % (platform.system()))
-    sys.stdout.write("Python version           : %s\n" % (get_python_version()))
-    sys.stdout.write("Virtual environment name: %s\n" % (args.venv_name))
-    sys.stdout.write("Run dependencies         : %s\n" % ("yes" if "run" in args.dependencies else "no"))
-    sys.stdout.write("Doc dependencies         : %s\n" % ("yes" if "doc" in args.dependencies else "no"))
-    sys.stdout.write("Tests dependencies       : %s\n" % ("yes" if "tests" in args.dependencies else "no"))
-    sys.stdout.write("Build dependencies       : %s\n" % ("yes" if "build" in args.dependencies else "no"))
-    sys.stdout.write("Style dependencies       : %s\n" % ("yes" if "style" in args.dependencies else "no"))
-    sys.stdout.write("Build system             : %s\n" % (args.build_system))
-    sys.stdout.write("Build system version     : %s\n" % (args.build_system_version))
-    sys.stdout.write("Build distribution       : %s\n" % ("yes" if args.build else "no"))
-    sys.stdout.write("Build method             : %s\n" % (args.build_method))
-    sys.stdout.write("Credentials management   : %s\n" % (args.credentials_management))
-    sys.stdout.write("\n")
+    print("OS                       : %s" % (platform.system()))
+    print("Python version           : %s" % (get_python_version()))
+    print("Virtual environment name : %s" % (args.venv_name))
+    print("Run dependencies         : %s" % ("yes" if "run" in args.dependencies else "no"))
+    print("Doc dependencies         : %s" % ("yes" if "doc" in args.dependencies else "no"))
+    print("Tests dependencies       : %s" % ("yes" if "tests" in args.dependencies else "no"))
+    print("Build dependencies       : %s" % ("yes" if "build" in args.dependencies else "no"))
+    print("Style dependencies       : %s" % ("yes" if "style" in args.dependencies else "no"))
+    print("Build system             : %s" % (args.build_system))
+    print("Build system version     : %s" % (args.build_system_version))
+    print("Build distribution       : %s" % ("yes" if args.build else "no"))
+    print("Build method             : %s" % (args.build_method))
+    print("Credentials management   : %s" % (args.credentials_management))
+    print("")
 
 
 def clear_workspace(args):
@@ -211,12 +206,8 @@ def clear_workspace(args):
     if not args.no_clear:
         # Remove virtual environment
         if os.path.isdir(".venv"):
-            sys.stdout.write("Delete existing virtual environment\n")
+            print("Delete existing virtual environment")
             shutil.rmtree(".venv")
-        # Remove lock file
-        if os.path.isfile("poetry.lock"):
-            sys.stdout.write("Delete existing poetry lock file\n")
-            os.remove("poetry.lock")
 
 
 def get_private_sources(config_file):
@@ -248,7 +239,7 @@ def configure_build_system(args):
     # Get list of private sources
     private_sources = get_private_sources("pyproject.toml")
     # Delete existing configuration
-    sys.stdout.write("Clean-up existing poetry configurations\n")
+    print("Clean-up existing poetry configurations")
     if sys.platform == "win32":
         username = os.getlogin()
         path_poetry_config = r"C:\Users\%s\AppData\Roaming\pypoetry" % (username)
@@ -260,7 +251,7 @@ def configure_build_system(args):
         raise Exception("Implementation not ready.")
     # Declare credentials for private sources
     for source in private_sources:
-        sys.stdout.write("Declare credentials for %s\n" % (source["name"]))
+        print("Declare credentials for %s" % (source["name"]))
         # Get source PAT
         if source["url"] == "https://pkgs.dev.azure.com/pyansys/_packaging/pyansys/pypi/simple/":
             token = os.environ["PYANSYS_PRIVATE_PYPI_PAT"]
@@ -286,12 +277,12 @@ def configure_build_system(args):
 def install_package_dependencies(args):
     """Install the package (mandatory requirements only)."""
     subprocess.run([".venv/Scripts/poetry", "install", "-vvv"], check=True)
-
+    
 
 def install_optional_dependencies(dependency_group):
     """Install optional requirements (doc, tests, build or style)."""
     file = os.path.join("requirements", f"requirements_{dependency_group}.txt")
-    command = f".venv/Scripts/python -m pip install -r {file}"
+    command = f".venv/Scripts/python -m pip install -r {file} --no-warn-conflicts"
     subprocess.run(command, check=True)
 
 
@@ -306,7 +297,7 @@ def include_package_data(args):
             try:
                 shutil.copytree(data, "%s" % (destination))
             except:
-                sys.stdout.write("Warning: package_data %s exists in %s. No override.\n" % (data, destination))
+                print("Warning: package_data %s exists in %s. No override." % (data, destination))
         else:
             raise FileNotFoundError("No such file or directory : %s" % (data))
 
@@ -337,14 +328,14 @@ def main():
     check_inputs(args)
 
     # Display header
-    sys.stdout.write("==============================================================================================\n")
-    sys.stdout.write("Setup Environment\n")
-    sys.stdout.write("==============================================================================================\n")
-    sys.stdout.write("\n")
+    print("==============================================================================================")
+    print("Setup Environment")
+    print("==============================================================================================")
+    print("")
 
-    sys.stdout.write("\n")
-    sys.stdout.write("Setup session --------------------------------------------------------------------------------\n")
-    sys.stdout.write("\n")
+    print("")
+    print("Setup session --------------------------------------------------------------------------------")
+    print("")
 
     # Parameters
     show_parameters(args)
@@ -352,81 +343,81 @@ def main():
     # Clean-up workspace
     clear_workspace(args)
 
-    sys.stdout.write("\n")
-    sys.stdout.write("Setup virtual environment --------------------------------------------------------------------\n")
-    sys.stdout.write("\n")
+    print("")
+    print("Setup virtual environment --------------------------------------------------------------------")
+    print("")
 
     # Create virtual environment
-    sys.stdout.write("Create virtual environment\n")
+    print("Create virtual environment")
     if os.path.isdir(args.venv_name) and args.no_clear:
-        sys.stdout.write("Skipped\n")
+        print("Skipped")
     else:
         subprocess.run([sys.executable, "-m", "venv", ".venv"])
-    sys.stdout.write("\n")
+    print("")
 
     # Upgrade to latest pip version
-    sys.stdout.write("Upgrade to latest pip version\n")
+    print("Upgrade to latest pip version")
     subprocess.run([".venv/Scripts/python", "-m", "pip", "install", "--upgrade", "pip"])
-    sys.stdout.write("\n")
+    print("")
 
-    sys.stdout.write("Setup build system ---------------------------------------------------------------------------\n")
-    sys.stdout.write("\n")
+    print("Setup build system ---------------------------------------------------------------------------")
+    print("")
 
     # Install build system
-    sys.stdout.write("Install build system\n")
+    print("Install build system")
     if "run" in args.dependencies:
         command = ".venv/Scripts/python -m pip install %s" % (args.build_system)
         if args.build_system_version != "*":
             command += "==%s" % (args.build_system_version)
         subprocess.run(command, check=True)
     else:
-        sys.stdout.write("Skipped\n")
-    sys.stdout.write("\n")
+        print("Skipped")
+    print("")
 
     # Configure build system
-    sys.stdout.write("Configure build system\n")
+    print("Configure build system")
     if "run" in args.dependencies:
         configure_build_system(args)
     else:
-        sys.stdout.write("Skipped\n")
-    sys.stdout.write("\n")
+        print("Skipped")
+    print("")
 
-    sys.stdout.write("Install requirements -------------------------------------------------------------------------\n")
-    sys.stdout.write("\n")
+    print("Install requirements -------------------------------------------------------------------------")
+    print("")
 
     # Install package dependencies
-    sys.stdout.write("Install run dependencies\n")
+    print("Install run dependencies")
     if "run" in args.dependencies:
         install_package_dependencies(args)
     else:
-        sys.stdout.write("Skipped\n")
-    sys.stdout.write("\n")
+        print("Skipped")
+    print("")
 
     # Install optional dependencies
     for dependency_group in ["doc", "tests", "build", "style"]:
-        sys.stdout.write("Install %s dependencies\n" % (dependency_group))
+        print("Install %s dependencies" % (dependency_group))
         if dependency_group in args.dependencies:
             install_optional_dependencies(dependency_group)
         else:
-            sys.stdout.write("Skipped\n")
-        sys.stdout.write("\n")
+            print("Skipped")
+        print("")
 
-    sys.stdout.write("Build distribution ---------------------------------------------------------------------------\n")
-    sys.stdout.write("\n")
+    print("Build distribution ---------------------------------------------------------------------------")
+    print("")
 
     # Build distribution
     if args.build:
         # Include package data
-        sys.stdout.write("Include package data\n")
+        print("Include package data")
         include_package_data(args)
-        sys.stdout.write("\n")
+        print("")
         # Build distribution
-        sys.stdout.write("Build distribution\n")
+        print("Build distribution")
         build_distribution(args)
-        sys.stdout.write("\n")
+        print("")
     else:
-        sys.stdout.write("Skipped\n")
-    sys.stdout.write("\n")
+        print("Skipped")
+    print("")
 
     # Back to current working directory
     os.chdir(working_directory)
@@ -434,15 +425,15 @@ def main():
     # Compute execution time
     elapsed_time = (time.time() - time_on) / 60  # in minutes
 
-    sys.stdout.write("\n")
-    sys.stdout.write("You are all set!\n")
-    sys.stdout.write("Navigate to project root and activate your environment with one these commands:\n")
-    sys.stdout.write(f"   - For Windows CMD       : {args.venv_name}/Scripts/activate.bat\n")
-    sys.stdout.write(f"   - For Windows Powershell: {args.venv_name}/Scripts/Activate.ps1\n")
-    sys.stdout.write("Enjoy!\n")
-    sys.stdout.write("\n")
-    sys.stdout.write("Execution time: %.1f minutes.\n" % (elapsed_time))
-    sys.stdout.write("\n")
+    print("")
+    print("You are all set!")
+    print("Navigate to project root and activate your environment with one these commands:")
+    print(rf"   - For Windows CMD       : {args.venv_name}\Scripts\activate.bat")
+    print(rf"   - For Windows Powershell: {args.venv_name}\Scripts\Activate.ps1")
+    print("Enjoy!")
+    print("")
+    print("Execution time: %.1f minutes." % (elapsed_time))
+    print("")
 
 
 # =================================================== [Execution] =================================================== #

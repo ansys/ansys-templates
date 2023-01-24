@@ -62,10 +62,8 @@ UI_STRUCTURE = [
 ]
 
 # Add UI structure to desired structure if applicable
-if "{{ cookiecutter.with_ui }}" == "yes":
+if "{{ cookiecutter.with_dash_ui }}" == "yes":
     DESIRED_STRUCTURE = DESIRED_STRUCTURE + UI_STRUCTURE
-
-print(DESIRED_STRUCTURE)
 
 def main():
     """Entry point of the script."""

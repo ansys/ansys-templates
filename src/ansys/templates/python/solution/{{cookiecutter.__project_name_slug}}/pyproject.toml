@@ -38,15 +38,15 @@ python = ">=3.7, <3.9"
 ansys-dash-treeview = {version = "0.0.1.dev0", source = "solutions-private-pypi"}
 ansys-saf-glow = {version = "0.1.6", source = "solutions-private-pypi" }
 ansys-saf-portal = {version = "0.1.1", source = "solutions-private-pypi"}
-{% if cookiecutter.with_ui == "yes" %}
-dash = {version = "^2.6"}
+toml = {version = "*"}
+tox = {version = "*"} 
+{% if cookiecutter.with_dash_ui == "yes" %} 
+dash = {version = "^2.6"}  
 dash_bootstrap_components = {version = "^1.2"}
 dash-extensions = {version = "^0.1"}
 dash-iconify = {version = "^0.1"}
-dash-uploader = {version = "^0.6"} 
+dash-uploader = {version = "^0.6"}
 {% endif %}
-toml = {version = "*"}
-tox = {version = "*"} 
 
 [tool.poetry.plugins."console_scripts"]
 {{ cookiecutter.__solution_name_slug }}_main = "ansys.solutions.{{ cookiecutter.__solution_name_slug }}.main:main"

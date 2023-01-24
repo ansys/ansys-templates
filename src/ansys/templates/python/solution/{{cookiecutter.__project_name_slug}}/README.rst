@@ -32,13 +32,19 @@ in the `Solutions Developer's Guide <https://dev-docs.solutions.ansys.com/index.
 
   2. Create a system environment variable named SOLUTIONS_PRIVATE_PYPI_PAT and assign the token.
   
+Flagship products
+~~~~~~~~~~~~~~~~~
+
+Specify if any.
+
 Setup the development environment
 ---------------------------------
 
 This procedure is intended for software developers that will contribute to the package maintenance and development. 
+Poetry is used as dependency management tool. 
 
-Setup the default configuration
-~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+Automatic installation
+~~~~~~~~~~~~~~~~~~~~~~
 
 1. Setup the Python environment:
 
@@ -71,17 +77,36 @@ From now on, all the commands listed in the documentation must be executed withi
 Update dependencies
 ~~~~~~~~~~~~~~~~~~~
 
-You can add dependencies to the package by updating the [tool.poetry.dependencies] section in the pyproject.toml. file.
-Each time the dependencies are changed it is important to update the virtual environment by running the following command:
+To add a new dependency or to update the version of an existing dependency use the ``poetry add`` command. 
+
+For packages collected from public PyPI run:
 
   .. code:: bash
 
-    poetry install
+    poetry add <name-of-package>
+
+For packages collected from Solutions private PyPI run:
+
+  .. code:: bash
+
+    poetry add <name-of-package> --source solutions-private-pypi
+
+For packages collected from PyAnsys private PyPI run:
+
+  .. code:: bash
+
+    poetry add <name-of-package> --source pyansys-private-pypi
+
+To request a specific version of a package:
+
+  .. code:: bash
+
+    poetry add <name-of-package>==<version>
 
 Start the application
 =====================
 
-To start the application:
+To start the application run the following command anywhere in the project:
 
   .. code:: bash
 
