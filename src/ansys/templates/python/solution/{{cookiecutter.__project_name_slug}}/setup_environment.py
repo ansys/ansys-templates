@@ -8,6 +8,7 @@ A Python script to automatize the setup of the Python ecosystem of a solution or
 
 import argparse
 import os
+from packaging import version
 from pathlib import Path, PurePath
 import platform
 import re
@@ -25,19 +26,19 @@ except:
 
 # =================================================== [Functions] =================================================== #
 
-def raise_python_version_error(setup_version, lower_version, upper_version):
-    """Raise Python version error."""
-    raise Exception(f"Python version is wrong. Project required a version in the range {lower_version}, {upper_version}. Current version is {setup_version}.")
 
+def read_integers_from_string(string):
+    """
+    Scan a string and extract integers.
 
-def read_numbers_from_string(string):
-    """Return numbers from a string."""
-    return re.findall("[-+]?[.]?[\d]+(?:,\d\d\d)*[\.]?\d*(?:[eE][-+]?\d+)?", string)  
+    The regex matches any digit character (0-9).
+    """
+    return re.findall("\d+", string)  
 
 
 def get_lower_version_from_python_specification(lower_specification):
     """Take a lower specification and convert it to the lowest authorized python version."""
-    lower_version = "".join(read_numbers_from_string(lower_specification))
+    lower_version = ".".join(read_integers_from_string(lower_specification))
     if lower_specification.startswith(">") and "=" not in lower_specification:
         lower_version_splitted = lower_version.split(".")
         lower_version_splitted[-1] = str(int(lower_version_splitted[-1]) + 1)
@@ -47,7 +48,7 @@ def get_lower_version_from_python_specification(lower_specification):
 
 def get_upper_version_from_python_specification(upper_specification):
     """Take a upper specification and convert it to the highest authorized python version."""
-    upper_version = "".join(read_numbers_from_string(upper_specification))
+    upper_version = ".".join(read_integers_from_string(upper_specification))
     if upper_specification.startswith("<") and "=" not in upper_specification:
         upper_version_splitted = upper_version.split(".")
         upper_version_splitted[-1] = str(int(upper_version_splitted[-1]) - 1)
@@ -85,6 +86,126 @@ def get_compatible_python_versions(configuration_file):
 def get_python_version():
     """Get Python version."""
     return f"{sys.version_info.major}.{sys.version_info.minor}.{sys.version_info.micro}"
+
+
+def check_python_version(configuration_file):
+    """Check if the current python version is compatible with the pyproject.toml specifications."""
+    setup_version = get_python_version()
+    lower_version, upper_version = get_compatible_python_versions(configuration_file)
+
+    if version.parse(setup_version) < version.parse(lower_version) or version.parse(setup_version) > version.parse(upper_version):
+        raise Exception(f"Python version is wrong. Project required a version in the range {lower_version}, {upper_version}. Current version is {setup_version}.")
+
+
+def get_python_package(
+    package_name: str,
+    package_version: str = "*",
+    method: str = "install",
+    pypi_url: str = "https://pypi.org/simple",
+    private_pypi_token_name: str = None,
+    no_deps: bool = False,
+    python_executable: str = sys.executable,
+) -> None:
+    """
+    Install or download a python package using PIP.
+
+    Parameters
+    ----------
+    package_name : str
+        Name of the package.
+    package_version : str
+        Version of the package.
+    method : str
+        Get method: ``download`` or ``install``
+    pypi_url : str
+        URL of the PyPI server.
+    private_pypi_token_name : str
+        Name of the environment variable holding the token to access to the PyPI.
+    python_executable : str
+        Path to the Python executable.
+
+    Returns
+    -------
+    None
+    """
+
+    # Set command
+    command = f"{python_executable} -m pip {method} {package_name}"
+    # Add package version if specified
+    if package_version != "*":
+        command += f"=={package_version}"
+    # Add part related to private PyPI source
+    if pypi_url != "https://pypi.org/simple":
+        # Check if token is available
+        if private_pypi_token_name is None:
+            raise Exception(f"No token specified for private PyPI server {pypi_url}.")
+        # Check if the environment variable associated to the private PyPI token exists
+        if os.environ.get(private_pypi_token_name) is None:
+            raise Exception(
+                "Environment variable {private_pypi_token_name} does not exist."
+            )
+        # Get private PyPI token
+        private_pypi_token = os.environ[private_pypi_token_name]
+        # Split absolute URL
+        url_scheme, relative_url = remove_scheme_from_url(pypi_url)
+        # Update command line
+        command += f" -i {url_scheme}://PAT:{private_pypi_token}@{relative_url}"
+    # Add no-deps option
+    if no_deps:
+        command += " --no-deps"
+    # Run command with dummy version to force PIP to return the list of released versions
+    returncode, stdout, stderr = run_command(command, display_output=False)
+    if returncode != 0:
+        print(stdout)
+        raise Exception("Command failed with error.")
+
+
+def remove_scheme_from_url(url):
+    """Remove the scheme part of a URL."""
+    items = url.split("://")
+    if len(items) == 2:
+        return items[0], items[1]
+    else:
+        raise Exception(f"Fail to return the URL without the scheme part for {url}.")
+
+
+def run_command(cmd, display_output=True):
+    """
+    Run command.
+    """
+    process = subprocess.Popen(cmd, stdout=subprocess.PIPE, stderr=subprocess.STDOUT)
+    if display_output:
+        stdout, stderr = b"", b""
+        for line in process.stdout:
+            sys.stdout.buffer.write(line)
+            sys.stdout.buffer.flush()
+            stdout += line
+        process.wait()
+    else:
+        stdout, stderr = process.communicate()
+
+    if isinstance(stdout, bytes):
+        try:
+            stdout = stdout.decode().splitlines()
+        except:
+            raise Exception("Unable to decode stdout.")
+
+    if isinstance(stderr, bytes):
+        try:
+            stderr = stderr.decode().splitlines()
+        except:
+            raise Exception("Unable to decode stderr.")
+
+    return process.returncode, stdout, stderr
+
+
+def upgrade_pip(python_executable: str = sys.executable) -> None:
+    """Upgrade to latest PIP version"""
+    subprocess.run(
+        [python_executable, "-m", "pip", "install", "--upgrade", "pip"],
+        check=True,
+        shell=True,
+    )
 
 
 def parser():
@@ -164,9 +285,9 @@ def parser():
         "-e", "--venv-name", type=str, help="Name of the virtual environment.", default=".venv", required=False
     )
     optional_inputs.add_argument(
-        "-n",
-        "--no-clear",
-        help="No workspace clean-up. Work with existing .venv if exists.",
+        "-f",
+        "--force-clear",
+        help="Clean-up the workspace. Delete existing .venv and poteyr.lock.",
         action="store_true",
         required=False,
     )
@@ -260,13 +381,16 @@ def show_parameters(args):
     print("")
 
 
-def clear_workspace(args):
+def clear_workspace():
     """Remove residual items form previous installation (like venv directory, lock file ...)."""
-    if not args.no_clear:
-        # Remove virtual environment
-        if os.path.isdir(".venv"):
-            print("Delete existing virtual environment")
-            shutil.rmtree(".venv")
+    # Remove virtual environment
+    if os.path.isdir(".venv"):
+        print("Delete existing virtual environment")
+        shutil.rmtree(".venv")
+    # Remove lock file
+    if os.path.isfile("poetry.lock"):
+        sys.stdout.write("Delete existing poetry lock file\n")
+        os.remove("poetry.lock")
 
 
 def get_private_sources(configuration_file):
@@ -333,9 +457,9 @@ def configure_build_system(args):
     return
 
 
-def install_package_dependencies(args):
+def install_production_dependencies(args):
     """Install the package (mandatory requirements only)."""
-    subprocess.run([".venv/Scripts/poetry", "install", "-vvv"], check=True)
+    subprocess.run([".venv/Scripts/poetry", "install", "-v"], check=True)
     
 
 def install_optional_dependencies(dependency_group):
@@ -371,31 +495,11 @@ def build_distribution(args):
         raise ValueError("Unknown build method %s." % (args.build_method))
 
 
-def check_python_version(configuration_file):
-    """Check if the current python version is compatible with the pyproject.toml specifications."""
-    setup_version = get_python_version()
-    lower_version, upper_version = get_compatible_python_versions("pyproject.toml")
-    setup_version_splitted = setup_version.split('.')
-    lower_version_splitted = lower_version.split('.')
-    upper_version_splitted = upper_version.split('.')
-    # Check lower limit
-    if int(setup_version_splitted[0]) < int(lower_version_splitted[0]):
-        raise_python_version_error(setup_version, lower_version, upper_version)
-    elif int(setup_version_splitted[0]) == int(lower_version_splitted[0]):
-        if int(setup_version_splitted[1]) < int(lower_version_splitted[1]):
-            raise_python_version_error(setup_version, lower_version, upper_version)
-        elif int(setup_version_splitted[1]) == int(lower_version_splitted[1]):
-            if int(setup_version_splitted[2]) < int(lower_version_splitted[2]):
-                raise_python_version_error(setup_version, lower_version, upper_version)
-    # Check upper limit
-    if int(setup_version_splitted[0]) > int(upper_version_splitted[0]):
-        raise_python_version_error(setup_version, lower_version, upper_version)
-    elif int(setup_version_splitted[0]) == int(upper_version_splitted[0]):
-        if int(setup_version_splitted[1]) > int(upper_version_splitted[1]):
-            raise_python_version_error(setup_version, lower_version, upper_version)
-        elif int(setup_version_splitted[1]) == int(upper_version_splitted[1]):
-            if int(setup_version_splitted[2]) > int(upper_version_splitted[2]):
-                raise_python_version_error(setup_version, lower_version, upper_version)
+def create_virtual_environùent(venv_name: str = None, python_executable: str = sys.executable) -> None:
+    """Create a virtual environment."""
+    print("Create virtual environment")
+    subprocess.run([python_executable, "-m", "venv", venv_name], check=True, shell=True)
+    print()
 
 
 def main():
@@ -426,8 +530,16 @@ def main():
     # Parameters
     show_parameters(args)
 
+    print("")
+    print("Clear workspace ------------------------------------------------------------------------------")
+    print("")
+
     # Clean-up workspace
-    clear_workspace(args)
+    if args.force_clear:
+        clear_workspace()
+    else:
+        print("Skipped")
+
 
     print("")
     print("Setup virtual environment --------------------------------------------------------------------")
@@ -435,7 +547,7 @@ def main():
 
     # Create virtual environment
     print("Create virtual environment")
-    if os.path.isdir(args.venv_name) and args.no_clear:
+    if os.path.isdir(args.venv_name) and not args.force_clear:
         print("Skipped")
     else:
         subprocess.run([sys.executable, "-m", "venv", ".venv"])
@@ -443,7 +555,10 @@ def main():
 
     # Upgrade to latest pip version
     print("Upgrade to latest pip version")
-    subprocess.run([".venv/Scripts/python", "-m", "pip", "install", "--upgrade", "pip"])
+    if args.force_clear:
+        upgrade_pip(python_executable=r".\.venv\Scripts\python")
+    else:
+        print("Skipped")
     print("")
 
     print("Setup build system ---------------------------------------------------------------------------")
@@ -451,18 +566,18 @@ def main():
 
     # Install build system
     print("Install build system")
-    if "run" in args.dependencies:
-        command = ".venv/Scripts/python -m pip install %s" % (args.build_system)
-        if args.build_system_version != "*":
-            command += "==%s" % (args.build_system_version)
-        subprocess.run(command, check=True)
+    if args.force_clear:
+        get_python_package(
+            args.build_system, args.build_system_version,  method="install", python_executable=r".\.venv\Scripts\python"
+        )
     else:
         print("Skipped")
     print("")
 
+
     # Configure build system
     print("Configure build system")
-    if "run" in args.dependencies:
+    if args.force_clear:
         configure_build_system(args)
     else:
         print("Skipped")
@@ -474,7 +589,7 @@ def main():
     # Install package dependencies
     print("Install run dependencies")
     if "run" in args.dependencies:
-        install_package_dependencies(args)
+        install_production_dependencies(args)
     else:
         print("Skipped")
     print("")
