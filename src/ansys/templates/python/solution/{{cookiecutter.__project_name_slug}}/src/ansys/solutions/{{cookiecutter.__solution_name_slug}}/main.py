@@ -5,7 +5,9 @@
 from ansys.saf.glow.runtime import glow_main
 
 from ansys.solutions.{{ cookiecutter.__solution_name_slug }}.solution import definition
-{% if cookiecutter.with_dash_ui == "yes" %} from ansys.solutions.{{ cookiecutter.__solution_name_slug }}.ui import app {% endif %}
+{% if cookiecutter.with_dash_ui == "yes" %}
+from ansys.solutions.{{ cookiecutter.__solution_name_slug }}.ui import app
+{% endif %}
 
 
 def main():
