@@ -35,7 +35,7 @@ in the `Solutions Developer's Guide <https://dev-docs.solutions.ansys.com/index.
 Flagship products
 ~~~~~~~~~~~~~~~~~
 
-Specify if any.
+Specify required flagship products.
 
 Setup the development environment
 ---------------------------------
@@ -97,7 +97,7 @@ For packages collected from PyAnsys private PyPI run:
 
     poetry add <name-of-package> --source pyansys-private-pypi
 
-To request a specific version of a package:
+To request a specific version of a package add ``==<version>``:
 
   .. code:: bash
 
