@@ -66,7 +66,7 @@ layout = html.Div(
                     [
                         dbc.Button(
                             "Back to Projects",
-                            id = "return-button",
+                            id = "return-to-portal",
                             className = "me-2",
                             n_clicks = 0,
                             style = {"background-color": "rgba(0, 0, 0, 1)", "border-color": "rgba(0, 0, 0, 1)"},
@@ -125,7 +125,6 @@ def return_to_portal(pathname):
                         href=portal_ui_url,
                         children=dbc.Button(
                             "Back to Projects",
-                            id="return-button",
                             className="me-2",
                             n_clicks=0,
                             style={"background-color": "rgba(0, 0, 0, 1)", "border-color": "rgba(0, 0, 0, 1)"},

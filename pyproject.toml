@@ -19,10 +19,8 @@ classifiers = [
     "License :: Other/Proprietary License",
     "Natural Language :: English",
     "Operating System :: Microsoft :: Windows",
-    "Private :: Do Not Upload",
     "Programming Language :: Python :: 3.7",
     "Programming Language :: Python :: 3.8",
-    "Programming Language :: Python :: 3.9",
     "Topic :: Scientific/Engineering"
 ]
 packages = [
@@ -40,15 +38,15 @@ python = ">=3.7, <3.9"
 ansys-dash-treeview = {version = "0.0.1.dev0", source = "solutions-private-pypi"}
 ansys-saf-glow = {version = "0.1.6", source = "solutions-private-pypi" }
 ansys-saf-portal = {version = "0.1.1", source = "solutions-private-pypi"}
-
-dash = {version = "^2.6"}
+toml = {version = "*"}
+tox = {version = "*"} 
+ 
+dash = {version = "^2.6"}  
 dash_bootstrap_components = {version = "^1.2"}
 dash-extensions = {version = "^0.1"}
 dash-iconify = {version = "^0.1"}
-dash-uploader = {version = "^0.6"} 
+dash-uploader = {version = "^0.6"}
 
-toml = {version = "*"}
-tox = {version = "*"} 
 
 [tool.poetry.plugins."console_scripts"]
 solution_main = "ansys.solutions.solution.main:main"
