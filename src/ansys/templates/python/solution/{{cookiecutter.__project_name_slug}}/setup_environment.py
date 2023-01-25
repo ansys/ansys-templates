@@ -10,6 +10,7 @@ import argparse
 import os
 from pathlib import Path, PurePath
 import platform
+import re
 import shutil
 import subprocess
 import sys
@@ -23,6 +24,62 @@ except:
     import toml
 
 # =================================================== [Functions] =================================================== #
+
+def raise_python_version_error(setup_version, lower_version, upper_version):
+    """Raise Python version error."""
+    raise Exception(f"Python version is wrong. Project required a version in the range {lower_version}, {upper_version}. Current version is {setup_version}.")
+
+
+def read_numbers_from_string(string):
+    """Return numbers from a string."""
+    return re.findall("[-+]?[.]?[\d]+(?:,\d\d\d)*[\.]?\d*(?:[eE][-+]?\d+)?", string)  
+
+
+def get_lower_version_from_python_specification(lower_specification):
+    """Take a lower specification and convert it to the lowest authorized python version."""
+    lower_version = "".join(read_numbers_from_string(lower_specification))
+    if lower_specification.startswith(">") and "=" not in lower_specification:
+        lower_version_splitted = lower_version.split(".")
+        lower_version_splitted[-1] = str(int(lower_version_splitted[-1]) + 1)
+        lower_version = ".".join(lower_version_splitted)
+    return lower_version         
+
+
+def get_upper_version_from_python_specification(upper_specification):
+    """Take a upper specification and convert it to the highest authorized python version."""
+    upper_version = "".join(read_numbers_from_string(upper_specification))
+    if upper_specification.startswith("<") and "=" not in upper_specification:
+        upper_version_splitted = upper_version.split(".")
+        upper_version_splitted[-1] = str(int(upper_version_splitted[-1]) - 1)
+        upper_version = ".".join(upper_version_splitted)
+    return upper_version    
+
+
+def get_compatible_python_versions(configuration_file):
+    """Reads a pyproject.toml file and axtract the list of compatible python versions."""
+    configuration = toml.load(configuration_file)
+    python_compatibility = configuration["tool"]["poetry"]["dependencies"]["python"].replace(" ", "")
+    if "," in python_compatibility:
+        # Process lower version
+        lower_specification = python_compatibility.split(",")[0]
+        lower_version = get_lower_version_from_python_specification(lower_specification)
+        # Process upper version
+        upper_specification = python_compatibility.split(",")[1]
+        upper_version = get_upper_version_from_python_specification(upper_specification)
+    else:
+        if python_compatibility.startswith(">"):
+            lower_version = get_lower_version_from_python_specification(python_compatibility)
+            upper_version = "3.10"
+        elif python_compatibility.startswith("<"):
+            lower_version = "3.7"
+            upper_version = get_lower_version_from_python_specification(python_compatibility)
+        else:
+            raise Exception("Unable to interpret python version specification.")
+    if len(lower_version.split(".")) == 2:
+        lower_version += ".0"
+    if len(upper_version.split(".")) == 2:
+        upper_version += ".0"  
+    return lower_version, upper_version
 
 
 def get_python_version():
@@ -181,6 +238,8 @@ def check_inputs(args):
                 raise FileNotFoundError(
                     "A README file is declared in the configuration file but is missing in the project."
                 )
+    # Check python version
+    check_python_version("pyproject.toml")
 
 
 def show_parameters(args):
@@ -210,9 +269,9 @@ def clear_workspace(args):
             shutil.rmtree(".venv")
 
 
-def get_private_sources(config_file):
+def get_private_sources(configuration_file):
     """Get list of private sources from configuration file."""
-    package_config = toml.load(config_file)
+    package_config = toml.load(configuration_file)
     try:
         private_sources = package_config["tool"]["poetry"]["source"]
     except:
@@ -220,9 +279,9 @@ def get_private_sources(config_file):
     return private_sources
 
 
-def get_package_data(config_file):
+def get_package_data(configuration_file):
     """Get list of package data to include in the source distribution."""
-    package_config = toml.load(config_file)
+    package_config = toml.load(configuration_file)
     try:
         package_data = package_config["tool"]["poetry"]["include"]
     except:
@@ -310,6 +369,33 @@ def build_distribution(args):
         subprocess.run([".venv/Scripts/python", "-m", "build"], check=True)
     else:
         raise ValueError("Unknown build method %s." % (args.build_method))
+
+
+def check_python_version(configuration_file):
+    """Check if the current python version is compatible with the pyproject.toml specifications."""
+    setup_version = get_python_version()
+    lower_version, upper_version = get_compatible_python_versions("pyproject.toml")
+    setup_version_splitted = setup_version.split('.')
+    lower_version_splitted = lower_version.split('.')
+    upper_version_splitted = upper_version.split('.')
+    # Check lower limit
+    if int(setup_version_splitted[0]) < int(lower_version_splitted[0]):
+        raise_python_version_error(setup_version, lower_version, upper_version)
+    elif int(setup_version_splitted[0]) == int(lower_version_splitted[0]):
+        if int(setup_version_splitted[1]) < int(lower_version_splitted[1]):
+            raise_python_version_error(setup_version, lower_version, upper_version)
+        elif int(setup_version_splitted[1]) == int(lower_version_splitted[1]):
+            if int(setup_version_splitted[2]) < int(lower_version_splitted[2]):
+                raise_python_version_error(setup_version, lower_version, upper_version)
+    # Check upper limit
+    if int(setup_version_splitted[0]) > int(upper_version_splitted[0]):
+        raise_python_version_error(setup_version, lower_version, upper_version)
+    elif int(setup_version_splitted[0]) == int(upper_version_splitted[0]):
+        if int(setup_version_splitted[1]) > int(upper_version_splitted[1]):
+            raise_python_version_error(setup_version, lower_version, upper_version)
+        elif int(setup_version_splitted[1]) == int(upper_version_splitted[1]):
+            if int(setup_version_splitted[2]) > int(upper_version_splitted[2]):
+                raise_python_version_error(setup_version, lower_version, upper_version)
 
 
 def main():
