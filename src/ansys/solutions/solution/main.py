@@ -5,7 +5,9 @@
 from ansys.saf.glow.runtime import glow_main
 
 from ansys.solutions.solution.solution import definition
- from ansys.solutions.solution.ui import app 
+
+from ansys.solutions.solution.ui import app
+
 
 
 def main():

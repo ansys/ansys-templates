@@ -1,7 +1,7 @@
 # ©2022, ANSYS Inc. Unauthorized use, distribution or duplication is prohibited.
 
 """
-A Python script to automatize the setup of the Python ecosystem of a solution or framework.
+A Python script to automate the setup of the Python ecosystem of a solution or framework.
 """
 
 # ==================================================== [Imports] ==================================================== #
@@ -33,7 +33,7 @@ def read_integers_from_string(string):
 
     The regex matches any digit character (0-9).
     """
-    return re.findall("\d+", string)  
+    return re.findall("\d+", string)
 
 
 def get_lower_version_from_python_specification(lower_specification):
@@ -43,7 +43,7 @@ def get_lower_version_from_python_specification(lower_specification):
         lower_version_splitted = lower_version.split(".")
         lower_version_splitted[-1] = str(int(lower_version_splitted[-1]) + 1)
         lower_version = ".".join(lower_version_splitted)
-    return lower_version         
+    return lower_version
 
 
 def get_upper_version_from_python_specification(upper_specification):
@@ -53,7 +53,7 @@ def get_upper_version_from_python_specification(upper_specification):
         upper_version_splitted = upper_version.split(".")
         upper_version_splitted[-1] = str(int(upper_version_splitted[-1]) - 1)
         upper_version = ".".join(upper_version_splitted)
-    return upper_version    
+    return upper_version
 
 
 def get_compatible_python_versions(configuration_file):
@@ -79,7 +79,7 @@ def get_compatible_python_versions(configuration_file):
     if len(lower_version.split(".")) == 2:
         lower_version += ".0"
     if len(upper_version.split(".")) == 2:
-        upper_version += ".0"  
+        upper_version += ".0"
     return lower_version, upper_version
 
 
@@ -460,7 +460,7 @@ def configure_build_system(args):
 def install_production_dependencies(args):
     """Install the package (mandatory requirements only)."""
     subprocess.run([".venv/Scripts/poetry", "install", "-v"], check=True)
-    
+
 
 def install_optional_dependencies(dependency_group):
     """Install optional requirements (doc, tests, build or style)."""
