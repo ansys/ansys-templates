@@ -540,7 +540,6 @@ def main():
     else:
         print("Skipped")
 
-
     print("")
     print("Setup virtual environment --------------------------------------------------------------------")
     print("")
@@ -555,10 +554,7 @@ def main():
 
     # Upgrade to latest pip version
     print("Upgrade to latest pip version")
-    if args.force_clear:
-        upgrade_pip(python_executable=r".\.venv\Scripts\python")
-    else:
-        print("Skipped")
+    upgrade_pip(python_executable=r".\.venv\Scripts\python")
     print("")
 
     print("Setup build system ---------------------------------------------------------------------------")
@@ -566,21 +562,13 @@ def main():
 
     # Install build system
     print("Install build system")
-    if args.force_clear:
-        get_python_package(
-            args.build_system, args.build_system_version,  method="install", python_executable=r".\.venv\Scripts\python"
-        )
-    else:
-        print("Skipped")
-    print("")
-
+    get_python_package(
+        args.build_system, args.build_system_version,  method="install", python_executable=r".\.venv\Scripts\python"
+    )
 
     # Configure build system
     print("Configure build system")
-    if args.force_clear:
-        configure_build_system(args)
-    else:
-        print("Skipped")
+    configure_build_system(args)
     print("")
 
     print("Install requirements -------------------------------------------------------------------------")
