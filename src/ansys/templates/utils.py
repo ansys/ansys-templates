@@ -135,6 +135,8 @@ def keep_files(files_list, project_path=Path(os.getcwd())):
         if str(file.relative_to(project_path)).replace(separator, new_separator) not in desired_files:
             file.unlink() if file.is_file() else folders.append(file)
 
+    folders = sorted(folders, reverse=True)
+
     # Removing undesired empty folders
     [folder.rmdir() for folder in folders if not os.listdir(str(folder))]
 
