@@ -62,18 +62,7 @@ layout = html.Div(
                     ],
                     className="ms-auto",
                 ),
-                html.Div(
-                    [
-                        dbc.Button(
-                            "Back to Projects",
-                            id = "return-to-portal",
-                            className = "me-2",
-                            n_clicks = 0,
-                            style = {"background-color": "rgba(0, 0, 0, 1)", "border-color": "rgba(0, 0, 0, 1)"},
-                        ),
-                    ],
-                    className = "bg-light border"
-                )
+                html.Div(id="return-to-portal"),
             ],
             direction = "horizontal",
             gap = 3,
@@ -118,19 +107,13 @@ def return_to_portal(pathname):
         []
         if portal_ui_url is None
         else [
-            html.P(
-                className="back-link",
-                children=[
-                    html.A(
-                        href=portal_ui_url,
-                        children=dbc.Button(
-                            "Back to Projects",
-                            className="me-2",
-                            n_clicks=0,
-                            style={"background-color": "rgba(0, 0, 0, 1)", "border-color": "rgba(0, 0, 0, 1)"},
-                        ),
-                    )
-                ],
+            dbc.Button(
+                "Back to Projects",
+                id = "return-to-portal",
+                className = "me-2",
+                n_clicks = 0,
+                href = portal_ui_url,
+                style = {"background-color": "rgba(0, 0, 0, 1)", "border-color": "rgba(0, 0, 0, 1)"},
             )
         ]
     )
