@@ -492,6 +492,13 @@ def build_distribution(args):
         raise ValueError("Unknown build method %s." % (args.build_method))
 
 
+def create_virtual_environùent(venv_name: str = None, python_executable: str = sys.executable) -> None:
+    """Create a virtual environment."""
+    print("Create virtual environment")
+    subprocess.run([python_executable, "-m", "venv", venv_name], check=True, shell=True)
+    print()
+
+
 def main():
     """Sequence of operations leading to the complete Python ecosystem."""
     # Start timer
