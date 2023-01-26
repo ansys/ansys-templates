@@ -8,7 +8,7 @@ A Python script to automate the setup of the Python ecosystem of a solution or f
 
 import argparse
 import os
-from packaging import version
+from packaging.markers import Marker
 from pathlib import Path, PurePath
 import platform
 import re
@@ -17,12 +17,7 @@ import subprocess
 import sys
 import textwrap
 import time
-
-try:
-    import toml
-except:
-    subprocess.run(f"{sys.executable} -m pip install toml", check=True)
-    import toml
+import toml
 
 # =================================================== [Functions] =================================================== #
 
@@ -36,65 +31,65 @@ def read_integers_from_string(string):
     return re.findall("\d+", string)
 
 
-def get_lower_version_from_python_specification(lower_specification):
-    """Take a lower specification and convert it to the lowest authorized python version."""
-    lower_version = ".".join(read_integers_from_string(lower_specification))
-    if lower_specification.startswith(">") and "=" not in lower_specification:
-        lower_version_splitted = lower_version.split(".")
-        lower_version_splitted[-1] = str(int(lower_version_splitted[-1]) + 1)
-        lower_version = ".".join(lower_version_splitted)
-    return lower_version
+def get_version_from_python_specification(specification):
+    """Read the version."""
+    return ".".join(read_integers_from_string(specification))
 
 
-def get_upper_version_from_python_specification(upper_specification):
-    """Take a upper specification and convert it to the highest authorized python version."""
-    upper_version = ".".join(read_integers_from_string(upper_specification))
-    if upper_specification.startswith("<") and "=" not in upper_specification:
-        upper_version_splitted = upper_version.split(".")
-        upper_version_splitted[-1] = str(int(upper_version_splitted[-1]) - 1)
-        upper_version = ".".join(upper_version_splitted)
-    return upper_version
+def get_sign_from_python_specification(specification):
+    """Read the mathematical symbol expressing a constraint on the version."""
+    first_part = specification.split(".")[0]
+    sign = "".join([i for i in first_part if not i.isdigit()])
+    return sign if sign != "" else "==":
 
 
-def get_compatible_python_versions(configuration_file):
+def check_python_version(configuration_file):
     """Reads a pyproject.toml file and axtract the list of compatible python versions."""
+    # Initialize lower/upper versions
+    lower_version, upper_version, lower_sign, upper_sign = None, None, None, None
+    lower_specification, upper_specification, single_specification = None, None, None
+    # Read TOML
     configuration = toml.load(configuration_file)
+    # Read Python version constraint
     python_compatibility = configuration["tool"]["poetry"]["dependencies"]["python"].replace(" ", "")
+    # Split lower/upper version constraint
     if "," in python_compatibility:
-        # Process lower version
-        lower_specification = python_compatibility.split(",")[0]
-        lower_version = get_lower_version_from_python_specification(lower_specification)
-        # Process upper version
-        upper_specification = python_compatibility.split(",")[1]
-        upper_version = get_upper_version_from_python_specification(upper_specification)
+        lower_specification, upper_specification = python_compatibility.split(",")[0], python_compatibility.split(",")[1]
     else:
         if python_compatibility.startswith(">"):
-            lower_version = get_lower_version_from_python_specification(python_compatibility)
-            upper_version = "3.10"
+            lower_specification, upper_specification = python_compatibility, None
         elif python_compatibility.startswith("<"):
-            lower_version = "3.7"
-            upper_version = get_lower_version_from_python_specification(python_compatibility)
+            lower_specification, upper_specification = None, python_compatibility
         else:
+            single_specification = python_compatibility
+    # Process lower constraint
+    if lower_specification:
+        lower_version = get_version_from_python_specification(lower_specification)
+        lower_sign = get_sign_from_python_specification(lower_specification)
+        marker = Marker(f"python_full_version {lower_sign} '{lower_version}'")
+        if not marker.evaluate():
+            raise Exception(f"Python version must be greater than or equal to {lower_version}.")
+    # Process upper constraint
+    if upper_specification:
+        upper_version = get_version_from_python_specification(upper_specification)
+        upper_sign = get_sign_from_python_specification(upper_specification)
+        marker = Marker(f"python_full_version {upper_sign} '{upper_version}'")
+        if not marker.evaluate():
+            raise Exception(f"Python version must be lower than or equal to {upper_version}.")
+    # Process single
+    if single_specification:
+        version = get_version_from_python_specification(single_specification)
+        sign = get_sign_from_python_specification(single_specification)
+        if sign != "==":
             raise Exception("Unable to interpret python version specification.")
-    if len(lower_version.split(".")) == 2:
-        lower_version += ".0"
-    if len(upper_version.split(".")) == 2:
-        upper_version += ".0"
-    return lower_version, upper_version
+        marker = Marker(f"python_full_version {sign} '{version}'")
+        if not marker.evaluate():
+            raise Exception(f"Python version must be equal to {version}.")
 
 
 def get_python_version():
     """Get Python version."""
     return f"{sys.version_info.major}.{sys.version_info.minor}.{sys.version_info.micro}"
-
-
-def check_python_version(configuration_file):
-    """Check if the current python version is compatible with the pyproject.toml specifications."""
-    setup_version = get_python_version()
-    lower_version, upper_version = get_compatible_python_versions(configuration_file)
-
-    if version.parse(setup_version) < version.parse(lower_version) or version.parse(setup_version) > version.parse(upper_version):
-        raise Exception(f"Python version is wrong. Project required a version in the range {lower_version}, {upper_version}. Current version is {setup_version}.")
 
 
 def get_python_package(
@@ -287,7 +282,7 @@ def parser():
     optional_inputs.add_argument(
         "-f",
         "--force-clear",
-        help="Clean-up the workspace. Delete existing .venv and poteyr.lock.",
+        help="Clean-up the workspace. Delete existing .venv and poetry.lock.",
         action="store_true",
         required=False,
     )
