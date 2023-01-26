@@ -40,9 +40,7 @@ def get_sign_from_python_specification(specification):
     """Read the mathematical symbol expressing a constraint on the version."""
     first_part = specification.split(".")[0]
     sign = "".join([i for i in first_part if not i.isdigit()])
-    if sign == "":
-        sign = "=="
-    return sign
+    return sign if sign != "" else "==":
 
 
 def check_python_version(configuration_file):
