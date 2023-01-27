@@ -40,9 +40,7 @@ def get_sign_from_python_specification(specification):
     """Read the mathematical symbol expressing a constraint on the version."""
     first_part = specification.split(".")[0]
     sign = "".join([i for i in first_part if not i.isdigit()])
-    if sign == "":
-        sign = "=="
-    return sign
+    return sign if sign != "" else "==":
 
 
 def check_python_version(configuration_file):
@@ -490,6 +488,13 @@ def build_distribution(args):
         subprocess.run([".venv/Scripts/python", "-m", "build"], check=True)
     else:
         raise ValueError("Unknown build method %s." % (args.build_method))
+
+
+def create_virtual_environùent(venv_name: str = None, python_executable: str = sys.executable) -> None:
+    """Create a virtual environment."""
+    print("Create virtual environment")
+    subprocess.run([python_executable, "-m", "venv", venv_name], check=True, shell=True)
+    print()
 
 
 def main():
