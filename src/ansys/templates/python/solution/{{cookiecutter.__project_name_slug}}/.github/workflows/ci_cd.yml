@@ -1,4 +1,4 @@
-name: CI
+name: CI pipeline
 
 on:
   pull_request:
@@ -10,15 +10,15 @@ on:
 env:
   MAIN_PYTHON_VERSION: '3.7'
   DOCUMENTATION_CNAME: '{{ cookiecutter.__solution_name_slug }}.docs.solutions.ansys.com'
-  POETRY_VERSION: 1.1.15
+  POETRY_VERSION: 1.3
   TOX_VERSION: 3.27.1
   POETRY_HTTP_BASIC_PYANSYS_PRIVATE_PYPI_USERNAME: 'PAT'
-  POETRY_HTTP_BASIC_PYANSYS_PRIVATE_PYPI_PASSWORD: ${{ secrets.PYANSYS_PRIVATE_PYPI_PAT }}
+  POETRY_HTTP_BASIC_PYANSYS_PRIVATE_PYPI_PASSWORD: {{ ' ${{ secrets.PYANSYS_PRIVATE_PYPI_PAT }}' }}
   POETRY_HTTP_BASIC_SOLUTIONS_PRIVATE_PYPI_USERNAME: 'PAT'
-  POETRY_HTTP_BASIC_SOLUTIONS_PRIVATE_PYPI_PASSWORD: ${{ secrets.SOLUTIONS_PRIVATE_PYPI_PAT }}
+  POETRY_HTTP_BASIC_SOLUTIONS_PRIVATE_PYPI_PASSWORD: {{ '${{ secrets.SOLUTIONS_PRIVATE_PYPI_PAT }}' }}
 
 concurrency:
-  group: ${{ github.workflow }}-${{ github.ref }}
+  group: {{ '${{ github.workflow }}-${{ github.ref }}' }}
   cancel-in-progress: true
 
 jobs:
@@ -32,7 +32,7 @@ jobs:
       - name: Check documentation style
         uses: Solution-Applications/actions/check-doc-style@v0.0.1
         with:
-          gh-token: ${{ secrets.GITHUB_TOKEN }}
+          gh-token: {{ '${{ secrets.GITHUB_TOKEN }}' }}
 
   build-doc:
     if: |
@@ -44,7 +44,7 @@ jobs:
       - name: Build documentation
         uses: Solution-Applications/actions/build-doc@v0.0.1
         with:
-          python-version: ${{ env.MAIN_PYTHON_VERSION }}
+          python-version: {{ '${{ env.MAIN_PYTHON_VERSION }}' }}
           documentation-artifact: html-documentation
 
   deploy-doc:
@@ -59,9 +59,9 @@ jobs:
         uses: pyansys/actions/doc-deploy-stable@v2
         with:
             doc-artifact-name: 'html-documentation'
-            cname: ${{ env.DOCUMENTATION_CNAME }}
-            token: ${{ secrets.GITHUB_TOKEN }}
-            python-version: ${{ env.MAIN_PYTHON_VERSION }}
+            cname: {{ '${{ env.DOCUMENTATION_CNAME }}' }}
+            token: {{ '${{ secrets.GITHUB_TOKEN }}' }}
+            python-version: {{ '${{ env.MAIN_PYTHON_VERSION }}' }}
 
   check-copyright:
     if: |
@@ -73,7 +73,7 @@ jobs:
       - name: Check copyright
         uses: Solution-Applications/actions/check-copyright@v0.0.1
         with:
-          gh-token: ${{ secrets.WORKFLOW_TOKEN }}
+          gh-token: {{ ' ${{ secrets.WORKFLOW_TOKEN }}' }}
 
   check-code-style:
     if: |
@@ -85,8 +85,8 @@ jobs:
       - name: Check code style
         uses: Solution-Applications/actions/check-code-style@v0.0.1
         with:
-          python-version: ${{ env.MAIN_PYTHON_VERSION }}
-          tox-version: ${{ env.TOX_VERSION }}
+          python-version: {{ ' ${{ env.MAIN_PYTHON_VERSION }}' }}
+          tox-version: {{ ' ${{ env.TOX_VERSION }}' }}
 
   build:
     if: |
@@ -97,10 +97,10 @@ jobs:
       - name: Build
         uses: Solution-Applications/actions/build@v0.0.1
         with:
-          python-version: ${{ env.MAIN_PYTHON_VERSION }}
+          python-version: {{ ' ${{ env.MAIN_PYTHON_VERSION }}' }}
           artifact-name: wheel
           run-in-venv: true
-          poetry-version: ${{ env.POETRY_VERSION }}
+          poetry-version: {{ ' ${{ env.POETRY_VERSION }}' }}
           retention-days: 7
 
   run-tests:
@@ -117,9 +117,9 @@ jobs:
       - name: Run tests
         uses: Solution-Applications/actions/run-tests@v0.0.1
         with:
-          python-version: ${{ matrix.python-version }}
-          poetry-version: ${{ env.POETRY_VERSION }}
-          tox-version: ${{ env.TOX_VERSION }}
+          python-version: {{ ' ${{ matrix.python-version }}' }}
+          poetry-version: {{ ' ${{ env.POETRY_VERSION }}' }}
+          tox-version: {{ ' ${{ env.TOX_VERSION }}' }}
           check-coverage-ratio: false
           min-coverage-ratio: 80
           run-in-venv: true
@@ -137,7 +137,7 @@ jobs:
       - name: Release
         uses: Solution-Applications/actions/release@v0.0.1
         with:
-          python-version: ${{ env.MAIN_PYTHON_VERSION }}
-          gh-token: ${{ secrets.WORKFLOW_TOKEN }}
-          solutions-pypi-token: ${{ secrets.SOLUTIONS_PRIVATE_PYPI_PAT }}
+          python-version: {{ ' ${{ env.MAIN_PYTHON_VERSION }}' }}
+          gh-token: {{ ' ${{ secrets.WORKFLOW_TOKEN }}' }}
+          solutions-pypi-token: {{ ' ${{ secrets.SOLUTIONS_PRIVATE_PYPI_PAT }}' }}
           solutions-pypi-repository-url: https://pkgs.dev.azure.com/pyansys/_packaging/ansys-solutions/pypi/upload/
