@@ -58,7 +58,7 @@ jobs:
       - name: Deploy documentation
         uses: Solution-Applications/actions/deploy-doc@v0.1.1
         with:
-          gh-token: ${{ secrets.GITHUB_TOKEN }}
+          gh-token: {{ '${{ secrets.GITHUB_TOKEN }}' }}
           documentation-artifact: html-documentation
           branch: gh-pages
 
