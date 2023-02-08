@@ -36,8 +36,8 @@ secondary = true
 [tool.poetry.dependencies]
 python = ">=3.7, <3.9"
 ansys-dash-treeview = {version = "0.0.1.dev0", source = "solutions-private-pypi"}
-ansys-saf-glow = {version = "0.1.6", source = "solutions-private-pypi" }
-ansys-saf-portal = {version = "0.1.1", source = "solutions-private-pypi"}
+ansys-saf-glow = {version = "0.1.9", source = "solutions-private-pypi" }
+ansys-saf-portal = {version = "0.1.2", source = "solutions-private-pypi"}
 toml = {version = "*"}
 tox = {version = "*"} 
  
