@@ -1,0 +1,57 @@
+Format: https://www.debian.org/doc/packaging-manuals/copyright-format/1.0/
+Upstream-Name: ansys-templates
+Upstream-Contact: pyansys.support@ansys.com
+Source: https://github.com/ansys/ansys-templates
+
+
+Files: src/ansys/templates/python/*
+Copyright: 2023 ANSYS, Inc. and/or its affiliates.
+License: MIT
+
+Files: src/ansys/templates/licenses/*
+Copyright: 2023 ANSYS, Inc. and/or its affiliates.
+License: MIT
+
+Files: .github/*
+Copyright: 2023 ANSYS, Inc. and/or its affiliates.
+License: MIT
+
+Files: doc/.vale.ini
+Copyright: 2023 ANSYS, Inc. and/or its affiliates.
+License: MIT
+
+Files: doc/styles/*
+Copyright: 2023 ANSYS, Inc. and/or its affiliates.
+License: MIT
+
+Files: doc/source/_static/*
+Copyright: 2023 ANSYS, Inc. and/or its affiliates.
+License: MIT
+
+Files: doc/source/_templates/*
+Copyright: 2023 ANSYS, Inc. and/or its affiliates.
+License: MIT
+
+Files: .flake8
+Copyright: 2023 ANSYS, Inc. and/or its affiliates.
+License: MIT
+
+Files: .gitignore
+Copyright: 2023 ANSYS, Inc. and/or its affiliates.
+License: MIT
+
+Files: .pre-commit-config.yaml
+Copyright: 2023 ANSYS, Inc. and/or its affiliates.
+License: MIT
+
+Files: tox.ini
+Copyright: 2023 ANSYS, Inc. and/or its affiliates.
+License: MIT
+
+Files: doc/make.bat
+Copyright: 2023 ANSYS, Inc. and/or its affiliates.
+License: MIT
+
+Files: doc/Makefile
+Copyright: 2023 ANSYS, Inc. and/or its affiliates.
+License: MIT

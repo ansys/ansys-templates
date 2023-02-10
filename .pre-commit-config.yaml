@@ -1,5 +1,10 @@
 repos:
 
+- repo: https://github.com/fsfe/reuse-tool
+  rev: v1.1.0
+  hooks:
+    - id: reuse
+
 - repo: https://github.com/psf/black
   rev: 23.1.0
   hooks:
