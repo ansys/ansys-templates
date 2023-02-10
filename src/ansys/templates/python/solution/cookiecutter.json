@@ -21,8 +21,5 @@
   "__product_name_slug": "",
   "__library_name_slug": "",
   "__is_pyansys": "False",
-  "_copy_without_render": [
-      "*.html",
-      "*.github"
-  ]
+  "_copy_without_render": ["*.html"]
 }
