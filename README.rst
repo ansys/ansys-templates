@@ -1,14 +1,23 @@
-#######################################
+##############################################
 Ansys Solutions 
-#######################################
+##############################################
+
+.. note::
+  This content needs to be configured according to the project specifics. 
+
 
 Introduction
 ============
 
+.. note::
+  Add here a description of the project.
+
 Ansys Solutions 
 
+  * Project name: **solution**
   * Solution name: **solution**
   * Package name: **ansys-solutions-**
+
 
 Installation
 ============
@@ -19,10 +28,15 @@ Prerequisites
 Python version support
 ~~~~~~~~~~~~~~~~~~~~~~
 
-Officially Python 3.7 to 3.8.
+.. note::
+  Add here the supported Python versions.
 
-Private PyPI server
-~~~~~~~~~~~~~~~~~~~
+For example:
+
+  Officially Python 3.7 to 3.8.
+
+Private PyPI servers
+~~~~~~~~~~~~~~~~~~~~
 
 Connection to Ansys-Solutions private PyPI server is required. Access is controlled via a ``Personal Access Token (PAT)`` which is available
 in the `Solutions Developer's Guide <https://dev-docs.solutions.ansys.com/index.html>`_. To declare the PAT on your system:
@@ -32,27 +46,63 @@ in the `Solutions Developer's Guide <https://dev-docs.solutions.ansys.com/index.
 
   2. Create a system environment variable named SOLUTIONS_PRIVATE_PYPI_PAT and assign the token.
   
+.. note::
+  In addition to the Ansys-Solutions private PyPI server, you can add several private sources such as PyAnsys private PyPI server. 
+
 Flagship products
 ~~~~~~~~~~~~~~~~~
 
-Specify required flagship products.
+.. note::
+  Add here the name and the versions of Ansys flagship products needed to run the solution. 
+  Remove this section if useless. 
+
+For example:
+
+  .. list-table:: Required flagship products
+    :widths: 200 100
+    :header-rows: 1
+
+    * - Product
+      - Versions
+
+    * - SpaceClaim
+      - R22.2 to latest
+
+    * - Fluent
+      - R23.1 to latest
+
+    * - XXX
+      - RXX.X
 
 Setup the development environment
 ---------------------------------
 
-This procedure is intended for software developers that will contribute to the package maintenance and development. 
-Poetry is used as dependency management tool. 
+In order to start using the solution or to develop inside the solution you need to install the Python ecosystem required.
+
+``poetry`` is the dependency manager tool used in this project. The dependencies are declared in ``pyproject.toml`` at project root.
 
 Automatic installation
 ~~~~~~~~~~~~~~~~~~~~~~
 
-1. Setup the Python environment:
+The automatic installation consists in running the setup_environment.py script at project root. Basically, this script creates a virtual environment,
+and installs the dependency management tool ``poetry``. The ``-d`` option is used to specify the group of dependencies to install. For production
+dependencies use ``-d run``, for doc dependencies use ``-d doc``, for tests dependencies ``-d tests``, and for build dependencies use ``-d build``.
+
+To install the complete development environment follow these instructions:
+
+1. Navigate to project root:
+
+  .. code:: bash
+
+    cd solution
+
+2. Setup the Python environment (the ``-d all`` option means that ``run``, ``doc``, ``tests``, and ``build`` dependencies will be installed):
 
   .. code:: bash
 
     python setup_environment.py -d all
 
-2. Activate the virtual environment:
+3. Activate the virtual environment:
 
   * For Linux system:
 
@@ -111,6 +161,7 @@ To start the application run the following command anywhere in the project:
   .. code:: bash
 
     saf run
+
 
 Code style check
 ================
@@ -191,6 +242,7 @@ Run codespell:
 
     python -m codespell .
 
+
 Testing
 =======
 
@@ -225,6 +277,7 @@ To run the tests against multiple Python versions automatically:
   .. code:: bash
 
     tox -e py
+
 
 Documentation
 =============
