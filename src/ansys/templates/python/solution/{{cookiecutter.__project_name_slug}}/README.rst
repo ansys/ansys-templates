@@ -1,15 +1,15 @@
-#################################################
-Ansys Solutions {{cookiecutter.solution_name}} 🚀
-#################################################
+##############################################
+Ansys Solutions {{cookiecutter.solution_name}}
+##############################################
 
 .. note::
-  ⚠️ This content needs to be configured according to the project specifics. 
+  This content needs to be configured according to the project specifics. 
 
 Introduction
 ============
 
 .. note::
-  ✍️ Add here a description of the project.
+  Add here a description of the project.
 
 Ansys Solutions {{cookiecutter.solution_name}}
 
@@ -27,7 +27,7 @@ Python version support
 ~~~~~~~~~~~~~~~~~~~~~~
 
 .. note::
-  ✍️ Add here the supported Python versions.
+  Add here the supported Python versions.
 
 For example:
 
@@ -45,13 +45,13 @@ in the `Solutions Developer's Guide <https://dev-docs.solutions.ansys.com/index.
   2. Create a system environment variable named SOLUTIONS_PRIVATE_PYPI_PAT and assign the token.
   
 .. note::
-  🛈 In addition to the Ansys-Solutions private PyPI server, you can add several private sources such as PyAnsys private PyPI server. 
+  In addition to the Ansys-Solutions private PyPI server, you can add several private sources such as PyAnsys private PyPI server. 
 
 Flagship products
 ~~~~~~~~~~~~~~~~~
 
 .. note::
-  ✍️ Add here the name and the versions of Ansys flagship products needed to run the solution. 
+  Add here the name and the versions of Ansys flagship products needed to run the solution. 
   Remove this section if useless. 
 
 For example:

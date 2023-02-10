@@ -4,7 +4,7 @@ on:
   pull_request:
     branches:
       - main
-    types: [opened, reopened, synchronize, ready_for_review, closed]
+    types: [opened, labeled, unlabeled, reopened, synchronize, ready_for_review, closed]
   workflow_dispatch:
 
 env:
