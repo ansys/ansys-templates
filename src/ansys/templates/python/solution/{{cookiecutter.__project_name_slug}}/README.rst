@@ -5,6 +5,7 @@ Ansys Solutions {{cookiecutter.solution_name}}
 .. note::
   This content needs to be configured according to the project specifics. 
 
+
 Introduction
 ============
 
@@ -16,6 +17,7 @@ Ansys Solutions {{cookiecutter.solution_name}}
   * Project name: **{{ cookiecutter.__project_name_slug }}**
   * Solution name: **{{ cookiecutter.__solution_name_slug }}**
   * Package name: **{{ cookiecutter.__pkg_name }}**
+
 
 Installation
 ============
@@ -160,6 +162,7 @@ To start the application run the following command anywhere in the project:
 
     saf run
 
+
 Code style check
 ================
 
@@ -239,6 +242,7 @@ Run codespell:
 
     python -m codespell .
 
+
 Testing
 =======
 
@@ -273,6 +277,7 @@ To run the tests against multiple Python versions automatically:
   .. code:: bash
 
     tox -e py
+
 
 Documentation
 =============
