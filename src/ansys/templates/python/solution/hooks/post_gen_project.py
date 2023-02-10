@@ -2,7 +2,7 @@ from ansys.templates.utils import keep_files
 
 
 DESIRED_STRUCTURE = [
-    ".github/workflows/ci_cd.yml",
+    ".github/workflows/ci.yml",
     ".vscode/launch.json",
     "doc/source/_static/ansys-solutions-logo-black-background.png",
     "doc/source/_static/README.md",
