@@ -13,7 +13,7 @@ from ansys.solutions.solution.ui import app
 def main():
     """Entry point."""
 
-    glow_main("solution", definition,  app )
+    glow_main(definition,  app )
 
 
 if __name__ == "__main__":
