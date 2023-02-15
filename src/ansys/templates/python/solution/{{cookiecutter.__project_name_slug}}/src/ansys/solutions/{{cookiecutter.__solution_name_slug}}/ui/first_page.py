@@ -3,9 +3,9 @@
 """Frontend of the first step."""
 
 
+from ansys.saf.glow.client.dashclient import DashClient
 from dash_extensions.enrich import Input, Output, State, callback, dcc, html
 
-from ansys.saf.glow.client.dashclient import DashClient
 from ansys.solutions.{{ cookiecutter.__solution_name_slug }}.solution.definition import {{cookiecutter.__solution_definition_name}}
 from ansys.solutions.{{ cookiecutter.__solution_name_slug }}.solution.first_step import FirstStep
 
@@ -15,10 +15,7 @@ def layout(step: FirstStep):
     return html.Div(
         [
             dcc.Markdown("""#### First step""", className="display-3"),
-            dcc.Markdown(
-                """###### Compute the sum of two numbers.""",
-                className="display-3"
-            ),
+            dcc.Markdown("""###### Compute the sum of two numbers.""", className="display-3"),
             html.Hr(className="my-2"),
             html.Br(),
             html.Div(["First Argument: ", dcc.Input(id="first-arg", value=step.first_arg, type="number")]),

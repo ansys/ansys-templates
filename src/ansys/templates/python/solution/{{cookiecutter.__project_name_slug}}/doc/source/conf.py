@@ -4,17 +4,16 @@
 
 # ==================================================== [Imports] ==================================================== #
 
-from ansys_sphinx_theme import ansys_favicon, get_version_match
-import os
 from datetime import datetime
+import os
 from pathlib import Path
+
+from ansys_sphinx_theme import ansys_favicon, get_version_match
 import toml
 
 # ============================================== [Project Information] ============================================== #
 
-package_configuration = toml.load(
-    Path(__file__).parent.parent.parent.absolute() / "pyproject.toml"
-)
+package_configuration = toml.load(Path(__file__).parent.parent.parent.absolute() / "pyproject.toml")
 
 # Project information
 project = package_configuration["tool"]["poetry"]["name"]
@@ -26,11 +25,7 @@ cname = os.getenv("DOCUMENTATION_CNAME", "nocname.com")
 # ============================================ [Options for HTML output] ============================================ #
 
 # Select desired logo, theme, and declare the html title
-html_logo = str(
-    Path(__file__).parent.absolute()
-    / "_static"
-    / "ansys-solutions-logo-black-background.png"
-)
+html_logo = str(Path(__file__).parent.absolute() / "_static" / "ansys-solutions-logo-black-background.png")
 html_theme = "ansys_sphinx_theme"
 html_favicon = ansys_favicon
 html_short_title = html_title = package_configuration["tool"]["poetry"]["name"]

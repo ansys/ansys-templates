@@ -188,8 +188,8 @@ def check_virtual_environment_name(args):
                 old_name = args.venv_name
                 args.venv_name = supported_dependency_management_systems[args.build_system]["required_venv_name"]
                 print(
-                    f"Warning: {args.build_system} expects the name of the virtual environment name to be {args.venv_name}."
-                    "{old_name} is replaced by {args.venv_name}."
+                    f"Warning: {args.build_system} expects the name of the virtual environment name to be "
+                    f"{args.venv_name}. {old_name} is replaced by {args.venv_name}."
                 )
 
 
@@ -598,7 +598,7 @@ def parser():
     optional_inputs.add_argument(
         "-v",
         "--verbose",
-        help="Activate verbose mdoe.",
+        help="Activate verbose mode.",
         action="store_true",
         required=False,
     )
@@ -630,7 +630,9 @@ def install_production_dependencies(args):
     print(f"Install production dependencies")
     if args.build_system and "run" in args.dependencies:
         if args.build_system == "poetry":
-            subprocess.run([rf".\{args.venv_name}\Scripts\poetry", "install", "-vv"], check=True, shell=True)
+            subprocess.run(
+                [rf".\{args.venv_name}\Scripts\poetry", "install", "--only", "main", "-vv"], check=True, shell=True
+            )
         elif args.build_system == "flit":
             subprocess.run([rf".\{args.venv_name}\Scripts\flit", "install"], check=True, shell=True)
         print()

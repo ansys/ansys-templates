@@ -89,8 +89,8 @@ jobs:
 
   check-code-style:
     if: |
-      github.event.pull_request.draft == false &&
-      github.event.pull_request.merged == false
+      github.event_name == 'pull_request' &&
+      github.event.pull_request.draft == false 
     name: Check code style
     runs-on: [ubuntu-latest]
     steps:
@@ -122,7 +122,7 @@ jobs:
       github.event_name == 'pull_request' &&
       github.event.pull_request.draft == false 
     name: Run tests
-    runs-on: [self-hosted, PIM]
+    runs-on: [windows-latest]
     strategy:
       matrix:
         python-version: ['3.7', '3.8']
@@ -133,7 +133,7 @@ jobs:
         with:
           python-version: {{ '${{ matrix.python-version }}' }}
           poetry-version: {{ '${{ env.POETRY_VERSION }}' }}
-          tox-version: {{ '{{ env.TOX_VERSION }}' }}
+          tox-version: {{ '${{ env.TOX_VERSION }}' }}
           check-coverage-ratio: false
           min-coverage-ratio: 80
           run-in-venv: true
