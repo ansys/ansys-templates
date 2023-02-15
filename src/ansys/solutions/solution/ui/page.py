@@ -14,7 +14,6 @@ from ansys.solutions.solution.solution.definition import (
 )
 from ansys.solutions.solution.ui import intro_page, first_page, second_page
 
-
 step_list = [
     {
         "key": "intro_step",

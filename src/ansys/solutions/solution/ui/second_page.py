@@ -13,10 +13,7 @@ def layout(step: SecondStep):
     return html.Div(
         [
             dcc.Markdown("""#### Second step""", className="display-3"),
-            dcc.Markdown(
-                """###### Subtitle.""",
-                className="display-3"
-            ),
+            dcc.Markdown("""###### Subtitle.""", className="display-3"),
             html.Hr(className="my-2"),
             html.Br(),
         ]
