@@ -3,10 +3,11 @@
 """Frontend of the first step."""
 
 import base64
-import dash_bootstrap_components as dbc
-from dash_extensions.enrich import dcc, html
 import os
 from pathlib import Path
+
+import dash_bootstrap_components as dbc
+from dash_extensions.enrich import dcc, html
 
 from ansys.solutions.{{ cookiecutter.__solution_name_slug }}.solution.intro_step import IntroStep
 

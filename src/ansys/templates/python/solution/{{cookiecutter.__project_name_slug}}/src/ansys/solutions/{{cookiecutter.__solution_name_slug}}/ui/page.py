@@ -14,7 +14,6 @@ from ansys.solutions.{{ cookiecutter.__solution_name_slug }}.solution.definition
 )
 from ansys.solutions.{{ cookiecutter.__solution_name_slug }}.ui import intro_page, first_page, second_page
 
-
 step_list = [
     {
         "key": "intro_step",
