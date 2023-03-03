@@ -41,7 +41,7 @@ Private PyPI servers
 Connection to Ansys-Solutions private PyPI server is required. Access is controlled via a ``Personal Access Token (PAT)`` which is available
 in the `Solutions Developer's Guide <https://dev-docs.solutions.ansys.com/index.html>`_. To declare the PAT on your system:
 
-  1. Visit the `Connecting to the private PyPI <https://dev-docs.solutions.ansys.com/how_to/get_started_org.html#connecting-to-the-private-pypi>`_ section of the `Solutions Developer's Guide <https://dev-docs.solutions.ansys.com/index.html>`_,
+  1. Visit the `Connecting to the private PyPI <https://dev-docs.solutions.ansys.com/getting_started/canonical_development_environment.html#connecting-to-the-private-pypi-servers>`_ section of the `Solutions Developer's Guide <https://dev-docs.solutions.ansys.com/index.html>`_,
      navigate to the Private PyPI servers section and copy the token related to Ansys-Solutions PyPI.
 
   2. Create a system environment variable named SOLUTIONS_PRIVATE_PYPI_PAT and assign the token.
@@ -96,13 +96,19 @@ To install the complete development environment follow these instructions:
 
     cd {{ cookiecutter.__project_name_slug }}
 
-2. Setup the Python environment (the ``-d all`` option means that ``run``, ``doc``, ``tests``, and ``build`` dependencies will be installed):
+2. Install ``toml`` and ``packaging``:
+
+  .. code:: bash
+
+    pip install toml packaging
+
+3. Setup the Python environment (the ``-d all`` option means that ``run``, ``doc``, ``tests``, and ``build`` dependencies will be installed):
 
   .. code:: bash
 
     python setup_environment.py -d all
 
-3. Activate the virtual environment:
+4. Activate the virtual environment:
 
   * For Linux system:
 
