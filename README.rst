@@ -102,13 +102,13 @@ To install the complete development environment follow these instructions:
 
     pip install toml packaging
 
-2. Setup the Python environment (the ``-d all`` option means that ``run``, ``doc``, ``tests``, and ``build`` dependencies will be installed):
+3. Setup the Python environment (the ``-d all`` option means that ``run``, ``doc``, ``tests``, and ``build`` dependencies will be installed):
 
   .. code:: bash
 
     python setup_environment.py -d all
 
-3. Activate the virtual environment:
+4. Activate the virtual environment:
 
   * For Linux system:
 
