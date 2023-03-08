@@ -48,6 +48,10 @@ Files: tox.ini
 Copyright: 2023 ANSYS, Inc. and/or its affiliates.
 License: MIT
 
+Files: AUTHORS.md
+Copyright: 2023 ANSYS, Inc. and/or its affiliates.
+License: MIT
+
 Files: doc/make.bat
 Copyright: 2023 ANSYS, Inc. and/or its affiliates.
 License: MIT
