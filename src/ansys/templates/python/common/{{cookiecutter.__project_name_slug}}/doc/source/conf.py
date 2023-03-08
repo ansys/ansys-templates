@@ -1,5 +1,6 @@
 """Sphinx documentation configuration file."""
 from datetime import datetime
+import os
 
 {%- if cookiecutter.__logo == "ansys" and cookiecutter.__logo_color == "white" %}
 from ansys_sphinx_theme import ansys_logo_white as logo
@@ -20,6 +21,7 @@ project = "{{ cookiecutter.__pkg_name }}"
 copyright = f"(c) {datetime.now().year} ANSYS, Inc. All rights reserved"
 author = "ANSYS, Inc."
 release = version = "{{ cookiecutter.__version }}"
+cname = os.getenv("DOCUMENTATION_CNAME")
 
 # Select desired logo, theme, and declare the html title
 html_logo = logo
@@ -38,6 +40,11 @@ html_theme_options = {
         ("PyAnsys", "https://docs.pyansys.com/"),
         {%- endif %}
     ],
+    "switcher": {
+        "json_url": f"https://{cname}/versions.json",
+        "version_match": get_version_match(__version__),
+    },
+    "check_switcher": False,
 }
 
 # Sphinx extensions
