@@ -19,15 +19,15 @@ jobs:
     runs-on: ubuntu-latest
     strategy:
       matrix:
-        python-version: ["3.7", "3.10"]
+        python-version: ["3.8", "3.11"]
         include:
 
-          - python-version: "3.7"
-            toxenv: py37
+          - python-version: "3.8"
+            toxenv: py38
             toxextra: keep-output
 
-          - python-version: "3.10"
-            toxenv: py310
+          - python-version: "3.11"
+            toxenv: py311
             toxextra: keep-output
 
         cfg:
@@ -75,7 +75,7 @@ jobs:
           tox -e ${{ matrix.toxenv }}-${{ matrix.toxextra }}-template
 
       - name: Move baked project to repo again
-        if: matrix.python-version == '3.7'
+        if: matrix.python-version == '3.8'
         run: |
           mv "output/test_template_python_${{ matrix.cfg.outdir }}" baked_template
           # GitHub Apps are not allowed to deal with .github workflows
@@ -83,7 +83,7 @@ jobs:
           ls -a baked_template
 
       - name: Create demo branch
-        if: matrix.python-version == '3.7'
+        if: matrix.python-version == '3.8'
         uses: peterjgrainger/action-create-branch@v2.4.0
         env:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
@@ -91,7 +91,7 @@ jobs:
           branch: "demo/${{ matrix.cfg.name }}"
 
       - name: Publish demo branch
-        if: matrix.python-version == '3.7'
+        if: matrix.python-version == '3.8'
         uses: s0/git-publish-subdir-action@develop
         env:
           REPO: self
