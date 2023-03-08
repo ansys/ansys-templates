@@ -10,6 +10,7 @@ on:
 env:
   MAIN_PYTHON_VERSION : '3.10'
   LIBRARY_NAME: 'ansys-templates'
+  LIBRARY_NAMESPACE: 'ansys.templates'
   DOCUMENTATION_CNAME: 'templates.ansys.com'
 
 concurrency:
@@ -23,14 +24,14 @@ jobs:
     runs-on: ubuntu-latest
     steps:
       - name: "Run PyAnsys code style checks"
-        uses: pyansys/actions/code-style@v3
+        uses: pyansys/actions/code-style@v4
 
   doc-style:
     name: Doc style
     runs-on: ubuntu-latest
     steps:
       - name: "Run Ansys documentation style checks"
-        uses: pyansys/actions/doc-style@v3
+        uses: pyansys/actions/doc-style@v4
         with:
           token: ${{ secrets.GITHUB_TOKEN }}
 
@@ -40,7 +41,7 @@ jobs:
     needs: doc-style
     steps:
       - name: "Run Ansys documentation building action"
-        uses: pyansys/actions/doc-build@v3
+        uses: pyansys/actions/doc-build@v4
 
   doc-deploy-development:
     name: Doc dev version deploy
@@ -49,7 +50,7 @@ jobs:
     needs: doc-build
     steps:
       - name: "Deploy developers documentation"
-        uses: pyansys/actions/doc-deploy-dev@v3
+        uses: pyansys/actions/doc-deploy-dev@v4
         with:
             cname: ${{ env.DOCUMENTATION_CNAME }}
             token: ${{ secrets.GITHUB_TOKEN }}
@@ -61,23 +62,45 @@ jobs:
     needs: doc-deploy-development
     steps:
       - name: "Deploy stable documentation"
-        uses: pyansys/actions/doc-deploy-stable@v3
+        uses: pyansys/actions/doc-deploy-stable@v4
         with:
             cname: ${{ env.DOCUMENTATION_CNAME }}
             token: ${{ secrets.GITHUB_TOKEN }}
 
+  smoke-tests:
+    name: Build and Smoke tests
+    runs-on: ${{ matrix.os }}
+    needs: [style]
+    strategy:
+      fail-fast: false
+      matrix:
+        os: [ubuntu-latest, windows-latest, macos-latest]
+        python-version: ['3.7', '3.8', '3.9', '3.10', '3.11']
+        should-release: 
+          - ${{ github.event_name == 'push' && contains(github.ref, 'refs/tags') }}
+        exclude:
+          - should-release: false
+            os: macos-latest
+    steps:
+        uses: pyansys/actions/build-wheelhouse@v4
+        with:
+          library-name: ${{ env.LIBRARY_NAME }}
+          library-namespace: ${{ env.LIBRARY_NAMESPACE }}
+          operating-system: ${{ matrix.os }}
+          python-version: ${{ matrix.python-version }}
+
   tests:
-    name: Smoke tests
+    name: Tests
     needs: code-style
     runs-on: ${{ matrix.os }}
     strategy:
       matrix:
         os: [windows-latest, ubuntu-latest]
         cfg:
-          - {python-version: "3.7", toxenv: "py37"}
           - {python-version: "3.8", toxenv: "py38"}
           - {python-version: "3.9", toxenv: "py39"}
           - {python-version: "3.10", toxenv: "py310"}
+          - {python-version: "3.11", toxenv: "py311"}
       fail-fast: false
 
     steps:
@@ -103,7 +126,7 @@ jobs:
     runs-on: ubuntu-latest
     steps:
       - name: "Build library source and wheel artifacts"
-        uses: pyansys/actions/build-library@v3
+        uses: pyansys/actions/build-library@v4
         with:
           library-name: ${{ env.LIBRARY_NAME }}
 
@@ -115,20 +138,20 @@ jobs:
     steps:
  
       - name: "Release to the private PyPI repository"
-        uses: pyansys/actions/release-pypi-private@v3
+        uses: pyansys/actions/release-pypi-private@v4
         with:
           library-name: ${{ env.LIBRARY_NAME }}
           twine-username: "__token__"
           twine-token: ${{ secrets.PYANSYS_PYPI_PRIVATE_PAT }}
  
       - name: "Release to the public PyPI repository"
-        uses: pyansys/actions/release-pypi-public@v3
+        uses: pyansys/actions/release-pypi-public@v4
         with:
           library-name: ${{ env.LIBRARY_NAME }}
           twine-username: "__token__"
           twine-token: ${{ secrets.PYPI_TOKEN }}
  
       - name: "Release to GitHub"
-        uses: pyansys/actions/release-github@v3
+        uses: pyansys/actions/release-github@v4
         with:
           library-name: ${{ env.LIBRARY_NAME }}
