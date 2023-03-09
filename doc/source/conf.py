@@ -3,12 +3,15 @@ from datetime import datetime
 import os
 
 from ansys_sphinx_theme import ansys_logo_white as logo
+from ansys_sphinx_theme import get_version_match
+
+from src import __version__
 
 # Project information
 project = "project-library"
 copyright = f"(c) {datetime.now().year} ANSYS, Inc. All rights reserved"
 author = "ANSYS, Inc."
-release = version = "0.1.dev0"
+release = version = __version__
 cname = os.getenv("DOCUMENTATION_CNAME")
 
 # Select desired logo, theme, and declare the html title
