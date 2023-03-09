@@ -270,7 +270,6 @@ DOC_PROJECT_STRUCTURE = [
     "LICENSE",
     "README.rst",
     ".pre-commit-config.yaml",
-    "ignore_words.txt",
     "requirements/requirements_build.txt",
     "requirements/requirements_doc.txt",
     "tox.ini",
