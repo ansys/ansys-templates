@@ -1,18 +1,13 @@
 """Sphinx documentation configuration file."""
 from datetime import datetime
-import os
 
-from ansys_sphinx_theme import get_version_match
 from ansys_sphinx_theme import pyansys_logo_black as logo
-
-from ansys.product.library import __version__
 
 # Project information
 project = "ansys-product-library"
 copyright = f"(c) {datetime.now().year} ANSYS, Inc. All rights reserved"
 author = "ANSYS, Inc."
-release = version = __version__
-cname = os.getenv("DOCUMENTATION_CNAME")
+release = version = "0.1.dev0"
 
 # Select desired logo, theme, and declare the html title
 html_logo = logo
@@ -27,11 +22,6 @@ html_theme_options = {
     "additional_breadcrumbs": [
         ("PyAnsys", "https://docs.pyansys.com/"),
     ],
-    "switcher": {
-        "json_url": f"https://{cname}/versions.json",
-        "version_match": get_version_match(__version__),
-    },
-    "check_switcher": False,
 }
 
 # Sphinx extensions
