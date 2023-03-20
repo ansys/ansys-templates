@@ -10,6 +10,7 @@ on:
 env:
   MAIN_PYTHON_VERSION : '3.10'
   LIBRARY_NAME: 'ansys-templates'
+  LIBRARY_NAMESPACE: 'ansys.templates'
   DOCUMENTATION_CNAME: 'templates.ansys.com'
 
 concurrency:
@@ -66,9 +67,26 @@ jobs:
             cname: ${{ env.DOCUMENTATION_CNAME }}
             token: ${{ secrets.GITHUB_TOKEN }}
 
+  build-wheelhouse:
+    name: "Build wheelhouse for latest Python versions"
+    runs-on: ${{ matrix.os }}
+    needs: code-style
+    strategy:
+       matrix:
+           os: [ubuntu-latest, windows-latest]
+           python-version: ['3.7', '3.8', '3.9', '3.10']
+    steps:
+      - name: "Build a wheelhouse of the Python library"
+        uses: pyansys/actions/build-wheelhouse@v4
+        with:
+          library-name: ${{ env.LIBRARY_NAME }}
+          library-namespace: ${{ env.LIBRARY_NAMESPACE }}
+          operating-system: ${{ matrix.os }}
+          python-version: ${{ matrix.python-version }}
+
   tests:
     name: Smoke tests
-    needs: code-style
+    needs: build-wheelhouse
     runs-on: ${{ matrix.os }}
     strategy:
       matrix:
@@ -115,20 +133,20 @@ jobs:
     steps:
  
       - name: "Release to the private PyPI repository"
-        uses: pyansys/actions/release-pypi-private@v3
+        uses: pyansys/actions/release-pypi-private@v4
         with:
           library-name: ${{ env.LIBRARY_NAME }}
           twine-username: "__token__"
           twine-token: ${{ secrets.PYANSYS_PYPI_PRIVATE_PAT }}
  
       - name: "Release to the public PyPI repository"
-        uses: pyansys/actions/release-pypi-public@v3
+        uses: pyansys/actions/release-pypi-public@v4
         with:
           library-name: ${{ env.LIBRARY_NAME }}
           twine-username: "__token__"
           twine-token: ${{ secrets.PYPI_TOKEN }}
  
       - name: "Release to GitHub"
-        uses: pyansys/actions/release-github@v3
+        uses: pyansys/actions/release-github@v4
         with:
           library-name: ${{ env.LIBRARY_NAME }}
