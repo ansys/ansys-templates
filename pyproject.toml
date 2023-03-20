@@ -47,7 +47,6 @@ dash_bootstrap_components = {version = "^1.2"}
 dash-extensions = {version = "^0.1"}
 dash-iconify = {version = "^0.1"}
 dash-uploader = {version = "^0.6"}
-packaging = {version = "21.3"}
 
 
 # Optional documentation dependencies

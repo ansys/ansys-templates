@@ -35,7 +35,7 @@ jobs:
     runs-on: [ubuntu-latest]
     steps:
       - name: Check documentation style
-        uses: Solution-Applications/actions/check-doc-style@v1.0.3
+        uses: Solution-Applications/actions/check-doc-style@v0.2.1
         with:
           gh-token: ${{ secrets.GITHUB_TOKEN }}
 
@@ -49,7 +49,7 @@ jobs:
     needs: [check-doc-style]
     steps:
       - name: Build documentation
-        uses: Solution-Applications/actions/build-doc@v1.0.3
+        uses: Solution-Applications/actions/build-doc@v0.2.1
         with:
           python-version: ${{ env.MAIN_PYTHON_VERSION }}
           poetry-version: ${{ env.POETRY_VERSION }}
@@ -64,10 +64,11 @@ jobs:
     needs: [build-doc]
     steps:
       - name: Deploy documentation
-        uses: Solution-Applications/actions/deploy-doc@v0.1.1
+        uses: Solution-Applications/actions/deploy-doc@v0.2.1
         with:
           gh-token: ${{ secrets.WORKFLOW_TOKEN }}
           documentation-artifact: html-documentation
+          cname: ${{ env.DOCUMENTATION_CNAME }}
           python-version: ${{ env.MAIN_PYTHON_VERSION }}
           render-last: 10
           short-version: false
@@ -80,7 +81,7 @@ jobs:
     runs-on: [ubuntu-latest]
     steps:
       - name: Check copyright
-        uses: Solution-Applications/actions/check-copyright@v1.0.3
+        uses: Solution-Applications/actions/check-copyright@v0.2.1
         with:
           gh-token: ${{ secrets.WORKFLOW_TOKEN }}
 
@@ -92,7 +93,7 @@ jobs:
     runs-on: [ubuntu-latest]
     steps:
       - name: Check code style
-        uses: Solution-Applications/actions/check-code-style@v1.0.3
+        uses: Solution-Applications/actions/check-code-style@v0.2.1
         with:
           python-version: ${{ env.MAIN_PYTHON_VERSION }}
           tox-version: ${{ env.TOX_VERSION }}
@@ -104,7 +105,7 @@ jobs:
     runs-on: [windows-latest]
     steps:
       - name: Build
-        uses: Solution-Applications/actions/build@v1.0.3
+        uses: Solution-Applications/actions/build@v0.2.1
         with:
           python-version: ${{ env.MAIN_PYTHON_VERSION }}
           poetry-version: ${{ env.POETRY_VERSION }}
@@ -126,14 +127,14 @@ jobs:
       fail-fast: false
     steps:
       - name: Run tests
-        uses: Solution-Applications/actions/run-tests@v1.0.3
+        uses: Solution-Applications/actions/run-tests@v0.2.1
         with:
           python-version: ${{ matrix.python-version }}
           poetry-version: ${{ env.POETRY_VERSION }}
           tox-version: ${{ env.TOX_VERSION }}
           check-coverage-ratio: false
           min-coverage-ratio: 80
-          run-in-venv: false
+          run-in-venv: true
           retention-days: 7
 
   release:
@@ -144,7 +145,7 @@ jobs:
     runs-on: [ubuntu-latest]
     steps:
       - name: Release
-        uses: Solution-Applications/actions/release@v1.0.3
+        uses: Solution-Applications/actions/release@v0.2.1
         with:
           python-version: ${{ env.MAIN_PYTHON_VERSION }}
           gh-token: ${{ secrets.WORKFLOW_TOKEN }}
