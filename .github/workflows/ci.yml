@@ -43,32 +43,8 @@ jobs:
       - name: "Run Ansys documentation building action"
         uses: pyansys/actions/doc-build@v4
 
-  doc-deploy-development:
-    name: Doc dev version deploy
-    if: github.event_name == 'push'
-    runs-on: ubuntu-latest
-    needs: doc-build
-    steps:
-      - name: "Deploy developers documentation"
-        uses: pyansys/actions/doc-deploy-dev@v4
-        with:
-            cname: ${{ env.DOCUMENTATION_CNAME }}
-            token: ${{ secrets.GITHUB_TOKEN }}
-
-  doc-deploy-stable:
-    name: Doc stable version deploy
-    if: github.event_name == 'push' && contains(github.ref, 'refs/tags')
-    runs-on: ubuntu-latest
-    needs: doc-deploy-development
-    steps:
-      - name: "Deploy stable documentation"
-        uses: pyansys/actions/doc-deploy-stable@v4
-        with:
-            cname: ${{ env.DOCUMENTATION_CNAME }}
-            token: ${{ secrets.GITHUB_TOKEN }}
-
-  smoke-tests:
-    name: Build and Smoke tests
+  wheelhouse:
+    name: Wheelhouse Python ${{ matrix.os }}
     runs-on: ${{ matrix.os }}
     needs: code-style
     strategy:
@@ -92,7 +68,7 @@ jobs:
 
   tests:
     name: Tests
-    needs: code-style
+    needs: wheelhouse
     runs-on: ${{ matrix.os }}
     strategy:
       matrix:
@@ -123,13 +99,25 @@ jobs:
 
   build-library:
     name: "Build library"
-    needs: [doc-deploy-stable, tests]
+    needs: [doc-build, tests]
     runs-on: ubuntu-latest
     steps:
       - name: "Build library source and wheel artifacts"
         uses: pyansys/actions/build-library@v4
         with:
           library-name: ${{ env.LIBRARY_NAME }}
+
+  doc-deploy-development:
+    name: Doc dev version deploy
+    if: github.event_name == 'push'
+    runs-on: ubuntu-latest
+    needs: build-library
+    steps:
+      - name: "Deploy developers documentation"
+        uses: pyansys/actions/doc-deploy-dev@v4
+        with:
+            cname: ${{ env.DOCUMENTATION_CNAME }}
+            token: ${{ secrets.GITHUB_TOKEN }}
 
   release:
     name: "Release to private and public PyPI and to GitHub"
@@ -156,3 +144,15 @@ jobs:
         uses: pyansys/actions/release-github@v4
         with:
           library-name: ${{ env.LIBRARY_NAME }}
+
+  doc-deploy-stable:
+    name: Doc stable version deploy
+    if: github.event_name == 'push' && contains(github.ref, 'refs/tags')
+    runs-on: ubuntu-latest
+    needs: release
+    steps:
+      - name: "Deploy stable documentation"
+        uses: pyansys/actions/doc-deploy-stable@v4
+        with:
+            cname: ${{ env.DOCUMENTATION_CNAME }}
+            token: ${{ secrets.GITHUB_TOKEN }}
