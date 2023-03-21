@@ -12,7 +12,7 @@ project = "pybasic"
 copyright = f"(c) {datetime.now().year} ANSYS, Inc. All rights reserved"
 author = "ANSYS, Inc."
 release = version = __version__
-cname = os.getenv("DOCUMENTATION_CNAME")
+cname = os.getenv("DOCUMENTATION_CNAME", "docs.pyansys.com")
 
 # Select desired logo, theme, and declare the html title
 html_logo = logo
