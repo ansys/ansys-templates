@@ -10,7 +10,7 @@ project = "doc-project"
 copyright = f"(c) {datetime.now().year} ANSYS, Inc. All rights reserved"
 author = "ANSYS, Inc."
 release = version = "0.1.dev0"
-cname = os.getenv("DOCUMENTATION_CNAME")
+cname = os.getenv("DOCUMENTATION_CNAME", "docs.pyansys.com")
 
 # Select desired logo, theme, and declare the html title
 html_logo = logo
