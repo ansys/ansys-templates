@@ -33,7 +33,7 @@ project = "ansys-templates"
 copyright = "(c) 2022 ANSYS, Inc. All rights reserved"
 author = "ANSYS, Inc."
 release = version = __version__
-cname = os.getenv("DOCUMENTATION_CNAME", "nocname.com")
+cname = os.getenv("DOCUMENTATION_CNAME", "docs.pyansys.com")
 
 # use the default pyansys logo
 html_logo = ansys_logo_black

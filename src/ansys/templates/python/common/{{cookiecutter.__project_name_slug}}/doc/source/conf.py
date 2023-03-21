@@ -31,7 +31,7 @@ release = version = __version__
 {%- elif cookiecutter.__template_name == "doc-project" %}
 release = version = "{{ cookiecutter.__version }}"
 {%- endif %}
-cname = os.getenv("DOCUMENTATION_CNAME")
+cname = os.getenv("DOCUMENTATION_CNAME", "docs.pyansys.com")
 
 # Select desired logo, theme, and declare the html title
 html_logo = logo
