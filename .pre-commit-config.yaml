@@ -35,3 +35,9 @@ repos:
   - id: pydocstyle
     additional_dependencies: [toml]
     exclude: ^src/ansys/templates/python/|^tests
+
+# this validates our github workflow files
+- repo: https://github.com/python-jsonschema/check-jsonschema
+  rev: 0.21.0
+  hooks:
+    - id: check-github-workflows
