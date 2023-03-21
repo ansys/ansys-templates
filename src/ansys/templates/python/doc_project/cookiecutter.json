@@ -1,6 +1,6 @@
 {
   "__template_name": "doc-project",
-  "project_name": "",
+  "project_name": "doc-project",
   "__project_name": "{{ cookiecutter.project_name }} | lower",
   "__project_name_slug": "{{ cookiecutter.project_name }}",
   "version": "0.1.dev0",

@@ -7,7 +7,6 @@ DESIRED_STRUCTURE = [
     "doc/source/_static/ansys-solutions-logo-black-background.png",
     "doc/source/_static/README.md",
     "doc/source/_templates/README.md",
-    "doc/source/_templates/sidebar-nav-bs.html",
     "doc/source/conf.py",
     "doc/source/index.rst",
     "doc/styles/Vocab/ANSYS/accept.txt",

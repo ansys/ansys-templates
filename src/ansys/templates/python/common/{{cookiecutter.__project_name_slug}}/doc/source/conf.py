@@ -1,6 +1,8 @@
 """Sphinx documentation configuration file."""
 from datetime import datetime
+import os
 
+from ansys_sphinx_theme import get_version_match
 {%- if cookiecutter.__logo == "ansys" and cookiecutter.__logo_color == "white" %}
 from ansys_sphinx_theme import ansys_logo_white as logo
 {%- elif cookiecutter.__logo == "ansys" and cookiecutter.__logo_color == "black" %}
@@ -11,6 +13,11 @@ from ansys_sphinx_theme import pyansys_logo_white as logo
 from ansys_sphinx_theme import pyansys_logo_black as logo
 {%- endif %}
 
+{%- if cookiecutter.__template_name != "doc-project" %}
+from {{cookiecutter.__pkg_namespace}} import __version__
+{%- endif %}
+
+
 # Project information
 {%- if cookiecutter.__template_name in ["doc-project"] %}
 project = "{{ cookiecutter.__project_name_slug }}"
@@ -19,7 +26,12 @@ project = "{{ cookiecutter.__pkg_name }}"
 {%- endif %}
 copyright = f"(c) {datetime.now().year} ANSYS, Inc. All rights reserved"
 author = "ANSYS, Inc."
+{%- if cookiecutter.__template_name != "doc-project" %}
+release = version = __version__
+{%- elif cookiecutter.__template_name == "doc-project" %}
 release = version = "{{ cookiecutter.__version }}"
+{%- endif %}
+cname = os.getenv("DOCUMENTATION_CNAME", "docs.pyansys.com")
 
 # Select desired logo, theme, and declare the html title
 html_logo = logo
@@ -38,6 +50,11 @@ html_theme_options = {
         ("PyAnsys", "https://docs.pyansys.com/"),
         {%- endif %}
     ],
+    "switcher": {
+        "json_url": f"https://{cname}/versions.json",
+        "version_match": get_version_match(__version__),
+    },
+    "check_switcher": False,
 }
 
 # Sphinx extensions

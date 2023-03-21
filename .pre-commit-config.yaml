@@ -1,7 +1,7 @@
 repos:
 
 - repo: https://github.com/fsfe/reuse-tool
-  rev: v1.1.0
+  rev: v1.1.2
   hooks:
     - id: reuse
 
@@ -9,6 +9,7 @@ repos:
   rev: 23.1.0
   hooks:
   - id: black
+    exclude: ^src/ansys/templates/python/
 
 - repo: https://github.com/pycqa/isort
   rev: 5.12.0

@@ -107,7 +107,6 @@ PYCOMMON_STRUCTURE = [
     "doc/source/conf.py",
     "doc/source/index.rst",
     "doc/source/_static/README.md",
-    "doc/source/_templates/sidebar-nav-bs.html",
     "doc/source/_templates/README.md",
     "LICENSE",
     "pyproject.toml",
@@ -136,9 +135,6 @@ PYANSYS_STRUCTURE = deepcopy(PYCOMMON_STRUCTURE) + [
 # Structure for pyansys-advanced projects
 PYANSYS_ADVANCED_STRUCTURE = deepcopy(PYCOMMON_STRUCTURE) + [
     f"src/ansys/{PYANSYS_VARS['__product_name_slug']}/{PYANSYS_VARS['__library_name_slug']}/__init__.py",
-    "requirements/requirements_build.txt",
-    "requirements/requirements_doc.txt",
-    "requirements/requirements_tests.txt",
 ]
 [PYANSYS_ADVANCED_STRUCTURE.remove(file) for file in
  ["azure-pipeline.yml", "setup.py", ".coveragerc", "requirements_build.txt", "requirements_doc.txt",
@@ -261,7 +257,6 @@ DOC_PROJECT_STRUCTURE = [
     "doc/source/conf.py",
     "doc/source/index.rst",
     "doc/source/_static/README.md",
-    "doc/source/_templates/sidebar-nav-bs.html",
     "doc/source/_templates/README.md",
     "examples/README.md",
     ".github/dependabot.yml",
@@ -273,7 +268,6 @@ DOC_PROJECT_STRUCTURE = [
     "LICENSE",
     "README.rst",
     ".pre-commit-config.yaml",
-    "ignore_words.txt",
     "requirements/requirements_build.txt",
     "requirements/requirements_doc.txt",
     "tox.ini",
@@ -286,7 +280,6 @@ SOLUTION_STRUCTURE = [
     "doc/source/_static/ansys-solutions-logo-black-background.png",
     "doc/source/_static/README.md",
     "doc/source/_templates/README.md",
-    "doc/source/_templates/sidebar-nav-bs.html",
     "doc/source/conf.py",
     "doc/source/index.rst",
     "doc/styles/Vocab/ANSYS/accept.txt",
@@ -384,9 +377,6 @@ def test_template_python(tmp_path, build_system, template):
     # the common/ directory
     if template == "pyansys-advanced" and build_system == "setuptools":
         EXPECTED_STRUCTURE.append("setup.py")
-    elif template == "pyansys-advanced" and build_system == "poetry":
-        EXPECTED_STRUCTURE = deepcopy(EXPECTED_STRUCTURE)
-        [EXPECTED_STRUCTURE.remove(f"requirements/requirements_{name}.txt") for name in ["build", "doc", "tests"]]
     elif template == "common":
         keep_files(EXPECTED_STRUCTURE, project_path)
 

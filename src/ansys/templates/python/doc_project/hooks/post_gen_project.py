@@ -24,7 +24,6 @@ DESIRED_STRUCTURE = [
     "doc/source/conf.py",
     "doc/source/index.rst",
     "doc/source/_static/README.md",
-    "doc/source/_templates/sidebar-nav-bs.html",
     "doc/source/_templates/README.md",
     "examples/README.md",
     ".github/dependabot.yml",
@@ -36,7 +35,6 @@ DESIRED_STRUCTURE = [
     "LICENSE",
     "README.rst",
     ".pre-commit-config.yaml",
-    "ignore_words.txt",
     "requirements/requirements_build.txt",
     "requirements/requirements_doc.txt",
     "tox.ini",
@@ -63,10 +61,10 @@ def main():
         profile="black",
     )
     filepaths_list = [
-        project_path / "doc/source/conf.py",
+        project_path / "doc" / "source" / "conf.py",
     ]
     for filepath in filepaths_list:
-        isort.api.sort_file(filepath, isort_config)
+        isort.api.sort_file(filepath, config=isort_config)
 
     # Apply the desired structure to the project
     keep_files(DESIRED_STRUCTURE)

@@ -32,7 +32,7 @@ readme = "README.rst"
 requires-python = ">=3.7"
 license = {file = "LICENSES/MIT.txt"}
 authors = [
-    {name = "ANSYS, Inc.", email = "pyansys.support@ansys.com"},
+    {name = "ANSYS, Inc.", email = "pyansys.core@ansys.com"},
 ]
 maintainers = [
     {name = "PyAnsys developers", email = "pyansys.maintainers@ansys.com"},
@@ -40,6 +40,7 @@ maintainers = [
 
 classifiers = [
     "Development Status :: 4 - Beta",
+    "Programming Language :: Python :: 3",
     "Programming Language :: Python :: 3.7",
     "Programming Language :: Python :: 3.8",
     "Programming Language :: Python :: 3.9",
@@ -79,7 +80,7 @@ Documentation = "https://templates.ansys.com/"
 Tracker = "https://github.com/ansys/ansys-templates/issues"
 
 [tool.black]
-force-exclude = ["src/ansys/templates/python"]
+force-exclude = ["src/ansys/templates/python/"]
 line-length = "100"
 
 [tool.isort]
