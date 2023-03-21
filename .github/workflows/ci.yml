@@ -82,6 +82,7 @@ jobs:
           - should-release: false
             os: macos-latest
     steps:
+      - name: "Build wheelhouse and perform smoke test"
         uses: pyansys/actions/build-wheelhouse@v4
         with:
           library-name: ${{ env.LIBRARY_NAME }}
