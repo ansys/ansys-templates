@@ -15,7 +15,8 @@ on:
 env:
   MAIN_PYTHON_VERSION: "3.8"
   DOCUMENTATION_CNAME: 'solution.docs.solutions.ansys.com'
-  POETRY_VERSION: "1.4"
+  # When changing this value, update setup_environment.py --build-system-version default value to match
+  POETRY_VERSION: "1.4.1"
   TOX_VERSION: "3.27.1"
   POETRY_HTTP_BASIC_SOLUTIONS_PRIVATE_PYPI_USERNAME: "PAT"
   POETRY_HTTP_BASIC_SOLUTIONS_PRIVATE_PYPI_PASSWORD: ${{ secrets.SOLUTIONS_PRIVATE_PYPI_PAT }}
