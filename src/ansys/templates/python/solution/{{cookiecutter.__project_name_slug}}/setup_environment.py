@@ -569,7 +569,7 @@ def parser():
         type=str,
         help="Build system version",
         # When changing this value, update .github\workflows\ci.yaml POETRY_VERSION to match
-        default="1.4.1",
+        default="1.4",
         required=False,
     )
     optional_inputs.add_argument(
