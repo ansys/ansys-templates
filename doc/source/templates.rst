@@ -20,8 +20,8 @@
 .. OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
 .. SOFTWARE.
 
-Available templates
-===================
+Templates
+=========
 
 All the available templates in ``ansys-templates`` can be found on this page.
 
