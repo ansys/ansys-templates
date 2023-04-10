@@ -23,36 +23,34 @@
 Available templates
 ===================
 
-All the available templates in ``ansys-templates`` are listed below these lines.
-Their main features are explained so users can select the template which fits
-their needs.
+All the available templates in ``ansys-templates`` can be found on this page.
 
 For quick-reference, the following table provides an overview of the main
 capabilities and features of each template:
 
-+-------------------------+-----------------------+-----------------+---------+----------+----------------+---------+
-| Template                | setup.py              | pyproject.toml  | Actions | tox.ini  | requirements/  | Docker  |
-+=========================+=======================+=================+=========+==========+================+=========+
-| doc-project             |                       |                 |  ``X``  |  ``X``   |  ``X``         |         |
-+-------------------------+-----------------------+-----------------+---------+----------+----------------+---------+
-| pybasic                 | ``X``                 |                 |         |          |                |         |
-+-------------------------+-----------------------+-----------------+---------+----------+----------------+---------+
-| pyansys                 |  ``X``                |  ``X``          |  ``X``  |          |                |         |
-+-------------------------+-----------------------+-----------------+---------+----------+----------------+---------+
-| pyansys-advanced        |  ``X``                |  ``X``          |  ``X``  |  ``X``   |  ``X``         |         |
-+-------------------------+-----------------------+-----------------+---------+----------+----------------+---------+
-| pyansys-openapi-client  |                       |                 |         |          |                |         |
-+-------------------------+-----------------------+-----------------+---------+----------+----------------+---------+
-| pyace                   |  ``X``                |  ``X``          |  ``X``  |  ``X``   |  ``X``         |  ``X``  |
-+-------------------------+-----------------------+-----------------+---------+----------+----------------+---------+
-| pyace-fast              |  ``X``                |  ``X``          |  ``X``  |  ``X``   |  ``X``         |  ``X``  |
-+-------------------------+-----------------------+-----------------+---------+----------+----------------+---------+
-| pyace-flask             |  ``X``                |  ``X``          |  ``X``  |  ``X``   |  ``X``         |  ``X``  |
-+-------------------------+-----------------------+-----------------+---------+----------+----------------+---------+
-| pyace-grpc              |  ``X``                |  ``X``          |  ``X``  |  ``X``   |  ``X``         |  ``X``  |
-+-------------------------+-----------------------+-----------------+---------+----------+----------------+---------+
-| solution                |                       |  ``X``          |  ``X``  |  ``X``   |  ``X``         |         |
-+-------------------------+-----------------------+-----------------+---------+----------+----------------+---------+
++--------------------------------+-----------------------+-----------------+---------+----------+----------------+---------+
+| Template                       | setup.py              | pyproject.toml  | Actions | tox.ini  | requirements/  | Docker  |
++================================+=======================+=================+=========+==========+================+=========+
+| :ref:`doc-project`             |                       |                 |  ``X``  |  ``X``   |  ``X``         |         |
++--------------------------------+-----------------------+-----------------+---------+----------+----------------+---------+
+| :ref:`pybasic`                 | ``X``                 |                 |         |          |                |         |
++--------------------------------+-----------------------+-----------------+---------+----------+----------------+---------+
+| :ref:`pyansys`                 |  ``X``                |  ``X``          |  ``X``  |          |                |         |
++--------------------------------+-----------------------+-----------------+---------+----------+----------------+---------+
+| :ref:`pyansys-advanced`        |  ``X``                |  ``X``          |  ``X``  |  ``X``   |  ``X``         |         |
++--------------------------------+-----------------------+-----------------+---------+----------+----------------+---------+
+| :ref:`pyansys-openapi-client`  |                       |                 |         |          |                |         |
++--------------------------------+-----------------------+-----------------+---------+----------+----------------+---------+
+| :ref:`pyace`                   |  ``X``                |  ``X``          |  ``X``  |  ``X``   |  ``X``         |  ``X``  |
++--------------------------------+-----------------------+-----------------+---------+----------+----------------+---------+
+| :ref:`pyace-fast`              |  ``X``                |  ``X``          |  ``X``  |  ``X``   |  ``X``         |  ``X``  |
++--------------------------------+-----------------------+-----------------+---------+----------+----------------+---------+
+| :ref:`pyace-flask`             |  ``X``                |  ``X``          |  ``X``  |  ``X``   |  ``X``         |  ``X``  |
++--------------------------------+-----------------------+-----------------+---------+----------+----------------+---------+
+| :ref:`pyace-grpc`              |  ``X``                |  ``X``          |  ``X``  |  ``X``   |  ``X``         |  ``X``  |
++--------------------------------+-----------------------+-----------------+---------+----------+----------------+---------+
+| :ref:`solution`                |                       |  ``X``          |  ``X``  |  ``X``   |  ``X``         |         |
++--------------------------------+-----------------------+-----------------+---------+----------+----------------+---------+
 
 .. note::
 
@@ -60,9 +58,8 @@ capabilities and features of each template:
    for each one of the templates. Take a look to these branches for having a
    better idea on the final project layout.
 
-
-``doc-project`` template
-------------------------
+doc-project
+-----------
 This template renders a documentation project based on Sphinx. You can chose
 between Ansys or PyAnsys logos together with the color theme.
 
@@ -81,14 +78,14 @@ To create a new project using this template by running:
 
 .. admonition:: Link to demo
 
-    https://github.com/ansys/ansys-templates/tree/demo/doc-project
+    `ansys-templates/demo - doc-project <https://github.com/ansys/ansys-templates/tree/demo/doc-project>`_
 
 
-``pybasic`` template
---------------------
+pybasic
+-------
 This template renders to a basic Python project. It does not follow the Ansys
 namespace, meaning that a ``src/library/`` layout is produced instead of the
-``src/ansys/product/library`` one. 
+``src/ansys/product/library`` one.
 
 Main features of this package are:
 
@@ -106,13 +103,13 @@ To create a new project using this template by running:
 
 .. admonition:: Link to demo
 
-    https://github.com/ansys/ansys-templates/tree/demo/pybasic
+    `ansys-templates/demo - pybasic <https://github.com/ansys/ansys-templates/tree/demo/pybasic>`_
 
 
-``pyansys`` template
---------------------
+pyansys
+-------
 This template renders to a basic Python project compliant with the latest
-PyAnsys guidelines. 
+PyAnsys guidelines.
 
 Main features of this package are:
 
@@ -131,11 +128,11 @@ To create a new project using this template, run:
 
 .. admonition:: Link to demo
 
-    https://github.com/ansys/ansys-templates/tree/demo/pyansys
+    `ansys-templates/demo - pyansys <https://github.com/ansys/ansys-templates/tree/demo/pyansys>`_
 
 
-``pyansys-advanced`` template
------------------------------
+pyansys-advanced
+----------------
 This template renders to a basic Python project compliant with the latest
 PyAnsys guidelines and the most modern techniques in Python packaging.
 
@@ -157,11 +154,15 @@ To create a new project using this template, run:
 
 .. admonition:: Link to demo
 
-    https://github.com/ansys/ansys-templates/tree/demo/pyansys-advanced
+    The there are three demo branches depending on your build-system.
+
+    * `ansys-templates/demo - pyansys-advanced-flit <https://github.com/ansys/ansys-templates/tree/demo/pyansys-advanced-flit>`_
+    * `ansys-templates/demo - pyansys-advanced-poetry <https://github.com/ansys/ansys-templates/tree/demo/pyansys-advanced-poetry>`_
+    * `ansys-templates/demo - pyansys-advanced-setuptools <https://github.com/ansys/ansys-templates/tree/demo/pyansys-advanced-setuptools>`_
 
 
-``pyansys-openapi-client`` template
------------------------------------
+pyansys-openapi-client
+----------------------
 Create an OpenAPI Client Package project compliant with PyAnsys guidelines.
 
 Main features of this package are:
@@ -178,11 +179,11 @@ To create a new project using this template, run:
 
 .. admonition:: Link to demo
 
-    This template does not have a demo available for the moment.
+    Demo unavailable at the moment.
 
 
-``pyace`` template
-------------------
+pyace
+-----
 This template renders to a basic Python project compliant with the latest
 ACE guidelines.
 
@@ -205,11 +206,11 @@ To create a new project using this template, run:
 
 .. admonition:: Link to demo
 
-    https://github.com/ansys/ansys-templates/tree/demo/pyace-pkg
+    `ansys-templates/demo - pyace-pkg <https://github.com/ansys/ansys-templates/tree/demo/pyace-pkg>`_
 
 
-``pyace-fast`` template
------------------------
+pyace-fast
+----------
 This template renders to a basic Python project compliant with the latest
 ACE guidelines and focused on `FastAPI`_ development:
 
@@ -232,11 +233,11 @@ To create a new project using this template, run:
 
 .. admonition:: Link to demo
 
-    https://github.com/ansys/ansys-templates/tree/demo/pyace-fast
+    `ansys-templates/demo - pyace-fast <https://github.com/ansys/ansys-templates/tree/demo/pyace-fast>`_
 
 
-``pyace-flask`` template
-------------------------
+pyace-flask
+-----------
 This template renders to a basic Python project compliant with the latest
 ACE guidelines and focused on `Flask`_ development:
 
@@ -260,11 +261,11 @@ To create a new project using this template, run:
 
 .. admonition:: Link to demo
 
-    https://github.com/ansys/ansys-templates/tree/demo/pyace-flask
+    `ansys-templates/demo - pyace-flask <https://github.com/ansys/ansys-templates/tree/demo/pyace-flask>`_
 
 
-``pyace-grpc`` template
------------------------
+pyace-grpc
+----------
 This template renders to a basic Python project compliant with the latest
 ACE guidelines and focused on `GRPC`_ development:
 
@@ -287,10 +288,10 @@ To create a new project using this template, run:
 
 .. admonition:: Link to demo
 
-    https://github.com/ansys/ansys-templates/tree/demo/pyace-grpc
+    `ansys-templates/demo - pyace-grpc <https://github.com/ansys/ansys-templates/tree/demo/pyace-grpc>`_
 
-``solution`` template
------------------------
+solution
+--------
 This template renders to a Python project compliant with the latest Solutions
 Application guidelines:
 
@@ -311,7 +312,7 @@ To create a new project using this template, run:
 
 .. admonition:: Link to demo
 
-    https://github.com/ansys/ansys-templates/tree/demo/solution
+    `ansys-templates/demo - solution <https://github.com/ansys/ansys-templates/tree/demo/solution>`_
 
 
 .. Links and references

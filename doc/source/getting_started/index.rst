@@ -47,10 +47,10 @@ Upgrade `pip`_ with:
 
 Installing ``pipx``
 ^^^^^^^^^^^^^^^^^^^
- 
+
 The ``ansys-templates`` tool is built on top of Python. To ensure a clean
 installation, you can use `pipx`_. It ensures an isolated installation of
-any Python tool that you want to use. 
+any Python tool that you want to use.
 
 Install `pipx`_ with:
 
@@ -68,8 +68,8 @@ If you encounter any issues when installing `pipx`_, see `pipx installation
 guidelines`_.
 
 
-Installing ``ansys-templates``
-------------------------------
+Installing ansys-templates
+--------------------------
 
 Once `pipx`_ is installed, proceed with the installation of
 ``ansys-templates`` with:
@@ -79,8 +79,8 @@ Once `pipx`_ is installed, proceed with the installation of
    python -m pipx install ansys-templates
 
 
-Upgrading ``ansys-templates``
------------------------------
+Upgrading ansys-templates
+-------------------------
 
 If you already have ``ansys-templates`` installed with `pipx`_, you can upgrade
 to the latest version with:
@@ -105,14 +105,14 @@ The following code is returned:
 
    Usage: ansys-templates [OPTIONS] COMMAND [ARGS]...
 
-   Ansys tool for creating Python projects.
-   
+   Ansys tool for creating new Ansys projects.
+
    Options:
      --help  Show this message and exit.
-   
+
    Commands:
-     list  List all available templates names.
-     new   Create a new project from desired template.
+     list     List all available templates names.
+     new      Create a new project from desired template.
      version  Display current version.
 
 .. LINKS & REFERENCES

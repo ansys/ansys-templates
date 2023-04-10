@@ -22,6 +22,7 @@
 
 """Sphinx documentation configuration file."""
 
+from datetime import datetime
 import os
 
 from ansys_sphinx_theme import ansys_favicon, ansys_logo_black, get_version_match
@@ -29,21 +30,28 @@ from ansys_sphinx_theme import ansys_favicon, ansys_logo_black, get_version_matc
 from ansys.templates import __version__
 
 # Project information
-project = "ansys-templates"
-copyright = "(c) 2022 ANSYS, Inc. All rights reserved"
+project = "Ansys Templates"
+copyright = f"(c) 2022-{datetime.today().year} ANSYS, Inc. and/or its affiliates."
 author = "ANSYS, Inc."
 release = version = __version__
-cname = os.getenv("DOCUMENTATION_CNAME", "docs.pyansys.com")
+cname = os.getenv("DOCUMENTATION_CNAME", "nocname.com")
 
 # use the default pyansys logo
 html_logo = ansys_logo_black
 html_favicon = ansys_favicon
 html_theme = "ansys_sphinx_theme"
-html_title = "ansys-templates"
+html_short_title = html_title = project  # necessary for proper breadcrumb title
+html_context = {
+    "github_user": "ansys",
+    "github_repo": "ansys-templates",
+    "github_version": "main",
+    "doc_path": "doc/source",
+}
 
 # specify the location of your github repo
 html_theme_options = {
     "github_url": "https://github.com/pyansys/pyansys-template",
+    "use_edit_page_button": True,
     "show_prev_next": False,
     "switcher": {
         "json_url": f"https://{cname}/versions.json",
@@ -54,9 +62,10 @@ html_theme_options = {
 
 # Sphinx extensions
 extensions = [
-    "sphinx.ext.autodoc",
-    "sphinx.ext.autosummary",
     "numpydoc",
+    "sphinx.ext.autodoc",
+    "sphinx.ext.autosectionlabel",
+    "sphinx.ext.autosummary",
     "sphinx.ext.intersphinx",
     "sphinx_copybutton",
 ]

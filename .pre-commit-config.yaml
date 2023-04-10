@@ -6,7 +6,7 @@ repos:
     - id: reuse
 
 - repo: https://github.com/psf/black
-  rev: 23.1.0
+  rev: 23.3.0
   hooks:
   - id: black
     exclude: ^src/ansys/templates/python/
@@ -25,7 +25,7 @@ repos:
     ]
 
 - repo: https://github.com/codespell-project/codespell
-  rev: v2.2.2
+  rev: v2.2.4
   hooks:
   - id: codespell
 
@@ -36,8 +36,17 @@ repos:
     additional_dependencies: [toml]
     exclude: ^src/ansys/templates/python/|^tests
 
+- repo: https://github.com/pre-commit/pre-commit-hooks
+  rev: v4.4.0
+  hooks:
+  - id: check-merge-conflict
+  - id: check-yaml
+    exclude: ^src/ansys/templates/
+  - id: requirements-txt-fixer
+  - id: trailing-whitespace
+
 # this validates our github workflow files
 - repo: https://github.com/python-jsonschema/check-jsonschema
-  rev: 0.21.0
+  rev: 0.22.0
   hooks:
     - id: check-github-workflows
