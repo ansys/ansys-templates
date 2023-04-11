@@ -38,7 +38,7 @@ secondary = true
 python = ">=3.8, <3.11"
 ansys-dash-treeview = {version = "0.0.1.dev0", source = "solutions-private-pypi"}
 ansys-saf-glow = {version = "0.2", source = "solutions-private-pypi" }
-ansys-saf-portal = {version = "0.1.4", source = "solutions-private-pypi"}
+ansys-saf-portal = {version = "0.1.6", source = "solutions-private-pypi"}
 toml = {version = "*"}
 tox = {version = "*"} 
 {% if cookiecutter.with_dash_ui == "yes" %} 
