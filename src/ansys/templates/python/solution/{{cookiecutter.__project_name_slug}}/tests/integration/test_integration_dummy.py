@@ -1,4 +1,4 @@
-# ©2022, ANSYS Inc. Unauthorized use, distribution or duplication is prohibited.
+# ©2023, ANSYS Inc. Unauthorized use, distribution or duplication is prohibited.
 
 import ansys.solutions.{{ cookiecutter.__solution_name_slug }}
 
