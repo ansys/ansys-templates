@@ -36,6 +36,7 @@ __version__ = importlib_metadata.version(__name__.replace(".", "-"))
 
 AVAILABLE_TEMPLATES_AND_DESCRIPTION = {
     "doc-project": "Create a documentation project using Sphinx.",
+    "osl-solution": "Create an OptiSLang Solution based on the Solution Application Framework.",
     "pybasic": "Create a basic Python Package.",
     "pyansys": "Create a PyAnsys Python Package project.",
     "pyansys-advanced": "Create an advanced PyAnsys Python Package project.",
