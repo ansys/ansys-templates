@@ -1,5 +1,5 @@
 {
-  "__template_name": "solution",
+  "__template_name": "osl-solution",
   "project_name": "",
   "__project_name_slug": "{{ cookiecutter.project_name.lower().replace('_', '-') }}",
   "solution_name": "",

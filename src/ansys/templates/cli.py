@@ -126,3 +126,8 @@ def pyace_grpc():
 def solution():
     """Create a Solution based on the Solution Application Framework."""
     create_project("solution")
+
+@new.command()
+def osl_solution():
+    """Create an OptiSLang Solution based on the Solution Application Framework."""
+    create_project("osl-solution")
