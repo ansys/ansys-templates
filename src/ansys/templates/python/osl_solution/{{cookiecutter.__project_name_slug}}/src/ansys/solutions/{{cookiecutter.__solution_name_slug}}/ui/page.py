@@ -12,22 +12,17 @@ from dash_iconify import DashIconify
 from ansys.solutions.{{ cookiecutter.__solution_name_slug }}.solution.definition import (
     {{ cookiecutter.__solution_definition_name }},
 )
-from ansys.solutions.{{ cookiecutter.__solution_name_slug }}.ui import intro_page, first_page, second_page
+from ansys.solutions.{{ cookiecutter.__solution_name_slug }}.ui import problem_setup_page, monitoring_page
 
 step_list = [
     {
-        "key": "intro_step",
-        "text": "Introduction",
+        "key": "problem_setup_step",
+        "text": "Problem Setup Step",
         "depth": 0,
     },
     {
-        "key": "first_step",
-        "text": "First Step",
-        "depth": 0,
-    },
-    {
-        "key": "second_step",
-        "text": "Second Step",
+        "key": "monitoring_step",
+        "text": "Monitoring Step",
         "depth": 0,
     }
 ]
@@ -145,14 +140,12 @@ def display_page(pathname, value):
     project = DashClient[{{ cookiecutter.__solution_definition_name }}].get_project(pathname)
     triggered_id = callback_context.triggered[0]["prop_id"].split(".")[0]
     if triggered_id == "url":
-        return intro_page.layout(project.steps.intro_step)
+        return problem_setup_page.layout(project.steps.problem_setup_step)
     if triggered_id == "navigation_tree":
         if value is None:
             page_layout = html.H1("Welcome!")
-        elif value == "intro_step":
-            page_layout = intro_page.layout(project.steps.intro_step)
-        elif value == "first_step":
-            page_layout = first_page.layout(project.steps.first_step)
-        elif value == "second_step":
-            page_layout = second_page.layout(project.steps.second_step)
+        elif value == "problem_setup_step":
+            page_layout = problem_setup_page.layout(project.steps.problem_setup_step)
+        elif value == "monitoring_step":
+            page_layout = monitoring_page.layout(project.steps.monitoring_step)
         return page_layout

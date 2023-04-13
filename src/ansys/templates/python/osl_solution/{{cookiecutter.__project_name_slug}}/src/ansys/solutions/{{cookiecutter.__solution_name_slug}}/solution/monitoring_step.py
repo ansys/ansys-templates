@@ -1,12 +1,12 @@
 # ©2022, ANSYS Inc. Unauthorized use, distribution or duplication is prohibited.
 
-"""Backend of the second step."""
+"""Backend of the monitoring step."""
 
 
 from ansys.saf.glow.solution import StepModel
 
 
-class SecondStep(StepModel):
-    """Step definition of the second step."""
+class MonitoringStep(StepModel):
+    """Step definition of the monitoring step."""
 
     id: str = "hey"

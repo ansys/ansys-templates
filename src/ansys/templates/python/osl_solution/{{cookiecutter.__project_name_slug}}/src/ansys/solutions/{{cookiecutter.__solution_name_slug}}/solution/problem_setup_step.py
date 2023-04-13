@@ -1,12 +1,12 @@
 # ©2022, ANSYS Inc. Unauthorized use, distribution or duplication is prohibited.
 
-"""Backend of the first step."""
+"""Backend of the problem setup step."""
 
 
 from ansys.saf.glow.solution import StepModel, StepSpec, transaction
 
 
-class FirstStep(StepModel):
+class ProblemSetupStep(StepModel):
     """Step definition of the first step."""
 
     first_arg: float = 0

@@ -7,10 +7,10 @@ from ansys.saf.glow.client.dashclient import DashClient
 from dash_extensions.enrich import Input, Output, State, callback, dcc, html
 
 from ansys.solutions.{{ cookiecutter.__solution_name_slug }}.solution.definition import {{cookiecutter.__solution_definition_name}}
-from ansys.solutions.{{ cookiecutter.__solution_name_slug }}.solution.first_step import FirstStep
+from ansys.solutions.{{ cookiecutter.__solution_name_slug }}.solution.problem_setup_step import ProblemSetupStep
 
 
-def layout(step: FirstStep):
+def layout(problem_setup_step: ProblemSetupStep):
     """Layout of the first step UI."""
     return html.Div(
         [
