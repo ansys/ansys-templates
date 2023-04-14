@@ -1,6 +1,7 @@
 # ©2023, ANSYS Inc. Unauthorized use, distribution or duplication is prohibited.
 
 """Backend of the problem setup step."""
+import platform
 
 from pathlib import Path
 

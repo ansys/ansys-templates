@@ -35,17 +35,16 @@ secondary = true
 
 # Main dependencies
 [tool.poetry.dependencies]
-python = ">=3.7, <3.9"
+python = ">=3.8, <3.11"
+python = ">=3.8, <3.11"
 ansys-dash-treeview = {version = "0.0.1.dev0", source = "solutions-private-pypi"}
-ansys-saf-glow = {version = "0.1.9", source = "solutions-private-pypi" }
-ansys-saf-portal = {version = "0.1.4", source = "solutions-private-pypi"}
-ansys-solutions-optislang-parser = {version = "0.1.dev0", source = "solutions-private-pypi"}
-ansys-solutions-optislang-frontend-components = {git = "https://github.com/Solution-Applications/optislang-frontend-components", branch = "main"} 
-ansys-solutions-products-ecosystem = {git = "https://github.com/Solution-Applications/ansys-products-ecosystem", branch = "main"}
-ansys-solutions-pyoptislang = { git = "https://github.com/Solution-Applications/pyoptislang", branch = "main"}
- ansys-solutions-optislang-wrapper = {version = "0.1.dev0", source = "solutions-private-pypi"}
+ansys-saf-glow = {version = "0.2", source = "solutions-private-pypi" }
+ansys-saf-portal = {version = "0.1.6", source = "solutions-private-pypi"}
 ansys-solutions-dash-lib = {version = "0.2.0", source = "solutions-private-pypi", python=">=3.8,<3.10"}
-
+ansys-solutions-optislang-parser = {version = "0.1.dev1", source = "solutions-private-pypi"}
+ansys-solutions-optislang-frontend-components = {git = "https://github.com/Solution-Applications/optislang-frontend-components.git", branch = "main"} 
+ansys-solutions-products-ecosystem = {git = "https://github.com/Solution-Applications/ansys-products-ecosystem.git", branch = "main"}
+ansys-optislang-core = { git = "https://github.com/Solution-Applications/pyoptislang.git", branch = "main" }
 toml = {version = "*"}
 tox = {version = "*"} 
 {% if cookiecutter.with_dash_ui == "yes" %} 

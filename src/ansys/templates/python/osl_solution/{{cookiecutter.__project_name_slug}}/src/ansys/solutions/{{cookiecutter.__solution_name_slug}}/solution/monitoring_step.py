@@ -9,4 +9,4 @@ from ansys.saf.glow.solution import StepModel
 class MonitoringStep(StepModel):
     """Step definition of the monitoring step."""
 
-    id: str = "hey"
+    component_level: str = "root"

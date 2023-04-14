@@ -11,7 +11,6 @@ from ansys.saf.glow.solution import MethodStatus
 from ansys.solutions.dash_components.table import InputRow
 from ansys.solutions.optislang.frontend_components.placeholder_table import PlaceholderTable
 
-
 from ansys.solutions.{{ cookiecutter.__solution_name_slug }}.solution.definition import {{cookiecutter.__solution_definition_name}}
 from ansys.solutions.{{ cookiecutter.__solution_name_slug }}.solution.problem_setup_step import ProblemSetupStep
 
