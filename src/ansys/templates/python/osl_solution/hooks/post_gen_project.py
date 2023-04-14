@@ -1,3 +1,6 @@
+import shutil
+import os
+from pathlib import Path
 from ansys.templates.utils import keep_files
 
 
@@ -18,6 +21,7 @@ DESIRED_STRUCTURE = [
     "examples/README.md",
     f"src/ansys/solutions/{{ cookiecutter.__solution_name_slug }}/model/scripts/README.md",
     f"src/ansys/solutions/{{ cookiecutter.__solution_name_slug }}/model/README.md",
+    f"src/ansys/solutions/{{ cookiecutter.__solution_name_slug }}/model/assets/README.md",
     f"src/ansys/solutions/{{ cookiecutter.__solution_name_slug }}/solution/definition.py",
     f"src/ansys/solutions/{{ cookiecutter.__solution_name_slug }}/solution/intro_step.py",
     f"src/ansys/solutions/{{ cookiecutter.__solution_name_slug }}/solution/first_step.py",
@@ -56,14 +60,28 @@ UI_STRUCTURE = [
     f"src/ansys/solutions/{{ cookiecutter.__solution_name_slug }}/ui/page.py",
 ]
 
+ASSETS_DIRCTORY = Path(f"src/ansys/solutions/{{ cookiecutter.__solution_name_slug }}/model/assets/").absolute()
+
 # Add UI structure to desired structure if applicable
 if "{{ cookiecutter.with_dash_ui }}" == "yes":
     DESIRED_STRUCTURE = DESIRED_STRUCTURE + UI_STRUCTURE
 
+
+def copy_file_to_assets_folder(file, des):
+    """Copy a file if it exists."""
+
+    if os.path.exists(file):
+        shutil.copy(file, des)
+
+
 def main():
     """Entry point of the script."""
-    # Apply the desired structure to the project
+
     keep_files(DESIRED_STRUCTURE)
+
+    copy_file_to_assets_folder("{{ cookiecutter.__optiSLang_workflow_file }}",  ASSETS_DIRCTORY / "{{ cookiecutter.__optiSLang_workflow_file_name }}")
+                               
+    copy_file_to_assets_folder("{{ cookiecutter.__optiSLang_placeholder_file }}", ASSETS_DIRCTORY / "{{ cookiecutter.__optiSLang_placeholder_name }}")
 
 if __name__ == "__main__":
     main()
