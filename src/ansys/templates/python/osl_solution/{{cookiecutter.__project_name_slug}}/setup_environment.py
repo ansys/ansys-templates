@@ -1,4 +1,4 @@
-# ©2022, ANSYS Inc. Unauthorized use, distribution or duplication is prohibited.
+# ©2023, ANSYS Inc. Unauthorized use, distribution or duplication is prohibited.
 
 """
 A Python script to automate the setup of the ecosystem of a Python project.
