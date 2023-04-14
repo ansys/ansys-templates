@@ -11,7 +11,7 @@
   "__short_description": "",
   "__pkg_name": "ansys-solutions-{{ cookiecutter.solution_name.lower().replace('_', '-') }}",
   "__pkg_namespace": "ansys.solutions.{{ cookiecutter.__project_name_slug }}",
-  "__requires_python": "3.7",
+  "__requires_python": "3.8",
   "__repository_url": "",
   "__build_system": "poetry",
   "__max_linelength": "120",
