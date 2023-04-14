@@ -1,6 +1,6 @@
 # ©2022, ANSYS Inc. Unauthorized use, distribution or duplication is prohibited.
 
-"""Frontend of the second step."""
+"""Frontend of the monitoring step."""
 
 
 from dash_extensions.enrich import dcc, html

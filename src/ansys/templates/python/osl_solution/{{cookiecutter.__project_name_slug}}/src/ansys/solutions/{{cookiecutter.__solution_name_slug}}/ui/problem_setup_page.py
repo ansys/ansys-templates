@@ -1,12 +1,13 @@
 # ©2022, ANSYS Inc. Unauthorized use, distribution or duplication is prohibited.
 
-"""Frontend of the first step."""
-
+"""Frontend of the problem setup step."""
+import time
 import dash_bootstrap_components as dbc
 
 from dash.exceptions import PreventUpdate
-from ansys.saf.glow.client.dashclient import DashClient
 from dash_extensions.enrich import Input, Output, State, callback, dcc, html
+from ansys.saf.glow.client.dashclient import DashClient
+from ansys.saf.glow.solution import MethodStatus
 from ansys.solutions.dash_components.table import InputRow
 from ansys.solutions.optislang.frontend_components.placeholder_table import PlaceholderTable
 
@@ -281,7 +282,7 @@ for alert in ["optislang-version", "workbench-version", "optislang-solve"]:
 def run_optislang_synchronously(n_clicks, pathname):
     """Start OptiSLang and run the simulation. Wait for the process to complete."""
     
-    project = DashClient[Hook_OptimizationSolution].get_project(pathname)
+    project = DashClient[{{cookiecutter.__solution_definition_name}}].get_project(pathname)
     problem_setup_step = project.steps.problem_setup_step
     if n_clicks and problem_setup_step.run_synchronously:
         problem_setup_step.run_optislang()
