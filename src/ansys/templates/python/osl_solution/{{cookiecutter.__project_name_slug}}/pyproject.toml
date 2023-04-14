@@ -39,8 +39,10 @@ python = ">=3.7, <3.9"
 ansys-dash-treeview = {version = "0.0.1.dev0", source = "solutions-private-pypi"}
 ansys-saf-glow = {version = "0.1.9", source = "solutions-private-pypi" }
 ansys-saf-portal = {version = "0.1.4", source = "solutions-private-pypi"}
-ansys-solutions-optislang-parser = {path = "./optislang-parser", develop = true, source = "solutions-private-pypi"} #TODO: update package when released in PyPI. To use, git clone repo.
-ansys-solutions-optislang-frontend-components = {path = "./optislang-frontend-components", develop = true, source = "solutions-private-pypi"} #TODO: update package when released in PyPI. To use, git clone repo.
+ansys-solutions-optislang-parser = {path = "./optislang-parser", develop = true} #TODO: update package when released in PyPI. To use, git clone repo.
+ansys-solutions-optislang-frontend-components = {path = "./optislang-frontend-components", develop = true} #TODO: update package when released in PyPI. To use, git clone repo.
+ansys-solutions-products-ecosystem = {path = "./ansys-products-ecosystem", develop = true} #TODO: update package when released in PyPI. To use, git clone repo.
+
 ansys-solutions-dash-lib = {version = "0.2.0", source = "solutions-private-pypi", python=">=3.8,<3.10"}
 toml = {version = "*"}
 tox = {version = "*"} 
