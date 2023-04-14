@@ -79,9 +79,9 @@ def main():
 
     keep_files(DESIRED_STRUCTURE)
 
-    copy_file_to_assets_folder("{{ cookiecutter.__optiSLang_workflow_file }}",  ASSETS_DIRCTORY / "{{ cookiecutter.__optiSLang_workflow_file_name }}")
+    copy_file_to_assets_folder("{{ cookiecutter.__optiSLang_project_file }}",  ASSETS_DIRCTORY / "{{ cookiecutter.__optiSLang_project_file_name }}")
                                
-    copy_file_to_assets_folder("{{ cookiecutter.__optiSLang_placeholder_file }}", ASSETS_DIRCTORY / "{{ cookiecutter.__optiSLang_placeholder_name }}")
+    copy_file_to_assets_folder("{{ cookiecutter.__optiSLang_properties_file }}", ASSETS_DIRCTORY / "{{ cookiecutter.__optiSLang_properties_file_name }}")
 
 if __name__ == "__main__":
     main()

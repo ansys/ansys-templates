@@ -28,8 +28,8 @@ class ProblemSetupStep(StepModel):
     run_synchronously: bool = True
 
     # File storage
-    project_file: FileReference = FileReference("Problem_Setup/{{ cookiecutter.__optiSLang_workflow_file_name }}") 
-    properties_file: FileReference = FileReference("Problem_Setup/{{ cookiecutter.__optiSLang_placeholder_name }}") 
+    project_file: FileReference = FileReference("Problem_Setup/{{ cookiecutter.__optiSLang_project_file_name }}") 
+    properties_file: FileReference = FileReference("Problem_Setup/{{ cookiecutter.__optiSLang_properties_file_name }}") 
 
     
     @transaction(self=StepSpec(download=["properties_file"], upload=["placeholder_values", "placeholder_definitions"]))
@@ -47,7 +47,7 @@ class ProblemSetupStep(StepModel):
         """Upload OptiSLang project file to project directory."""
 
         original_project_file = (
-            Path(__file__).parent.absolute().parent / "model" / "assets" / "{{ cookiecutter.__optiSLang_workflow_file_name }}"  
+            Path(__file__).parent.absolute().parent / "model" / "assets" / "{{ cookiecutter.__optiSLang_project_file_name }}"  
         )
         self.project_file.write_bytes(original_project_file.read_bytes())
     
@@ -56,7 +56,7 @@ class ProblemSetupStep(StepModel):
         """Upload OptiSLang properties to project directory."""
 
         original_properties_file = (
-            Path(__file__).parent.absolute().parent / "model" / "assets" / "{{ cookiecutter.__optiSLang_placeholder_name }}" 
+            Path(__file__).parent.absolute().parent / "model" / "assets" / "{{ cookiecutter.__optiSLang_properties_file_name }}" 
         )
         self.properties_file.write_bytes(original_properties_file.read_bytes())
     
