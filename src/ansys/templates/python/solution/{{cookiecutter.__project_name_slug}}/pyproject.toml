@@ -40,9 +40,9 @@ ansys-dash-treeview = {version = "0.0.1.dev0", source = "solutions-private-pypi"
 ansys-saf-glow = {version = "0.1.9", source = "solutions-private-pypi" }
 ansys-saf-portal = {version = "0.1.4", source = "solutions-private-pypi"}
 toml = {version = "*"}
-tox = {version = "*"} 
-{% if cookiecutter.with_dash_ui == "yes" %} 
-dash = {version = "^2.6"}  
+tox = {version = "*"}
+{% if cookiecutter.with_dash_ui == "yes" %}
+dash = {version = "^2.6"}
 dash_bootstrap_components = {version = "^1.2"}
 dash-extensions = {version = "^0.1"}
 dash-iconify = {version = "^0.1"}

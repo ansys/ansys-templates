@@ -6,13 +6,13 @@
 
 ## Contributors
 
-* [Roberto Pastor](https://github.com/RobPasMue)
-* [Revathy Venugopal](https://github.com/Revathyvenugopal162)
 * [Alexander Kaszynski](https://github.com/akaszynski)
-* [Maxime Rey](https://github.com/MaxJPRey)
-* [Ismael Azehaf](https://github.com/iazehaf)
-* [Pierre Lulé](https://github.com/plule-ansys)
-* [Dominik Gresch](https://github.com/greschd)
-* [German Ayuso](https://github.com/germa89)
-* [Doug Addy](https://github.com/da1910)
 * [Dan Williams](https://github.com/dnwillia-work)
+* [Dominik Gresch](https://github.com/greschd)
+* [Doug Addy](https://github.com/da1910)
+* [German Ayuso](https://github.com/germa89)
+* [Ismael Azehaf](https://github.com/iazehaf)
+* [Maxime Rey](https://github.com/MaxJPRey)
+* [Pierre Lulé](https://github.com/plule-ansys)
+* [Revathy Venugopal](https://github.com/Revathyvenugopal162)
+* [Roberto Pastor](https://github.com/RobPasMue)

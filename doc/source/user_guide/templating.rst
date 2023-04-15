@@ -33,13 +33,13 @@ Understanding the templates directory
 In ``ansys-templates``, all templates are placed in ``src/ansys/templates/``.
 The ``templates/`` directory contains different families of templates.
 
-A `family of templates` is simply a directory with a ``common/`` folder and
-various templates folders.
+A `family of templates` is simply a directory with a ``common/`` directory and
+various templates directories.
 
-- The ``common/`` folder contains various resources that are common to all
+- The ``common/`` directory contains various resources that are common to all
   templates of a given family. This avoids duplication of files across templates.
 
-- Each template folder contains its own set of custom files.
+- Each template directory contains its own set of custom files.
 
 .. code:: bash
 
@@ -94,8 +94,8 @@ Inside this new family, you must create at least two different files:
 - A ``common/{{cookiecutter.__project_name_slug}}/`` directory to contain all of
   the typical files for this family. All files in the ``common/{{cookiecutter.__project_name_slug}}``
   directory will be copied to each template when rendering it.
-  
-  
+
+
 .. note::
 
     You can later add a ``hooks/post_gen_project.py`` file in the
@@ -106,7 +106,7 @@ Inside this new family, you must create at least two different files:
 Adding a new template to a family
 ---------------------------------
 
-To add a new template to a family, first create a new template folder. For example,
+To add a new template to a family, first create a new template directory. For example,
 ``src/ansys/templates/family_0/new_template``:
 
 .. code:: bash
@@ -225,7 +225,7 @@ Removing undesired files
 
 It is likely that there are some files coming from the ``common/``
 directory that you do not want included in your rendered template. To exclude files,
-you can take advantage of `cookiecutter hooks`_. 
+you can take advantage of `cookiecutter hooks`_.
 
 Hooks are Python scripts that allow you to control the rendering process both before
 and after the process is executed. With hooks, you can move or delete any files

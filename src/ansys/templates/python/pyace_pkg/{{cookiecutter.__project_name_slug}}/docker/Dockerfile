@@ -7,8 +7,8 @@ ENV PYTHONDONTWRITEBYTECODE=1
 # Turns off buffering for easier container logging
 ENV PYTHONUNBUFFERED=1
 
-RUN apt-get update \ 
-    && apt-get install -y \ 
+RUN apt-get update \
+    && apt-get install -y \
     && rm -rf /var/lib/apt/lists/*
 
 COPY requirements/requirements_build.txt ./

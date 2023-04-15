@@ -3,7 +3,7 @@ Ansys Solutions {{cookiecutter.solution_name}}
 ##############################################
 
 .. note::
-  This content needs to be configured according to the project specifics. 
+  This content needs to be configured according to the project specifics.
 
 
 Introduction
@@ -45,16 +45,16 @@ in the `Solutions Developer's Guide <https://dev-docs.solutions.ansys.com/index.
      navigate to the Private PyPI servers section and copy the token related to Ansys-Solutions PyPI.
 
   2. Create a system environment variable named SOLUTIONS_PRIVATE_PYPI_PAT and assign the token.
-  
+
 .. note::
-  In addition to the Ansys-Solutions private PyPI server, you can add several private sources such as PyAnsys private PyPI server. 
+  In addition to the Ansys-Solutions private PyPI server, you can add several private sources such as PyAnsys private PyPI server.
 
 Flagship products
 ~~~~~~~~~~~~~~~~~
 
 .. note::
-  Add here the name and the versions of Ansys flagship products needed to run the solution. 
-  Remove this section if useless. 
+  Add here the name and the versions of Ansys flagship products needed to run the solution.
+  Remove this section if useless.
 
 For example:
 
@@ -133,7 +133,7 @@ From now on, all the commands listed in the documentation must be executed withi
 Update dependencies
 ~~~~~~~~~~~~~~~~~~~
 
-To add a new dependency or to update the version of an existing dependency use the ``poetry add`` command. 
+To add a new dependency or to update the version of an existing dependency use the ``poetry add`` command.
 
 For packages collected from public PyPI run:
 
@@ -174,7 +174,7 @@ Code style check
 
 In this project, the following code style checks are required:
 
-  * black 
+  * black
 
   * isort
 
@@ -188,17 +188,17 @@ All-in-one checks using pre-commit
 ----------------------------------
 
 All those checks can be triggered with one single tool: ``pre-commit``. ``pre-commit`` is a GIT hook allowing to trigger all the code style commands at once at the point when you perform a git commit.
-``pre-commit`` prevents you from forgetting to run the required actions against your code and it ensures the exact same style policies are applied. The code style policy is defined in the 
-``.pre-commit-config.yaml`` at project root. 
+``pre-commit`` prevents you from forgetting to run the required actions against your code and it ensures the exact same style policies are applied. The code style policy is defined in the
+``.pre-commit-config.yaml`` at project root.
 
 Developers are not forced but encouraged to install ``pre-commit`` via:
 
   .. code:: bash
 
     python -m pip install pre-commit
-        
+
   .. code:: bash
-        
+
     pre-commit install
 
 To run pre-commit:
@@ -207,7 +207,7 @@ To run pre-commit:
 
     pre-commit run --all-files --show-diff-on-failure
 
-How to remove ``pre-commit``? 
+How to remove ``pre-commit``?
 
   * Navigate to the git directory at the root of the repository
 
@@ -252,7 +252,7 @@ Run codespell:
 Testing
 =======
 
-**Unit tests** and **Integration tests** are executed via the ``pytest`` framework. 
+**Unit tests** and **Integration tests** are executed via the ``pytest`` framework.
 
 To run the unit tests:
 
@@ -306,7 +306,7 @@ Build the package:
 
     python -m build
 
-Using poetry 
+Using poetry
 ------------
 
 Build the package:
