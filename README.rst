@@ -54,14 +54,14 @@ Then, you can simply execute:
 .. code:: bash
 
     poetry run python -m pip install ansys-product-library
-    
+
 For developers
 ^^^^^^^^^^^^^^
 
 Installing Pyproduct library in developer mode allows
 you to modify the source and enhance it.
 
-Before contributing to the project, please refer to the `PyAnsys Developer's guide`_. You will 
+Before contributing to the project, please refer to the `PyAnsys Developer's guide`_. You will
 need to follow these steps:
 
 #. Start by cloning this repository:
@@ -99,13 +99,13 @@ need to follow these steps:
 #. Install the project in editable mode:
 
     .. code:: bash
-    
+
       poetry run python -m pip install ansys-product-library
-        
+
     #. Finally, verify your development installation by running:
 
    .. code:: bash
-        
+
       tox
 
 
@@ -114,7 +114,7 @@ How to testing
 
 This project takes advantage of `tox`_. This tool allows to automate common
 development tasks (similar to Makefile) but it is oriented towards Python
-development. 
+development.
 
 Using tox
 ^^^^^^^^^
