@@ -4,8 +4,8 @@ FROM python:3.7-slim AS base
 ENV PYTHONDONTWRITEBYTECODE=1
 ENV PYTHONUNBUFFERED=1
 
-RUN apt-get update \ 
-    && apt-get install -y \ 
+RUN apt-get update \
+    && apt-get install -y \
     && rm -rf /var/lib/apt/lists/*
 
 WORKDIR /app
@@ -19,7 +19,7 @@ RUN mkdir stubs
 
 ADD protobufs/ ./protobufs/
 RUN python -m grpc_tools.protoc  \
-    -I ./protobufs  \ 
+    -I ./protobufs  \
     --python_out=./stubs \
     --grpc_python_out=./stubs  \
     ./protobufs/*.proto
