@@ -76,7 +76,7 @@ jobs:
   check-copyright:
     if: |
       github.event_name == 'pull_request' &&
-      github.event.pull_request.draft == false 
+      github.event.pull_request.draft == false
     name: Check copyright
     runs-on: [ubuntu-latest]
     steps:
@@ -88,7 +88,7 @@ jobs:
   check-code-style:
     if: |
       github.event_name == 'pull_request' &&
-      github.event.pull_request.draft == false 
+      github.event.pull_request.draft == false
     name: Check code style
     runs-on: [ubuntu-latest]
     steps:
@@ -97,11 +97,11 @@ jobs:
         with:
           python-version: ${{ env.MAIN_PYTHON_VERSION }}
           tox-version: ${{ env.TOX_VERSION }}
-          
+
   build:
     if: |
       github.event.pull_request.draft == false
-    name: Build 
+    name: Build
     runs-on: [windows-latest]
     steps:
       - name: Build
@@ -114,11 +114,11 @@ jobs:
           run-in-venv: false
           dependencies-source: build-system
           retention-days: 7
-          
+
   run-tests:
     if: |
       github.event_name == 'pull_request' &&
-      github.event.pull_request.draft == false 
+      github.event.pull_request.draft == false
     name: Run tests
     runs-on: [windows-latest]
     strategy:
