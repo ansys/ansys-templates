@@ -56,7 +56,7 @@ guide`_. You will need to follow these steps:
 #. Install the project in editable mode:
 
    .. code:: bash
-    
+
       python -m pip install --editable pybasic
 
 #. Install additional requirements (if needed):
@@ -71,7 +71,7 @@ guide`_. You will need to follow these steps:
 #. Finally, verify your development installation by running:
 
    .. code:: bash
-        
+
       python -m pip install -r requirements_tests.txt
       pytest tests -vv
 
