@@ -45,6 +45,7 @@ ansys-solutions-optislang-parser = {git = "https://github.com/Solution-Applicati
 ansys-solutions-optislang-frontend-components = {git = "https://github.com/Solution-Applications/optislang-frontend-components.git", branch = "main"} 
 ansys-solutions-products-ecosystem = {git = "https://github.com/Solution-Applications/ansys-products-ecosystem.git", branch = "main"}
 ansys-optislang-core = { git = "https://github.com/Solution-Applications/pyoptislang.git", branch = "main" }
+# ansys-solutions-optislang-wrapper = { git = "https://github.com/Solution-Applications/optislang-wrapper.git", branch = "main" }
 toml = {version = "*"}
 tox = {version = "*"} 
 {% if cookiecutter.with_dash_ui == "yes" %} 

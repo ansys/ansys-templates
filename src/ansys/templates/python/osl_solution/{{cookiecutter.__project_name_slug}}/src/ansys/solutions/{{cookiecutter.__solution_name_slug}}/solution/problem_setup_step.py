@@ -99,55 +99,55 @@ class ProblemSetupStep(StepModel):
 
         self.ansys_ecosystem_checked = True  
 
-        @transaction(
-        self=StepSpec(
-            download=[
-                "ansys_ecosystem",
-                "project_file",
-                "properties_file",
-                "workbench_input_deck"
-            ],
-            upload=[
-                "optislang_solve_status",
-                "results_directory",
-                "best_design_file"
-            ],
-        )
-    )
-    @long_running
-    def run_optislang(self) -> None:
-        """Start OptiSLang and run the project."""
+    # @transaction(
+    #     self=StepSpec(
+    #         download=[
+    #             "ansys_ecosystem",
+    #             "project_file",
+    #             "properties_file",
+    #             "workbench_input_deck"
+    #         ],
+    #         upload=[
+    #             "optislang_solve_status",
+    #             "results_directory",
+    #             "best_design_file"
+    #         ],
+    #     )
+    # )
+    # @long_running
+    # def run_optislang(self) -> None:
+    #     """Start OptiSLang and run the project."""
 
-        stderr_file = str(self.project_file.project_path / "Problem_Setup" / "stderr.log")
+    #     stderr_file = str(self.project_file.project_path / "Problem_Setup" / "stderr.log")
 
-        # Start OptiSLang 
-        osl = OptiSLangOrchestrator(
-            project_file = self.project_file.path,
-            properties_file = self.properties_file.path,
-            output_file = "hook_optimization_output.json",
-            version = convert_to_short_version(self.ansys_ecosystem["optislang"]["selected_version"])
-        )        
-        osl.start()
+    #     # Start OptiSLang 
+    #     osl = OptiSLangOrchestrator(
+    #         project_file = self.project_file.path,
+    #         properties_file = self.properties_file.path,
+    #         output_file = "hook_optimization_output.json",
+    #         version = convert_to_short_version(self.ansys_ecosystem["optislang"]["selected_version"])
+    #     )        
+    #     osl.start()
 
-        # Wait for OptiSLang to complete
-        while True:
-            # Check the status of the OptiSLang solve
-            if osl.get_status() == "processing":
-                self.optislang_solve_status = "in-progress"
-            elif osl.get_status() == "succeeded":
-                self.optislang_solve_status = "success"
-            elif osl.get_status() == "failed":
-                self.optislang_solve_status = "failure"
-            elif osl.get_status() == "stopped": # Case where OptiSLang stops without error, to further continue the solve.
-                if not check_if_file_is_empty(stderr_file): 
-                    self.optislang_solve_status = "failure"
-            else:
-                osl.stop()
-                raise Exception(f"ERROR: Unknown status: {osl.get_status()}.")
-            # Exit 
-            if osl.get_status() == "succeeded" or self.optislang_solve_status == "failure":
-                osl.stop()
-                break
-            time.sleep(1)
+    #     # Wait for OptiSLang to complete
+    #     while True:
+    #         # Check the status of the OptiSLang solve
+    #         if osl.get_status() == "processing":
+    #             self.optislang_solve_status = "in-progress"
+    #         elif osl.get_status() == "succeeded":
+    #             self.optislang_solve_status = "success"
+    #         elif osl.get_status() == "failed":
+    #             self.optislang_solve_status = "failure"
+    #         elif osl.get_status() == "stopped": # Case where OptiSLang stops without error, to further continue the solve.
+    #             if not check_if_file_is_empty(stderr_file): 
+    #                 self.optislang_solve_status = "failure"
+    #         else:
+    #             osl.stop()
+    #             raise Exception(f"ERROR: Unknown status: {osl.get_status()}.")
+    #         # Exit 
+    #         if osl.get_status() == "succeeded" or self.optislang_solve_status == "failure":
+    #             osl.stop()
+    #             break
+    #         time.sleep(1)
 
-        pause = True
+    #     pause = True
