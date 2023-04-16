@@ -7,5 +7,5 @@ from dash_extensions.enrich import html
 
 def layout():
     """Layout of the summary page tab."""
-    
+
     return html.Div() # TODO: add relevant ui components

@@ -82,6 +82,11 @@ SOLUTION_VARS = dict(
     __project_name_slug="solution",
 )
 
+OSL_SOLUTION_VARS = dict(
+    __solution_name_slug="solution",
+    __project_name_slug="solution",
+)
+
 PYCOMMON_STRUCTURE = [
     ".coveragerc",
     ".flake8",

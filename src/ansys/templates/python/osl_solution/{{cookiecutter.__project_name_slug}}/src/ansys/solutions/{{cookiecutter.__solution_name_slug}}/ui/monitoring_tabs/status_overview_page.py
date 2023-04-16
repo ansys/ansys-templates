@@ -7,6 +7,5 @@ from dash_extensions.enrich import html
 
 def layout():
     """Layout of the status overview tab."""
-    
-    return html.Div() # TODO: add relevant ui components
 
+    return html.Div() # TODO: add relevant ui components

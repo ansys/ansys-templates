@@ -61,8 +61,7 @@ UI_STRUCTURE = [
     f"src/ansys/solutions/{{ cookiecutter.__solution_name_slug }}/ui/app.py",
     f"src/ansys/solutions/{{ cookiecutter.__solution_name_slug }}/ui/monitoring_page.py",
     f"src/ansys/solutions/{{ cookiecutter.__solution_name_slug }}/ui/problem_setup_page.py",
-    f"src/ansys/solutions/{{ cookiecutter.__solution_name_slug }}/ui/page.py",
-    
+    f"src/ansys/solutions/{{ cookiecutter.__solution_name_slug }}/ui/page.py"
 ]
 
 ASSETS_DIRCTORY = Path(f"src/ansys/solutions/{{ cookiecutter.__solution_name_slug }}/model/assets/").absolute()
@@ -85,8 +84,8 @@ def main():
     keep_files(DESIRED_STRUCTURE)
 
     copy_file_to_assets_folder("{{ cookiecutter.__optiSLang_project_file }}",  ASSETS_DIRCTORY / "{{ cookiecutter.__optiSLang_project_file_name }}")
-                               
     copy_file_to_assets_folder("{{ cookiecutter.__optiSLang_properties_file }}", ASSETS_DIRCTORY / "{{ cookiecutter.__optiSLang_properties_file_name }}")
+
 
 if __name__ == "__main__":
     main()

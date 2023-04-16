@@ -5,9 +5,9 @@ import platform
 
 from pathlib import Path
 
-from ansys.saf.glow.solution import StepModel, StepSpec, transaction, FileReference, long_running
+from ansys.saf.glow.solution import StepModel, StepSpec, transaction, FileReference #, long_running
 from ansys.solutions.optislang.parser.placeholder import ProjectProperties
-from ansys.solutions.products_ecosystem.utils import convert_to_short_version, convert_to_long_version
+from ansys.solutions.products_ecosystem.utils import convert_to_long_version
 from ansys.solutions.products_ecosystem.controller import AnsysProductsEcosystemController
 
 class ProblemSetupStep(StepModel):
@@ -29,10 +29,9 @@ class ProblemSetupStep(StepModel):
     run_synchronously: bool = True
 
     # File storage
-    project_file: FileReference = FileReference("Problem_Setup/{{ cookiecutter.__optiSLang_project_file_name }}") 
-    properties_file: FileReference = FileReference("Problem_Setup/{{ cookiecutter.__optiSLang_properties_file_name }}") 
+    project_file: FileReference = FileReference("Problem_Setup/{{ cookiecutter.__optiSLang_project_file_name }}")
+    properties_file: FileReference = FileReference("Problem_Setup/{{ cookiecutter.__optiSLang_properties_file_name }}")
 
-    
     @transaction(self=StepSpec(download=["properties_file"], upload=["placeholder_values", "placeholder_definitions"]))
     def get_default_placeholder_values(self):
         """Get placeholder values and definitions using the ProjectProperties class."""
@@ -42,25 +41,25 @@ class ProblemSetupStep(StepModel):
         placeholders = pp.get_properties()['placeholders']
         self.placeholder_values = placeholders.get('placeholder_values')
         self.placeholder_definitions = placeholders.get('placeholder_definitions')
-        
+
     @transaction(self=StepSpec(upload=["project_file"]))
     def upload_project_file_to_project_directory(self) -> None:
         """Upload OptiSLang project file to project directory."""
 
         original_project_file = (
-            Path(__file__).parent.absolute().parent / "model" / "assets" / "{{ cookiecutter.__optiSLang_project_file_name }}"  
+            Path(__file__).parent.absolute().parent / "model" / "assets" / "{{ cookiecutter.__optiSLang_project_file_name }}"
         )
         self.project_file.write_bytes(original_project_file.read_bytes())
-    
+
     @transaction(self=StepSpec(upload=["properties_file"]))
     def upload_properties_file_to_project_directory(self) -> None:
         """Upload OptiSLang properties to project directory."""
 
         original_properties_file = (
-            Path(__file__).parent.absolute().parent / "model" / "assets" / "{{ cookiecutter.__optiSLang_properties_file_name }}" 
+            Path(__file__).parent.absolute().parent / "model" / "assets" / "{{ cookiecutter.__optiSLang_properties_file_name }}"
         )
         self.properties_file.write_bytes(original_properties_file.read_bytes())
-    
+
     @transaction(
         self=StepSpec(
             upload=["ansys_ecosystem"],
@@ -72,10 +71,9 @@ class ProblemSetupStep(StepModel):
         controller = AnsysProductsEcosystemController()
 
         for product_name in self.ansys_ecosystem.keys():
-            
             self.ansys_ecosystem[product_name]["installed_versions"] = controller.get_installed_versions(product_name, outout_format="long")
             self.ansys_ecosystem[product_name]["compatible_versions"] = [product_version for product_version in self.ansys_ecosystem[product_name]["installed_versions"] if product_version in self.ansys_ecosystem[product_name]["authorized_versions"]]
-            
+
             if len(self.ansys_ecosystem[product_name]["installed_versions"]) == 0:
                 alert_message = f"No installation of {product_name.title()} found in the machine {platform.node()}."
                 alert_color = "danger"
@@ -92,12 +90,12 @@ class ProblemSetupStep(StepModel):
                 for compatible_version in self.ansys_ecosystem[product_name]["compatible_versions"]:
                     alert_message += f" {convert_to_long_version(compatible_version)}"
                 alert_message += ".\n"
-                alert_message += "Selected version is %s." %(self.ansys_ecosystem[product_name]["selected_version"])
+                alert_message += "Selected version is %s." % (self.ansys_ecosystem[product_name]["selected_version"])
                 alert_color = "success"
             self.ansys_ecosystem[product_name]["alert_message"] = alert_message
             self.ansys_ecosystem[product_name]["alert_color"] = alert_color
 
-        self.ansys_ecosystem_checked = True  
+        self.ansys_ecosystem_checked = True
 
     # @transaction(
     #     self=StepSpec(
@@ -120,13 +118,13 @@ class ProblemSetupStep(StepModel):
 
     #     stderr_file = str(self.project_file.project_path / "Problem_Setup" / "stderr.log")
 
-    #     # Start OptiSLang 
+    #     # Start OptiSLang
     #     osl = OptiSLangOrchestrator(
     #         project_file = self.project_file.path,
     #         properties_file = self.properties_file.path,
     #         output_file = "hook_optimization_output.json",
     #         version = convert_to_short_version(self.ansys_ecosystem["optislang"]["selected_version"])
-    #     )        
+    #     )
     #     osl.start()
 
     #     # Wait for OptiSLang to complete
@@ -139,12 +137,12 @@ class ProblemSetupStep(StepModel):
     #         elif osl.get_status() == "failed":
     #             self.optislang_solve_status = "failure"
     #         elif osl.get_status() == "stopped": # Case where OptiSLang stops without error, to further continue the solve.
-    #             if not check_if_file_is_empty(stderr_file): 
+    #             if not check_if_file_is_empty(stderr_file):
     #                 self.optislang_solve_status = "failure"
     #         else:
     #             osl.stop()
     #             raise Exception(f"ERROR: Unknown status: {osl.get_status()}.")
-    #         # Exit 
+    #         # Exit
     #         if osl.get_status() == "succeeded" or self.optislang_solve_status == "failure":
     #             osl.stop()
     #             break
