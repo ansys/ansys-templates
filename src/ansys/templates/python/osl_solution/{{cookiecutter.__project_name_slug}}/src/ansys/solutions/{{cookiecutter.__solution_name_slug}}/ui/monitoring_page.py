@@ -13,7 +13,7 @@ from ansys.solutions.{{ cookiecutter.__solution_name_slug }}.ui.monitoring_tabs 
 
 def update_monitoring_tabs(component):
     if component == "root":
-        monitoring_tabs = [ 
+        monitoring_tabs = [
             dcc.Tab(label='Project Summary', value='project_summary_step'),
             dcc.Tab(label='Result Files', value='result_files_step'),
             dcc.Tab(label='Scenery', value='scenery_step'),
@@ -44,7 +44,7 @@ def layout(step: MonitoringStep):
             html.Hr(className="my-2"),
             html.Br(),
             dbc.Row(
-                dcc.Tabs(id="monitoring-tabs", value='project_summary_step', 
+                dcc.Tabs(id="monitoring-tabs", value='project_summary_step',
                     children= monitoring_tabs,
                 ),
             ),
@@ -82,5 +82,5 @@ def display_monitoring_page(pathname, tab):
     elif tab == "visualization_step":
         page_layout = visualization_page.layout(project.steps.hook_optimization_step)
     elif tab == "status_overview_step":
-        page_layout = status_overview_page.layout(project.steps.hook_optimization_step)    
+        page_layout = status_overview_page.layout(project.steps.hook_optimization_step)
     return page_layout

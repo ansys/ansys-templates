@@ -45,7 +45,7 @@ step_list = [
         "key": "second_node_step",
         "text": "Second Node Step",
         "depth": 1,
-    }, 
+    },
 ]
 
 

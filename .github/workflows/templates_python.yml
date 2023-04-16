@@ -38,7 +38,7 @@ jobs:
 
           # All pybasic template tests
           - {name: "pybasic", template: "pybasic", build-system: "setuptools", outdir: "pybasic_s0/pybasic"}
-            
+
           # All pybasic template tests
           - {name: "pyansys", template: "pyansys", build-system: "setuptools", outdir: "pyansys_s0/pyproduct-library"}
 
