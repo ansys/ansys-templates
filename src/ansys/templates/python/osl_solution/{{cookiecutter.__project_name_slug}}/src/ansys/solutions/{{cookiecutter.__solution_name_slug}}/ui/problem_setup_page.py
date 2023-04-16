@@ -21,7 +21,7 @@ def update_alerts_(problem_setup_step):
     alerts = []
 
     # Product version alerts
-    for product_data in problem_setup_step.ansys_ecosystem.values(): 
+    for product_data in problem_setup_step.ansys_ecosystem.values():
         alerts.append(
             html.Div(
                 children=[
@@ -29,7 +29,7 @@ def update_alerts_(problem_setup_step):
                         product_data["alert_message"],
                         color=product_data["alert_color"],
                     )
-                ]  
+                ]
             )
         )
 
@@ -78,7 +78,7 @@ def update_alerts(problem_setup_step):
     alerts = []
 
     # Product version alerts
-    for product_name, product_data in problem_setup_step.ansys_ecosystem.items(): 
+    for product_name, product_data in problem_setup_step.ansys_ecosystem.items():
         alerts.append(
             html.Div(
                 [
@@ -152,7 +152,7 @@ def layout(problem_setup_step: ProblemSetupStep):
         problem_setup_step.upload_project_file_to_project_directory()
         problem_setup_step.upload_properties_file_to_project_directory()
         problem_setup_step.get_default_placeholder_values()
-    
+
     placeholder_table = PlaceholderTable(problem_setup_step.placeholder_values, problem_setup_step.placeholder_definitions)
 
     # Placeholder card for displaying parameters defined in the <project_name>.json
@@ -161,12 +161,12 @@ def layout(problem_setup_step: ProblemSetupStep):
             dbc.CardBody(
                 [
                 dbc.Accordion(
-                    [   
+                    [
                         dbc.AccordionItem(
                             [
                                 html.Div(placeholder_table.create()),
                             ],
-                            
+
                             title="Placeholders",
                             item_id="parameter-placeholders",
                         )
@@ -174,10 +174,10 @@ def layout(problem_setup_step: ProblemSetupStep):
                 )
             ]
             )
-        ]            
+        ]
     )
     return html.Div(
-        [   
+        [
             html.H1("Insert OptiSLang Project Name Here", className="display-3", style={"font-size": "35px"}),
             html.Hr(className="my-2"),
             html.Br(),
@@ -198,7 +198,7 @@ def layout(problem_setup_step: ProblemSetupStep):
             html.Br(),
             dbc.Row(
                 [
-                    # dbc.Row(image_card), 
+                    # dbc.Row(image_card),
                     dbc.Row(placeholder_card),
                 ],
                 style={"padding": "20px"},
@@ -206,7 +206,7 @@ def layout(problem_setup_step: ProblemSetupStep):
             dbc.Row(
                 [
                     dbc.Accordion(
-                        [   
+                        [
                             dbc.AccordionItem(
                                 [
                                     InputRow(
@@ -280,7 +280,7 @@ for alert in ["optislang-version", "workbench-version", "optislang-solve"]:
 )
 def run_optislang_synchronously(n_clicks, pathname):
     """Start OptiSLang and run the simulation. Wait for the process to complete."""
-    
+
     project = DashClient[{{cookiecutter.__solution_definition_name}}].get_project(pathname)
     problem_setup_step = project.steps.problem_setup_step
     if n_clicks and problem_setup_step.run_synchronously:

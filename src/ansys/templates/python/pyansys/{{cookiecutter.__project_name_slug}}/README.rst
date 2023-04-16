@@ -24,7 +24,7 @@ For developers
 Installing Py{{ cookiecutter.product_name }} {{ cookiecutter.library_name }} in developer mode allows
 you to modify the source and enhance it.
 
-Before contributing to the project, please refer to the `PyAnsys Developer's guide`_. You will 
+Before contributing to the project, please refer to the `PyAnsys Developer's guide`_. You will
 need to follow these steps:
 
 #. Start by cloning this repository:
@@ -59,7 +59,7 @@ need to follow these steps:
 #. Install the project in editable mode:
 
    .. code:: bash
-    
+
       python -m pip install --editable {{ cookiecutter.__pkg_name }}
 
 #. Install additional requirements (if needed):
@@ -73,7 +73,7 @@ need to follow these steps:
 #. Finally, verify your development installation by running:
 
    .. code:: bash
-        
+
       python -m pip install -r requirements/requirements_tests.txt
       pytest tests -v
 

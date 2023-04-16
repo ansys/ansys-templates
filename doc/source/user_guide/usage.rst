@@ -40,10 +40,10 @@ The following help content is returned:
    Usage: ansys-templates [OPTIONS] COMMAND [ARGS]...
 
    Ansys tool for creating Python projects.
-   
+
    Options:
      --help  Show this message and exit.
-   
+
    Commands:
      list  List all available templates names.
      new   Create a new project from desired template.
@@ -65,14 +65,16 @@ The following templates are returned:
 
    Available templates in ``ansys-templates`` are:
 
+   doc-project: Create a documentation project using Sphinx.
    pybasic: Create a basic Python Package.
    pyansys: Create a PyAnsys Python Package project.
    pyansys-advanced: Create an advanced PyAnsys Python Package project.
+   pyansys-openapi-client: Create an OpenAPI Client Package project.
    pyace: Create a Python project for any method developers.
    pyace-flask: Create a Flask project initialized for any developer.
    pyace-grpc: Create gRPC project initialized for any developer.
    pyace-fast: Create a FastAPI project initialized for any developer.
-
+   solution: Create a Solution based on the Solution Application Framework.
 
 Creating a new PyAnsys project
 ------------------------------
