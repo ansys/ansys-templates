@@ -1,4 +1,4 @@
-# ©2022, ANSYS Inc. Unauthorized use, distribution or duplication is prohibited.
+# ©2023, ANSYS Inc. Unauthorized use, distribution or duplication is prohibited.
 
 """Initialization of the frontend layout across all the steps."""
 
@@ -14,6 +14,7 @@ from ansys.solutions.{{ cookiecutter.__solution_name_slug }}.solution.definition
 )
 from ansys.solutions.{{ cookiecutter.__solution_name_slug }}.ui import problem_setup_page, monitoring_page
 
+
 step_list = [
     {
         "key": "problem_setup_step",
@@ -24,7 +25,27 @@ step_list = [
         "key": "monitoring_step",
         "text": "Monitoring Step",
         "depth": 0,
-    }
+    },
+    {
+        "key": "root_step",
+        "text": "Root Step",
+        "depth": 1,
+    },
+    {
+        "key": "system_step",
+        "text": "System Step",
+        "depth": 1,
+    },
+    {
+        "key": "first_node_step",
+        "text": "First Node Step",
+        "depth": 1,
+    },
+    {
+        "key": "second_node_step",
+        "text": "Second Node Step",
+        "depth": 1,
+    }, 
 ]
 
 
@@ -138,6 +159,8 @@ def display_poject_name(pathname):
 def display_page(pathname, value):
     """Display page content."""
     project = DashClient[{{ cookiecutter.__solution_definition_name }}].get_project(pathname)
+    monitoring_step = project.steps.monitoring_step
+
     triggered_id = callback_context.triggered[0]["prop_id"].split(".")[0]
     if triggered_id == "url":
         return problem_setup_page.layout(project.steps.problem_setup_step)
@@ -147,5 +170,17 @@ def display_page(pathname, value):
         elif value == "problem_setup_step":
             page_layout = problem_setup_page.layout(project.steps.problem_setup_step)
         elif value == "monitoring_step":
+            page_layout = monitoring_page.layout(project.steps.monitoring_step)
+        elif value == "root_step":
+            monitoring_step.component_level = "root"
+            page_layout = monitoring_page.layout(project.steps.monitoring_step)
+        elif value == "system_step":
+            monitoring_step.component_level = "system"
+            page_layout = monitoring_page.layout(project.steps.monitoring_step)
+        elif value == "first_node_step":
+            monitoring_step.component_level = "node"
+            page_layout = monitoring_page.layout(project.steps.monitoring_step)
+        elif value == "second_node_step":
+            monitoring_step.component_level = "node"
             page_layout = monitoring_page.layout(project.steps.monitoring_step)
         return page_layout

@@ -1,1 +1,1 @@
-# Add here assets related to the simulation models.
+# Add assets related to the simulation models.

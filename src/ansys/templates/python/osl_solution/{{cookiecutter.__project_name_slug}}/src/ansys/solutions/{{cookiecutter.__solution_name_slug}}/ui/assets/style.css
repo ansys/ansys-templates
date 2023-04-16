@@ -1,4 +1,25 @@
-/*©2022, ANSYS Inc. Unauthorized use, distribution or duplication is prohibited.*/
+/*©2023, ANSYS Inc. Unauthorized use, distribution or duplication is prohibited.*/
 .back-link {
     text-align: right;
+}
+.button {
+    color:#fff;
+    background-color:#000000;
+    border-color:#000000;
+}
+
+.accordion-button {
+    text-align: left;
+    display: block;
+    color:#fff;
+    background-color:#000000;
+    border-color:#000000;
+}
+
+.accordion-button:not(.collapsed) {
+    text-align: left;
+    display: block;
+    color:#fff;
+    background-color:#000000;
+    border-color:#000000;
 }
