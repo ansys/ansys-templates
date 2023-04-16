@@ -129,5 +129,5 @@ def solution():
 
 @new.command()
 def osl_solution():
-    """Create an optiSLang Solution based on the Solution Application Framework."""
+    """Create an oSL solution based on SAF."""
     create_project("osl-solution")
