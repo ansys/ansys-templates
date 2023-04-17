@@ -81,6 +81,18 @@ In order to start using the solution or to develop inside the solution you need 
 
 ``poetry`` is the dependency manager tool used in this project. The dependencies are declared in ``pyproject.toml`` at project root.
 
+From now on, the version of the dependency manager tool must be defined in the pyproject.toml file. 
+
+For example, if you are using Poetry version 1.4.2 (the latest poetry version), the following lines must be part of your pyproject.toml file, after the [build-system] section:
+[build-system-requirements]
+build-system-version = "1.4.2"
+For this project, the poetry version used is 1.4.2.
+
+Otherwise if you want to use the version of poetry of your choice, you can use the -s option to run the setup_environment.py script.
+For example, ``python setup_environment.py -d all -s 1.3``
+
+Last but not least, please make sure that the version of poetry in your pyproject.toml file is the same as in the ci.yml file (located in the .github\workflows folder) for consistency. 
+
 Automatic installation
 ~~~~~~~~~~~~~~~~~~~~~~
 

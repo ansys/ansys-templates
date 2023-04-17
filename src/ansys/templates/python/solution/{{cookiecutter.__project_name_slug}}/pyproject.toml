@@ -3,7 +3,7 @@ requires = ["poetry-core>=1.0.0,<1.3.0", "setuptools>=65.0"]
 build-backend = "poetry.core.masonry.api"
 
 [build-system-requirements]
-build-system-version = "1.4.0"
+build-system-version = "1.4.2"
 
 [tool.poetry]
 name = "{{cookiecutter.__pkg_name}}"
@@ -43,8 +43,8 @@ python = ">=3.8, <3.11"
 ansys-dash-treeview = {version = "0.0.1.dev0", source = "solutions-private-pypi"}
 ansys-saf-glow = {version = "^0.2", source = "solutions-private-pypi" }
 ansys-saf-portal = {version = "^0.1.6", source = "solutions-private-pypi"}
-toml = {version = "*"}
-tox = {version = "*"} 
+toml = {version = ">=0.10.0,<=0.10.2"}
+tox = {version = ">=3.27.1,<=4.4.12"} 
 {% if cookiecutter.with_dash_ui == "yes" %} 
 dash = {version = "^2.6"}  
 dash_bootstrap_components = {version = "^1.2"}
@@ -67,7 +67,7 @@ sphinx_code_tabs = {version = "^0.5.3"}
 sphinx-gallery = {version = "^0.11.1"}
 sphinx_mdinclude= {version = "^0.5.3"}
 sphinx-tabs = {version = ">=1.2.1,<3.5.0"}
-toml = {version = "*"} # Needed by conf.py
+toml = {version = "<=0.10.2"} # Needed by conf.py
 
 # Optional testing dependencies
 [tool.poetry.group.tests]
