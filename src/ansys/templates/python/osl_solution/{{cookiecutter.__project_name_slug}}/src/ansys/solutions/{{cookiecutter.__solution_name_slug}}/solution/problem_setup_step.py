@@ -22,7 +22,7 @@ class ProblemSetupStep(StepModel):
             "installed_versions": [],
             "compatible_versions": [],
             "selected_version": None,
-            "alert_message": "OptiSLang install not checked.",
+            "alert_message": "optiSLang install not checked.",
             "alert_color": "warning"
         },
     }
@@ -44,7 +44,7 @@ class ProblemSetupStep(StepModel):
 
     @transaction(self=StepSpec(upload=["project_file"]))
     def upload_project_file_to_project_directory(self) -> None:
-        """Upload OptiSLang project file to project directory."""
+        """Upload optiSLang project file to project directory."""
 
         original_project_file = (
             Path(__file__).parent.absolute().parent / "model" / "assets" / "{{ cookiecutter.__optiSLang_project_file_name }}"
@@ -53,7 +53,7 @@ class ProblemSetupStep(StepModel):
 
     @transaction(self=StepSpec(upload=["properties_file"]))
     def upload_properties_file_to_project_directory(self) -> None:
-        """Upload OptiSLang properties to project directory."""
+        """Upload optiSLang properties to project directory."""
 
         original_properties_file = (
             Path(__file__).parent.absolute().parent / "model" / "assets" / "{{ cookiecutter.__optiSLang_properties_file_name }}"
@@ -114,11 +114,11 @@ class ProblemSetupStep(StepModel):
     # )
     # @long_running
     # def run_optislang(self) -> None:
-    #     """Start OptiSLang and run the project."""
+    #     """Start optiSLang and run the project."""
 
     #     stderr_file = str(self.project_file.project_path / "Problem_Setup" / "stderr.log")
 
-    #     # Start OptiSLang
+    #     # Start optiSLang
     #     osl = OptiSLangOrchestrator(
     #         project_file = self.project_file.path,
     #         properties_file = self.properties_file.path,
@@ -127,16 +127,16 @@ class ProblemSetupStep(StepModel):
     #     )
     #     osl.start()
 
-    #     # Wait for OptiSLang to complete
+    #     # Wait for optiSLang to complete
     #     while True:
-    #         # Check the status of the OptiSLang solve
+    #         # Check the status of the optiSLang solve
     #         if osl.get_status() == "processing":
     #             self.optislang_solve_status = "in-progress"
     #         elif osl.get_status() == "succeeded":
     #             self.optislang_solve_status = "success"
     #         elif osl.get_status() == "failed":
     #             self.optislang_solve_status = "failure"
-    #         elif osl.get_status() == "stopped": # Case where OptiSLang stops without error, to further continue the solve.
+    #         elif osl.get_status() == "stopped": # Case where optiSLang stops without error, to further continue the solve.
     #             if not check_if_file_is_empty(stderr_file):
     #                 self.optislang_solve_status = "failure"
     #         else:

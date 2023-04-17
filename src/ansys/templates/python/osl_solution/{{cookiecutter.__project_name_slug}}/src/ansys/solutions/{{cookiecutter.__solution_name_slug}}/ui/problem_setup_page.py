@@ -33,11 +33,11 @@ def update_alerts_(problem_setup_step):
             )
         )
 
-    # OptiSLang solve alert
+    # optiSLang solve alert
     if problem_setup_step.optislang_solve_status == "initial":
         alerts.append(
             dbc.Alert(
-                "OptiSLang simulation not started.",
+                "optiSLang simulation not started.",
                 color="warning",
                 id="optislang_simulation_alert",
             )
@@ -45,7 +45,7 @@ def update_alerts_(problem_setup_step):
     elif problem_setup_step.optislang_solve_status == "in-progress":
         alerts.append(
             dbc.Alert(
-                "OptiSLang simulation in progress.",
+                "optiSLang simulation in progress.",
                 color="warning",
                 id="optislang_simulation_alert",
             )
@@ -53,7 +53,7 @@ def update_alerts_(problem_setup_step):
     elif problem_setup_step.optislang_solve_status == "success":
         alerts.append(
             dbc.Alert(
-                "OptiSLang simulation completed successfully.",
+                "optiSLang simulation completed successfully.",
                 color="success",
                 id="optislang_simulation_alert",
             )
@@ -61,7 +61,7 @@ def update_alerts_(problem_setup_step):
     elif problem_setup_step.optislang_solve_status == "failure":
         alerts.append(
             dbc.Alert(
-                "OptiSLang simulation failed.",
+                "optiSLang simulation failed.",
                 color="danger",
                 id="optislang_simulation_alert"
             )
@@ -102,21 +102,21 @@ def update_alerts(problem_setup_step):
             ),
         )
 
-    # OptiSLang solve alert
+    # optiSLang solve alert
     if problem_setup_step.optislang_solve_status == "initial":
-        solve_message, solve_color = "OptiSLang simulation not started.", "warning"
+        solve_message, solve_color = "optiSLang simulation not started.", "warning"
     elif problem_setup_step.optislang_solve_status == "in-progress":
-        solve_message, solve_color = "OptiSLang simulation in progress.", "primary"
+        solve_message, solve_color = "optiSLang simulation in progress.", "primary"
     elif problem_setup_step.optislang_solve_status == "success":
-        solve_message, solve_color = "OptiSLang simulation completed successfully.", "success"
+        solve_message, solve_color = "optiSLang simulation completed successfully.", "success"
     elif problem_setup_step.optislang_solve_status == "failure":
-        solve_message, solve_color = "OptiSLang simulation failed.", "danger"
+        solve_message, solve_color = "optiSLang simulation failed.", "danger"
 
     alerts.append(
         html.Div(
             [
                 dbc.Button(
-                    "OptiSLang Solve",
+                    "optiSLang Solve",
                     id="popover-optislang-solve-target",
                     disabled = False,
                     color=solve_color,
@@ -178,7 +178,7 @@ def layout(problem_setup_step: ProblemSetupStep):
     )
     return html.Div(
         [
-            html.H1("Insert OptiSLang Project Name Here", className="display-3", style={"font-size": "35px"}),
+            html.H1("Insert optiSLang Project Name Here", className="display-3", style={"font-size": "35px"}),
             html.Hr(className="my-2"),
             html.Br(),
             dbc.Row(
@@ -279,7 +279,7 @@ for alert in ["optislang-version", "workbench-version", "optislang-solve"]:
     prevent_initial_call=True,
 )
 def run_optislang_synchronously(n_clicks, pathname):
-    """Start OptiSLang and run the simulation. Wait for the process to complete."""
+    """Start optiSLang and run the simulation. Wait for the process to complete."""
 
     project = DashClient[{{cookiecutter.__solution_definition_name}}].get_project(pathname)
     problem_setup_step = project.steps.problem_setup_step
@@ -292,7 +292,7 @@ def run_optislang_synchronously(n_clicks, pathname):
         if problem_setup_step.optislang_solve_status == "success":
             return (
                 dbc.Alert(
-                    "OptiSLang simulation completed successfully.",
+                    "optiSLang simulation completed successfully.",
                     color="success",
                 ),
                 True
@@ -300,7 +300,7 @@ def run_optislang_synchronously(n_clicks, pathname):
         elif problem_setup_step.optislang_solve_status == "failure":
             return (
                 dbc.Alert(
-                    "OptiSLang simulation failed.",
+                    "optiSLang simulation failed.",
                     color="danger",
                 ),
                 True
@@ -308,7 +308,7 @@ def run_optislang_synchronously(n_clicks, pathname):
         else:
             return (
                 dbc.Alert(
-                    "OptiSLang simulation failed with an unknown error.",
+                    "optiSLang simulation failed with an unknown error.",
                     color="danger",
                 ),
                 True

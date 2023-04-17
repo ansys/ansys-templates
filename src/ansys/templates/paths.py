@@ -67,7 +67,7 @@ PYTHON_TEMPLATES_SOLUTION_PATH = PYTHON_TEMPLATES_PATH / "solution"
 """Path to the Solution template."""
 
 PYTHON_TEMPLATES_OSL_SOLUTION_PATH = PYTHON_TEMPLATES_PATH / "osl_solution"
-"""Path to the OptiSLang Solution template."""
+"""Path to the optiSLang Solution template."""
 
 TEMPLATE_PATH_FINDER = {
     "common": PYTHON_TEMPLATES_COMMON_PATH,
