@@ -15,3 +15,5 @@ pyace-fast
 pyace-flask
 pyace-grpc
 setuptools
+optiSLang
+
