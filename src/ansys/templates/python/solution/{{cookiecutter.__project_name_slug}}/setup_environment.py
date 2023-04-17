@@ -45,9 +45,9 @@ The following project structure is expected for projects with a dependency manag
 project-name
 └── pyproject.toml                  # Configuration of the build system.
 The following lines should be present in the ``pyproject.toml`` file for managing the version of the dependency management system:
-Example for using poetry 1.4.0:
+Example for using poetry 1.4.2:
 [build-system-requirements]
-build-system-version = "1.4.0"
+build-system-version = "1.4.2"
 """
 
 # ==================================================== [Imports] ==================================================== #
