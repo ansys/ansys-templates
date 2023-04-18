@@ -1,3 +1,3 @@
-# ©2022, ANSYS Inc. Unauthorized use, distribution or duplication is prohibited.
+# ©2023, ANSYS Inc. Unauthorized use, distribution or duplication is prohibited.
 
 """Initialization."""
