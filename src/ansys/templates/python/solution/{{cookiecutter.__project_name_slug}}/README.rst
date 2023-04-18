@@ -81,7 +81,7 @@ In order to start using the solution or to develop inside the solution you need 
 
 ``poetry`` is the dependency manager tool used in this project. The dependencies are declared in ``pyproject.toml`` at project root.
 
-From now on, the version of the dependency manager tool must be defined in the pyproject.toml file. 
+From now on, the version of the dependency manager tool must be defined in the pyproject.toml file.
 
 For example, if you are using Poetry version 1.4.2 (the latest poetry version), the following lines must be part of your pyproject.toml file, after the ``build-system`` section:
 

@@ -83,7 +83,7 @@ pytest-pep8 = {version = "*"}
 pytest-pythonpath = {version = "*"}
 pytest-xdist = {version = "^3.0.2"}
 pytest-mock = {version = "*"}
-tox = {version = "^4.4.0"} 
+tox = {version = "^4.4.0"}
 
 # Optional build requirements
 [tool.poetry.group.build]
