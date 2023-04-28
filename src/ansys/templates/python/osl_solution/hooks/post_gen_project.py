@@ -39,7 +39,7 @@ DESIRED_STRUCTURE = [
     f"src/ansys/solutions/{{ cookiecutter.__solution_name_slug }}/ui/colorscale.py",
     f"src/ansys/solutions/{{ cookiecutter.__solution_name_slug }}/ui/monitoring_page.py",
     f"src/ansys/solutions/{{ cookiecutter.__solution_name_slug }}/ui/problem_setup_page.py",
-    f"src/ansys/solutions/{{ cookiecutter.__solution_name_slug }}/ui/page.py"
+    f"src/ansys/solutions/{{ cookiecutter.__solution_name_slug }}/ui/page.py",
     f"src/ansys/solutions/{{ cookiecutter.__solution_name_slug }}/__init__.py",
     f"src/ansys/solutions/{{ cookiecutter.__solution_name_slug }}/main.py",
     "tests/common_test_files/README.md",

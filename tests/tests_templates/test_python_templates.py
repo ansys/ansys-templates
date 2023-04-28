@@ -83,8 +83,8 @@ SOLUTION_VARS = dict(
 )
 
 OSL_SOLUTION_VARS = dict(
-    __solution_name_slug="solution",
-    __project_name_slug="solution",
+    __solution_name_slug="osl_solution",
+    __project_name_slug="osl_solution",
 )
 
 PYCOMMON_STRUCTURE = [
