@@ -19,13 +19,27 @@ DESIRED_STRUCTURE = [
     "doc/make.bat",
     "doc/Makefile",
     "examples/README.md",
+    f"src/ansys/solutions/{{ cookiecutter.__solution_name_slug }}/model/assets/README.md",
     f"src/ansys/solutions/{{ cookiecutter.__solution_name_slug }}/model/scripts/README.md",
     f"src/ansys/solutions/{{ cookiecutter.__solution_name_slug }}/model/README.md",
     f"src/ansys/solutions/{{ cookiecutter.__solution_name_slug }}/model/utils.py",
-    f"src/ansys/solutions/{{ cookiecutter.__solution_name_slug }}/model/assets/README.md",
     f"src/ansys/solutions/{{ cookiecutter.__solution_name_slug }}/solution/definition.py",
     f"src/ansys/solutions/{{ cookiecutter.__solution_name_slug }}/solution/monitoring_step.py",
     f"src/ansys/solutions/{{ cookiecutter.__solution_name_slug }}/solution/problem_setup_step.py",
+    f"src/ansys/solutions/{{ cookiecutter.__solution_name_slug }}/ui/assets/Graphics/ansys-solutions-horizontal-logo.png",
+    f"src/ansys/solutions/{{ cookiecutter.__solution_name_slug }}/ui/assets/style.css",
+    f"src/ansys/solutions/{{ cookiecutter.__solution_name_slug }}/ui/monitoring_tabs/design_table_page.py",
+    f"src/ansys/solutions/{{ cookiecutter.__solution_name_slug }}/ui/monitoring_tabs/project_summary_page.py",
+    f"src/ansys/solutions/{{ cookiecutter.__solution_name_slug }}/ui/monitoring_tabs/result_files_page.py",
+    f"src/ansys/solutions/{{ cookiecutter.__solution_name_slug }}/ui/monitoring_tabs/scenery_page.py",
+    f"src/ansys/solutions/{{ cookiecutter.__solution_name_slug }}/ui/monitoring_tabs/status_overview_page.py",
+    f"src/ansys/solutions/{{ cookiecutter.__solution_name_slug }}/ui/monitoring_tabs/summary_page.py",
+    f"src/ansys/solutions/{{ cookiecutter.__solution_name_slug }}/ui/monitoring_tabs/visualization_page.py",
+    f"src/ansys/solutions/{{ cookiecutter.__solution_name_slug }}/ui/app.py",
+    f"src/ansys/solutions/{{ cookiecutter.__solution_name_slug }}/ui/colorscale.py",
+    f"src/ansys/solutions/{{ cookiecutter.__solution_name_slug }}/ui/monitoring_page.py",
+    f"src/ansys/solutions/{{ cookiecutter.__solution_name_slug }}/ui/problem_setup_page.py",
+    f"src/ansys/solutions/{{ cookiecutter.__solution_name_slug }}/ui/page.py"
     f"src/ansys/solutions/{{ cookiecutter.__solution_name_slug }}/__init__.py",
     f"src/ansys/solutions/{{ cookiecutter.__solution_name_slug }}/main.py",
     "tests/common_test_files/README.md",
@@ -48,23 +62,6 @@ DESIRED_STRUCTURE = [
     "tox.ini"
 ]
 """A list holding all desired files to be included in the project."""
-
-UI_STRUCTURE = [
-    f"src/ansys/solutions/{{ cookiecutter.__solution_name_slug }}/ui/assets/Graphics/ansys-solutions-horizontal-logo.png",
-    f"src/ansys/solutions/{{ cookiecutter.__solution_name_slug }}/ui/assets/style.css",
-    f"src/ansys/solutions/{{ cookiecutter.__solution_name_slug }}/ui/monitoring_tabs/design_table_page.py",
-    f"src/ansys/solutions/{{ cookiecutter.__solution_name_slug }}/ui/monitoring_tabs/project_summary_page.py",
-    f"src/ansys/solutions/{{ cookiecutter.__solution_name_slug }}/ui/monitoring_tabs/result_files_page.py",
-    f"src/ansys/solutions/{{ cookiecutter.__solution_name_slug }}/ui/monitoring_tabs/scenery_page.py",
-    f"src/ansys/solutions/{{ cookiecutter.__solution_name_slug }}/ui/monitoring_tabs/status_overview_page.py",
-    f"src/ansys/solutions/{{ cookiecutter.__solution_name_slug }}/ui/monitoring_tabs/summary_page.py",
-    f"src/ansys/solutions/{{ cookiecutter.__solution_name_slug }}/ui/monitoring_tabs/visualization_page.py",
-    f"src/ansys/solutions/{{ cookiecutter.__solution_name_slug }}/ui/app.py",
-    f"src/ansys/solutions/{{ cookiecutter.__solution_name_slug }}/ui/colorscale.py",
-    f"src/ansys/solutions/{{ cookiecutter.__solution_name_slug }}/ui/monitoring_page.py",
-    f"src/ansys/solutions/{{ cookiecutter.__solution_name_slug }}/ui/problem_setup_page.py",
-    f"src/ansys/solutions/{{ cookiecutter.__solution_name_slug }}/ui/page.py"
-]
 
 ASSETS_DIRCTORY = Path(f"src/ansys/solutions/{{ cookiecutter.__solution_name_slug }}/model/assets/").absolute()
 

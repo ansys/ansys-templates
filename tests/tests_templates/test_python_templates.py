@@ -348,7 +348,7 @@ OSL_SOLUTION_STRUCTURE = [
     f"src/ansys/solutions/{OSL_SOLUTION_VARS['__solution_name_slug']}/model/assets/README.md",
     f"src/ansys/solutions/{OSL_SOLUTION_VARS['__solution_name_slug']}/model/scripts/README.md",
     f"src/ansys/solutions/{OSL_SOLUTION_VARS['__solution_name_slug']}/model/README.md",
-    f"src/ansys/solutions/{{ cookiecutter.__solution_name_slug }}/model/utils.py",
+    f"src/ansys/solutions/{OSL_SOLUTION_VARS['__solution_name_slug']}/model/utils.py",
     f"src/ansys/solutions/{OSL_SOLUTION_VARS['__solution_name_slug']}/solution/definition.py",
     f"src/ansys/solutions/{OSL_SOLUTION_VARS['__solution_name_slug']}/solution/monitoring_step.py",
     f"src/ansys/solutions/{OSL_SOLUTION_VARS['__solution_name_slug']}/solution/problem_setup_step.py",
@@ -362,7 +362,7 @@ OSL_SOLUTION_STRUCTURE = [
     f"src/ansys/solutions/{OSL_SOLUTION_VARS['__solution_name_slug']}/ui/monitoring_tabs/summary_page.py",
     f"src/ansys/solutions/{OSL_SOLUTION_VARS['__solution_name_slug']}/ui/monitoring_tabs/visualization_page.py",
     f"src/ansys/solutions/{OSL_SOLUTION_VARS['__solution_name_slug']}/ui/app.py",
-    f"src/ansys/solutions/{{ cookiecutter.__solution_name_slug }}/ui/colorscale.py",
+    f"src/ansys/solutions/{OSL_SOLUTION_VARS['__solution_name_slug']}/ui/colorscale.py",
     f"src/ansys/solutions/{OSL_SOLUTION_VARS['__solution_name_slug']}/ui/monitoring_page.py",
     f"src/ansys/solutions/{OSL_SOLUTION_VARS['__solution_name_slug']}/ui/problem_setup_page.py",
     f"src/ansys/solutions/{OSL_SOLUTION_VARS['__solution_name_slug']}/ui/page.py",
@@ -391,7 +391,7 @@ OSL_SOLUTION_STRUCTURE = [
 # A dictionary relating templates name with their variables and structure
 TEMPLATES_VARIABLES_AND_STRUCTURE = {
     "common": [PYCOMMON_VARS, PYCOMMON_STRUCTURE],
-    "osl-solution": [SOLUTION_VARS, OSL_SOLUTION_STRUCTURE],
+    "osl-solution": [OSL_SOLUTION_VARS, OSL_SOLUTION_STRUCTURE],
     "pybasic": [PYBASIC_VARS, PYBASIC_STRUCTURE],
     "pyansys": [PYANSYS_VARS, PYANSYS_STRUCTURE],
     "pyansys-advanced": [PYANSYS_ADVANCED_VARS, PYANSYS_ADVANCED_STRUCTURE],
