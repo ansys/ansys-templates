@@ -83,7 +83,8 @@ def copy_file_to_assets_folder(file_path: str, destination: str):
     if os.path.exists(file_path):
         shutil.copy(file_path, destination)
     else:
-        raise FileNotFoundError(f"Unable to find {file_path}.")
+        print(f"Unable to find {file_path}.")
+        # raise FileNotFoundError(f"Unable to find {file_path}.")
 
 
 def main():
