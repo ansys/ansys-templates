@@ -302,7 +302,6 @@ Main features of this package are:
 - Includes a ``pyproject.toml`` for project and tools configuration.
 - Includes ``doc/`` and ``tests/``.
 - Includes GitHub workflows (actions).
-- All ``requirements_*.txt`` are contained in a ``requirements_/`` directory.
 - Includes a ``tox.ini`` file.
 
 To create a new project using this template, run:
@@ -313,6 +312,31 @@ To create a new project using this template, run:
 .. admonition:: Link to demo
 
     `ansys-templates/demo - solution <https://github.com/ansys/ansys-templates/tree/demo/solution>`_
+
+``osl-solution`` template
+-------------------------
+This template renders to a Python project compliant with the latest Solutions
+Application guidelines for optiSLang solution:
+
+Main features of this package are:
+
+- The build system is imposed to be ``poetry``.
+- Uses a ``src/`` layout.
+- Includes a ``pyproject.toml`` for project and tools configuration.
+- Includes ``doc/`` and ``tests/``.
+- Includes GitHub workflows (actions).
+- Includes a ``tox.ini`` file.
+
+To create a new project using this template, run:
+.. code-block:: text
+
+    ansys-templates new osl-solution
+
+.. admonition:: Link to demo
+
+    https://github.com/ansys/ansys-templates/tree/demo/solution
+
+
 
 
 .. Links and references

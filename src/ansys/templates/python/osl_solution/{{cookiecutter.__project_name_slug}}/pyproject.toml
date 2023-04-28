@@ -2,6 +2,8 @@
 requires = ["poetry-core>=1.0.0,<1.3.0", "setuptools>=65.0"]
 build-backend = "poetry.core.masonry.api"
 
+# The following lines were added to enforce the poetry version needed for the project.
+# It will be read by the setup_environment.py script to install this version.
 [build-system-requirements]
 build-system-version = "1.4.2"
 
@@ -37,22 +39,23 @@ url = "https://pkgs.dev.azure.com/pyansys/_packaging/ansys-solutions/pypi/simple
 default = false
 secondary = true
 
-# Main dependencies
-[tool.poetry.dependencies]
+[tool.poetry.dependencies] # Main dependencies
 python = ">=3.8, <3.11"
 ansys-dash-treeview = {version = "0.0.1.dev0", source = "solutions-private-pypi"}
-ansys-saf-glow = {version = "^0.2.0", source = "solutions-private-pypi" }
-ansys-saf-portal = {version = "^0.1.6", source = "solutions-private-pypi"}
-{% if cookiecutter.with_dash_ui == "yes" %}
+ansys-saf-glow = {version = "0.1.9", source = "solutions-private-pypi", python = ">=3.8,<3.9"}
+ansys-saf-portal = {version = "0.1.6", source = "solutions-private-pypi"}
+ansys-solutions-dash-lib = {version = "0.3.0", source = "solutions-private-pypi"}
+ansys-solutions-products-ecosystem = {version = "0.1.dev0", source = "solutions-private-pypi"}
+ansys-solutions-optislang-parser = {version = "0.1.dev2", source = "solutions-private-pypi"}
+ansys-solutions-optislang-wrapper = {version = "0.2.dev0", source = "solutions-private-pypi"}
+ansys-solutions-optislang-frontend-components = {version = "0.1.dev0", source = "solutions-private-pypi"}
 dash = {version = "^2.6"}
 dash_bootstrap_components = {version = "^1.2"}
 dash-extensions = {version = "^0.1"}
 dash-iconify = {version = "^0.1"}
 dash-uploader = {version = "^0.6"}
-{% endif %}
 
-# Optional documentation dependencies
-[tool.poetry.group.doc]
+[tool.poetry.group.doc] # Optional doc dependencies
 optional = true
 [tool.poetry.group.doc.dependencies]
 ansys-sphinx-theme = {version = "^0.8.0"}
@@ -64,10 +67,10 @@ sphinx_code_tabs = {version = "^0.5.3"}
 sphinx-gallery = {version = "^0.11.1"}
 sphinx_mdinclude= {version = "^0.5.3"}
 sphinx-tabs = {version = ">=1.2.1,<3.5.0"}
-toml = {version = "^0.10.0"} # Needed by conf.py
+toml = {version = "^0.10.2"} # Needed by conf.py
+tox = {version = "^4.4.11"}
 
-# Optional testing dependencies
-[tool.poetry.group.tests]
+[tool.poetry.group.tests] # Optional testing dependencies
 optional = true
 [tool.poetry.group.tests.dependencies]
 coverage = {version = "^6.4.1"}
@@ -81,14 +84,14 @@ pytest-pep8 = {version = "*"}
 pytest-pythonpath = {version = "*"}
 pytest-xdist = {version = "^3.0.2"}
 pytest-mock = {version = "*"}
-tox = {version = "^4.4.0"}
+tox = {version = "^4.4.11"}
 
-# Optional build requirements
-[tool.poetry.group.build]
+[tool.poetry.group.build] # Optional build requirements
 optional = true
 [tool.poetry.group.build.dependencies]
 build = {version = "^0.8.0"}
 twine = {version = "^4.0.1"}
+tox = {version = "^4.4.11"}
 
 [tool.poetry.plugins."console_scripts"]
 {{ cookiecutter.__solution_name_slug }}_main = "ansys.solutions.{{ cookiecutter.__solution_name_slug }}.main:main"

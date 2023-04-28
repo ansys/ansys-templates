@@ -103,6 +103,7 @@ Available templates
 Available templates in ``ansys-templates`` are:
 
 - ``doc-project``: Create a documentation project using Sphinx.
+- ``osl-solution``: Create an optiSLang Solution based on the Solution Application Framework.
 - ``pybasic``: Create a basic Python Package.
 - ``pyansys``: Create a PyAnsys Python Package project.
 - ``pyansys-advanced``: Create an advanced PyAnsys Python Package project.
@@ -142,7 +143,8 @@ available in ``ansys-templates``:
 +-------------------------+-----------------------+-----------------+---------+----------+----------------+---------+
 | solution                |                       |  ``X``          |  ``X``  |  ``X``   |  ``X``         |         |
 +-------------------------+-----------------------+-----------------+---------+----------+----------------+---------+
-
+| osl-solution            |                       |  ``X``          |  ``X``  |  ``X``   |  ``X``         |         |
++-------------------------+-----------------------+-----------------+---------+----------+----------------+---------+
 
 Demo branches
 -------------
@@ -160,6 +162,7 @@ its corresponding demonstration branch.
 * Demo branch for `pyace-flask`_
 * Demo branch for `pyace-grpc`_
 * Demo branch for `solution`_
+* Demo branch for `osl-solution`_
 
 
 .. _doc-project: https://github.com/ansys/ansys-templates/tree/demo/doc-project
@@ -173,3 +176,4 @@ its corresponding demonstration branch.
 .. _pyace-flask: https://github.com/ansys/ansys-templates/tree/demo/pyace-flask
 .. _pyace-grpc: https://github.com/ansys/ansys-templates/tree/demo/pyace-grpc
 .. _solution: https://github.com/ansys/ansys-templates/tree/demo/solution
+.. _osl-solution: https://github.com/ansys/ansys-templates/tree/demo/solution
