@@ -314,7 +314,7 @@ To create a new project using this template, run:
     `ansys-templates/demo - solution <https://github.com/ansys/ansys-templates/tree/demo/solution>`_
 
 ``osl-solution`` template
------------------------
+-------------------------
 This template renders to a Python project compliant with the latest Solutions
 Application guidelines for optiSLang solution:
 
