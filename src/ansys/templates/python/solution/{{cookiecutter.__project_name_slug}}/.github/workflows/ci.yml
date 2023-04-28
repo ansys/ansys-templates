@@ -14,10 +14,10 @@ on:
 
 env:
   MAIN_PYTHON_VERSION: "3.8"
+  # To be updated with GitHub pages url.
   DOCUMENTATION_CNAME: '{{ cookiecutter.__solution_name_slug }}.docs.solutions.ansys.com'
   # When changing this value, update setup_environment.py --build-system-version default value to match
-  POETRY_VERSION: "1.4"
-  TOX_VERSION: "3.27.1"
+  POETRY_VERSION: "1.4.2"
   POETRY_HTTP_BASIC_SOLUTIONS_PRIVATE_PYPI_USERNAME: "PAT"
   POETRY_HTTP_BASIC_SOLUTIONS_PRIVATE_PYPI_PASSWORD: {{ '${{ secrets.SOLUTIONS_PRIVATE_PYPI_PAT }}' }}
 
@@ -36,7 +36,7 @@ jobs:
     runs-on: [ubuntu-latest]
     steps:
       - name: Check documentation style
-        uses: Solution-Applications/actions/check-doc-style@v1.0.3
+        uses: Solution-Applications/actions/check-doc-style@v2.1.0
         with:
           gh-token: {{ '${{ secrets.GITHUB_TOKEN }}' }}
 
@@ -50,7 +50,7 @@ jobs:
     needs: [check-doc-style]
     steps:
       - name: Build documentation
-        uses: Solution-Applications/actions/build-doc@v1.0.3
+        uses: Solution-Applications/actions/build-doc@v2.1.0
         with:
           python-version: {{ '${{ env.MAIN_PYTHON_VERSION }}' }}
           poetry-version: {{ '${{ env.POETRY_VERSION }}' }}
@@ -65,7 +65,7 @@ jobs:
     needs: [build-doc]
     steps:
       - name: Deploy documentation
-        uses: Solution-Applications/actions/deploy-doc@v0.1.1
+        uses: Solution-Applications/actions/deploy-doc@v2.1.0
         with:
           gh-token: {{ '${{ secrets.WORKFLOW_TOKEN }}' }}
           documentation-artifact: html-documentation
@@ -81,7 +81,7 @@ jobs:
     runs-on: [ubuntu-latest]
     steps:
       - name: Check copyright
-        uses: Solution-Applications/actions/check-copyright@v1.0.3
+        uses: Solution-Applications/actions/check-copyright@v2.1.0
         with:
           gh-token: {{ '${{ secrets.WORKFLOW_TOKEN }}' }}
 
@@ -93,7 +93,7 @@ jobs:
     runs-on: [ubuntu-latest]
     steps:
       - name: Check code style
-        uses: Solution-Applications/actions/check-code-style@v1.0.3
+        uses: Solution-Applications/actions/check-code-style@v2.1.0
         with:
           python-version: {{ '${{ env.MAIN_PYTHON_VERSION }}' }}
           tox-version: {{ '${{ env.TOX_VERSION }}' }}
@@ -105,7 +105,7 @@ jobs:
     runs-on: [windows-latest]
     steps:
       - name: Build
-        uses: Solution-Applications/actions/build@v1.0.3
+        uses: Solution-Applications/actions/build@v2.1.0
         with:
           python-version: {{ '${{ env.MAIN_PYTHON_VERSION }}' }}
           poetry-version: {{ '${{ env.POETRY_VERSION }}' }}
@@ -123,11 +123,11 @@ jobs:
     runs-on: [windows-latest]
     strategy:
       matrix:
-        python-version: ['3.7', '3.8']
+        python-version: ['3.8', '3.9', '3.10']
       fail-fast: false
     steps:
       - name: Run tests
-        uses: Solution-Applications/actions/run-tests@v1.0.3
+        uses: Solution-Applications/actions/run-tests@v2.1.0
         with:
           python-version: {{ '${{ matrix.python-version }}' }}
           poetry-version: {{ '${{ env.POETRY_VERSION }}' }}
@@ -145,7 +145,7 @@ jobs:
     runs-on: [ubuntu-latest]
     steps:
       - name: Release
-        uses: Solution-Applications/actions/release@v1.0.3
+        uses: Solution-Applications/actions/release@v2.1.0
         with:
           python-version: {{ '${{ env.MAIN_PYTHON_VERSION }}' }}
           gh-token: {{ '${{ secrets.WORKFLOW_TOKEN }}' }}

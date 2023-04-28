@@ -26,7 +26,7 @@ build-backend = "flit_core.buildapi"
 
 [project]
 name = "ansys-templates"
-version = "0.6.dev0"
+version = "0.7.dev0"
 description = "Creates Python projects according to PyAnsys guidelines"
 readme = "README.rst"
 requires-python = ">=3.7"
@@ -58,14 +58,14 @@ dependencies = [
 
 [project.optional-dependencies]
 tests = [
-    "pytest==7.3.0",
+    "pytest==7.3.1",
     "pytest-cov==4.0.0",
 ]
 doc = [
-    "ansys-sphinx-theme==0.9.7",
+    "ansys-sphinx-theme==0.9.8",
     "numpydoc==1.5.0",
-    "sphinx==5.3.0",
-    "sphinx-copybutton==0.5.1",
+    "sphinx==6.2.1",
+    "sphinx-copybutton==0.5.2",
 ]
 
 [tool.flit.module]
