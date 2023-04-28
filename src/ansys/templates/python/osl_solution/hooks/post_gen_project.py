@@ -65,10 +65,6 @@ DESIRED_STRUCTURE = [
 
 ASSETS_DIRCTORY = Path(f"src/ansys/solutions/{{ cookiecutter.__solution_name_slug }}/model/assets/").absolute()
 
-# Add UI structure to desired structure if applicable
-if "{{ cookiecutter.with_dash_ui }}" == "yes":
-    DESIRED_STRUCTURE = DESIRED_STRUCTURE + UI_STRUCTURE
-
 
 def copy_file_to_assets_folder(file_path: str, destination: str):
     """Copy a file if it exists."""
