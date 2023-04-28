@@ -266,7 +266,6 @@ Run codespell:
 
 
 Testing
-=======
 
 **Unit tests** and **Integration tests** are executed via the ``pytest`` framework.
 
