@@ -85,9 +85,9 @@ def main():
 
     keep_files(DESIRED_STRUCTURE)
 
-    if len("{{ cookiecutter.__optiSLang_project_file }}"):
+    if len("{{ cookiecutter.__optiSLang_project_file }}".replace(" ", "")):
         copy_file_to_assets_folder("{{ cookiecutter.__optiSLang_project_file }}",  str(ASSETS_DIRCTORY / "{{ cookiecutter.__optiSLang_project_file_name }}"))
-    if len("{{ cookiecutter.__optiSLang_properties_file }}"):
+    if len("{{ cookiecutter.__optiSLang_properties_file }}".replace(" ", "")):
         copy_file_to_assets_folder("{{ cookiecutter.__optiSLang_properties_file }}", str(ASSETS_DIRCTORY / "{{ cookiecutter.__optiSLang_properties_file_name }}"))
 
 
