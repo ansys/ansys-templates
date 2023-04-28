@@ -18,33 +18,13 @@ from ansys.solutions.{{ cookiecutter.__solution_name_slug }}.ui import problem_s
 step_list = [
     {
         "key": "problem_setup_step",
-        "text": "Problem Setup Step",
+        "text": "Problem Setup",
         "depth": 0,
     },
     {
         "key": "monitoring_step",
-        "text": "Monitoring Step",
+        "text": "Monitoring",
         "depth": 0,
-    },
-    {
-        "key": "root_step",
-        "text": "Root Step",
-        "depth": 1,
-    },
-    {
-        "key": "system_step",
-        "text": "System Step",
-        "depth": 1,
-    },
-    {
-        "key": "first_node_step",
-        "text": "First Node Step",
-        "depth": 1,
-    },
-    {
-        "key": "second_node_step",
-        "text": "Second Node Step",
-        "depth": 1,
     },
 ]
 
@@ -117,6 +97,7 @@ layout = html.Div(
 )
 def return_to_portal(pathname):
     """Display Solution Portal when back-to-portal button gets selected."""
+
     portal_ui_url = DashClient.get_portal_ui_url()
     children = (
         []
@@ -141,13 +122,11 @@ def return_to_portal(pathname):
 )
 def display_poject_name(pathname):
     """Display current project name."""
+
     project = DashClient[{{cookiecutter.__solution_definition_name}}].get_project(pathname)
     return f"Project Name: {project.project_display_name}"
 
 
-# this callback is essential for initializing the step based on the persisted
-# state of the project when the browser first displays the project to the user
-# given the project's URL
 @callback(
     Output("page-content", "children"),
     [
@@ -157,11 +136,17 @@ def display_poject_name(pathname):
     prevent_initial_call=True,
 )
 def display_page(pathname, value):
-    """Display page content."""
-    project = DashClient[{{ cookiecutter.__solution_definition_name }}].get_project(pathname)
-    monitoring_step = project.steps.monitoring_step
+    """
+    Display page content.
 
+    this callback is essential for initializing the step based on the persisted
+    state of the project when the browser first displays the project to the user
+    given the project's URL.
+    """
+
+    project = DashClient[{{ cookiecutter.__solution_definition_name }}].get_project(pathname)
     triggered_id = callback_context.triggered[0]["prop_id"].split(".")[0]
+
     if triggered_id == "url":
         return problem_setup_page.layout(project.steps.problem_setup_step)
     if triggered_id == "navigation_tree":
@@ -170,17 +155,5 @@ def display_page(pathname, value):
         elif value == "problem_setup_step":
             page_layout = problem_setup_page.layout(project.steps.problem_setup_step)
         elif value == "monitoring_step":
-            page_layout = monitoring_page.layout(project.steps.monitoring_step)
-        elif value == "root_step":
-            monitoring_step.component_level = "root"
-            page_layout = monitoring_page.layout(project.steps.monitoring_step)
-        elif value == "system_step":
-            monitoring_step.component_level = "system"
-            page_layout = monitoring_page.layout(project.steps.monitoring_step)
-        elif value == "first_node_step":
-            monitoring_step.component_level = "node"
-            page_layout = monitoring_page.layout(project.steps.monitoring_step)
-        elif value == "second_node_step":
-            monitoring_step.component_level = "node"
-            page_layout = monitoring_page.layout(project.steps.monitoring_step)
+            page_layout = monitoring_page.layout(project.steps.monitoring_step, project.steps.problem_setup_step)
         return page_layout

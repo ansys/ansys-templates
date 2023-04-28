@@ -21,6 +21,7 @@ DESIRED_STRUCTURE = [
     "examples/README.md",
     f"src/ansys/solutions/{{ cookiecutter.__solution_name_slug }}/model/scripts/README.md",
     f"src/ansys/solutions/{{ cookiecutter.__solution_name_slug }}/model/README.md",
+    f"src/ansys/solutions/{{ cookiecutter.__solution_name_slug }}/model/utils.py",
     f"src/ansys/solutions/{{ cookiecutter.__solution_name_slug }}/model/assets/README.md",
     f"src/ansys/solutions/{{ cookiecutter.__solution_name_slug }}/solution/definition.py",
     f"src/ansys/solutions/{{ cookiecutter.__solution_name_slug }}/solution/monitoring_step.py",
@@ -59,6 +60,7 @@ UI_STRUCTURE = [
     f"src/ansys/solutions/{{ cookiecutter.__solution_name_slug }}/ui/monitoring_tabs/summary_page.py",
     f"src/ansys/solutions/{{ cookiecutter.__solution_name_slug }}/ui/monitoring_tabs/visualization_page.py",
     f"src/ansys/solutions/{{ cookiecutter.__solution_name_slug }}/ui/app.py",
+    f"src/ansys/solutions/{{ cookiecutter.__solution_name_slug }}/ui/colorscale.py",
     f"src/ansys/solutions/{{ cookiecutter.__solution_name_slug }}/ui/monitoring_page.py",
     f"src/ansys/solutions/{{ cookiecutter.__solution_name_slug }}/ui/problem_setup_page.py",
     f"src/ansys/solutions/{{ cookiecutter.__solution_name_slug }}/ui/page.py"
@@ -71,11 +73,17 @@ if "{{ cookiecutter.with_dash_ui }}" == "yes":
     DESIRED_STRUCTURE = DESIRED_STRUCTURE + UI_STRUCTURE
 
 
-def copy_file_to_assets_folder(file, des):
+def copy_file_to_assets_folder(file_path: str, destination: str):
     """Copy a file if it exists."""
 
-    if os.path.exists(file):
-        shutil.copy(file, des)
+    if not os.path.isabs(file_path):
+        working_directory = os.path.dirname(os.getcwd())
+        file_path = os.path.join(working_directory, file_path)
+
+    if os.path.exists(file_path):
+        shutil.copy(file_path, destination)
+    else:
+        raise FileNotFoundError(f"Unable to find {file_path}.")
 
 
 def main():
@@ -83,8 +91,8 @@ def main():
 
     keep_files(DESIRED_STRUCTURE)
 
-    copy_file_to_assets_folder("{{ cookiecutter.__optiSLang_project_file }}",  ASSETS_DIRCTORY / "{{ cookiecutter.__optiSLang_project_file_name }}")
-    copy_file_to_assets_folder("{{ cookiecutter.__optiSLang_properties_file }}", ASSETS_DIRCTORY / "{{ cookiecutter.__optiSLang_properties_file_name }}")
+    copy_file_to_assets_folder("{{ cookiecutter.__optiSLang_project_file }}",  str(ASSETS_DIRCTORY / "{{ cookiecutter.__optiSLang_project_file_name }}"))
+    copy_file_to_assets_folder("{{ cookiecutter.__optiSLang_properties_file }}", str(ASSETS_DIRCTORY / "{{ cookiecutter.__optiSLang_properties_file_name }}"))
 
 
 if __name__ == "__main__":
