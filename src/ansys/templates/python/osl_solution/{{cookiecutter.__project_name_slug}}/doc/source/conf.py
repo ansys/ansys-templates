@@ -56,7 +56,7 @@ extensions = [
 ]
 
 # Intersphinx mapping
-intersphinx_mapping = {"python": ("https://docs.python.org/dev", None)}
+intersphinx_mapping = {"python": ("https://docs.python.org/3", None)}
 
 # numpydoc configuration
 numpydoc_show_class_members = False
