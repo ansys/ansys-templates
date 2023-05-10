@@ -1,4 +1,4 @@
-# This Docker Compose file is used to start up the Tracelens visualization platform and its required services. It includes containers for the Tracelens frontend, 
+# This Docker Compose file is used to start up the Tracelens visualization platform and its required services. It includes containers for the Tracelens frontend,
 # backend, and database, as well as an Elasticsearch instance for storing and indexing traces.
 # Before running the solution, set the following environment variables:
 # $env:OTEL_EXPORTER_OTLP_ENDPOINT = 'http://localhost:4317'
