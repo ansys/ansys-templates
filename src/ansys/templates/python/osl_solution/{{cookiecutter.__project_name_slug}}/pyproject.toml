@@ -46,9 +46,8 @@ ansys-saf-glow = {version = "0.1.9", source = "solutions-private-pypi", python =
 ansys-saf-portal = {version = "0.1.6", source = "solutions-private-pypi"}
 ansys-solutions-dash-lib = {version = "0.3.0", source = "solutions-private-pypi"}
 ansys-solutions-products-ecosystem = {version = "0.1.dev0", source = "solutions-private-pypi"}
-ansys-solutions-optislang-parser = {version = "0.1.dev2", source = "solutions-private-pypi"}
-ansys-solutions-optislang-wrapper = {version = "0.2.dev0", source = "solutions-private-pypi"}
-ansys-solutions-optislang-frontend-components = {version = "0.1.dev0", source = "solutions-private-pypi"}
+ansys-solutions-optislang-wrapper = {git = "https://github.com/Solution-Applications/optislang-wrapper.git"}
+ansys-solutions-optislang-frontend-components = {version = "0.1.dev1", source = "solutions-private-pypi"}
 dash = {version = "^2.6"}
 dash_bootstrap_components = {version = "^1.2"}
 dash-extensions = {version = "^0.1"}

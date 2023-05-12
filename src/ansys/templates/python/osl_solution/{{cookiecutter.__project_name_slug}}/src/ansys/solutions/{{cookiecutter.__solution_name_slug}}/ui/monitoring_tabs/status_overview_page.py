@@ -1,52 +1,24 @@
 # ©2023, ANSYS Inc. Unauthorized use, distribution or duplication is prohibited.
 
-"""Frontend of the second step."""
+"""Frontend of the node status overview tab."""
 
-from dash import dash_table
 from dash_extensions.enrich import html
-import pandas as pd
+import optislang_dash_lib
 
 from ansys.solutions.{{ cookiecutter.__solution_name_slug }}.solution.monitoring_step import MonitoringStep
 
 
-class StatusOverviewTable(object):
-    """"""
-
-    def __init__(self, data):
-        """Constructor."""
-
-        self.data = data
-
-    def render(self):
-        """Generate table."""
-
-        if isinstance(self.data, pd.DataFrame):
-            return dash_table.DataTable(
-                data=self.data.to_dict("records"),
-                columns=[{"name": i, "id": i, "type": "text"} for i in self.data.columns],
-                fixed_rows={"headers": True},
-                sort_action="native",
-                row_selectable="multi",
-                page_action="native",
-                style_header={
-                    "textAlign": "center",
-                    "font_family": "Roboto",
-                    "font_size": "15px",
-                    "fontWeight": "bold",
-                },
-                style_cell={
-                    "textAlign": "center",
-                    "font_family": "Roboto",
-                    "font_size": "15px",
-                },
-            )
-
-
 def layout(monitoring_step: MonitoringStep):
-    """Layout of the status overview tab UI."""
+    """Layout of the node status overview tab."""
 
-    monitoring_step.get_status_overview()
+    monitoring_step.get_project_state() # fetches data on page load
 
-    status_overview_table = StatusOverviewTable(pd.DataFrame(monitoring_step.status_overview))
-
-    return html.Div([status_overview_table.render()])
+    return html.Div(
+        id="node-status-view",
+        children=[
+            optislang_dash_lib.Nodestatusviewcomponent(
+                id="node-status-view-component",
+                project_state=monitoring_step.project_state,
+            ),
+        ],
+    )
