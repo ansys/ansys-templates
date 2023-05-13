@@ -69,10 +69,14 @@ PYTHON_TEMPLATES_SOLUTION_PATH = PYTHON_TEMPLATES_PATH / "solution"
 PYTHON_TEMPLATES_OSL_SOLUTION_PATH = PYTHON_TEMPLATES_PATH / "osl_solution"
 """Path to the optiSLang Solution template."""
 
+PYTHON_TEMPLATES_OSL_SOLUTION_FROM_OWA_PATH = PYTHON_TEMPLATES_PATH / "osl_solution_from_owa"
+"""Path to the optiSLang Solution template from owa file."""
+
 TEMPLATE_PATH_FINDER = {
     "common": PYTHON_TEMPLATES_COMMON_PATH,
     "doc-project": PYTHON_TEMPLATES_DOC_PROJECT,
     "osl-solution": PYTHON_TEMPLATES_OSL_SOLUTION_PATH,
+    "osl-solution-from-owa": PYTHON_TEMPLATES_OSL_SOLUTION_FROM_OWA_PATH,
     "pybasic": PYTHON_TEMPLATES_PYBASIC_PATH,
     "pyansys": PYTHON_TEMPLATES_PYANSYS_PATH,
     "pyansys-advanced": PYTHON_TEMPLATES_PYANSYS_ADVANCED_PATH,

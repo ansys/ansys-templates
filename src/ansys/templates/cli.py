@@ -123,11 +123,17 @@ def pyace_grpc():
     create_project("pyace-grpc")
 
 @new.command()
-def solution():
-    """Create a Solution based on the Solution Application Framework."""
-    create_project("solution")
-
-@new.command()
-def osl_solution():
-    """Create an oSL solution based on SAF."""
-    create_project("osl-solution")
+@click.option('-f',  '--from', 'from_' , help='From existing workflow.',
+              type=click.Choice(['owa', 'opf'], case_sensitive=False))
+def solution(from_):
+    """[Ansys Internal Use Only] Create a solution based on SAF."""
+    match from_:
+        case 'owa':
+            print("OWA")
+            #create_project("osl-solution-from-owato")
+        case 'opf':
+            print("OPF")
+            #create_project("osl-solution")
+        case _ :
+            print("Default")
+            #create_project("solution")
