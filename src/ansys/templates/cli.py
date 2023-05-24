@@ -128,7 +128,7 @@ def pyace_grpc():
 def solution(_from):
     """[Ansys Internal Use Only] Create a solution based on SAF."""
     if  _from == 'owa':
-        create_project("osl-solution-from-owato")
+        create_project("osl-solution-from-owa")
     elif _from == 'opf':
         create_project("osl-solution")
     else:

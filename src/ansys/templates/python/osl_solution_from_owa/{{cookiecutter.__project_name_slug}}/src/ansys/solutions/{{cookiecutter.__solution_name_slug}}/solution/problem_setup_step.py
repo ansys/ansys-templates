@@ -40,8 +40,8 @@ class ProblemSetupStep(StepModel):
     }
 
     # File storage
-    project_file: FileReference = FileReference("Problem_Setup/{{ cookiecutter.__optiSLang_project_file_name }}")
-    properties_file: FileReference = FileReference("Problem_Setup/{{ cookiecutter.__optiSLang_properties_file_name }}")
+    project_file: FileReference = FileReference("Problem_Setup/{{ cookiecutter.__optiSLang_app_file_name }}")
+    properties_file: FileReference = FileReference("Problem_Setup/{{ cookiecutter.__optiSLang_app_file_name }}")
 
     @transaction(self=StepSpec(download=["properties_file"], upload=["placeholder_values", "placeholder_definitions"]))
     def get_default_placeholder_values(self):
