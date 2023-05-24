@@ -24,14 +24,14 @@ jobs:
     runs-on: ubuntu-latest
     steps:
       - name: "Run PyAnsys code style checks"
-        uses: pyansys/actions/code-style@v4
+        uses: ansys/actions/code-style@v4
 
   doc-style:
     name: Doc style
     runs-on: ubuntu-latest
     steps:
       - name: "Run Ansys documentation style checks"
-        uses: pyansys/actions/doc-style@v4
+        uses: ansys/actions/doc-style@v4
         with:
           token: ${{ secrets.GITHUB_TOKEN }}
 
@@ -41,7 +41,7 @@ jobs:
     needs: doc-style
     steps:
       - name: "Run Ansys documentation building action"
-        uses: pyansys/actions/doc-build@v4
+        uses: ansys/actions/doc-build@v4
 
   wheelhouse:
     name: Wheelhouse Python ${{ matrix.os }}
@@ -59,7 +59,7 @@ jobs:
             os: macos-latest
     steps:
       - name: "Build wheelhouse and perform smoke test"
-        uses: pyansys/actions/build-wheelhouse@v4
+        uses: ansys/actions/build-wheelhouse@v4
         with:
           library-name: ${{ env.LIBRARY_NAME }}
           library-namespace: ${{ env.LIBRARY_NAMESPACE }}
@@ -103,7 +103,7 @@ jobs:
     runs-on: ubuntu-latest
     steps:
       - name: "Build library source and wheel artifacts"
-        uses: pyansys/actions/build-library@v4
+        uses: ansys/actions/build-library@v4
         with:
           library-name: ${{ env.LIBRARY_NAME }}
 
@@ -114,7 +114,7 @@ jobs:
     needs: build-library
     steps:
       - name: "Deploy developers documentation"
-        uses: pyansys/actions/doc-deploy-dev@v4
+        uses: ansys/actions/doc-deploy-dev@v4
         with:
             cname: ${{ env.DOCUMENTATION_CNAME }}
             token: ${{ secrets.GITHUB_TOKEN }}
@@ -127,21 +127,21 @@ jobs:
     steps:
 
       - name: "Release to the private PyPI repository"
-        uses: pyansys/actions/release-pypi-private@v4
+        uses: ansys/actions/release-pypi-private@v4
         with:
           library-name: ${{ env.LIBRARY_NAME }}
           twine-username: "__token__"
           twine-token: ${{ secrets.PYANSYS_PYPI_PRIVATE_PAT }}
 
       - name: "Release to the public PyPI repository"
-        uses: pyansys/actions/release-pypi-public@v4
+        uses: ansys/actions/release-pypi-public@v4
         with:
           library-name: ${{ env.LIBRARY_NAME }}
           twine-username: "__token__"
           twine-token: ${{ secrets.PYPI_TOKEN }}
 
       - name: "Release to GitHub"
-        uses: pyansys/actions/release-github@v4
+        uses: ansys/actions/release-github@v4
         with:
           library-name: ${{ env.LIBRARY_NAME }}
 
@@ -152,7 +152,7 @@ jobs:
     needs: release
     steps:
       - name: "Deploy stable documentation"
-        uses: pyansys/actions/doc-deploy-stable@v4
+        uses: ansys/actions/doc-deploy-stable@v4
         with:
             cname: ${{ env.DOCUMENTATION_CNAME }}
             token: ${{ secrets.GITHUB_TOKEN }}
