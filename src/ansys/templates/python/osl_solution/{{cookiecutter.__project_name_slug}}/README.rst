@@ -33,7 +33,7 @@ Python version support
 
 For example:
 
-  Officially Python 3.7 to 3.8.
+  Officially Python 3.8 to 3.10.
 
 Private PyPI servers
 ~~~~~~~~~~~~~~~~~~~~
