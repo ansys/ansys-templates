@@ -1,1 +1,0 @@
-# Add assets related to the simulation models.
