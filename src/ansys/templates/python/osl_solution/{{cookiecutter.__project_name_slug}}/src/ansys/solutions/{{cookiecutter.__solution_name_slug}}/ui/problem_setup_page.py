@@ -26,7 +26,7 @@ def update_alerts(problem_setup_step: ProblemSetupStep) -> list:
             html.Div(
                 [
                     dbc.Button(
-                        f"{product_name.title()} Version",
+                        f"{product_name} Version",
                         id=f"popover-{product_name}-version-target",
                         disabled=False,
                         color=product_data["alert_color"],
@@ -61,7 +61,7 @@ def update_alerts(problem_setup_step: ProblemSetupStep) -> list:
         html.Div(
             [
                 dbc.Button(
-                    "OptiSLang Solve",
+                    "optiSLang Solve",
                     id="popover-optislang-solve-target",
                     disabled=False,
                     color=solve_color,
@@ -113,7 +113,7 @@ def layout(problem_setup_step: ProblemSetupStep):
         [
             html.H1("Insert optiSLang Project Name Here", className="display-3", style={"font-size": "35px"}),
             html.P(
-                "Inset a one sentence description of your app.",
+                "Insert a one sentence description of your app.",
                 className="lead",
                 style={"font-size": "20px"},
             ),

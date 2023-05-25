@@ -29,12 +29,12 @@ class ProblemSetupStep(StepModel):
     port: int = 5310  # 53538
     run_synchronously: bool = False
     ansys_ecosystem: dict = {
-        "optislang": {
+        "optiSLang": {
             "authorized_versions": ["2022.2", "2023.1"],
             "installed_versions": [],
             "compatible_versions": [],
             "selected_version": None,
-            "alert_message": "OptiSLang install not checked.",
+            "alert_message": "optiSLang install not checked.",
             "alert_color": "warning",
         }
     }
@@ -86,7 +86,7 @@ class ProblemSetupStep(StepModel):
         for product_name in self.ansys_ecosystem.keys():
 
             self.ansys_ecosystem[product_name]["installed_versions"] = controller.get_installed_versions(
-                product_name, outout_format="long"
+                product_name.lower(), outout_format="long"
             )
             self.ansys_ecosystem[product_name]["compatible_versions"] = [
                 product_version
@@ -95,12 +95,12 @@ class ProblemSetupStep(StepModel):
             ]
 
             if len(self.ansys_ecosystem[product_name]["installed_versions"]) == 0:
-                alert_message = f"No installation of {product_name.title()} found in the machine {platform.node()}."
+                alert_message = f"No installation of {product_name} found in the machine {platform.node()}."
                 alert_color = "danger"
                 self.ansys_ecosystem_ready = False
             elif len(self.ansys_ecosystem[product_name]["compatible_versions"]) == 0:
                 alert_message = (
-                    f"None of the authorized versions of {product_name.title()} "
+                    f"None of the authorized versions of {product_name} "
                     f"is installed in the machine {platform.node()}.\n"
                 )
                 alert_message += "At least one of these versions is required:"
@@ -117,7 +117,7 @@ class ProblemSetupStep(StepModel):
                 ][
                     -1
                 ]  # Latest
-                alert_message = f"{product_name.title()} install detected. Compatible versions are:"
+                alert_message = f"{product_name} install detected. Compatible versions are:"
                 for compatible_version in self.ansys_ecosystem[product_name]["compatible_versions"]:
                     alert_message += f" {convert_to_long_version(compatible_version)}"
                 alert_message += ".\n"
@@ -134,24 +134,24 @@ class ProblemSetupStep(StepModel):
     )
     @long_running
     def run_optislang_synchronously(self) -> None:
-        """Start OptiSLang and run the project."""
+        """Start optiSLang and run the project."""
 
         stderr_file = str(self.project_file.project_path / "Problem_Setup" / "stderr.log")
 
-        # Start OptiSLang
+        # Start optiSLang
         osl = OptiSLangOrchestrator(
             project_file=self.project_file.path,
             properties_file=self.properties_file.path,
             output_file="hook_optimization_output.json",
-            version=convert_to_short_version(self.ansys_ecosystem["optislang"]["selected_version"]),
+            version=convert_to_short_version(self.ansys_ecosystem["optiSLang"]["selected_version"]),
             host=self.host,
             port=self.port,
         )
         osl.start()
 
-        # Wait for OptiSLang to complete
+        # Wait for optiSLang to complete
         while True:
-            # Check the status of the OptiSLang solve
+            # Check the status of the optiSLang solve
             if osl.get_status() == "processing":
                 self.optislang_solve_status = "in-progress"
             elif osl.get_status() == "succeeded":
@@ -160,7 +160,7 @@ class ProblemSetupStep(StepModel):
                 self.optislang_solve_status = "failure"
             elif (
                 osl.get_status() == "stopped"
-            ):  # Case where OptiSLang stops without error, to further continue the solve.
+            ):  # Case where optiSLang stops without error, to further continue the solve.
                 if not check_if_file_is_empty(stderr_file):
                     self.optislang_solve_status = "failure"
             else:
@@ -185,29 +185,29 @@ class ProblemSetupStep(StepModel):
     )
     @long_running
     def run_optislang_asynchronously(self) -> None:
-        """Start OptiSLang and run the project."""
+        """Start optiSLang and run the project."""
 
         stderr_file = str(self.project_file.project_path / "Problem_Setup" / "stderr.log")
 
-        # Start OptiSLang
+        # Start optiSLang
         osl = OptiSLangOrchestrator(
             project_file=self.project_file.path,
             properties_file=self.properties_file.path,
             output_file="hook_optimization_output.json",
-            version=convert_to_short_version(self.ansys_ecosystem["optislang"]["selected_version"]),
+            version=convert_to_short_version(self.ansys_ecosystem["optiSLang"]["selected_version"]),
             host=self.host,
             port=self.port,
         )
         osl.start()
 
-        # Wait for OptiSLang to complete
+        # Wait for optiSLang to complete
         if osl.get_status() == "processing":
             self.optislang_solve_status = "in-progress"
         elif osl.get_status() == "succeeded":
             self.optislang_solve_status = "success"
         elif osl.get_status() == "failed":
             self.optislang_solve_status = "failure"
-        elif osl.get_status() == "stopped":  # Case where OptiSLang stops without error, to further continue the solve.
+        elif osl.get_status() == "stopped":  # Case where optiSLang stops without error, to further continue the solve.
             if not check_if_file_is_empty(stderr_file):
                 self.optislang_solve_status = "failure"
             else:
@@ -224,7 +224,7 @@ class ProblemSetupStep(StepModel):
         )
     )
     def get_optislsang_status(self) -> None:
-        """Start OptiSLang and run the project."""
+        """Start optiSLang and run the project."""
 
         monitoring = Monitoring(project_file=self.project_file.path, host=self.host, port=self.port)
 
@@ -240,7 +240,7 @@ class ProblemSetupStep(StepModel):
             self.optislang_solve_status = "failure"
         elif (
             monitoring.get_state().lower() == "stopped"
-        ):  # Case where OptiSLang stops without error, to further continue the solve.
+        ):  # Case where optiSLang stops without error, to further continue the solve.
             self.optislang_solve_status = "stopped"
         else:
             self.optislang_solve_status = "failure"

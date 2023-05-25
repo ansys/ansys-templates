@@ -97,13 +97,11 @@ The following commands are provided with ``ansys-templates``:
 - ``ansys-templates list``: lists all available templates.
 - ``ansys-templates new <template name>``: creates a new project from template.
 
-
 Available templates
 -------------------
 Available templates in ``ansys-templates`` are:
 
 - ``doc-project``: Create a documentation project using Sphinx.
-- ``osl-solution``: Create an optiSLang Solution based on the Solution Application Framework.
 - ``pybasic``: Create a basic Python Package.
 - ``pyansys``: Create a PyAnsys Python Package project.
 - ``pyansys-advanced``: Create an advanced PyAnsys Python Package project.
@@ -112,7 +110,7 @@ Available templates in ``ansys-templates`` are:
 - ``pyace-flask``: Create a Flask project initialized for any developer.
 - ``pyace-grpc``: Create gRPC project initialized for any developer.
 - ``pyace-fast``: Create a FastAPI project initialized for any developer.
-- ``solution``: Create a Solution based on the Solution Application Framework.
+- ``solution``: Create a Solution based on the Solution Application Framework. **For Ansys Internal Use Only**
 
 
 Template features
@@ -141,10 +139,11 @@ available in ``ansys-templates``:
 +-------------------------+-----------------------+-----------------+---------+----------+----------------+---------+
 | pyace-grpc              |  ``X``                |  ``X``          |  ``X``  |  ``X``   |  ``X``         |  ``X``  |
 +-------------------------+-----------------------+-----------------+---------+----------+----------------+---------+
-| solution                |                       |  ``X``          |  ``X``  |  ``X``   |  ``X``         |         |
+| solution "*"            |                       |  ``X``          |  ``X``  |  ``X``   |  ``X``         |         |
 +-------------------------+-----------------------+-----------------+---------+----------+----------------+---------+
-| osl-solution            |                       |  ``X``          |  ``X``  |  ``X``   |  ``X``         |         |
-+-------------------------+-----------------------+-----------------+---------+----------+----------------+---------+
+
+.. warning::
+    "*" This template is for **Ansys Internal Use Only**.
 
 Demo branches
 -------------
@@ -177,3 +176,4 @@ its corresponding demonstration branch.
 .. _pyace-grpc: https://github.com/ansys/ansys-templates/tree/demo/pyace-grpc
 .. _solution: https://github.com/ansys/ansys-templates/tree/demo/solution
 .. _osl-solution: https://github.com/ansys/ansys-templates/tree/demo/solution
+
