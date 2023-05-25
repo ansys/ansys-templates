@@ -7,7 +7,7 @@ from pathlib import Path
 import time
 
 from ansys.saf.glow.solution import StepModel, StepSpec, FileReference, transaction, long_running
-from ansys.solutions.optislang.parser.placeholder import ProjectProperties
+from ansys.solutions.optislang.parser.project_properties import ProjectProperties
 from ansys.solutions.optislang.wrapper.monitoring import Monitoring
 from ansys.solutions.optislang.wrapper.orchestrator import OptiSLangOrchestrator
 from ansys.solutions.products_ecosystem.controller import AnsysProductsEcosystemController
