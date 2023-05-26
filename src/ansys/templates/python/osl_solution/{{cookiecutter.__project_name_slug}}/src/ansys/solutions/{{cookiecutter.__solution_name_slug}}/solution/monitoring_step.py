@@ -33,7 +33,7 @@ class MonitoringStep(StepModel):
     parallel_coordinates: dict = None
     status_overview: dict = None
     project_state: dict = None
-    
+
     @transaction(
         self=StepSpec(upload=["available_root_nodes", "available_system_nodes", "available_subsystem_nodes"]),
         problem_setup_step=StepSpec(download=["project_file", "host", "port"]),
