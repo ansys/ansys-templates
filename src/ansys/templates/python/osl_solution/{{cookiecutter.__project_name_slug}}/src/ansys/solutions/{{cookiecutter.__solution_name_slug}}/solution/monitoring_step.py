@@ -290,6 +290,7 @@ class MonitoringStep(StepModel):
         self.status_overview = monitoring.get_status_overview(actor_name, to_dataframe=False)
 
         monitoring.dispose()
+        
     @transaction(
         self=StepSpec(upload=["project_state"]),
         problem_setup_step=StepSpec(download=["project_file", "host", "port"]),
