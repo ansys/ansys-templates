@@ -153,3 +153,8 @@ jobs:
           gh-token: {{ '${{ secrets.WORKFLOW_TOKEN }}' }}
           solutions-pypi-token: {{ '${{ secrets.SOLUTIONS_PRIVATE_PYPI_ADMIN_TOKEN }}' }}
           solutions-pypi-repository-url: https://pkgs.dev.azure.com/pyansys/_packaging/ansys-solutions/pypi/upload/
+          artifactory-username: "none"
+          artifactory-password: "none"
+          artifactory-repository-url: "none"
+          artifact-name: "none"
+          working-directory: "."
