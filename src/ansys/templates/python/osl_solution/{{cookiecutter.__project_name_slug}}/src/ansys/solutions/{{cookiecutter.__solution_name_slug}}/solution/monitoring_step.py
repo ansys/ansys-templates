@@ -32,6 +32,7 @@ class MonitoringStep(StepModel):
     history: dict = None
     parallel_coordinates: dict = None
     status_overview: dict = None
+    project_state: dict = None
 
     @transaction(
         self=StepSpec(upload=["available_root_nodes", "available_system_nodes", "available_subsystem_nodes"]),
@@ -288,4 +289,21 @@ class MonitoringStep(StepModel):
 
         self.status_overview = monitoring.get_status_overview(actor_name, to_dataframe=False)
 
+        monitoring.dispose()
+
+    @transaction(
+        self=StepSpec(upload=["project_state"]),
+        problem_setup_step=StepSpec(download=["project_file", "host", "port"]),
+    )
+    def get_project_state(self, problem_setup_step):
+        """Get project state."""
+
+        monitoring = Monitoring(
+            project_file=problem_setup_step.project_file.path,
+            host=problem_setup_step.host,
+            port=problem_setup_step.port,
+        )
+
+        monitoring.initialize()
+        self.project_state = monitoring.get_scenery_and_node_status_view_data()
         monitoring.dispose()
