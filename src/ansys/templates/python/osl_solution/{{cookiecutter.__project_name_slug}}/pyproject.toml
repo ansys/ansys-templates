@@ -55,7 +55,7 @@ dash-extensions = {version = "^0.1"}
 dash-iconify = {version = "^0.1"}
 dash-uploader = {version = "^0.6"}
 
-[tool.poetry.group.doc] 
+[tool.poetry.group.doc]
 optional = true
 [tool.poetry.group.doc.dependencies]
 ansys-sphinx-theme = {version = "^0.8.0"}
@@ -70,7 +70,7 @@ sphinx-tabs = {version = ">=1.2.1,<3.5.0"}
 toml = {version = "^0.10.2"} # Needed by conf.py
 tox = {version = "^4.4.11"}
 
-[tool.poetry.group.tests] 
+[tool.poetry.group.tests]
 optional = true
 [tool.poetry.group.tests.dependencies]
 coverage = {version = "^6.4.1"}
