@@ -86,7 +86,7 @@ pytest-xdist = {version = "^3.0.2"}
 pytest-mock = {version = "*"}
 tox = {version = "^4.4.11"}
 
-[tool.poetry.group.build] # Optional build requirements
+[tool.poetry.group.build]
 optional = true
 [tool.poetry.group.build.dependencies]
 build = {version = "^0.8.0"}
