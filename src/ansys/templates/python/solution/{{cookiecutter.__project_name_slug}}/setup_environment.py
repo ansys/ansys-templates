@@ -628,7 +628,7 @@ def parser():
         "--build-system-version",
         type=str,
         help="Build system version",
-        default="*",
+        default="1.5.1",
         required=False,
     )
     optional_inputs.add_argument(
