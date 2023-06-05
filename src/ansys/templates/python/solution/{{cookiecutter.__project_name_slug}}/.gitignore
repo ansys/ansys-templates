@@ -124,7 +124,7 @@ celerybeat.pid
 
 # Environments
 .poetry
-.env
+.env/
 .venv
 env/
 venv/
