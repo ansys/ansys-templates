@@ -582,6 +582,15 @@ def check_dependency_group(dependency_group, configuration):
     except:
         return False
 
+def configure_portal_database(venv_name):
+    subprocess.run(
+        [
+            rf".\{venv_name}\Scripts\poetry",
+            "run",
+            "configure-portal-database",
+        ],
+        check=True,
+    )
 
 # Specifics ---------------------------------------------------------------------------------------------------------
 
@@ -856,6 +865,10 @@ def main():
 
     # Back to current working directory
     os.chdir(working_directory)
+
+    # Configure database
+    if 'run' in args.dependencies:
+        configure_portal_database(args.venv_name)
 
     # Compute execution time
     elapsed_time = (time.time() - time_on) / 60  # in minutes
