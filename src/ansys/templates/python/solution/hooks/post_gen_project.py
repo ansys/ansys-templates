@@ -41,7 +41,8 @@ DESIRED_STRUCTURE = [
     "pyproject.toml",
     "README.rst",
     "setup_environment.py",
-    "tox.ini"
+    "tox.ini",
+    ".env"
 ]
 """A list holding all desired files to be included in the project."""
 

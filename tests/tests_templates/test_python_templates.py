@@ -328,6 +328,7 @@ SOLUTION_STRUCTURE = [
     "README.rst",
     "setup_environment.py",
     "tox.ini",
+    ".env"
 ]
 
 OSL_SOLUTION_STRUCTURE = [
