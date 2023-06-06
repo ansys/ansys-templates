@@ -1,5 +1,5 @@
 ##############################################
-Ansys Solutions 
+Ansys Solutions my_solution
 ##############################################
 
 .. note::
@@ -12,11 +12,11 @@ Introduction
 .. note::
   Add here a description of the project.
 
-Ansys Solutions 
+Ansys Solutions my_solution
 
   * Project name: **solution**
   * Solution name: **solution**
-  * Package name: **ansys-solutions-**
+  * Package name: **ansys-solutions-my-solution**
 
 
 Installation
