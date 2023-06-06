@@ -552,7 +552,9 @@ def configure_poetry(venv_name, credentials_management_method):
     for source in private_sources:
         print(f"Declare credentials for {source['name']}")
         # Get source PAT
-        if source["url"] == "https://pkgs.dev.azure.com/pyansys/_packaging/pyansys/pypi/simple/":
+        if source["name"].lower() == "pypi":
+            continue
+        elif source["url"] == "https://pkgs.dev.azure.com/pyansys/_packaging/pyansys/pypi/simple/":
             token = os.environ["PYANSYS_PRIVATE_PYPI_PAT"]
         elif source["url"] == "https://pkgs.dev.azure.com/pyansys/_packaging/ansys-solutions/pypi/simple/":
             token = os.environ["SOLUTIONS_PRIVATE_PYPI_PAT"]
