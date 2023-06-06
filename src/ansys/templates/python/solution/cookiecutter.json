@@ -1,10 +1,10 @@
 {
   "__template_name": "solution",
-  "project_name": "default_project_name",
+  "project_name": "my-solution",
   "__project_name_slug": "{{ cookiecutter.project_name.lower().replace('_', '-') }}",
-  "solution_name": "default_solution_name",
+  "solution_name": "my_solution",
   "__solution_name_slug": "{{ cookiecutter.solution_name.lower().replace('-', '_') }}",
-  "solution_display_name": "default_solution_display_name",
+  "solution_display_name": "My Solution",
   "with_dash_ui": ["yes", "no"],
   "__solution_definition_name": "{{ cookiecutter.__solution_name_slug.title() }}Solution",
   "__version": "0.1.dev0",
