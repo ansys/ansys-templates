@@ -1,4 +1,6 @@
 # ©2023, ANSYS Inc. Unauthorized use, distribution or duplication is prohibited.
+# CAPTURED v0.4.0 on 6/6/23 from:
+# https://github.com/Solution-Applications/common-files/blob/v0.4.0/setup-environment/setup_environment.py
 
 """
 A Python script to automate the setup of the ecosystem of a Python project.
