@@ -34,6 +34,7 @@ jobs:
       github.event_name == 'push'
     name: Check documentation style
     runs-on: [ubuntu-latest]
+    timeout-minutes: 10
     steps:
       - name: Check documentation style
         uses: Solution-Applications/actions/check-doc-style@v2.1.0
@@ -47,6 +48,7 @@ jobs:
       github.event_name == 'push'
     name: Build documentation
     runs-on: [ubuntu-latest]
+    timeout-minutes: 10
     needs: [check-doc-style]
     steps:
       - name: Build documentation
@@ -62,6 +64,7 @@ jobs:
       github.event_name == 'push'
     name: Deploy documentation
     runs-on: [ubuntu-latest]
+    timeout-minutes: 10
     needs: [build-doc]
     steps:
       - name: Deploy documentation
@@ -79,6 +82,7 @@ jobs:
       github.event.pull_request.draft == false
     name: Check copyright
     runs-on: [ubuntu-latest]
+    timeout-minutes: 10
     steps:
       - name: Check copyright
         uses: Solution-Applications/actions/check-copyright@v2.1.0
@@ -91,6 +95,7 @@ jobs:
       github.event.pull_request.draft == false
     name: Check code style
     runs-on: [ubuntu-latest]
+    timeout-minutes: 10
     steps:
       - name: Check code style
         uses: Solution-Applications/actions/check-code-style@v2.1.0
@@ -103,6 +108,7 @@ jobs:
       github.event.pull_request.draft == false
     name: Build
     runs-on: [windows-latest]
+    timeout-minutes: 10
     steps:
       - name: Build
         uses: Solution-Applications/actions/build@v2.1.0
@@ -121,6 +127,7 @@ jobs:
       github.event.pull_request.draft == false
     name: Run tests
     runs-on: [windows-latest]
+    timeout-minutes: 10
     strategy:
       matrix:
         python-version: ['3.8', '3.9', '3.10']
@@ -143,6 +150,7 @@ jobs:
     name: Release
     needs: [build]
     runs-on: [ubuntu-latest]
+    timeout-minutes: 10
     steps:
       - name: Release
         uses: Solution-Applications/actions/release@v2.1.0
