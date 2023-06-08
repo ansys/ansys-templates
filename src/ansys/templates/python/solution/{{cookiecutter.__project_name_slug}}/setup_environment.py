@@ -1,4 +1,6 @@
 # ©2023, ANSYS Inc. Unauthorized use, distribution or duplication is prohibited.
+# CAPTURED v0.4.0 on 6/6/23 from:
+# https://github.com/Solution-Applications/common-files/blob/v0.4.0/setup-environment/setup_environment.py
 
 """
 A Python script to automate the setup of the ecosystem of a Python project.
@@ -552,7 +554,9 @@ def configure_poetry(venv_name, credentials_management_method):
     for source in private_sources:
         print(f"Declare credentials for {source['name']}")
         # Get source PAT
-        if source["url"] == "https://pkgs.dev.azure.com/pyansys/_packaging/pyansys/pypi/simple/":
+        if source["name"].lower() == "pypi":
+            continue
+        elif source["url"] == "https://pkgs.dev.azure.com/pyansys/_packaging/pyansys/pypi/simple/":
             token = os.environ["PYANSYS_PRIVATE_PYPI_PAT"]
         elif source["url"] == "https://pkgs.dev.azure.com/pyansys/_packaging/ansys-solutions/pypi/simple/":
             token = os.environ["SOLUTIONS_PRIVATE_PYPI_PAT"]
@@ -637,7 +641,7 @@ def parser():
         "--build-system-version",
         type=str,
         help="Build system version",
-        default="*",
+        default="1.5.1",
         required=False,
     )
     optional_inputs.add_argument(
