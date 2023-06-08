@@ -34,8 +34,11 @@ packages = [
 [[tool.poetry.source]]
 name = "solutions-private-pypi"
 url = "https://pkgs.dev.azure.com/pyansys/_packaging/ansys-solutions/pypi/simple/"
-default = false
-secondary = true
+priority = "supplemental"
+
+[[tool.poetry.source]]
+name = "PyPI"
+priority = "primary"
 
 # Main dependencies
 [tool.poetry.dependencies]

@@ -17,7 +17,7 @@ env:
   # To be updated with GitHub pages url.
   DOCUMENTATION_CNAME: 'solution.docs.solutions.ansys.com'
   # When changing this value, update setup_environment.py --build-system-version default value to match
-  POETRY_VERSION: "1.4.2"
+  POETRY_VERSION: "1.5.1"
   POETRY_HTTP_BASIC_SOLUTIONS_PRIVATE_PYPI_USERNAME: "PAT"
   POETRY_HTTP_BASIC_SOLUTIONS_PRIVATE_PYPI_PASSWORD: ${{ secrets.SOLUTIONS_PRIVATE_PYPI_PAT }}
 
