@@ -133,7 +133,7 @@ class ProblemSetupStep(StepModel):
         )
     )
     @long_running
-    def run_optislang_synchronously(self) -> None:
+    def run_optislang(self) -> None:
         """Start optiSLang and run the project."""
 
         stderr_file = str(self.project_file.project_path / "Problem_Setup" / "stderr.log")
