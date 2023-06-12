@@ -151,6 +151,7 @@ class ProblemSetupStep(StepModel):
 
         # Wait for optiSLang to complete
         while True:
+            time.sleep(10)
             # Check the status of the optiSLang solve
             if osl.get_status() == "processing":
                 self.optislang_solve_status = "in-progress"
@@ -165,7 +166,9 @@ class ProblemSetupStep(StepModel):
                     self.optislang_solve_status = "failure"
             else:
                 osl.stop()
+                self.optislang_solve_status = "stopped"
                 raise Exception(f"ERROR: Unknown status: {osl.get_status()}.")
+            self.transaction.upload(["optislang_solve_status"])
             # Exit
             if osl.get_status() == "succeeded" or self.optislang_solve_status == "failure":
                 osl.dispose()
@@ -215,34 +218,4 @@ class ProblemSetupStep(StepModel):
 
         osl.dispose()
 
-    @transaction(
-        self=StepSpec(
-            download=["project_file", "host", "port"],
-            upload=[
-                "optislang_solve_status",
-            ],
-        )
-    )
-    def get_optislsang_status(self) -> None:
-        """Start optiSLang and run the project."""
-
-        monitoring = Monitoring(project_file=self.project_file.path, host=self.host, port=self.port)
-
-        monitoring.initialize()
-
-        monitoring.get_state()
-
-        if monitoring.get_state().lower() == "processing":
-            self.optislang_solve_status = "in-progress"
-        elif monitoring.get_state().lower() == "finished":
-            self.optislang_solve_status = "success"
-        elif monitoring.get_state().lower() == "failed":
-            self.optislang_solve_status = "failure"
-        elif (
-            monitoring.get_state().lower() == "stopped"
-        ):  # Case where optiSLang stops without error, to further continue the solve.
-            self.optislang_solve_status = "stopped"
-        else:
-            self.optislang_solve_status = "failure"
-
-        monitoring.dispose()
+    

@@ -250,6 +250,21 @@ def update_tabs(root_node_name, system_node_name, subsystem_node_name, pathname)
                 },
             ),
             dbc.Tab(
+                label="Visualization",
+                tab_id="visualization_tab",
+                label_style={
+                    "color": "#000000",
+                    "text-color": "#000000",
+                },
+                active_label_style={
+                    "color": "#FFFFFF",
+                    "text-color": "#000000",
+                    "background-color": "#000000",
+                    "border-style": "solid",
+                    "border-color": "#000000",
+                },
+            ),
+            dbc.Tab(
                 label="Status Overview",
                 tab_id="status_overview_tab",
                 label_style={

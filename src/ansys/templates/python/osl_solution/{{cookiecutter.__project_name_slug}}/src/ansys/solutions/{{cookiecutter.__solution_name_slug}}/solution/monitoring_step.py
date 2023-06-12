@@ -33,6 +33,7 @@ class MonitoringStep(StepModel):
     parallel_coordinates: dict = None
     status_overview: dict = None
     project_state: dict = None
+    system_uid: str = None
 
     @transaction(
         self=StepSpec(upload=["available_root_nodes", "available_system_nodes", "available_subsystem_nodes"]),
@@ -292,7 +293,10 @@ class MonitoringStep(StepModel):
         monitoring.dispose()
 
     @transaction(
-        self=StepSpec(upload=["project_state"]),
+        self=StepSpec(
+            upload=["project_state", "system_uid"],
+            download=["selected_root_node", "selected_system_node", "selected_subsystem_node"],
+        ),
         problem_setup_step=StepSpec(download=["project_file", "host", "port"]),
     )
     def get_project_state(self, problem_setup_step):
@@ -305,5 +309,15 @@ class MonitoringStep(StepModel):
         )
 
         monitoring.initialize()
+        if self.selected_subsystem_node:
+            actor_name = self.selected_subsystem_node
+        elif self.selected_system_node:
+            actor_name = self.selected_system_node
+        elif self.selected_root_node:
+            actor_name = self.selected_root_node
+        else:
+            raise Exception("No actor selected.")
+
+        self.system_uid = monitoring._get_actor_uid(actor_name)
         self.project_state = monitoring.get_scenery_and_node_status_view_data()
         monitoring.dispose()

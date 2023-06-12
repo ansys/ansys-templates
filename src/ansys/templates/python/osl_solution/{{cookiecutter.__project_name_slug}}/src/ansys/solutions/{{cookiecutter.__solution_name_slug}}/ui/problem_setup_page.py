@@ -250,7 +250,7 @@ def run_optislang_synchronously(n_clicks, pathname):
     project = DashClient[{{cookiecutter.__solution_definition_name}}].get_project(pathname)
     problem_setup_step = project.steps.problem_setup_step
     if n_clicks and problem_setup_step.run_synchronously:
-        problem_setup_step.run_optislang_synchronously()
+        problem_setup_step.run_optislang()
         while problem_setup_step.get_long_running_method_state("run_optislang").status == MethodStatus.Running:
             time.sleep(2)
         if problem_setup_step.optislang_solve_status == "success":
@@ -275,7 +275,7 @@ def run_optislang_asynchronously(n_clicks, pathname):
     project = DashClient[{{cookiecutter.__solution_definition_name}}].get_project(pathname)
     problem_setup_step = project.steps.problem_setup_step
     if n_clicks and not problem_setup_step.run_synchronously:
-        problem_setup_step.run_optislang_asynchronously()
+        problem_setup_step.run_optislang()
         return update_alerts(problem_setup_step)
     else:
         raise PreventUpdate
@@ -293,7 +293,6 @@ def update_optislang_status(n_intervals, pathname):
     project = DashClient[{{cookiecutter.__solution_definition_name}}].get_project(pathname)
     problem_setup_step = project.steps.problem_setup_step
     if not problem_setup_step.run_synchronously and problem_setup_step.optislang_solve_status != "initial":
-        problem_setup_step.get_optislsang_status()
         return update_alerts(problem_setup_step)
     else:
         return update_alerts(problem_setup_step)

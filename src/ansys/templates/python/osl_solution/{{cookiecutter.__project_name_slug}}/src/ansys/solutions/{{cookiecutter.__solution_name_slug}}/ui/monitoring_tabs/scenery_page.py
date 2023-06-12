@@ -12,7 +12,8 @@ from ansys.solutions.{{ cookiecutter.__solution_name_slug }}.solution.monitoring
 def layout(monitoring_step: MonitoringStep):
     """Layout of the scenery view tab."""
 
-    monitoring_step.get_project_state() # fetches data on page load
+    if not monitoring_step.project_state:
+        monitoring_step.get_project_state()
 
     return html.Div(
         [
