@@ -1,10 +1,10 @@
 {
   "__template_name": "osl-solution",
-  "project_name": "",
+  "project_name": "my-osl-solution",
   "__project_name_slug": "{{ cookiecutter.project_name.lower().replace('_', '-') }}",
-  "solution_name": "",
+  "solution_name": "my_osl_solution",
   "__solution_name_slug": "{{ cookiecutter.solution_name.lower().replace('-', '_') }}",
-  "solution_display_name": "",
+  "solution_display_name": "My optiSLang Solution",
   "optiSLang_project_file": "",
   "__optiSLang_project_file": "{{ cookiecutter.optiSLang_project_file|lower|replace('\\\\', '/') }} ",
   "__optiSLang_project_file_name": "{{ cookiecutter.__optiSLang_project_file.split('/')[-1] }}",
