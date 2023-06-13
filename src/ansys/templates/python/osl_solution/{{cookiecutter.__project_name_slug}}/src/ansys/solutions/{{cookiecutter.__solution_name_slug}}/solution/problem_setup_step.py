@@ -8,7 +8,6 @@ import time
 
 from ansys.saf.glow.solution import StepModel, StepSpec, FileReference, transaction, long_running
 from ansys.solutions.optislang.parser.project_properties import ProjectProperties
-from ansys.solutions.optislang.wrapper.monitoring import Monitoring
 from ansys.solutions.optislang.wrapper.orchestrator import OptiSLangOrchestrator
 from ansys.solutions.products_ecosystem.controller import AnsysProductsEcosystemController
 from ansys.solutions.products_ecosystem.utils import convert_to_long_version, convert_to_short_version
@@ -218,4 +217,3 @@ class ProblemSetupStep(StepModel):
 
         osl.dispose()
 
-    
