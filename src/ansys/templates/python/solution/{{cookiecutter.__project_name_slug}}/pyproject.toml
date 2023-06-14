@@ -44,8 +44,8 @@ priority = "primary"
 [tool.poetry.dependencies]
 python = ">=3.8, <3.11"
 ansys-dash-treeview = {version = "0.0.1.dev0", source = "solutions-private-pypi"}
-ansys-saf-glow = {version = "^0.2.0", source = "solutions-private-pypi" }
-ansys-saf-portal = {version = "^0.1.7", source = "solutions-private-pypi"}
+ansys-saf-glow = {version = "^0.3.dev4", source = "solutions-private-pypi" }
+ansys-saf-portal = {version = "^0.2.0", source = "solutions-private-pypi"}
 {% if cookiecutter.with_dash_ui == "yes" %}
 dash = {version = "^2.6"}
 dash_bootstrap_components = {version = "^1.2"}
