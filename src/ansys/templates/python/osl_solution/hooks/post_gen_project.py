@@ -105,7 +105,7 @@ def main():
     if len("{{ cookiecutter.__optiSLang_properties_file }}".replace(" ", "")):
         copy_file_to_assets_folder("{{ cookiecutter.__optiSLang_properties_file }}", str(ASSETS_DIRCTORY / "{{ cookiecutter.__optiSLang_properties_file_name }}"))
     if len("{{ cookiecutter.__optiSLang_metadata_file }}".replace(" ", "")):
-        copy_file_to_assets_folder("{{ cookiecutter.__optiSLang_metadata_file }}", str(ASSETS_DIRCTORY / "{{ cookiecutter.__optiSLang_metadata_file }}"))
+        copy_file_to_assets_folder("{{ cookiecutter.__optiSLang_metadata_file }}", str(ASSETS_DIRCTORY / "{{ cookiecutter.__optiSLang_metadata_file_name }}"))
 
 
 if __name__ == "__main__":
