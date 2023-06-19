@@ -96,7 +96,7 @@ def return_to_portal(pathname):
 )
 def display_poject_name(pathname):
     """Display current project name."""
-    project = DashClient[{{ cookiecutter.__solution_name_slug }}Solution].get_project(pathname)
+    project = DashClient[{{ cookiecutter.__solution_definition_name }}].get_project(pathname)
     return f"Project Name: {project.project_display_name}"
 
 
@@ -117,7 +117,7 @@ def display_page(pathname, value):
     given the project's URL
     """
 
-    project = DashClient[{{ cookiecutter.__solution_name_slug }}Solution].get_project(pathname)
+    project = DashClient[{{ cookiecutter.__solution_definition_name }}].get_project(pathname)
     triggered_id = callback_context.triggered[0]["prop_id"].split(".")[0]
 
     if triggered_id == "url":

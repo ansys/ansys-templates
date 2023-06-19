@@ -6,7 +6,7 @@ from ansys.saf.glow.client.dashclient import DashClient
 import dash_bootstrap_components as dbc
 from dash_extensions.enrich import Input, Output, State, callback, dcc, html
 
-from ansys.solutions.{{ cookiecutter.__solution_name_slug }}.solution.definition import {{ cookiecutter.__solution_name_slug }}Solution
+from ansys.solutions.{{ cookiecutter.__solution_name_slug }}.solution.definition import {{ cookiecutter.__solution_definition_name }}
 from ansys.solutions.{{ cookiecutter.__solution_name_slug }}.solution.monitoring_step import MonitoringStep
 from ansys.solutions.{{ cookiecutter.__solution_name_slug }}.solution.problem_setup_step import ProblemSetupStep
 from ansys.solutions.{{ cookiecutter.__solution_name_slug }}.ui.utils.alerts import update_monitoring_alert
@@ -59,7 +59,7 @@ def layout(problem_setup_step: ProblemSetupStep, monitoring_step: MonitoringStep
 def update_page_content(active_tab, pathname, node_info):
     """Update the page content according to the selected tab."""
 
-    project = DashClient[{{ cookiecutter.__solution_name_slug }}Solution].get_project(pathname)
+    project = DashClient[{{ cookiecutter.__solution_definition_name }}].get_project(pathname)
     problem_setup_step = project.steps.problem_setup_step
 
     if active_tab == "project_summary_tab":

@@ -12,7 +12,7 @@ from dash.exceptions import PreventUpdate
 import dash_bootstrap_components as dbc
 from dash_extensions.enrich import Input, Output, State, callback, dcc, html
 
-from ansys.solutions.{{ cookiecutter.__solution_name_slug }}.solution.definition import {{ cookiecutter.__solution_name_slug }}Solution
+from ansys.solutions.{{ cookiecutter.__solution_name_slug }}.solution.definition import {{ cookiecutter.__solution_definition_name }}
 from ansys.solutions.{{ cookiecutter.__solution_name_slug }}.solution.problem_setup_step import ProblemSetupStep
 from ansys.solutions.{{ cookiecutter.__solution_name_slug }}.ui.utils.alerts import update_alerts
 from ansys.solutions.{{ cookiecutter.__solution_name_slug }}.ui.utils.placeholders import update_placeholders
@@ -175,7 +175,7 @@ for alert in ["optislang_version", "optislang_solve"]:
 def check_ansys_ecosystem(n_clicks, pathname):
     """Start OptiSLang and run the simulation. Wait for the process to complete."""
 
-    project = DashClient[{{ cookiecutter.__solution_name_slug }}Solution].get_project(pathname)
+    project = DashClient[{{ cookiecutter.__solution_definition_name }}].get_project(pathname)
     problem_setup_step = project.steps.problem_setup_step
 
     if n_clicks:
@@ -197,7 +197,7 @@ def check_ansys_ecosystem(n_clicks, pathname):
 def start_analysis(n_clicks, table_children, pathname):
     """Start OptiSLang and run the simulation. Wait for the process to complete."""
 
-    project = DashClient[{{ cookiecutter.__solution_name_slug }}Solution].get_project(pathname)
+    project = DashClient[{{ cookiecutter.__solution_definition_name }}].get_project(pathname)
     problem_setup_step = project.steps.problem_setup_step
 
     if n_clicks:
@@ -226,7 +226,7 @@ def start_analysis(n_clicks, table_children, pathname):
 def update_alert_messages(n_intervals, n_clicks, pathname):
     """Display status badges."""
 
-    project = DashClient[{{ cookiecutter.__solution_name_slug }}Solution].get_project(pathname)
+    project = DashClient[{{ cookiecutter.__solution_definition_name }}].get_project(pathname)
     problem_setup_step = project.steps.problem_setup_step
 
     if problem_setup_step.ansys_ecosystem_ready:
