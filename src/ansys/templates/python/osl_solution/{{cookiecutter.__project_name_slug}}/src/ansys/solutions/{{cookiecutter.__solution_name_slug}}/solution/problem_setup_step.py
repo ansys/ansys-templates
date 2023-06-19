@@ -85,17 +85,17 @@ class ProblemSetupStep(StepModel):
 
     @transaction(
         self=StepSpec(
-            upload=["project_file", "properties_file", "workbench_input_deck", "metadata_file", "system_hierarchy_file"]
+            upload=["project_file", "properties_file", "metadata_file", "system_hierarchy_file"]
         )
     )
     def upload_bulk_files_to_project_directory(self) -> None:
         """Upload bulk files to project directory."""
 
-        original_project_file = Path(__file__).parent.absolute().parent / "model" / "assets" / {{ cookiecutter.__optiSLang_project_file_name }}
+        original_project_file = Path(__file__).parent.absolute().parent / "model" / "assets" / "{{ cookiecutter.__optiSLang_project_file_name }}"
         self.project_file.write_bytes(original_project_file.read_bytes())
 
         original_properties_file = (
-            Path(__file__).parent.absolute().parent / "model" / "assets" / {{ cookiecutter.__optiSLang_properties_file_name }}
+            Path(__file__).parent.absolute().parent / "model" / "assets" / "{{ cookiecutter.__optiSLang_properties_file_name }}"
         )
         self.properties_file.write_bytes(original_properties_file.read_bytes())
 
@@ -174,7 +174,6 @@ class ProblemSetupStep(StepModel):
             download=[
                 "project_file",
                 "working_properties_file",
-                "workbench_input_deck",
                 "system_hierarchy_file",
                 "tcp_server_stopped_states",
             ],
@@ -186,7 +185,6 @@ class ProblemSetupStep(StepModel):
                 "tcp_server_port",
                 "project_status_info",
                 "results_files",
-                "results_directory",
             ],
         )
     )
