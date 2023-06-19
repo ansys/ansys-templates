@@ -1,0 +1,7 @@
+cache-dir = ".poetry\\.cache"
+[virtualenvs]
+create = false
+in-project = true
+
+[repositories.solutions-private-pypi]
+url = "https://pkgs.dev.azure.com/pyansys/_packaging/ansys-solutions/pypi/simple/"
