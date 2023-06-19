@@ -8,7 +8,7 @@ import dash_bootstrap_components as dbc
 from dash_extensions.enrich import Input, Output, callback, callback_context, dcc, html
 from dash_iconify import DashIconify
 
-from ansys.solutions.{{ cookiecutter.__solution_name_slug }}.solution.definition import {{ cookiecutter.__solution_name_slug }}Solution
+from ansys.solutions.{{ cookiecutter.__solution_name_slug }}.solution.definition import {{ cookiecutter.__solution_definition_name }}
 from ansys.solutions.{{ cookiecutter.__solution_name_slug }}.ui.pages import monitoring_page, problem_setup_page
 from ansys.solutions.{{ cookiecutter.__solution_name_slug }}.ui.utils.common_functions import extract_dict_by_key, read_system_hierarchy
 
