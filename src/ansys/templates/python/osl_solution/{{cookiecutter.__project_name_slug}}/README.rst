@@ -104,7 +104,7 @@ Installation
 
   .. code:: bash
 
-    python src/ansys/solutions/{{ cookiecutter.__solution_name_slug }}/model/scripts/extract_system_hierarchy.py -p src/ansys/solutions/hook_optimization/model/assets/{{ cookiecutter.__optiSLang_project_file_name }}
+    python src/ansys/solutions/{{ cookiecutter.__solution_name_slug }}/model/scripts/extract_system_hierarchy.py -p src/ansys/solutions/{{ cookiecutter.__solution_name_slug }}/model/assets/{{ cookiecutter.__optiSLang_project_file_name }}
 
 From now on, all the commands must be executed within the virtual environment.
 
