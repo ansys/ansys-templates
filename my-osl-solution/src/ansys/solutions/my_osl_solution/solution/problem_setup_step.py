@@ -58,8 +58,8 @@ class ProblemSetupStep(StepModel):
     # File storage ----------------------------------------------------------------------------------------------------
 
     # Inputs
-    project_file: FileReference = FileReference("Problem_Setup/{{ cookiecutter.__optiSLang_project_file_name }}")
-    properties_file: FileReference = FileReference("Problem_Setup/{{ cookiecutter.__optiSLang_properties_file_name }}")
+    project_file: FileReference = FileReference("Problem_Setup/hook_optimization.opf ")
+    properties_file: FileReference = FileReference("Problem_Setup/hook_optimization.json ")
     metadata_file: FileReference = FileReference("Problem_Setup/metadata_file.json")
     system_hierarchy_file: FileReference = FileReference("Problem_Setup/system_hierarchy.json")
 
@@ -91,11 +91,11 @@ class ProblemSetupStep(StepModel):
     def upload_bulk_files_to_project_directory(self) -> None:
         """Upload bulk files to project directory."""
 
-        original_project_file = Path(__file__).parent.absolute().parent / "model" / "assets" / {{ cookiecutter.__optiSLang_project_file_name }}
+        original_project_file = Path(__file__).parent.absolute().parent / "model" / "assets" / hook_optimization.opf 
         self.project_file.write_bytes(original_project_file.read_bytes())
 
         original_properties_file = (
-            Path(__file__).parent.absolute().parent / "model" / "assets" / {{ cookiecutter.__optiSLang_properties_file_name }}
+            Path(__file__).parent.absolute().parent / "model" / "assets" / hook_optimization.json 
         )
         self.properties_file.write_bytes(original_properties_file.read_bytes())
 

@@ -1,5 +1,5 @@
 ##############################################
-{{cookiecutter.solution_name}}
+my_osl_solution
 ##############################################
 |python|
 
@@ -31,7 +31,7 @@ Token
 -----
 
 Connection to the **Solutions** private PyPI server is required. The access is controlled via a token. Create a system environment variable named ``SOLUTIONS_PRIVATE_PYPI_PAT``
-and assign it with the **Solutions** token provided in `Connecting to the private PyPI <https://dev-docs.solutions.ansys.com/solution_journey/getting_started/canonical_development_environment.html#connecting-to-ansys-private-pypi-servers>`_.
+and assign it with the **Solutions** token provided in `Connecting to the private PyPI <https://dev-docs.solutions.ansys.com/getting_started/canonical_development_environment.html#connecting-to-ansys-private-pypi-servers>`_.
 
 Software
 --------
@@ -60,13 +60,13 @@ Installation
 
    .. code:: bash
 
-     git clone https://github.com/Solution-Applications/{{ cookiecutter.__project_name_slug }}
+     git clone https://github.com/Solution-Applications/my-osl-solution
 
 2. Navigate to the cloned project directory:
 
    .. code:: bash
     
-    cd {{ cookiecutter.__project_name_slug }}
+    cd my-osl-solution
 
 3. Install ``toml`` and ``packaging`` on your system environment:
 
@@ -104,7 +104,7 @@ Installation
 
   .. code:: bash
 
-    python src/ansys/solutions/{{ cookiecutter.__solution_name_slug }}/model/scripts/extract_system_hierarchy.py -p src/ansys/solutions/hook_optimization/model/assets/{{ cookiecutter.__optiSLang_project_file_name }}
+    python src/ansys/solutions/my_osl_solution/model/scripts/extract_system_hierarchy.py -p src/ansys/solutions/hook_optimization/model/assets/hook_optimization.opf 
 
 From now on, all the commands must be executed within the virtual environment.
 
