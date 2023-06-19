@@ -9,7 +9,7 @@ from typing import Any, Iterable, Union
 
 import dash_bootstrap_components as dbc
 
-from ansys.solutions.hook_optimization.ui.utils.constants import MONITORING_TABS
+from ansys.solutions.{{ cookiecutter.__solution_name_slug }}.ui.utils.constants import MONITORING_TABS
 
 
 def read_system_hierarchy() -> list:

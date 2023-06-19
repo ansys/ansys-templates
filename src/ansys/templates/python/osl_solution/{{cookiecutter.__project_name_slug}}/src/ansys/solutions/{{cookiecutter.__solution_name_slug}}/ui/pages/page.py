@@ -8,9 +8,9 @@ import dash_bootstrap_components as dbc
 from dash_extensions.enrich import Input, Output, callback, callback_context, dcc, html
 from dash_iconify import DashIconify
 
-from ansys.solutions.hook_optimization.solution.definition import Hook_OptimizationSolution
-from ansys.solutions.hook_optimization.ui.pages import monitoring_page, problem_setup_page
-from ansys.solutions.hook_optimization.ui.utils.common_functions import extract_dict_by_key, read_system_hierarchy
+from ansys.solutions.{{ cookiecutter.__solution_name_slug }}.solution.definition import {{ cookiecutter.__solution_name_slug }}Solution
+from ansys.solutions.{{ cookiecutter.__solution_name_slug }}.ui.pages import monitoring_page, problem_setup_page
+from ansys.solutions.{{ cookiecutter.__solution_name_slug }}.ui.utils.common_functions import extract_dict_by_key, read_system_hierarchy
 
 step_list = read_system_hierarchy()
 
@@ -96,7 +96,7 @@ def return_to_portal(pathname):
 )
 def display_poject_name(pathname):
     """Display current project name."""
-    project = DashClient[Hook_OptimizationSolution].get_project(pathname)
+    project = DashClient[{{ cookiecutter.__solution_name_slug }}Solution].get_project(pathname)
     return f"Project Name: {project.project_display_name}"
 
 
@@ -117,7 +117,7 @@ def display_page(pathname, value):
     given the project's URL
     """
 
-    project = DashClient[Hook_OptimizationSolution].get_project(pathname)
+    project = DashClient[{{ cookiecutter.__solution_name_slug }}Solution].get_project(pathname)
     triggered_id = callback_context.triggered[0]["prop_id"].split(".")[0]
 
     if triggered_id == "url":

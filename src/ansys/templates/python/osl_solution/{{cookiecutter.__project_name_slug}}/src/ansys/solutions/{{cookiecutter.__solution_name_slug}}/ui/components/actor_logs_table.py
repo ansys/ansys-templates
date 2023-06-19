@@ -7,7 +7,7 @@ from datetime import datetime
 from dash import dash_table
 import pandas as pd
 
-from ansys.solutions.hook_optimization.ui.utils.common_functions import (
+from ansys.solutions.{{ cookiecutter.__solution_name_slug }}.ui.utils.common_functions import (
     remove_key_from_dictionaries,
     sort_dict_by_ordered_keys,
 )

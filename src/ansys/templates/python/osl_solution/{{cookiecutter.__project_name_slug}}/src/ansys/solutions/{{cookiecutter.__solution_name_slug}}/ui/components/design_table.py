@@ -5,7 +5,7 @@
 from dash import dash_table
 import pandas as pd
 
-from ansys.solutions.hook_optimization.ui.utils.common_functions import sorted_nicely
+from ansys.solutions.{{ cookiecutter.__solution_name_slug }}.ui.utils.common_functions import sorted_nicely
 
 
 class DesignTable:

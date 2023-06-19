@@ -5,7 +5,7 @@
 import dash_bootstrap_components as dbc
 from dash_extensions.enrich import html
 
-from ansys.solutions.hook_optimization.ui.components.design_table import DesignTable
+from ansys.solutions.{{ cookiecutter.__solution_name_slug }}.ui.components.design_table import DesignTable
 
 
 def layout(actors_info: list, actors_status_info: dict, uid: str, font_size: str = "15px") -> html.Div:

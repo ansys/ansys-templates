@@ -3,7 +3,7 @@
 import dash_bootstrap_components as dbc
 from dash_extensions.enrich import html
 
-from ansys.solutions.hook_optimization.solution.problem_setup_step import ProblemSetupStep
+from ansys.solutions.{{ cookiecutter.__solution_name_slug }}.solution.problem_setup_step import ProblemSetupStep
 
 
 def update_alerts(problem_setup_step: ProblemSetupStep) -> list:

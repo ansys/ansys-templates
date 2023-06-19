@@ -4,7 +4,7 @@
 
 from dash_extensions.enrich import html
 
-from ansys.solutions.hook_optimization.ui.components.summary_view import SummaryView
+from ansys.solutions.{{ cookiecutter.__solution_name_slug }}.ui.components.summary_view import SummaryView
 
 
 def layout(

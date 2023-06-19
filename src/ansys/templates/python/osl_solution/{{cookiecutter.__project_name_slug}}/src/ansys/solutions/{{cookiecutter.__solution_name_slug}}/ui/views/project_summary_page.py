@@ -5,7 +5,7 @@
 import dash_bootstrap_components as dbc
 from dash_extensions.enrich import html
 
-from ansys.solutions.hook_optimization.ui.components.project_summary_table import ProjectSummaryTable
+from ansys.solutions.{{ cookiecutter.__solution_name_slug }}.ui.components.project_summary_table import ProjectSummaryTable
 
 
 def layout(project_status_info: dict, font_size: str = "15px") -> html.Div:

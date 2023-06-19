@@ -6,10 +6,10 @@ from dash import dash_table
 import dash_bootstrap_components as dbc
 from dash_extensions.enrich import dcc, html
 
-from ansys.solutions.hook_optimization.ui.components.actor_information_table import ActorInformationTable
-from ansys.solutions.hook_optimization.ui.components.actor_logs_table import ActorLogsTable
-from ansys.solutions.hook_optimization.ui.components.actor_statistics_table import ActorStatisticsTable
-from ansys.solutions.hook_optimization.ui.components.system_files import SystemFiles
+from ansys.solutions.{{ cookiecutter.__solution_name_slug }}.ui.components.actor_information_table import ActorInformationTable
+from ansys.solutions.{{ cookiecutter.__solution_name_slug }}.ui.components.actor_logs_table import ActorLogsTable
+from ansys.solutions.{{ cookiecutter.__solution_name_slug }}.ui.components.actor_statistics_table import ActorStatisticsTable
+from ansys.solutions.{{ cookiecutter.__solution_name_slug }}.ui.components.system_files import SystemFiles
 
 
 class SummaryView:

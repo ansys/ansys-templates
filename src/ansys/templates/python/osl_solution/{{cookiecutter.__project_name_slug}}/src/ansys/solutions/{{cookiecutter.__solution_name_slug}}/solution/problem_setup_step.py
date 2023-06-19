@@ -17,8 +17,8 @@ from ansys.solutions.optislang.parser.project_properties import (
 from ansys.solutions.products_ecosystem.controller import AnsysProductsEcosystemController
 from ansys.solutions.products_ecosystem.utils import convert_to_long_version
 
-from ansys.solutions.hook_optimization.model.utils import read_system_hierarchy
-from ansys.solutions.hook_optimization.ui.utils.monitoring import _get_actor_hids
+from ansys.solutions.{{ cookiecutter.__solution_name_slug }}.model.utils import read_system_hierarchy
+from ansys.solutions.{{ cookiecutter.__solution_name_slug }}.ui.utils.monitoring import _get_actor_hids
 
 
 class ProblemSetupStep(StepModel):

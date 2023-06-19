@@ -61,7 +61,7 @@ def test_() -> None:
         response = json.load(f)
 
     test_nodes = [
-        {"uid": "bcc95c97-0313-4bee-971a-a84aa2ff6dc1", "name": "hook_optimization"},
+        {"uid": "bcc95c97-0313-4bee-971a-a84aa2ff6dc1", "name": "{{ cookiecutter.__solution_name_slug }}"},
         {"uid": "4b3d77be-efcb-4d8f-ac49-9deeed1900e2", "name": "AMOP"},
         {"uid": "17622ac8-158f-4ae7-85f4-1156975a75e4", "name": "hook"},
         {"uid": "75746764-9e04-4bc6-a810-f8cdf0dd8bd4", "name": "ETK"},
@@ -77,7 +77,7 @@ def test_() -> None:
         {"uid": "2976c166-0ba1-4d6b-b291-3f8c1615dd3f", "name": "Validator Postprocessing"},
     ]
 
-    # root = _get_root_by_name(response, "hook_optimization")
+    # root = _get_root_by_name(response, "{{ cookiecutter.__solution_name_slug }}")
     for test_node in test_nodes:
         output = _get_node_by_uid(response, test_node["uid"])
         if output["name"] == test_node["name"]:
