@@ -16,6 +16,7 @@ DESIRED_STRUCTURE = [
     "doc/make.bat",
     "doc/Makefile",
     "examples/README.md",
+    f"src/ansys/solutions/{{ cookiecutter.__solution_name_slug }}/model/assets/README.md",
     f"src/ansys/solutions/{{ cookiecutter.__solution_name_slug }}/model/scripts/README.md",
     f"src/ansys/solutions/{{ cookiecutter.__solution_name_slug }}/model/README.md",
     f"src/ansys/solutions/{{ cookiecutter.__solution_name_slug }}/solution/definition.py",
@@ -30,6 +31,7 @@ DESIRED_STRUCTURE = [
     "tests/conftest.py",
     ".codespell.exclude",
     ".codespell.ignore",
+    ".env",
     ".flake8",
     ".gitignore",
     ".pre-commit-config.yaml",
@@ -38,6 +40,8 @@ DESIRED_STRUCTURE = [
     "CODEOWNERS",
     "CONTRIBUTING.md",
     "LICENSE.rst",
+    "poetry.lock",
+    "poetry.toml",
     "pyproject.toml",
     "README.rst",
     "setup_environment.py",
@@ -47,14 +51,16 @@ DESIRED_STRUCTURE = [
 """A list holding all desired files to be included in the project."""
 
 UI_STRUCTURE = [
-    f"src/ansys/solutions/{{ cookiecutter.__solution_name_slug }}/ui/assets/Graphics/ansys-solutions-horizontal-logo.png",
-    f"src/ansys/solutions/{{ cookiecutter.__solution_name_slug }}/ui/assets/Graphics/solution-workflow-sketch.png",
-    f"src/ansys/solutions/{{ cookiecutter.__solution_name_slug }}/ui/assets/style.css",
+    f"src/ansys/solutions/{{ cookiecutter.__solution_name_slug }}/ui/assets/css/style.css",
+    f"src/ansys/solutions/{{ cookiecutter.__solution_name_slug }}/ui/assets/images/README.md",
+    f"src/ansys/solutions/{{ cookiecutter.__solution_name_slug }}/ui/assets/logos/ansys-solutions-horizontal-logo.png",
+    f"src/ansys/solutions/{{ cookiecutter.__solution_name_slug }}/ui/assets/scripts/README.md",
+    f"src/ansys/solutions/{{ cookiecutter.__solution_name_slug }}/ui/components/README.md",
+    f"src/ansys/solutions/{{ cookiecutter.__solution_name_slug }}/ui/pages/first_page.py",
+    f"src/ansys/solutions/{{ cookiecutter.__solution_name_slug }}/ui/pages/intro_page.py",
+    f"src/ansys/solutions/{{ cookiecutter.__solution_name_slug }}/ui/pages/second_page.py",
+    f"src/ansys/solutions/{{ cookiecutter.__solution_name_slug }}/ui/pages/page.py",
     f"src/ansys/solutions/{{ cookiecutter.__solution_name_slug }}/ui/app.py",
-    f"src/ansys/solutions/{{ cookiecutter.__solution_name_slug }}/ui/intro_page.py",
-    f"src/ansys/solutions/{{ cookiecutter.__solution_name_slug }}/ui/first_page.py",
-    f"src/ansys/solutions/{{ cookiecutter.__solution_name_slug }}/ui/second_page.py",
-    f"src/ansys/solutions/{{ cookiecutter.__solution_name_slug }}/ui/page.py",
 ]
 
 # Add UI structure to desired structure if applicable
