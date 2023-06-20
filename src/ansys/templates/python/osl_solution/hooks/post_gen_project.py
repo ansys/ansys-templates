@@ -34,6 +34,7 @@ DESIRED_STRUCTURE = [
     f"src/ansys/solutions/{{ cookiecutter.__solution_name_slug }}/ui/components/actor_logs_table.py",
     f"src/ansys/solutions/{{ cookiecutter.__solution_name_slug }}/ui/components/actor_statistics_table.py",
     f"src/ansys/solutions/{{ cookiecutter.__solution_name_slug }}/ui/components/design_table.py",
+    f"src/ansys/solutions/{{ cookiecutter.__solution_name_slug }}/ui/components/logs_table.py",
     f"src/ansys/solutions/{{ cookiecutter.__solution_name_slug }}/ui/components/project_summary_table.py",
     f"src/ansys/solutions/{{ cookiecutter.__solution_name_slug }}/ui/components/summary_view.py",
     f"src/ansys/solutions/{{ cookiecutter.__solution_name_slug }}/ui/components/system_files.py",
