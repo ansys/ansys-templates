@@ -52,7 +52,7 @@ jobs:
           check-poetry: "true"
 
   build:
-    name: Build 
+    name: Build
     runs-on: [ubuntu-latest]
     steps:
       - name: Build

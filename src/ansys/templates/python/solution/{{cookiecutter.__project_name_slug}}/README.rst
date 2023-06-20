@@ -65,7 +65,7 @@ Installation
 2. Navigate to the cloned project directory:
 
    .. code:: bash
-    
+
     cd {{ cookiecutter.__project_name_slug }}
 
 3. Install ``toml`` and ``packaging`` on your system environment:
