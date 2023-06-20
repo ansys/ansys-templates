@@ -2,6 +2,7 @@
 
 import json
 from pathlib import Path
+from typing import Union
 
 
 def _get_root_by_name(tcp_server_response: dict, root_name: str) -> dict:
@@ -50,6 +51,23 @@ def _get_actor_hids(actor_states: dict) -> list:
         return [state["hid"] for state in actor_states["states"]]
     else:
         return []
+
+
+def read_optislang_logs(log_file: Union[Path, str]) -> list:
+
+    logs = []
+
+    log_file = Path(log_file)
+
+    if log_file.exists():
+        with open(log_file, "r") as file:
+            for line in file:
+                if len(line.strip().rstrip("\n").replace(" ", "")) > 0:
+                    logs.append(line.strip().rstrip("\n"))
+    else:
+        raise FileNotFoundError(f"Unable to find log file {log_file}.")
+
+    return logs
 
 
 def test_() -> None:

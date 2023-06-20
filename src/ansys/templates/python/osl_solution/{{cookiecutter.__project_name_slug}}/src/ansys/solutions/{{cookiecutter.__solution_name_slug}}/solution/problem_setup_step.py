@@ -7,8 +7,8 @@ from pathlib import Path
 import platform
 import time
 
-from ansys.optislang.core import Optislang
-from ansys.saf.glow.solution import FileGroupReference, FileReference, StepModel, StepSpec, long_running, transaction
+from ansys.optislang.core import Optislang, logging
+from ansys.saf.glow.solution import FileReference, StepModel, StepSpec, long_running, transaction
 from ansys.solutions.optislang.parser.project_properties import (
     ProjectProperties,
     apply_placeholders_to_properties_file,
@@ -18,7 +18,7 @@ from ansys.solutions.products_ecosystem.controller import AnsysProductsEcosystem
 from ansys.solutions.products_ecosystem.utils import convert_to_long_version
 
 from ansys.solutions.{{ cookiecutter.__solution_name_slug }}.model.utils import read_system_hierarchy
-from ansys.solutions.{{ cookiecutter.__solution_name_slug }}.ui.utils.monitoring import _get_actor_hids
+from ansys.solutions.{{ cookiecutter.__solution_name_slug }}.ui.utils.monitoring import _get_actor_hids, read_optislang_logs
 
 
 class ProblemSetupStep(StepModel):
@@ -46,6 +46,7 @@ class ProblemSetupStep(StepModel):
             "selected_version": None,
             "alert_message": "OptiSLang install not checked.",
             "alert_color": "warning",
+            "alias": "optiSLang",
         }
     }
     system_hierarchy: dict = {}
@@ -54,6 +55,8 @@ class ProblemSetupStep(StepModel):
     actors_status_info: dict = {}
     results_files: dict = {}
     tcp_server_stopped_states = ["idle", "finished", "stopped", "aborted"]
+    optislang_logs: list = []
+    optislang_log_level: str = "DEBUG"
 
     # File storage ----------------------------------------------------------------------------------------------------
 
@@ -66,6 +69,7 @@ class ProblemSetupStep(StepModel):
     # Outputs
     working_properties_file: FileReference = FileReference("Problem_Setup/working_properties_file.json")
     server_info_file: FileReference = FileReference("Problem_Setup/server_info.ini")
+    optislang_log_file: FileReference = FileReference("Problem_Setup/pyoptislang.log")
 
     # Methods ---------------------------------------------------------------------------------------------------------
 
@@ -176,6 +180,7 @@ class ProblemSetupStep(StepModel):
                 "working_properties_file",
                 "system_hierarchy_file",
                 "tcp_server_stopped_states",
+                "optislang_log_level",
             ],
             upload=[
                 "optislang_solve_status",
@@ -185,6 +190,8 @@ class ProblemSetupStep(StepModel):
                 "tcp_server_port",
                 "project_status_info",
                 "results_files",
+                "optislang_log_file",
+                "optislang_logs",
             ],
         )
     )
@@ -194,15 +201,24 @@ class ProblemSetupStep(StepModel):
 
         self.system_hierarchy = read_system_hierarchy(self.system_hierarchy_file.path)
 
+        osl_logger = logging.OslLogger(
+            loglevel=self.optislang_log_level,
+            log_to_file=True,
+            logfile_name=self.optislang_log_file.path,
+            log_to_stdout=True,
+        )
+
         osl = Optislang(
             project_path=self.project_file.path,
-            loglevel="DEBUG",
+            loglevel=self.optislang_log_level,
             reset=True,
             shutdown_on_finished=True,
             import_project_properties_file=self.working_properties_file.path,
             additional_args=[f"--write-server-info={self.server_info_file.path}"],
             ini_timeout=30,  # might need to be adjusted
         )
+
+        osl.__logger = osl_logger.add_instance_logger(osl.name, osl, self.optislang_log_level)
 
         if self.tcp_server_port is None:
             if self.server_info_file.exists():
@@ -220,6 +236,8 @@ class ProblemSetupStep(StepModel):
         while True:
             # Get project status info
             self.project_status_info = osl.get_osl_server().get_full_project_status_info()
+            # Read pyoptislang logs
+            self.optislang_logs = read_optislang_logs(self.optislang_log_file.path)
             # Get actor status info
             for node_info in self.system_hierarchy:
                 self.actors_info[node_info["uid"]] = osl.get_osl_server().get_actor_info(node_info["uid"])
@@ -232,11 +250,13 @@ class ProblemSetupStep(StepModel):
                         )
             # Get status
             self.optislang_solve_status = osl.project.get_status().lower()
+            osl.log.info(f"Analysis status: {self.optislang_solve_status}")
             # Upload fields
             self.transaction.upload(["optislang_solve_status"])
             self.transaction.upload(["project_status_info"])
             self.transaction.upload(["actors_info"])
             self.transaction.upload(["actors_status_info"])
+            self.transaction.upload(["optislang_logs"])
             # Check if analysis stopped
             if self.optislang_solve_status in self.tcp_server_stopped_states:
                 break

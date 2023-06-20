@@ -17,7 +17,7 @@ def update_alerts(problem_setup_step: ProblemSetupStep) -> list:
             html.Div(
                 [
                     dbc.Button(
-                        f"{product_name.title()} Version",
+                        f"{product_data['alias']} Version",
                         id=f"popover_{product_name}_version_target",
                         disabled=False,
                         color=product_data["alert_color"],
