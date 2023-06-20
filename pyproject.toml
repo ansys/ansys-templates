@@ -75,7 +75,7 @@ name = "ansys.templates"
 ansys-templates = "ansys.templates.cli:main"
 
 [project.urls]
-Source = "https://github.com/ansys-templates/ansys-templates"
+Source = "https://github.com/ansys/ansys-templates"
 Homepage = "https://templates.ansys.com/"
 Documentation = "https://templates.ansys.com/"
 Tracker = "https://github.com/ansys/ansys-templates/issues"
