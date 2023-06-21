@@ -94,7 +94,7 @@ def pyansys_advanced():
 
 
 @new.command()
-def pyansys_advanced():
+def ansys_api():
     """Create a new gRPC API definition."""
     create_project("ansys-api")
 
