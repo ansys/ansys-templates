@@ -1,4 +1,4 @@
-### {{ cookiecutter.project_slug }} gRPC Interface Package
+### {{ cookiecutter.__project_name_slug }} gRPC Interface Package
 
 This Python package contains the auto-generated gRPC Python interface files for
 {{ cookiecutter.product_name }}.
@@ -10,7 +10,7 @@ Provided that these wheels have been published to public PyPI, they can be
 installed with:
 
 ```
-pip install {{ cookiecutter.project_slug | lower }}
+pip install {{ cookiecutter.__project_name_slug | lower }}
 ```
 
 Otherwise, see the

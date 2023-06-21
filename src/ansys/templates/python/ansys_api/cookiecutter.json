@@ -1,7 +1,7 @@
 {
     "product_name": "",
     "library_name": "",
-    "project_slug": "ansys-api-{{ '-'.join([cookiecutter.product_name, cookiecutter.library_name]) | slugify }}",
+    "__project_name_slug": "ansys-api-{{ '-'.join([cookiecutter.product_name, cookiecutter.library_name]) | slugify }}",
     "api_version": "0",
     "_dot_package_name_no_ver": "ansys.api.{{ cookiecutter.product_name | slugify(separator='_') }}.{{ cookiecutter.library_name | slugify(separator='_') }}",
     "_dot_package_name": "{{ cookiecutter._dot_package_name_no_ver }}.v{{ cookiecutter.api_version }}",
