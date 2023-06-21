@@ -51,7 +51,7 @@ jobs:
           # - {name: "pyansys-advanced-setuptools", template: "pyansys-advanced", build-system: "setuptools", outdir: "pyansys_a2/pyproduct-library"}
 
           # # All ansys API templates
-          - {name: "ansys-api", template: "ansys-api", build-system: "setuptools", outdir: "ansys_api_s0/pyproduct-library"}
+          - {name: "ansys-api", template: "ansys-api", build-system: "setuptools", outdir: "ansys_api2/ansys-api-product-library"}
 
           # # # All pyace template tests
           # - {name: "pyace-pkg", template: "pyace", build-system: "setuptools", outdir: "pyace_set0/project"}
