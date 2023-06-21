@@ -12,7 +12,7 @@ from dash_iconify import DashIconify
 from ansys.solutions.solution.solution.definition import (
     SolutionSolution,
 )
-from ansys.solutions.solution.ui import intro_page, first_page, second_page
+from ansys.solutions.solution.ui.pages import intro_page, first_page, second_page
 
 step_list = [
     {
@@ -41,7 +41,7 @@ layout = html.Div(
                 html.Div(
                     [
                         html.Img(
-                        src = r"/assets/Graphics/ansys-solutions-horizontal-logo.png",
+                        src = r"/assets/logos/ansys-solutions-horizontal-logo.png",
                         style={'width': '80%'}
                     )
                     ],
