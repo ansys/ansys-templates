@@ -50,7 +50,7 @@ PYANSYS_VARS = PYANSYS_ADVANCED_VARS = dict(
     requires_python="3.7",
 )
 
-ANSYS_API_VARS = PYANSYS_ADVANCED_VARS = dict(
+ANSYS_API_VARS = dict(
     product_name="product",
     library_name="library",
     __product_name_slug="product",
@@ -486,4 +486,6 @@ def test_template_python(tmp_path, build_system, template):
         keep_files(EXPECTED_STRUCTURE, project_path)
 
     # Check that all common files are included in baked project
+    print(EXPECTED_STRUCTURE)
+    print(project_path)
     assert_project_structure(EXPECTED_STRUCTURE, project_path)
