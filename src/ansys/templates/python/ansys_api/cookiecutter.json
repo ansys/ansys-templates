@@ -20,7 +20,7 @@
     },
     "__requires_python": "",
     "__repository_url": "",
-    "__build_system": "",
+    "__build_system": "setuptools",
     "__logo": "",
     "__logo_color": "",
     "__max_linelength": "",
