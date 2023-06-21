@@ -1,11 +1,17 @@
 {
     "product_name": "",
+    "__product_name_slug": "{{ cookiecutter.product_name | slugify(separator=('_')) }}",
     "library_name": "",
-    "__project_name_slug": "ansys-api-{{ '-'.join([cookiecutter.product_name, cookiecutter.library_name]) | slugify }}",
+    "__library_name_slug": "{{ cookiecutter.library_name | slugify(separator=('_')) }}",
+    "__project_name_slug": "ansys-api-{{ cookiecutter.__product_name_slug }}{% if cookiecutter.__library_name_slug %}-{{ cookiecutter.__library_name_slug }}{% endif %}",
     "api_version": "0",
-    "_dot_package_name_no_ver": "ansys.api.{{ cookiecutter.product_name | slugify(separator='_') }}.{{ cookiecutter.library_name | slugify(separator='_') }}",
-    "_dot_package_name": "{{ cookiecutter._dot_package_name_no_ver }}.v{{ cookiecutter.api_version }}",
-    "api_package_version": "0.1.0",
+    "__api_version": "{{ cookiecutter.api_version }}",
+    "__pkg_namespace": "ansys.{{ cookiecutter.__product_name_slug }}.{{ cookiecutter.__library_name_slug }}",
+    "__pkg_namespace_with_version": "{{ cookiecutter.__pkg_namespace}}-v{{ cookiecutter.__api_version }}",
+    "version": "0.1.dev0",
+    "__version": "{{ cookiecutter.version }}",
+    "short_description": "A collection of gRPC API definitions for Ansys {{ cookiecutter.product_name }} {{ cookiecutter.library_name }}",
+    "__short_description": "{{ cookiecutter.short_description | capitalize }}",
     "protos_dir": "",
     "proto_dependencies": {
         "modules": []
