@@ -50,6 +50,14 @@ PYANSYS_VARS = PYANSYS_ADVANCED_VARS = dict(
     requires_python="3.7",
 )
 
+ANSYS_API_VARS = PYANSYS_ADVANCED_VARS = dict(
+    product_name="product",
+    library_name="library",
+    __product_name_slug="product",
+    __library_name_slug="library",
+    __project_name_slug="ansys-api-product-library",
+)
+
 PYANSYS_OPENAPI_VARS = dict(
     product_name="product",
     library_name="library",
@@ -144,6 +152,17 @@ PYANSYS_ADVANCED_STRUCTURE = deepcopy(PYCOMMON_STRUCTURE) + [
 [PYANSYS_ADVANCED_STRUCTURE.remove(file) for file in
  ["azure-pipeline.yml", "setup.py", ".coveragerc", "requirements_build.txt", "requirements_doc.txt",
   "requirements_tests.txt"]]
+
+# Structure for pyansys-advanced projects
+ANSYS_API_STRUCTURE = [
+    "README.md",
+    "pyproject.toml",
+    "setup.py",
+    f"src/ansys/api/{ANSYS_API_VARS['__product_name_slug']}/{ANSYS_API_VARS['__library_name_slug']}/__init__.py",
+    f"src/ansys/api/{ANSYS_API_VARS['__product_name_slug']}/{ANSYS_API_VARS['__library_name_slug']}/py.typed",
+    f"src/ansys/api/{ANSYS_API_VARS['__product_name_slug']}/{ANSYS_API_VARS['__library_name_slug']}/VERSION",
+    ".github/workflows/ci.yml",
+]
 
 PYACE_FLASK_STRUCTURE = deepcopy(PYCOMMON_STRUCTURE) + [
     "src/__init__.py",
@@ -416,6 +435,7 @@ TEMPLATES_VARIABLES_AND_STRUCTURE = {
     "pybasic": [PYBASIC_VARS, PYBASIC_STRUCTURE],
     "pyansys": [PYANSYS_VARS, PYANSYS_STRUCTURE],
     "pyansys-advanced": [PYANSYS_ADVANCED_VARS, PYANSYS_ADVANCED_STRUCTURE],
+    "ansys-api": [ANSYS_API_VARS, ANSYS_API_STRUCTURE],
     "pyansys-openapi-client": [PYANSYS_OPENAPI_VARS, PYANSYS_OPENAPI_STRUCTURE],
     "pyace-flask": [PYACE_VARS, PYACE_FLASK_STRUCTURE],
     "pyace-grpc": [PYACE_VARS, PYACE_GRPC_STRUCTURE],
