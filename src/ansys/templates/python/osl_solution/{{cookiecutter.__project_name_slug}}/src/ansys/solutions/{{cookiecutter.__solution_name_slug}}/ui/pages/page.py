@@ -2,56 +2,37 @@
 
 """Initialization of the frontend layout across all the steps."""
 
-
 from ansys.saf.glow.client.dashclient import DashClient
 from ansys_dash_treeview import AnsysDashTreeview
 import dash_bootstrap_components as dbc
 from dash_extensions.enrich import Input, Output, callback, callback_context, dcc, html
 from dash_iconify import DashIconify
 
-from ansys.solutions.{{ cookiecutter.__solution_name_slug }}.solution.definition import (
-    {{ cookiecutter.__solution_definition_name }},
-)
-from ansys.solutions.{{ cookiecutter.__solution_name_slug }}.ui import problem_setup_page, monitoring_page
+from ansys.solutions.{{ cookiecutter.__solution_name_slug }}.solution.definition import {{ cookiecutter.__solution_definition_name }}
+from ansys.solutions.{{ cookiecutter.__solution_name_slug }}.ui.pages import monitoring_page, problem_setup_page
+from ansys.solutions.{{ cookiecutter.__solution_name_slug }}.ui.utils.common_functions import extract_dict_by_key, read_system_hierarchy
 
-
-step_list = [
-    {
-        "key": "problem_setup_step",
-        "text": "Problem Setup",
-        "depth": 0,
-    },
-    {
-        "key": "monitoring_step",
-        "text": "Monitoring",
-        "depth": 0,
-    },
-]
+step_list = read_system_hierarchy()
 
 
 layout = html.Div(
     [
-        dcc.Location(id="url", refresh=False), # represents the browser address bar and doesn't render anything
+        dcc.Location(id="url", refresh=False),  # represents the browser address bar and doesn't render anything
         dbc.Stack(
             [
                 html.Div(
-                    [
-                        html.Img(
-                        src = r"/assets/Graphics/ansys-solutions-horizontal-logo.png",
-                        style={'width': '80%'}
-                    )
-                    ],
+                    [html.Img(src=r"/assets/logos/ansys-solutions-horizontal-logo.png", style={"width": "80%"})],
                 ),
                 html.Div(
                     [
                         dbc.Button(
                             "Project Name:",
-                            id = "project-name",
-                            disabled = True,
+                            id="project-name",
+                            disabled=True,
                             style={
                                 "color": "rgba(0, 0, 0, 1)",
                                 "background-color": "rgba(255, 255, 255, 1)",
-                                "border-color": "rgba(0, 0, 0, 1)"
+                                "border-color": "rgba(0, 0, 0, 1)",
                             },
                         )
                     ],
@@ -59,8 +40,8 @@ layout = html.Div(
                 ),
                 html.Div(id="return-to-portal"),
             ],
-            direction = "horizontal",
-            gap = 3,
+            direction="horizontal",
+            gap=3,
         ),
         html.Br(),
         dbc.Row(
@@ -78,13 +59,7 @@ layout = html.Div(
                     width=2,
                     style={"background-color": "rgba(242, 242, 242, 0.6)"},  # Ansys grey
                 ),
-                dbc.Col(
-                    html.Div(
-                        id="page-content",
-                        style={"padding-right": "1%"}
-                    ),
-                    width=10
-                ),
+                dbc.Col(html.Div(id="page-content", style={"padding-right": "1%"}), width=10),
             ],
         ),
     ]
@@ -97,7 +72,6 @@ layout = html.Div(
 )
 def return_to_portal(pathname):
     """Display Solution Portal when back-to-portal button gets selected."""
-
     portal_ui_url = DashClient.get_portal_ui_url()
     children = (
         []
@@ -105,11 +79,11 @@ def return_to_portal(pathname):
         else [
             dbc.Button(
                 "Back to Projects",
-                id = "return-to-portal",
-                className = "me-2",
-                n_clicks = 0,
-                href = portal_ui_url,
-                style = {"background-color": "rgba(0, 0, 0, 1)", "border-color": "rgba(0, 0, 0, 1)"},
+                id="return-to-portal",
+                className="me-2",
+                n_clicks=0,
+                href=portal_ui_url,
+                style={"background-color": "rgba(0, 0, 0, 1)", "border-color": "rgba(0, 0, 0, 1)"},
             )
         ]
     )
@@ -122,8 +96,7 @@ def return_to_portal(pathname):
 )
 def display_poject_name(pathname):
     """Display current project name."""
-
-    project = DashClient[{{cookiecutter.__solution_definition_name}}].get_project(pathname)
+    project = DashClient[{{ cookiecutter.__solution_definition_name }}].get_project(pathname)
     return f"Project Name: {project.project_display_name}"
 
 
@@ -141,7 +114,7 @@ def display_page(pathname, value):
 
     this callback is essential for initializing the step based on the persisted
     state of the project when the browser first displays the project to the user
-    given the project's URL.
+    given the project's URL
     """
 
     project = DashClient[{{ cookiecutter.__solution_definition_name }}].get_project(pathname)
@@ -154,6 +127,9 @@ def display_page(pathname, value):
             page_layout = html.H1("Welcome!")
         elif value == "problem_setup_step":
             page_layout = problem_setup_page.layout(project.steps.problem_setup_step)
-        elif value == "monitoring_step":
-            page_layout = monitoring_page.layout(project.steps.monitoring_step, project.steps.problem_setup_step)
+        else:
+            node_info = extract_dict_by_key(step_list, "key", value, expect_unique=True)
+            page_layout = monitoring_page.layout(
+                project.steps.problem_setup_step, project.steps.monitoring_step, node_info
+            )
         return page_layout
