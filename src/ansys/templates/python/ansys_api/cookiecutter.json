@@ -1,9 +1,11 @@
 {
+    "__template_name": "ansys-api",
     "product_name": "",
     "__product_name_slug": "{{ cookiecutter.product_name | slugify(separator=('_')) }}",
     "library_name": "",
     "__library_name_slug": "{{ cookiecutter.library_name | slugify(separator=('_')) }}",
     "__project_name_slug": "ansys-api-{{ cookiecutter.__product_name_slug }}{% if cookiecutter.__library_name_slug %}-{{ cookiecutter.__library_name_slug }}{% endif %}",
+    "__pkg_name": "{{ cookiecutter.__project_name_slug }}",
     "api_version": "0",
     "__api_version": "{{ cookiecutter.api_version }}",
     "__pkg_namespace": "ansys.api.{{ cookiecutter.__product_name_slug }}.{{ cookiecutter.__library_name_slug }}",
@@ -16,5 +18,13 @@
     "proto_dependencies": {
         "modules": []
     },
+    "__requires_python": "",
+    "__repository_url": "",
+    "__build_system": "",
+    "__logo": "",
+    "__logo_color": "",
+    "__max_linelength": "",
+    "__coverage_source": "",
+    "__is_pyansys": "false",
     "_extensions": ["cookiecutter.extensions.SlugifyExtension"]
 }
