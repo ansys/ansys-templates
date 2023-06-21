@@ -14,7 +14,6 @@ DESIRED_STRUCTURE = [
     f"{src_path}/__init__.py",
     f"{src_path}/VERSION",
     f"{src_path}/py.typed",
-    f"{src_path}/v0",
     ".github/workflows/ci.yml",
 ]
 """A list holding all desired files to be included in the project."""
