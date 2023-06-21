@@ -8,6 +8,9 @@ on:
       - main
   workflow_dispatch:
 
+env:
+  MAIN_PYTHON_VERSION: '3.8'
+
 concurrency:
   group: ${{ github.workflow }}-${{ github.ref }}
   cancel-in-progress: true
@@ -32,29 +35,32 @@ jobs:
 
         cfg:
           # All pybasic template tests
-          - {name: "doc-project", template: "doc-project", build-system: "flit", outdir: "doc_proje0/doc-project"}
-          - {name: "doc-project", template: "doc-project", build-system: "poetry", outdir: "doc_proje1/doc-project"}
-          - {name: "doc-project", template: "doc-project", build-system: "setuptools", outdir: "doc_proje2/doc-project"}
+          # - {name: "doc-project", template: "doc-project", build-system: "flit", outdir: "doc_proje0/doc-project"}
+          # - {name: "doc-project", template: "doc-project", build-system: "poetry", outdir: "doc_proje1/doc-project"}
+          # - {name: "doc-project", template: "doc-project", build-system: "setuptools", outdir: "doc_proje2/doc-project"}
 
-          # All pybasic template tests
-          - {name: "pybasic", template: "pybasic", build-system: "setuptools", outdir: "pybasic_s0/pybasic"}
+          # # All pybasic template tests
+          # - {name: "pybasic", template: "pybasic", build-system: "setuptools", outdir: "pybasic_s0/pybasic"}
 
-          # All pybasic template tests
-          - {name: "pyansys", template: "pyansys", build-system: "setuptools", outdir: "pyansys_s0/pyproduct-library"}
+          # # All pybasic template tests
+          # - {name: "pyansys", template: "pyansys", build-system: "setuptools", outdir: "pyansys_s0/pyproduct-library"}
 
-          # # All pyansys_advanced template tests
-          - {name: "pyansys-advanced-flit", template: "pyansys-advanced", build-system: "flit", outdir: "pyansys_a0/pyproduct-library"}
-          - {name: "pyansys-advanced-poetry", template: "pyansys-advanced", build-system: "poetry", outdir: "pyansys_a1/pyproduct-library"}
-          - {name: "pyansys-advanced-setuptools", template: "pyansys-advanced", build-system: "setuptools", outdir: "pyansys_a2/pyproduct-library"}
+          # # # All pyansys_advanced template tests
+          # - {name: "pyansys-advanced-flit", template: "pyansys-advanced", build-system: "flit", outdir: "pyansys_a0/pyproduct-library"}
+          # - {name: "pyansys-advanced-poetry", template: "pyansys-advanced", build-system: "poetry", outdir: "pyansys_a1/pyproduct-library"}
+          # - {name: "pyansys-advanced-setuptools", template: "pyansys-advanced", build-system: "setuptools", outdir: "pyansys_a2/pyproduct-library"}
 
-          # # All pyace template tests
-          - {name: "pyace-pkg", template: "pyace", build-system: "setuptools", outdir: "pyace_set0/project"}
-          - {name: "pyace-flask", template: "pyace-flask", build-system: "setuptools", outdir: "pyace_fla2/project"}
-          - {name: "pyace-fast", template: "pyace-fast", build-system: "setuptools", outdir: "pyace_fas2/project"}
-          - {name: "pyace-grpc", template: "pyace-grpc", build-system: "setuptools", outdir: "pyace_grp2/project"}
+          # # All ansys API templates
+          - {name: "ansys-api", template: "ansys-api", build-system: "setuptools", outdir: "ansys_api_s0/pyproduct-library"}
 
-          # All solution template tests
-          - {name: "solution", template: "solution", build-system: "poetry", outdir: "solution_1/solution"}
+          # # # All pyace template tests
+          # - {name: "pyace-pkg", template: "pyace", build-system: "setuptools", outdir: "pyace_set0/project"}
+          # - {name: "pyace-flask", template: "pyace-flask", build-system: "setuptools", outdir: "pyace_fla2/project"}
+          # - {name: "pyace-fast", template: "pyace-fast", build-system: "setuptools", outdir: "pyace_fas2/project"}
+          # - {name: "pyace-grpc", template: "pyace-grpc", build-system: "setuptools", outdir: "pyace_grp2/project"}
+
+          # # All solution template tests
+          # - {name: "solution", template: "solution", build-system: "poetry", outdir: "solution_1/solution"}
 
       fail-fast: false
 
@@ -75,7 +81,7 @@ jobs:
           tox -e ${{ matrix.toxenv }}-${{ matrix.toxextra }}-template
 
       - name: Move baked project to repo again
-        if: matrix.python-version == '3.8' && github.event_name == 'push'
+        if: matrix.python-version == env.MAIN_PYTHON_VERSION && github.event_name == 'push'
         run: |
           mv "output/test_template_python_${{ matrix.cfg.outdir }}" baked_template
           # GitHub Apps are not allowed to deal with .github workflows
@@ -83,7 +89,7 @@ jobs:
           ls -a baked_template
 
       - name: Create demo branch
-        if: matrix.python-version == '3.8' && github.event_name == 'push'
+        if: matrix.python-version == env.MAIN_PYTHON_VERSION && github.event_name == 'push'
         uses: peterjgrainger/action-create-branch@v2.4.0
         env:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
@@ -91,7 +97,7 @@ jobs:
           branch: "demo/${{ matrix.cfg.name }}"
 
       - name: Publish demo branch
-        if: matrix.python-version == '3.8' && github.event_name == 'push'
+        if: matrix.python-version == env.MAIN_PYTHON_VERSION && github.event_name == 'push'
         uses: s0/git-publish-subdir-action@develop
         env:
           REPO: self

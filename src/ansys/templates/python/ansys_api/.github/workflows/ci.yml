@@ -1,0 +1,76 @@
+name: GitHub CI
+
+# run only on main branch.  This avoids duplicated actions on PRs
+on:
+  pull_request:
+  push:
+    tags:
+      - "*"
+    branches:
+      - main
+
+jobs:
+  build:
+    name: Build package
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v2
+      - name: Setup Python
+        uses: actions/setup-python@v2
+        with:
+          python-version: "3.7"
+      - name: Install build requirements
+        run: |
+          pip install -U pip
+          pip install build
+      - name: Build
+        run: python -m build
+      - name: Install
+        run: pip install dist/*.whl
+      - name: Test import
+        run: |
+          mkdir tmp
+          cd tmp
+          python -c "import {{ cookiecutter._dot_package_name }}; print('Sucessfully imported {{ cookiecutter._dot_package_name }}')"
+          python -c "from {{ cookiecutter._dot_package_name }} import __version__; print(__version__)"
+      - name: Upload packages
+        uses: actions/upload-artifact@v2
+        with:
+          name: {{ cookiecutter.project_slug }}-packages
+          path: dist/
+          retention-days: 7
+
+  Release:
+    if: github.event_name == 'push' && contains(github.ref, 'refs/tags')
+    needs: [build]
+    runs-on: ubuntu-latest
+    steps:
+      - name: Set up Python
+        uses: actions/setup-python@v2
+        with:
+          python-version: 3.10
+
+      - uses: actions/download-artifact@v2
+
+      - name: Display structure of downloaded files
+        run: ls -R
+
+      # uncomment the following section to permit upload to public PyPI
+
+      # - name: Upload to Public PyPi
+      #   run: |
+      #     pip install twine
+      #     twine upload --skip-existing ./**/*.whl
+      #     twine upload --skip-existing ./**/*.tar.gz
+      #   env:
+      #     TWINE_USERNAME: __token__
+      #     TWINE_PASSWORD: {% raw %}${{ secrets.PYPI_TOKEN }} {% endraw %}
+
+      - name: Release
+        uses: softprops/action-gh-release@v1
+        with:
+          generate_release_notes: true
+          files: |
+            ./**/*.whl
+            ./**/*.tar.gz
+            ./**/*.pdf
