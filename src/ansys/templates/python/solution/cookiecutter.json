@@ -1,9 +1,9 @@
 {
   "__template_name": "solution",
   "project_name": "my-solution",
-  "__project_name_slug": "{{ cookiecutter.project_name.lower().replace('_', '-') }}",
+  "__project_name_slug": "{{ cookiecutter.project_name.lower().replace('_', '-').replace(' ', '-') }}",
   "solution_name": "my_solution",
-  "__solution_name_slug": "{{ cookiecutter.solution_name.lower().replace('-', '_') }}",
+  "__solution_name_slug": "{{ cookiecutter.solution_name.lower().replace('-', '_').replace(' ', '_') }}",
   "solution_display_name": "My Solution",
   "with_dash_ui": ["yes", "no"],
   "__solution_definition_name": "{{ cookiecutter.__solution_name_slug.title() }}Solution",

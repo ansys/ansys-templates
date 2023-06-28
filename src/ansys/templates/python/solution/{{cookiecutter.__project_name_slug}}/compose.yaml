@@ -28,7 +28,7 @@ services:
       - "host.docker.internal:host-gateway"
 
   tracelens:
-    image: docker.io/rogeralsing/tracelens:amd64
+    image: azwepsifujiaksacr.azurecr.io/ansys/md1-obs/tracelens:latest
     ports:
       - 5000:5001
       - 4317:4317
