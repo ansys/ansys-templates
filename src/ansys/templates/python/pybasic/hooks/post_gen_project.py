@@ -3,9 +3,11 @@ from ansys.templates.utils import keep_files
 
 DESIRED_STRUCTURE = [
     ".coveragerc",
+    "AUTHORS",
     "CHANGELOG.md",
     "CODE_OF_CONDUCT.md",
     "CONTRIBUTING.md",
+    "CONTRIBUTORS.md",
     "doc/Makefile",
     "doc/make.bat",
     "doc/.vale.ini",
