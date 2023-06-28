@@ -3,7 +3,10 @@
 """General purpose functions."""
 
 from collections import defaultdict
+import json
 import os
+from pathlib import Path
+from typing import Union
 
 
 def check_if_exists_in_file(string: str, file: str) -> bool:
@@ -32,3 +35,15 @@ def get_duplicates_from_list(sequence: list) -> list:
         tally[item].append(i)
     duplicates = dict([(key, locs) for key, locs in tally.items() if len(locs) > 1])
     return list(duplicates.keys())
+
+
+def read_system_hierarchy(system_hierarchy_file: Union[str, Path]) -> list:
+
+    with open(system_hierarchy_file) as f:
+        system_hierarchy = json.load(f)
+
+    return [
+        node_info
+        for node_info in system_hierarchy["system_hierarchy"]
+        if node_info["key"] not in ["problem_setup_step", "monitoring_step"]
+    ]

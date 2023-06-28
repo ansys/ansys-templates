@@ -1,11 +1,8 @@
-/*©2023, ANSYS Inc. Unauthorized use, distribution or duplication is prohibited.*/
+/*©2022, ANSYS Inc. Unauthorized use, distribution or duplication is prohibited.*/
+
+
 .back-link {
     text-align: right;
-}
-.button {
-    color:#fff;
-    background-color:#000000;
-    border-color:#000000;
 }
 
 .accordion-button {
@@ -31,15 +28,20 @@
 .tab-style {
     color: #000000;
     background-color: #FFFFFF;
+    text-color: #000000;
 }
 
 .tab-label-style {
     color: #000000;
+    text-color: "#000000";
 }
+
 
 .tab-active-style {
     color: #FFFFFF;
+    text-color: "#000000";
     background-color: #000000;
     border-style: solid;
     border-color: #FFFFFF;
 }
+
