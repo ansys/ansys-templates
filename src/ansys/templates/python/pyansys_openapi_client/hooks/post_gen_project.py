@@ -8,9 +8,11 @@ ALLOWED_BUILD_SYSTEMS = ["flit"]
 """A list of all allowed build systems by the template."""
 
 DESIRED_STRUCTURE = [
+    "AUTHORS",
     "CHANGELOG.md",
     "CODE_OF_CONDUCT.md",
     "CONTRIBUTING.md",
+    "CONTRIBUTORS.md",
     ".flake8",
     ".github/workflows/build_and_test_library.yml",
     ".github/workflows/generate_library.yml",

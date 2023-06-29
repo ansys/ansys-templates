@@ -11,9 +11,11 @@ ALLOWED_BUILD_SYSTEMS = ["flit", "poetry", "setuptools"]
 """A list of all allowed build systems by the template."""
 
 DESIRED_STRUCTURE = [
+    "AUTHORS",
     "CHANGELOG.md",
     "CODE_OF_CONDUCT.md",
     "CONTRIBUTING.md",
+    "CONTRIBUTORS.md",
     "doc/Makefile",
     "doc/make.bat",
     "doc/.vale.ini",
