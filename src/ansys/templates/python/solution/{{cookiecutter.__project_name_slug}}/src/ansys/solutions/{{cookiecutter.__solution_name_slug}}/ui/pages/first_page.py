@@ -8,7 +8,7 @@ from dash_extensions.enrich import Input, Output, State, callback, dcc, html
 
 from ansys.solutions.{{ cookiecutter.__solution_name_slug }}.solution.definition import {{cookiecutter.__solution_definition_name}}
 from ansys.solutions.{{ cookiecutter.__solution_name_slug }}.solution.first_step import FirstStep
-from ansys.solutions.dash_components.table import InputRow
+from ansys.solutions.dash_components.table import InputRow,OutputRow
 
 
 def layout(step: FirstStep):
@@ -28,6 +28,7 @@ def layout(step: FirstStep):
                 value_width=4,
                 unit_width=1,
                 description_width=4,
+                font_size="16px"
             ).get(),
             InputRow(
                 "number",
@@ -38,6 +39,7 @@ def layout(step: FirstStep):
                 value_width=4,
                 unit_width=1,
                 description_width=4,
+                font_size="16px"
             ).get(),
             InputRow(
                 "button",
@@ -48,8 +50,30 @@ def layout(step: FirstStep):
                 unit_width=1,
                 description_width=4,
                 class_name="button",
+                font_size="16px"
             ).get(),
-            html.P(id="result", children=f"Result:{step.result}"),
+            html.Br(),
+            OutputRow(
+                "number",
+                "result",
+                "Result",
+                row_default_value=step.result,
+                label_width=2,
+                value_width=4,
+                unit_width=1,
+                description_width=4,
+                class_name="button",
+                font_size="16px"
+            ).get(),
+            dcc.Loading(
+                type="circle",
+                fullscreen=True,
+                color="#ffb71b",
+                style={
+                    "background-color": "rgba(55, 58, 54, 0.1)",
+                },
+                children=html.Div(id="wait_completion"),
+            ),
         ]
     )
 
@@ -59,7 +83,8 @@ def layout(step: FirstStep):
 # Notice that the project is referenced by a call to get_project and
 # the url is a State argument to the callback
 @callback(
-    Output("result", "children"),
+    Output("result", "value"),
+    Output("wait_completion", "children"),
     Input("calculate", "n_clicks"),
     State("first-arg", "value"),
     State("second-arg", "value"),
@@ -73,4 +98,4 @@ def calculate(n_clicks, first_arg, second_arg, pathname):
     step.first_arg = first_arg
     step.second_arg = second_arg
     step.calculate()
-    return f"Result:{step.result}"
+    return step.result, True
