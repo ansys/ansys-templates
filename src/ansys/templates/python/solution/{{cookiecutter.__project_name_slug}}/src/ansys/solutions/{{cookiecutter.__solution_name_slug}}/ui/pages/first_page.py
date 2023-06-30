@@ -8,6 +8,7 @@ from dash_extensions.enrich import Input, Output, State, callback, dcc, html
 
 from ansys.solutions.{{ cookiecutter.__solution_name_slug }}.solution.definition import {{cookiecutter.__solution_definition_name}}
 from ansys.solutions.{{ cookiecutter.__solution_name_slug }}.solution.first_step import FirstStep
+from ansys.solutions.dash_components.table import InputRow
 
 
 def layout(step: FirstStep):
@@ -18,9 +19,36 @@ def layout(step: FirstStep):
             dcc.Markdown("""###### Compute the sum of two numbers.""", className="display-3"),
             html.Hr(className="my-2"),
             html.Br(),
-            html.Div(["First Argument: ", dcc.Input(id="first-arg", value=step.first_arg, type="number")]),
-            html.Div(["Second Argument: ", dcc.Input(id="second-arg", value=step.second_arg, type="number")]),
-            html.Button("Calculate", id="calculate", n_clicks=0),
+            InputRow(
+                "number",
+                "first-arg",
+                "First Argument",
+                row_description='Enter a value.',
+                label_width=2,
+                value_width=4,
+                unit_width=1,
+                description_width=4,
+            ).get(),
+            InputRow(
+                "number",
+                "second-arg",
+                "Second Argument",
+                row_description='Enter a value.',
+                label_width=2,
+                value_width=4,
+                unit_width=1,
+                description_width=4,
+            ).get(),
+            InputRow(
+                "button",
+                "calculate",
+                "Calculate",
+                label_width=2,
+                value_width=4,
+                unit_width=1,
+                description_width=4,
+                class_name="button",
+            ).get(),
             html.P(id="result", children=f"Result:{step.result}"),
         ]
     )
