@@ -203,14 +203,14 @@ reference = "solutions-private-pypi"
 
 [[package]]
 name = "ansys-solutions-dash-lib"
-version = "0.4.1"
+version = "0.4.2"
 description = "A collection of functions and classes to design solution's frontend using Dash components."
 category = "main"
 optional = false
 python-versions = ">=3.8,<3.11"
 files = [
-    {file = "ansys_solutions_dash_lib-0.4.1-py3-none-any.whl", hash = "sha256:f9632dae1a8c687a3fef054ae88c2d8efec04e6d556a3c99be1d15eb2ab5e9fa"},
-    {file = "ansys_solutions_dash_lib-0.4.1.tar.gz", hash = "sha256:e83a8c35f4e335bcae3a1d3a8f4d1cfd8b0c7254772fd89e894f6348a8f0fc63"},
+    {file = "ansys_solutions_dash_lib-0.4.2-py3-none-any.whl", hash = "sha256:21bd1225591d290ff463602ff83c033bfe35fd7b4418db496654eb1c8e25084c"},
+    {file = "ansys_solutions_dash_lib-0.4.2.tar.gz", hash = "sha256:285ccf20b01e1de03ea288f2fced6bb16d6d1d8dc4a09d647626d57c551681df"},
 ]
 
 [package.dependencies]
@@ -224,18 +224,18 @@ reference = "solutions-private-pypi"
 
 [[package]]
 name = "ansys-solutions-optislang-frontend-components"
-version = "0.1.dev4"
+version = "0.1.dev5"
 description = ""
 category = "main"
 optional = false
 python-versions = ">=3.8,<3.11"
 files = [
-    {file = "ansys_solutions_optislang_frontend_components-0.1.dev4-py3-none-any.whl", hash = "sha256:db52b184b9c32ac66db7edfdfc0dc0eb780a5eef9c0545f140a44ec898914529"},
-    {file = "ansys_solutions_optislang_frontend_components-0.1.dev4.tar.gz", hash = "sha256:d437375c8456ffbd721a3756e944897e7d94bec0531919dd0bf751c57472d940"},
+    {file = "ansys_solutions_optislang_frontend_components-0.1.dev5-py3-none-any.whl", hash = "sha256:efbae610a00493e9c3ce7a9ce5398733e6811fc74b694916156ff9b94a799e00"},
+    {file = "ansys_solutions_optislang_frontend_components-0.1.dev5.tar.gz", hash = "sha256:41a1651ec3bb4ae79fe70abff60feee743c4a85c7bea42b389a7dcc754ee84c8"},
 ]
 
 [package.dependencies]
-ansys-solutions-dash-lib = "0.4.1"
+ansys-solutions-dash-lib = "0.4.2"
 
 [package.source]
 type = "legacy"
@@ -3832,4 +3832,4 @@ testing = ["big-O", "flake8 (<5)", "jaraco.functools", "jaraco.itertools", "more
 [metadata]
 lock-version = "2.0"
 python-versions = ">=3.8, <3.11"
-content-hash = "422ef88438a29555e9b06a4098cf3d257b7cdeba3b8ddecb880e56d842c86936"
+content-hash = "a1082d415799ac87ea1423f2e41415541548b6bde15bbd56ed6f49b7570c86b9"

@@ -23,8 +23,6 @@ def layout(problem_setup_step: ProblemSetupStep) -> html.Div:
 
     # Upload placeholders and assets
     if problem_setup_step.placeholders == {}:
-        problem_setup_step.upload_bulk_files_to_project_directory()
-        problem_setup_step.get_app_metadata()
         problem_setup_step.get_default_placeholder_values()
         problem_setup_step.ui_placeholders = problem_setup_step.placeholders
 
@@ -70,27 +68,27 @@ def layout(problem_setup_step: ProblemSetupStep) -> html.Div:
                         [
                             dbc.AccordionItem(
                                 [
-                                    InputRow(
-                                        "button",
-                                        "check_ansys_ecosystem",
-                                        "Check Ansys ecosystem",
-                                        disabled=False,
-                                        label_width=2,
-                                        value_width=4,
-                                        unit_width=1,
-                                        description_width=4,
-                                        class_name="button",
-                                    ).get(),
-                                    dcc.Loading(
-                                        type="circle",
-                                        fullscreen=True,
-                                        color="#ffb71b",
-                                        style={
-                                            "background-color": "rgba(55, 58, 54, 0.1)",
-                                        },
-                                        children=html.Div(id="wait_ecosystem_ckeck"),
-                                    ),
-                                    html.Br(),
+                                    # InputRow(
+                                    #     "button",
+                                    #     "check_ansys_ecosystem",
+                                    #     "Check Ansys ecosystem",
+                                    #     disabled=False,
+                                    #     label_width=2,
+                                    #     value_width=4,
+                                    #     unit_width=1,
+                                    #     description_width=4,
+                                    #     class_name="button",
+                                    # ).get(),
+                                    # dcc.Loading(
+                                    #     type="circle",
+                                    #     fullscreen=True,
+                                    #     color="#ffb71b",
+                                    #     style={
+                                    #         "background-color": "rgba(55, 58, 54, 0.1)",
+                                    #     },
+                                    #     children=html.Div(id="wait_ecosystem_ckeck"),
+                                    # ),
+                                    # html.Br(),
                                     InputRow(
                                         "button",
                                         "start_analysis",
@@ -144,25 +142,25 @@ for alert in ["optislang_version", "optislang_solve"]:
         return is_open
 
 
-@callback(
-    Output("alert_messages", "children"),
-    Output("wait_ecosystem_ckeck", "children"),
-    Output("start_analysis", "disabled"),
-    Input("check_ansys_ecosystem", "n_clicks"),
-    State("url", "pathname"),
-    prevent_initial_call=True,
-)
-def check_ansys_ecosystem(n_clicks, pathname):
-    """Start OptiSLang and run the simulation. Wait for the process to complete."""
+# @callback(
+#     Output("alert_messages", "children"),
+#     Output("wait_ecosystem_ckeck", "children"),
+#     Output("start_analysis", "disabled"),
+#     Input("check_ansys_ecosystem", "n_clicks"),
+#     State("url", "pathname"),
+#     prevent_initial_call=True,
+# )
+# def check_ansys_ecosystem(n_clicks, pathname):
+#     """Start optiSLang and run the simulation. Wait for the process to complete."""
 
-    project = DashClient[{{ cookiecutter.__solution_definition_name }}].get_project(pathname)
-    problem_setup_step = project.steps.problem_setup_step
+#     project = DashClient[{{ cookiecutter.__solution_definition_name }}].get_project(pathname)
+#     problem_setup_step = project.steps.problem_setup_step
 
-    if n_clicks:
-        problem_setup_step.check_ansys_ecosystem()
-        return update_alerts(problem_setup_step), True, False if problem_setup_step.ansys_ecosystem_ready else True
-    else:
-        raise PreventUpdate
+#     if n_clicks:
+#         problem_setup_step.check_ansys_ecosystem()
+#         return update_alerts(problem_setup_step), True, False if problem_setup_step.ansys_ecosystem_ready else True
+#     else:
+#         raise PreventUpdate
 
 
 @callback(
@@ -175,7 +173,7 @@ def check_ansys_ecosystem(n_clicks, pathname):
     prevent_initial_call=True,
 )
 def start_analysis(n_clicks, table_children, pathname):
-    """Start OptiSLang and run the simulation. Wait for the process to complete."""
+    """Start optiSLang and run the simulation. Wait for the process to complete."""
 
     project = DashClient[{{ cookiecutter.__solution_definition_name }}].get_project(pathname)
     problem_setup_step = project.steps.problem_setup_step
