@@ -205,6 +205,7 @@ class ProblemSetupStep(StepModel):
                 "working_properties_file",
                 "tcp_server_stopped_states",
                 "optislang_log_level",
+                "node_list",
             ],
             upload=[
                 "optislang_solve_status",
