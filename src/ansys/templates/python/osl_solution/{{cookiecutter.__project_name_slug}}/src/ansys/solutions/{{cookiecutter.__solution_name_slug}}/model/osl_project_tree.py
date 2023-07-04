@@ -129,19 +129,3 @@ def get_node_list(project_tree: dict) -> list:
         for node_info in project_tree["project_tree"]
         if node_info["key"] not in ["problem_setup_step"]
     ]
-
-
-# model_directory = Path(__file__).absolute().parent
-# assets_directory = model_directory / "assets"
-# project_file = assets_directory / "hook_optimization.opf"
-# project_state_file = assets_directory / "project_state.json"
-
-# project_tree = get_osl_project_tree_from_opf(project_file, project_state_file)
-
-# step_list = get_step_list(project_tree)
-# node_list = get_node_list(project_tree)
-
-# print(step_list)
-# print()
-# print(node_list)
-
