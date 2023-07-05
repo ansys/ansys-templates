@@ -45,10 +45,9 @@ ansys-dash-treeview = {version = "0.0.1.dev0", source = "solutions-private-pypi"
 ansys-optislang-core = "^0.3.0"
 ansys-saf-glow = {version = "0.3.dev4", source = "solutions-private-pypi"}
 ansys-saf-portal = {version = "0.2.0", source = "solutions-private-pypi"}
-ansys-solutions-dash-lib = {version = "^0.3.0", source = "solutions-private-pypi"}
+ansys-solutions-dash-lib = {version = "^0.4.1", source = "solutions-private-pypi"}
 ansys-solutions-products-ecosystem = {version = "^0.1.dev0", source = "solutions-private-pypi"}
-ansys-solutions-optislang-parser = {version = "^0.1.dev6", source = "solutions-private-pypi"}
-ansys-solutions-optislang-frontend-components = {version = "^0.1.dev3", source = "solutions-private-pypi"}
+ansys-solutions-optislang-frontend-components = {version = "^0.1.dev4", source = "solutions-private-pypi"}
 optislang-dash-lib = {version = "^0.2.1", source = "solutions-private-pypi"}
 dash = "^2.6"
 dash_bootstrap_components = "^1.2"

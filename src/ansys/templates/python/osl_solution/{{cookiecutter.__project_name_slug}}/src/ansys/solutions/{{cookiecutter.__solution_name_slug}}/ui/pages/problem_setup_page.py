@@ -7,10 +7,10 @@ import time
 from ansys.saf.glow.client.dashclient import DashClient
 from ansys.saf.glow.solution import MethodStatus
 from ansys.solutions.dash_components.table import InputRow
-from ansys.solutions.optislang.frontend_components.placeholder_table import PlaceholderTable
 from dash.exceptions import PreventUpdate
 import dash_bootstrap_components as dbc
 from dash_extensions.enrich import Input, Output, State, callback, dcc, html
+from ansys.solutions.optislang.frontend_components.load_sections import to_dash_sections
 
 from ansys.solutions.{{ cookiecutter.__solution_name_slug }}.solution.definition import {{ cookiecutter.__solution_definition_name }}
 from ansys.solutions.{{ cookiecutter.__solution_name_slug }}.solution.problem_setup_step import ProblemSetupStep
@@ -22,29 +22,13 @@ def layout(problem_setup_step: ProblemSetupStep) -> html.Div:
     """Layout of the problem setup step."""
 
     # Upload placeholders and assets
-    if problem_setup_step.placeholder_values == {}:
+    if problem_setup_step.placeholders == {}:
         problem_setup_step.upload_bulk_files_to_project_directory()
         problem_setup_step.get_app_metadata()
         problem_setup_step.get_default_placeholder_values()
-        problem_setup_step.ui_placeholders = problem_setup_step.placeholder_values
+        problem_setup_step.ui_placeholders = problem_setup_step.placeholders
 
-    # Placeholder card for displaying parameters defined in the <project_name>.json
-    placeholder_card = dbc.Accordion(
-        [
-            dbc.AccordionItem(
-                [
-                    html.Div(
-                        id="placeholder_table",
-                        children=PlaceholderTable(
-                            problem_setup_step.ui_placeholders, problem_setup_step.placeholder_definitions
-                        ).create(),
-                    ),
-                ],
-                title="Placeholders",
-                item_id="parameter_placeholders",
-            )
-        ]
-    )
+    project_properties_sections = to_dash_sections(problem_setup_step.placeholders, problem_setup_step.registered_files)
 
     return html.Div(
         [
@@ -79,11 +63,7 @@ def layout(problem_setup_step: ProblemSetupStep) -> html.Div:
             ),
             html.Br(),
             # Input form
-            dbc.Row(
-                [
-                    placeholder_card,
-                ],
-            ),
+            dbc.Row(project_properties_sections),
             dbc.Row(
                 [
                     dbc.Accordion(
@@ -190,7 +170,7 @@ def check_ansys_ecosystem(n_clicks, pathname):
     Output("wait_start_analysis", "children"),
     Output("start_analysis", "disabled"),
     Input("start_analysis", "n_clicks"),
-    [State("placeholder_table", "children")],
+    [State("table-placeholders", "children")],
     State("url", "pathname"),
     prevent_initial_call=True,
 )
@@ -202,7 +182,7 @@ def start_analysis(n_clicks, table_children, pathname):
 
     if n_clicks:
         # Update project properties file prior to the solve
-        problem_setup_step.ui_placeholders = update_placeholders(table_children, problem_setup_step.placeholder_values)
+        problem_setup_step.ui_placeholders = update_placeholders(table_children, problem_setup_step.placeholders)
         problem_setup_step.write_updated_properties_file()
         # Start analysis
         problem_setup_step.start_analysis()

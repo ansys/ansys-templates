@@ -6,14 +6,11 @@ import json
 from pathlib import Path
 import platform
 import time
+from typing import List
 
 from ansys.optislang.core import Optislang, logging
 from ansys.saf.glow.solution import FileReference, StepModel, StepSpec, long_running, transaction
-from ansys.solutions.optislang.parser.project_properties import (
-    ProjectProperties,
-    apply_placeholders_to_properties_file,
-    write_properties_file,
-)
+from ansys.solutions.optislang.frontend_components.project_properties import ProjectProperties, write_properties_file, apply_placeholders_to_properties_file
 from ansys.solutions.products_ecosystem.controller import AnsysProductsEcosystemController
 from ansys.solutions.products_ecosystem.utils import convert_to_long_version
 
@@ -29,8 +26,6 @@ class ProblemSetupStep(StepModel):
     # Frontend persistence
     ansys_ecosystem_ready: bool = False
     optislang_solve_status: str = "initial"  # initial, processing, finished, stopped, aborted, idle
-    placeholder_values: dict = {}
-    placeholder_definitions: dict = {}
     ui_placeholders: dict = {}
     app_metadata: dict = {}
     analysis_running: bool = False
@@ -50,6 +45,11 @@ class ProblemSetupStep(StepModel):
         }
     }
     system_hierarchy: dict = {}
+    placeholders: dict = {}
+    registered_files: List = []
+    settings: dict = {}
+    parameter_manager: dict = {}
+    criteria: dict = {}
     project_status_info: dict = {}
     actors_info: dict = {}
     actors_status_info: dict = {}
@@ -73,14 +73,18 @@ class ProblemSetupStep(StepModel):
 
     # Methods ---------------------------------------------------------------------------------------------------------
 
-    @transaction(self=StepSpec(download=["properties_file"], upload=["placeholder_values", "placeholder_definitions"]))
-    def get_default_placeholder_values(self) -> None:
+    @transaction(self=StepSpec(download=["properties_file"], upload=["placeholders", "registered_files", "settings", "parameter_manager", "criteria"]))
+    def get_default_placeholder_values(self):
         """Get placeholder values and definitions using the ProjectProperties class."""
+
         pp = ProjectProperties()
         pp.read_file(self.properties_file.path)
-        placeholders = pp.get_properties()["placeholders"]
-        self.placeholder_values = placeholders.get("placeholder_values")
-        self.placeholder_definitions = placeholders.get("placeholder_definitions")
+        self.placeholders = pp._placeholders
+        self.registered_files = pp._registered_files
+        self.settings = pp._settings
+        self.parameter_manager = pp._parameter_manager
+        self.criteria = pp._criteria
+
 
     @transaction(self=StepSpec(download=["properties_file", "ui_placeholders"], upload=["working_properties_file"]))
     def write_updated_properties_file(self) -> None:
