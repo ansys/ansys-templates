@@ -123,11 +123,11 @@ def pyace_grpc():
     create_project("pyace-grpc")
 
 @new.command()
-@click.option('-f',  '--from', '_from' , help='From existing workflow.',
-              type=click.Choice(['opf'], case_sensitive=False))
+@click.option('-f',  '--from', '_from' , help='From existing optiSLang application archive (OWA).',
+              type=click.Choice(['owa'], case_sensitive=False))
 def solution(_from):
     """[Ansys Internal Use Only] Create a solution based on SAF."""
-    if _from == 'opf':
+    if _from == 'owa':
         create_project("osl-solution")
     else:
         create_project("solution")

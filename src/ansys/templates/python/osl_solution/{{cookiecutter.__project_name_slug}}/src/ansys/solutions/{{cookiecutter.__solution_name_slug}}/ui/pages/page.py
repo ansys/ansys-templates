@@ -6,8 +6,10 @@ from ansys.saf.glow.client.dashclient import DashClient
 from ansys_dash_treeview import AnsysDashTreeview
 import dash_bootstrap_components as dbc
 from dash_extensions.enrich import Input, Output, State, callback, callback_context, dcc, html
+from dash.exceptions import PreventUpdate
 from dash_iconify import DashIconify
 import dash_loading_spinners as dls
+from pathlib import Path
 
 from ansys.solutions.{{ cookiecutter.__solution_name_slug }}.solution.definition import {{ cookiecutter.__solution_definition_name }}
 from ansys.solutions.{{ cookiecutter.__solution_name_slug }}.ui.pages import monitoring_page, problem_setup_page
@@ -78,67 +80,73 @@ def project_initialization(pathname, n_clicks):
     project = DashClient[{{ cookiecutter.__solution_definition_name }}].get_project(pathname)
 
     if not project.steps.problem_setup_step.project_initialized:
+        # Solution-specific code
+        project_tree_path = Path(__file__).absolute().parent.parent.parent / "model" / "assets" / "project_state.json"
+        if not project_tree_path.exists():
+            project.steps.problem_setup_step.generate_project_state()
+        # Project-specific code
         project.steps.problem_setup_step.upload_bulk_files_to_project_directory()
+        project.steps.problem_setup_step.read_project_tree()
         project.steps.problem_setup_step.get_app_metadata()
-        project.steps.problem_setup_step.get_project_tree()
         project.steps.problem_setup_step.check_ansys_ecosystem()
-
-    return [
-        dbc.Stack(
-            [
-                html.Div(
-                    [html.Img(src=r"/assets/logos/ansys-solutions-horizontal-logo.png", style={"width": "80%"})],
-                ),
-                html.Div(
-                    [
-                        dbc.Button(
-                            f"Project Name: {project.project_display_name}",
-                            id="project-name",
-                            disabled=True,
-                            style={
-                                "color": "rgba(0, 0, 0, 1)",
-                                "background-color": "rgba(255, 255, 255, 1)",
-                                "border-color": "rgba(0, 0, 0, 1)",
-                            },
-                        )
-                    ],
-                    className="ms-auto",
-                ),
-                html.Div(id="return_to_portal"),
-            ],
-            direction="horizontal",
-            gap=3,
-        ),
-        html.Br(),
-        dbc.Row(
-            [
-                dbc.Col(
-                    AnsysDashTreeview(
-                        id="navigation_tree",
-                        items=[
-                            {
-                                "key": "problem_setup_step",
-                                "text": "Problem Setup",
-                                "depth": 0,
-                                "uid": None,
-                                "type": None,
-                                "kind": None,
-                                "is_root": False,
-                            },
-                        ],
-                        children=[
-                            DashIconify(icon="bi:caret-right-square-fill"),
-                            DashIconify(icon="bi:caret-down-square-fill"),
-                        ],
-                        style={"showButtons": True, "focusColor": "#ffb71b", "itemHeight": "32"},  # Ansys gold
+        return [
+            dbc.Stack(
+                [
+                    html.Div(
+                        [html.Img(src=r"/assets/logos/ansys-solutions-horizontal-logo.png", style={"width": "80%"})],
                     ),
-                    width=2,
-                    style={"background-color": "rgba(242, 242, 242, 0.6)"},  # Ansys grey
-                ),
-                dbc.Col(html.Div(id="page_body", style={"padding-right": "1%"}), width=10),
-            ],
-        ),
-    ], n_clicks + 1, True
+                    html.Div(
+                        [
+                            dbc.Button(
+                                f"Project Name: {project.project_display_name}",
+                                id="project-name",
+                                disabled=True,
+                                style={
+                                    "color": "rgba(0, 0, 0, 1)",
+                                    "background-color": "rgba(255, 255, 255, 1)",
+                                    "border-color": "rgba(0, 0, 0, 1)",
+                                },
+                            )
+                        ],
+                        className="ms-auto",
+                    ),
+                    html.Div(id="return_to_portal"),
+                ],
+                direction="horizontal",
+                gap=3,
+            ),
+            html.Br(),
+            dbc.Row(
+                [
+                    dbc.Col(
+                        AnsysDashTreeview(
+                            id="navigation_tree",
+                            items=[
+                                {
+                                    "key": "problem_setup_step",
+                                    "text": "Problem Setup",
+                                    "depth": 0,
+                                    "uid": None,
+                                    "type": None,
+                                    "kind": None,
+                                    "is_root": False,
+                                },
+                            ],
+                            children=[
+                                DashIconify(icon="bi:caret-right-square-fill"),
+                                DashIconify(icon="bi:caret-down-square-fill"),
+                            ],
+                            style={"showButtons": True, "focusColor": "#ffb71b", "itemHeight": "32"},  # Ansys gold
+                        ),
+                        width=2,
+                        style={"background-color": "rgba(242, 242, 242, 0.6)"},  # Ansys grey
+                    ),
+                    dbc.Col(html.Div(id="page_body", style={"padding-right": "1%"}), width=10),
+                ],
+            ),
+        ], n_clicks + 1, True
+    else:
+        raise PreventUpdate
 
 
 @callback(
@@ -149,9 +157,6 @@ def project_initialization(pathname, n_clicks):
 def display_step_list(n_clicks, pathname):
     """Display current project name."""
     project = DashClient[{{ cookiecutter.__solution_definition_name }}].get_project(pathname)
-
-    if not project.steps.problem_setup_step.step_list:
-        project.steps.problem_setup_step.get_project_tree()
 
     return project.steps.problem_setup_step.step_list
 
