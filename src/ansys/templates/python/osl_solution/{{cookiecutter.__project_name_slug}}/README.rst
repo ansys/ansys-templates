@@ -100,12 +100,6 @@ Installation
 
     poetry run configure-portal-database
 
-7. Run this command to extract the project tree (system hierarchy) from the optiSLang project file:
-
-  .. code:: bash
-
-    python src/ansys/solutions/{{ cookiecutter.__solution_name_slug }}/model/scripts/extract_system_hierarchy.py -p src/ansys/solutions/{{ cookiecutter.__solution_name_slug }}/model/assets/{{ cookiecutter.__optiSLang_project_file_name }}
-
 From now on, all the commands must be executed within the virtual environment.
 
 

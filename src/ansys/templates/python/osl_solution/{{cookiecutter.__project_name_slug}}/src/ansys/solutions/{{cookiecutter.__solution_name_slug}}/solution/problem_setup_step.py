@@ -7,14 +7,16 @@ from pathlib import Path
 import platform
 import time
 from typing import List
+import subprocess
+import sys
 
 from ansys.optislang.core import Optislang, logging
-from ansys.saf.glow.solution import FileReference, StepModel, StepSpec, long_running, transaction
+from ansys.saf.glow.solution import FileReference, AssetFileReference, StepModel, StepSpec, long_running, transaction
 from ansys.solutions.optislang.frontend_components.project_properties import ProjectProperties, write_properties_file, apply_placeholders_to_properties_file
 from ansys.solutions.products_ecosystem.controller import AnsysProductsEcosystemController
 from ansys.solutions.products_ecosystem.utils import convert_to_long_version
 
-from ansys.solutions.{{ cookiecutter.__solution_name_slug }}.model.utils import read_system_hierarchy
+from ansys.solutions.{{ cookiecutter.__solution_name_slug }}.model.osl_project_tree import dump_project_state, get_project_tree, get_node_list, get_step_list
 from ansys.solutions.{{ cookiecutter.__solution_name_slug }}.ui.utils.monitoring import _get_actor_hids, read_optislang_logs
 
 
@@ -44,7 +46,8 @@ class ProblemSetupStep(StepModel):
             "alias": "optiSLang",
         }
     }
-    system_hierarchy: dict = {}
+    step_list: list = []
+    node_list: list = []
     placeholders: dict = {}
     registered_files: List = []
     settings: dict = {}
@@ -57,14 +60,16 @@ class ProblemSetupStep(StepModel):
     tcp_server_stopped_states = ["idle", "finished", "stopped", "aborted"]
     optislang_logs: list = []
     optislang_log_level: str = "DEBUG"
+    project_initialized: bool = False
+    has_project_state: bool = False
 
     # File storage ----------------------------------------------------------------------------------------------------
 
     # Inputs
-    project_file: FileReference = FileReference("Problem_Setup/{{ cookiecutter.__optiSLang_project_file_name }}")
-    properties_file: FileReference = FileReference("Problem_Setup/{{ cookiecutter.__optiSLang_properties_file_name }}")
-    metadata_file: FileReference = FileReference("Problem_Setup/metadata_file.json")
-    system_hierarchy_file: FileReference = FileReference("Problem_Setup/system_hierarchy.json")
+    project_file: FileReference = FileReference("Problem_Setup/{{ cookiecutter.__optiSLang_application_archive_stem }}.opf")
+    properties_file: FileReference = FileReference("Problem_Setup/{{ cookiecutter.__optiSLang_application_archive_stem }}.json")
+    metadata_file: FileReference = FileReference("Problem_Setup/metadata.json")
+    project_state_file: FileReference = FileReference("Problem_Setup/project_state.json")
 
     # Outputs
     working_properties_file: FileReference = FileReference("Problem_Setup/working_properties_file.json")
@@ -73,54 +78,59 @@ class ProblemSetupStep(StepModel):
 
     # Methods ---------------------------------------------------------------------------------------------------------
 
-    @transaction(self=StepSpec(download=["properties_file"], upload=["placeholders", "registered_files", "settings", "parameter_manager", "criteria"]))
-    def get_default_placeholder_values(self):
-        """Get placeholder values and definitions using the ProjectProperties class."""
+    @transaction(
+        self=StepSpec(
+            upload=["has_project_state"]
+        )
+    )
+    def generate_project_state(self) -> None:
+        """Generate a project state from an optiSLang opf file."""
 
-        pp = ProjectProperties()
-        pp.read_file(self.properties_file.path)
-        self.placeholders = pp._placeholders
-        self.registered_files = pp._registered_files
-        self.settings = pp._settings
-        self.parameter_manager = pp._parameter_manager
-        self.criteria = pp._criteria
+        project_file = Path(__file__).absolute().parent.parent / "model" / "assets" / "{{ cookiecutter.__optiSLang_application_archive_stem }}.opf"
 
+        dump_project_state(project_file, Path(project_file).parent / "project_state.json")
 
-    @transaction(self=StepSpec(download=["properties_file", "ui_placeholders"], upload=["working_properties_file"]))
-    def write_updated_properties_file(self) -> None:
-        properties = apply_placeholders_to_properties_file(self.ui_placeholders, self.properties_file.path)
-        write_properties_file(properties, Path(self.working_properties_file.path))
+        self.has_project_state = True
 
     @transaction(
         self=StepSpec(
-            upload=["project_file", "properties_file", "metadata_file", "system_hierarchy_file"]
+            download=["project_state_file"],
+            upload=["step_list", "node_list"]
+        )
+    )
+    def read_project_tree(self) -> None:
+        """Read project tree from optiSLang project state file."""
+
+        project_tree = get_project_tree(self.project_state_file.path)
+        self.step_list = get_step_list(project_tree)
+        self.node_list = get_node_list(project_tree)
+
+    @transaction(
+        self=StepSpec(
+            upload=[
+                "project_file",
+                "properties_file",
+                "metadata_file",
+                "project_state_file",
+            ]
         )
     )
     def upload_bulk_files_to_project_directory(self) -> None:
         """Upload bulk files to project directory."""
 
-        original_project_file = Path(__file__).parent.absolute().parent / "model" / "assets" / "{{ cookiecutter.__optiSLang_project_file_name }}"
+        original_project_file = Path(__file__).parent.absolute().parent / "model" / "assets" / "{{ cookiecutter.__optiSLang_application_archive_stem }}.opf"
         self.project_file.write_bytes(original_project_file.read_bytes())
 
         original_properties_file = (
-            Path(__file__).parent.absolute().parent / "model" / "assets" / "{{ cookiecutter.__optiSLang_properties_file_name }}"
+            Path(__file__).parent.absolute().parent / "model" / "assets" / "{{ cookiecutter.__optiSLang_application_archive_stem }}.json"
         )
         self.properties_file.write_bytes(original_properties_file.read_bytes())
 
         original_metadata_file = Path(__file__).parent.absolute().parent / "model" / "assets" / "metadata.json"
         self.metadata_file.write_bytes(original_metadata_file.read_bytes())
 
-        original_system_hierarchy_file = (
-            Path(__file__).parent.absolute().parent / "model" / "assets" / "system_hierarchy.json"
-        )
-        self.system_hierarchy_file.write_bytes(original_system_hierarchy_file.read_bytes())
-
-    @transaction(self=StepSpec(download=["metadata_file"], upload=["app_metadata"]))
-    def get_app_metadata(self) -> None:
-        """Read OWA metadata file."""
-
-        with open(self.metadata_file.path) as f:
-            self.app_metadata = json.load(f)
+        original_project_state_file = Path(__file__).parent.absolute().parent / "model" / "assets" / "project_state.json"
+        self.project_state_file.write_bytes(original_project_state_file.read_bytes())
 
     @transaction(
         self=StepSpec(
@@ -177,14 +187,43 @@ class ProblemSetupStep(StepModel):
             self.ansys_ecosystem[product_name]["alert_message"] = alert_message
             self.ansys_ecosystem[product_name]["alert_color"] = alert_color
 
+    @transaction(self=StepSpec(download=["properties_file"], upload=["placeholders", "registered_files", "settings", "parameter_manager", "criteria"]))
+    def get_default_placeholder_values(self):
+        """Get placeholder values and definitions using the ProjectProperties class."""
+
+        pp = ProjectProperties()
+        pp.read_file(self.properties_file.path)
+        self.placeholders = pp._placeholders
+        self.registered_files = pp._registered_files
+        self.settings = pp._settings
+        self.parameter_manager = pp._parameter_manager
+        self.criteria = pp._criteria
+
+    @transaction(self=StepSpec(download=["properties_file", "ui_placeholders"], upload=["working_properties_file"]))
+    def write_updated_properties_file(self) -> None:
+        properties = apply_placeholders_to_properties_file(self.ui_placeholders, self.properties_file.path)
+        write_properties_file(properties, Path(self.working_properties_file.path))
+
+    @transaction(
+        self=StepSpec(
+            download=["metadata_file"],
+            upload=["app_metadata"]
+        )
+    )
+    def get_app_metadata(self) -> None:
+        """Read OWA metadata file."""
+
+        with open(self.metadata_file.path) as f:
+            self.app_metadata = json.load(f)
+
     @transaction(
         self=StepSpec(
             download=[
                 "project_file",
                 "working_properties_file",
-                "system_hierarchy_file",
                 "tcp_server_stopped_states",
                 "optislang_log_level",
+                "node_list",
             ],
             upload=[
                 "optislang_solve_status",
@@ -202,8 +241,6 @@ class ProblemSetupStep(StepModel):
     @long_running
     def start_analysis(self) -> None:
         """Start optiSLang and run the project."""
-
-        self.system_hierarchy = read_system_hierarchy(self.system_hierarchy_file.path)
 
         osl_logger = logging.OslLogger(
             loglevel=self.optislang_log_level,
@@ -243,7 +280,7 @@ class ProblemSetupStep(StepModel):
             # Read pyoptislang logs
             self.optislang_logs = read_optislang_logs(self.optislang_log_file.path)
             # Get actor status info
-            for node_info in self.system_hierarchy:
+            for node_info in self.node_list:
                 self.actors_info[node_info["uid"]] = osl.get_osl_server().get_actor_info(node_info["uid"])
                 node_hids = _get_actor_hids(osl.get_osl_server().get_actor_states(node_info["uid"]))
                 if len(node_hids):
