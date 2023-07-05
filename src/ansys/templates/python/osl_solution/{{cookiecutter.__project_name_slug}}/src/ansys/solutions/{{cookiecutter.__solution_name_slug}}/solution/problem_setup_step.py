@@ -59,7 +59,7 @@ class ProblemSetupStep(StepModel):
     results_files: dict = {}
     tcp_server_stopped_states = ["idle", "finished", "stopped", "aborted"]
     optislang_logs: list = []
-    optislang_log_level: str = "DEBUG"
+    optislang_log_level: str = "INFO"
     project_initialized: bool = False
     has_project_state: bool = False
 
