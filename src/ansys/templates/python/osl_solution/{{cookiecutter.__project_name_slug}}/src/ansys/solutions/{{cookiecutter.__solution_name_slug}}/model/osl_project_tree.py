@@ -29,7 +29,7 @@ def dump_project_state(project_file: Path, project_state_file: Path) -> None:
         reset=True,
         shutdown_on_finished=True,
         dump_project_state=project_state_file,
-        ini_timeout=50, 
+        ini_timeout=50,
     )
 
     osl.dispose()
@@ -136,13 +136,3 @@ def get_node_list(project_tree: dict) -> list:
         for node_info in project_tree["project_tree"]
         if node_info["key"] not in ["problem_setup_step"]
     ]
-
-
-# path_to_opf = Path(__file__).absolute().parent / "assets" / "hook_optimization.opf"
-# path_to_fiel = Path(__file__).absolute().parent / "assets" / "project_state.json"
-
-# dump_project_state(path_to_opf, path_to_fiel)
-# project_tree = get_project_tree(path_to_fiel)
-
-# print(project_tree)
-

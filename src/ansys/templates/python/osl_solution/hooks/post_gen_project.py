@@ -108,11 +108,9 @@ def copy_file_to_assets_folder(file_path: str, destination: str) -> None:
 def collect_files_with_extension(directory, extension):
     """
     Collects all files with the specified extension from a directory.
-    
     Args:
         directory (str): The directory path.
         extension (str): The desired file extension.
-    
     Returns:
         list: A list of file names with the specified extension.
     """
@@ -129,7 +127,7 @@ def main():
         unzip_archive("{{ cookiecutter.__optiSLang_application_archive }}", ASSETS_DIRCTORY / "{{ cookiecutter.__optiSLang_application_archive_stem }}")
         for file in ["metadata.json", "doc.md"]:
             copy_file_to_assets_folder(
-                str(ASSETS_DIRCTORY / "{{ cookiecutter.__optiSLang_application_archive_stem }}" / file), 
+                str(ASSETS_DIRCTORY / "{{ cookiecutter.__optiSLang_application_archive_stem }}" / file),
                 str(ASSETS_DIRCTORY / file)
             )
         for extension in [".json", ".opf"]:
@@ -141,7 +139,7 @@ def main():
             else:
                 candidate = "{{ cookiecutter.__optiSLang_application_archive_stem }}" + extension
                 copy_file_to_assets_folder(
-                    str(ASSETS_DIRCTORY / "{{ cookiecutter.__optiSLang_application_archive_stem }}" / "custom_data" / candidates[0]), 
+                    str(ASSETS_DIRCTORY / "{{ cookiecutter.__optiSLang_application_archive_stem }}" / "custom_data" / candidates[0]),
                     str(ASSETS_DIRCTORY / candidate)
                 )
         shutil.rmtree(str(ASSETS_DIRCTORY / "{{ cookiecutter.__optiSLang_application_archive_stem }}"))
