@@ -1,69 +1,109 @@
 # ©2023, ANSYS Inc. Unauthorized use, distribution or duplication is prohibited.
-# CAPTURED v0.4.0 on 6/6/23 from:
+# CAPTURED v0.5.1 on 7/4/23 from:
 # https://github.com/Solution-Applications/common-files/blob/v0.4.0/setup-environment/setup_environment.py
 
 """
-A Python script to automate the setup of the ecosystem of a Python project.
+A Python script to automate the setup of the Python ecosystem of a project.
+
+Prerequisites
+-------------
+
+1. The following packages are required:
+    * packaging
+    * toml
+
+2. This script needs to be executed at project's root.
+
+3. Currently, this code only supports:
+    * ``windows`` as operating system
+    * ``poetry`` as dependency management system
+    * projects without dependency management systems
+    * ``poetry`` 1.2 to latest.
+
+4. The following project structure is expected for projects without a dependency management system:
+    project-name
+    ├──requirements/                    # Folder containing the optional group of dependencies.
+    │  ├── requirements_doc.txt         # Requirements file associated to the documentation group.
+    │  ├── requirements_tests.txt       # Requirements file associated to the tests group.
+    │  ├── requirements_style.txt       # Requirements file associated to the style group.
+    │  └── requirements_build.txt       # Requirements file associated to the build group.
+
+5. The following project structure is expected for projects with a dependency management system:
+    project-name
+    └── pyproject.toml                  # Configuration of the build system.
+
+The following packages are needed on top of the standard Python configuration: ``toml`` and ``packaging``.
 
 Usage
 -----
 
-This script needs to be executed at project's root.
-
 To create a virtual environment and install the dependency management system of the project (if any):
     ``python setup_environment.py``
 
-To override an existing install use the ``-f`` option to force the workspace clean-up:
-    ``python setup_environment.py -f``
-
-To select a particular version of the dependency management system use the ``-s`` option:
-    ``python setup_environment.py -s 1.3``
-
-To install the production dependencies as well as all the optional dependency groups of the project use the ``-d``
-option with the keyword ``all``:
-    ``python setup_environment.py -d all``
-
-To install only a particular dependency group use ``run`` for production, ``doc`` for documentation, ``tests`` for
-testing, ``style`` for code linting, and ``build`` for build. For example:
+To install a particular dependency group use the ``-d`` option:
     ``python setup_environment.py -d run`` installs production dependencies
     ``python setup_environment.py -d doc`` installs doc dependencies
     ``python setup_environment.py -d tests`` installs tests dependencies
     ``python setup_environment.py -d style`` installs style dependencies
     ``python setup_environment.py -d build`` installs build dependencies
 
-It is also possible to combine several groups:
+It is possible to combine several groups:
     ``python setup_environment.py -d run doc tests``
+
+To install all available dependencies (production and optional) use the ``all`` option:
+    ``python setup_environment.py -d all``
 
 Extra dependency groups refer to any group declared in the configuration file of the dependency management system which
 are not part of doc, tests, style and build. To install these groups use the ``x`` option:
     ``python setup_environment.py -x <name-of-the-group>``
-
-Currently, this code only supports:
-    * ``windows`` as operating system
-    * ``poetry`` and ``flit`` as dependency management systems
-    * projects without dependency management systems
 
 There are two locations where the script will search for optional dependencies:
     * First it checks the ``pyproject.toml`` configuration file and search for optional dependency groups
     * Alternatively, it looks for a ``requirements`` folder at project root containing requirements files with the
       name of the dependency group. For instance: requirements/requirements_doc.txt for the documentation group.
 
-The following project structure is expected for projects without a dependency management system:
-project-name
-├──requirements/                    # Folder containing the optional group of dependencies.
-│  ├── requirements_doc.txt         # Requirements file associated to the documentation group.
-│  ├── requirements_tests.txt       # Requirements file associated to the tests group.
-│  ├── requirements_style.txt       # Requirements file associated to the style group.
-│  └── requirements_build.txt       # Requirements file associated to the build group.
+To enforce the version of the dependency manager two options are possible:
 
-The following project structure is expected for projects with a dependency management system:
-project-name
-└── pyproject.toml                  # Configuration of the build system.
+    1. ``setup_environment.py`` reads the ``pyproject.toml`` and looks for a ``build-system-version`` key within
+    the ``build-system-requirements`` section. The example below illustrates this. Note that,
+    ``build-system-requirements` and ``build-system-version`` are not part of the ``PEP518`` standard. These syntax is
+    purely internal.
+    ```
+    [build-system-requirements]
+    build-system-version = "1.4.2"
+    ```
 
-The following lines should be present in the ``pyproject.toml`` file for managing the version of the dependency management system:
-Example for using poetry 1.4.0:
-[build-system-requirements]
-build-system-version = "1.4.0"
+    2. If the ``pyproject.toml`` does not contain a ``build-system-version``, the ``setup_environment.py`` checks the
+    ``-s`` option which can be provided in the command line when executing the script. In the example below, version
+    1.4.2 is enforced:
+    ``python setup_environment.py -s 1.4.2``
+
+Note that ``-s`` takes precedence over ``build-system-version``. If none of the two options listed above are used, the
+script simply takes the latest version of the dependency manager.
+
+To reinstall all dependencies by deleting both venvs and local poetry cache:
+    ``python setup_environment.py -f``
+
+To reinstall all dependencies by deleting venvs, local poetry cache and lock file. This option must be
+used only if REALLY necessary as the installation time for the whole process will be quite long.
+    ``python setup_environment.py -F``
+
+What this script is doing?
+--------------------------
+
+The aim of this script is to automate the project installation. It creates a virtual environment, installs a
+dependency manager if a configuration file is detected at project's root, configures the dependency manager to
+enable package collection from private sources, installs the dependency groups following user desire.
+
+In case ``poetry`` is detected as the project's dependency manager, two virtual environment are created. The first one
+is named ``.venv`` and is located in a ``.poetry`` directory created at project's root. It is use to install
+``poetry``. The second one, also named ``.venv`` is created at project's root and is controlled by ``poetry`` to
+install the dependencies. This configuration is required by ``poetry``.
+
+Future development
+------------------
+
+Given its size and its scope, this script will be refactored and transformed into a package.
 """
 
 # ==================================================== [Imports] ==================================================== #
@@ -79,38 +119,51 @@ import sys
 import textwrap
 import time
 
-from packaging.markers import Marker
-import toml
+try:
+    from packaging.markers import Marker
+except:
+    sys.exit("Process stopped. The `packaging` library is missing. Install with: `pip install packaging`.")
+try:
+    import toml
+except:
+    sys.exit("Process stopped. The `toml` library is missing. Install with: `pip install toml`.")
 
 # =================================================== [Variables] =================================================== #
 
-supported_dependency_management_systems = {
-    "poetry": {
+DEPENDENCY_MANAGER_PATHS = {
+    "win32": {
+        "poetry_python_executable": Path(".poetry").absolute() / ".venv" / "Scripts" / "python.exe",
+        "build_sys_exec": Path(".poetry").absolute() / ".venv" / "Scripts" / "poetry.exe",
+        "dep_bin_venv_path": Path(".venv").absolute() / "Scripts" / "poetry.exe",
+        "python_executable": Path(".venv").absolute() / "Scripts" / "python.exe",
+        "shell": True,
+    },
+    "linux": {
+        "poetry_python_executable": Path(".poetry").absolute() / ".venv" / "bin" / "python",
+        "build_sys_exec": Path(".poetry").absolute() / ".venv" / "bin" / "poetry",
+        "dep_bin_venv_path": Path(".venv").absolute() / "bin" / "poetry",
+        "python_executable": Path(".venv").absolute() / "bin" / "python",
+        "shell": False,
+    },
+    "common": {
         "configuration_file": "pyproject.toml",
         "build_backend": "poetry.core.masonry.api",
         "required_venv_name": ".venv",
         "lock_file": "poetry.lock",
-        "cache_folder": ".poetry\.cache",
-        "build_system_venv": ".poetry\.venv",
-    },
-    "flit": {
-        "configuration_file": "pyproject.toml",
-        "build_backend": "flit_core.buildapi",
-        "required_venv_name": None,
-        "lock_file": None,
-        "cache_folder": ".flit/.cache",
-        "build_system_venv": ".flit/.venv",
+        "build_system_venv": Path(".poetry") / ".venv",
+        "cache_folder": Path(".poetry").absolute() / ".cache",
     },
 }
 
-standard_optional_dependency_groups = ["doc", "tests", "build", "style", "external"]
+configuration = toml.load(DEPENDENCY_MANAGER_PATHS["common"]["configuration_file"])
+STANDARD_OPTIONAL_DEPENDENCY_GROUPS = [group for group in configuration["tool"]["poetry"]["group"].keys()]
 
 # =================================================== [Functions] =================================================== #
 
 # Console prints ----------------------------------------------------------------------------------------------------
 
 
-def print_main_header(text, max_length=100):
+def print_main_header(text: str, max_length: int = 100) -> None:
     """Display main header."""
 
     for i in range(max_length):
@@ -123,8 +176,9 @@ def print_main_header(text, max_length=100):
     print()
 
 
-def print_section_header(text, max_length=100):
+def print_section_header(text: str, max_length: int = 100) -> None:
     """Display a section header in the console."""
+
     section_header = ""
     if len(text) < max_length:
         section_header = text + " "
@@ -136,8 +190,9 @@ def print_section_header(text, max_length=100):
     print()
 
 
-def print_input_value(input, value, separator=":", separator_position=60):
+def print_input_value(input: str, value: str, separator: str = ":", separator_position: int = 60) -> None:
     """Print input value in console."""
+
     if len(input) < separator_position:
         text = input
         for i in range(len(text), separator_position):
@@ -148,21 +203,21 @@ def print_input_value(input, value, separator=":", separator_position=60):
     print(text)
 
 
-def print_inputs_summary(args):
+def print_inputs_summary(args: object) -> None:
     """Display a summary of the inputs."""
 
     print(f"OS                                   : {platform.system()}")
     print(f"Python version                       : {get_python_version()}")
     print(f"Virtual environment name             : {args.venv_name}")
     print(f"run dependencies                     : {'yes' if 'run' in args.dependencies else 'no'}")
-    for dependency_group in standard_optional_dependency_groups:
+    for dependency_group in STANDARD_OPTIONAL_DEPENDENCY_GROUPS:
         print_input_value(
             f"{dependency_group} dependencies",
             "yes" if dependency_group in args.dependencies else "no",
             separator=":",
             separator_position=37,
         )
-    if args.build_system and args.extra_dependencies:
+    if args.extra_dependencies:
         for dependency_group in args.extra_dependencies:
             print_input_value(
                 f"{dependency_group} dependencies",
@@ -170,7 +225,7 @@ def print_inputs_summary(args):
                 separator=":",
                 separator_position=37,
             )
-    print(f"Dependency management system         : {args.build_system}")
+    print(f"Dependency management system         : poetry")
     print(f"Dependency management system version : {args.build_system_version}")
     print(f"Credentials management               : {args.credentials_management_method}")
     print()
@@ -179,104 +234,83 @@ def print_inputs_summary(args):
 # Checks ------------------------------------------------------------------------------------------------------------
 
 
-def check_dependency_management_system():
-    """Check if a dependency management system is available at project root."""
-    for dms_name in supported_dependency_management_systems.keys():
-        if os.path.exists(supported_dependency_management_systems[dms_name]["configuration_file"]):
-            dms_configuration = toml.load(supported_dependency_management_systems[dms_name]["configuration_file"])
-            if (
-                dms_configuration["build-system"]["build-backend"]
-                == supported_dependency_management_systems[dms_name]["build_backend"]
-            ):
-                return dms_name
-
-
-def check_virtual_environment_name(args):
+def check_virtual_environment_name(args: object) -> None:
     """Check if the virtual environment name is consistent with the build system expectations."""
-    if args.build_system:
-        if supported_dependency_management_systems[args.build_system]["required_venv_name"]:
-            if supported_dependency_management_systems[args.build_system]["required_venv_name"] != args.venv_name:
-                old_name = args.venv_name
-                args.venv_name = supported_dependency_management_systems[args.build_system]["required_venv_name"]
-                print(
-                    f"Warning: {args.build_system} expects the name of the virtual environment name to be {args.venv_name}."
-                    f"{old_name} is replaced by {args.venv_name}."
-                )
+
+    if DEPENDENCY_MANAGER_PATHS["common"]["required_venv_name"] != args.venv_name:
+        old_name = args.venv_name
+        args.venv_name = DEPENDENCY_MANAGER_PATHS["common"]["required_venv_name"]
+        print(
+            f"Warning: poetry expects the name of the virtual environment name to be"
+            f" {args.venv_name}. {old_name} is replaced by {args.venv_name}."
+        )
 
 
-def check_python_version(args):
+def check_python_version(args: object) -> None:
     """
     Check if the version of the current Python interpreter is consistent with the python version specifications
     from the build system.
     """
-    if args.build_system:
-        # Initialize lower/upper versions
-        lower_version, upper_version, lower_bound_symbol, upper_bound_symbol = None, None, None, None
-        lower_specification, upper_specification, single_specification = None, None, None
-        # Read TOML
-        configuration = toml.load(supported_dependency_management_systems[args.build_system]["configuration_file"])
-        # Read Python version constraint
-        python_compatibility = ""
-        if args.build_system == "poetry":
-            python_compatibility = configuration["tool"][args.build_system]["dependencies"]["python"].replace(" ", "")
-        elif args.build_system == "flit":
-            python_compatibility = configuration["project"]["requires-python"].replace(" ", "")
-        # Split lower/upper version constraint
-        if "," in python_compatibility:
-            lower_specification, upper_specification = (
-                python_compatibility.split(",")[0],
-                python_compatibility.split(",")[1],
-            )
+
+    # Initialize lower/upper versions
+    lower_version, upper_version, lower_bound_symbol, upper_bound_symbol = None, None, None, None
+    lower_specification, upper_specification, single_specification = None, None, None
+    # Read TOML
+    configuration = toml.load(DEPENDENCY_MANAGER_PATHS["common"]["configuration_file"])
+    # Read Python version constraint
+    python_compatibility = configuration["tool"]["poetry"]["dependencies"]["python"].replace(" ", "")
+    # Split lower/upper version constraint
+    if "," in python_compatibility:
+        lower_specification, upper_specification = (
+            python_compatibility.split(",")[0],
+            python_compatibility.split(",")[1],
+        )
+    else:
+        if python_compatibility.startswith(">"):
+            lower_specification, upper_specification = python_compatibility, None
+        elif python_compatibility.startswith("<"):
+            lower_specification, upper_specification = None, python_compatibility
         else:
-            if python_compatibility.startswith(">"):
-                lower_specification, upper_specification = python_compatibility, None
-            elif python_compatibility.startswith("<"):
-                lower_specification, upper_specification = None, python_compatibility
-            else:
-                single_specification = python_compatibility
-        # Process lower constraint
-        if lower_specification:
-            lower_version = get_version_from_python_specification(lower_specification)
-            lower_bound_symbol = get_sign_from_python_specification(lower_specification)
-            marker = Marker(f"python_full_version {lower_bound_symbol} '{lower_version}'")
-            if not marker.evaluate():
-                raise Exception(f"Python version must be {lower_bound_symbol} {lower_version}.")
-        # Process upper constraint
-        if upper_specification:
-            upper_version = get_version_from_python_specification(upper_specification)
-            upper_bound_symbol = get_sign_from_python_specification(upper_specification)
-            marker = Marker(f"python_full_version {upper_bound_symbol} '{upper_version}'")
-            if not marker.evaluate():
-                raise Exception(f"Python version must be {upper_bound_symbol} {upper_version}.")
-        # Process single
-        if single_specification:
-            version = get_version_from_python_specification(single_specification)
-            sign = get_sign_from_python_specification(single_specification)
-            if sign != "==":
-                raise Exception("Unable to interpret python version specification.")
-            marker = Marker(f"python_full_version {sign} '{version}'")
-            if not marker.evaluate():
-                raise Exception(f"Python version must be equal to {version}.")
+            single_specification = python_compatibility
+    # Process lower constraint
+    if lower_specification:
+        lower_version = get_version_from_python_specification(lower_specification)
+        lower_bound_symbol = get_sign_from_python_specification(lower_specification)
+        marker = Marker(f"python_full_version {lower_bound_symbol} '{lower_version}'")
+        if not marker.evaluate():
+            raise Exception(f"Python version must be {lower_bound_symbol} {lower_version}.")
+    # Process upper constraint
+    if upper_specification:
+        upper_version = get_version_from_python_specification(upper_specification)
+        upper_bound_symbol = get_sign_from_python_specification(upper_specification)
+        marker = Marker(f"python_full_version {upper_bound_symbol} '{upper_version}'")
+        if not marker.evaluate():
+            raise Exception(f"Python version must be {upper_bound_symbol} {upper_version}.")
+    # Process single
+    if single_specification:
+        version = get_version_from_python_specification(single_specification)
+        sign = get_sign_from_python_specification(single_specification)
+        if sign != "==":
+            raise Exception("Unable to interpret python version specification.")
+        marker = Marker(f"python_full_version {sign} '{version}'")
+        if not marker.evaluate():
+            raise Exception(f"Python version must be equal to {version}.")
 
 
-def check_existing_install(args):
+def check_existing_install(args: object) -> str:
     """Check if an install exists already."""
+
     return os.path.isdir(args.venv_name)
 
 
-def check_inputs(args):
+def check_inputs(args: object) -> None:
     """Check inputs consistency."""
-    # Check platform
-    if sys.platform != "win32":
-        raise Exception("Only Windows operating systems are supported.")
     # Rework dependencies argument if all option is selected
     if "all" in args.dependencies:
         args.install_all = True
-        args.dependencies = standard_optional_dependency_groups + ["run"]
+        args.dependencies = STANDARD_OPTIONAL_DEPENDENCY_GROUPS + ["run"]
     else:
         args.install_all = False
-    # Check if a dependency management system is declared
-    args.build_system = check_dependency_management_system()
     # Check virtual environment name
     check_virtual_environment_name(args)
     # Check python version
@@ -288,17 +322,28 @@ def check_inputs(args):
 # General-purpose ---------------------------------------------------------------------------------------------------
 
 
-def read_integers_from_string(string):
-    """
-    Scan a string and extract integers.
+def extract_substring_between_markers(string: str, marker_1: str, marker_2: str) -> str:
+    """Extract substring between two markers using find() and slice()."""
 
-    The regex matches any digit character (0-9).
+    # find() method will search the given marker and stores its index
+    mk1 = string.find(marker_1) + len(marker_1)
+    # find() method will search the given marker and sotres its index
+    mk2 = string.find(marker_2, mk1)
+    # using slicing substring will be fetched in between markers.
+    return string[mk1:mk2]
+
+
+def read_integers_from_string(string: str) -> list:
     """
+    Scan a string and extract integers. The regex matches any digit character (0-9).
+    """
+
     return re.findall(r"\d+", string)
 
 
-def remove_scheme_from_url(url):
+def remove_scheme_from_url(url: str) -> tuple:
     """Remove the scheme part of a URL."""
+
     items = url.split("://")
     if len(items) == 2:
         return items[0], items[1]
@@ -306,49 +351,29 @@ def remove_scheme_from_url(url):
         raise Exception(f"Fail to return the URL without the scheme part for {url}.")
 
 
-def get_python_version():
+def get_python_version() -> None:
     """Get Python version."""
+
     return f"{sys.version_info.major}.{sys.version_info.minor}.{sys.version_info.micro}"
 
 
-def get_python_package(
-    package_name: str,
+def set_pip_command(
     package_version: str = "*",
     method: str = "install",
     pypi_url: str = "https://pypi.org/simple",
     private_pypi_token_name: str = "",
     no_deps: bool = False,
     python_executable: str = sys.executable,
-    verbose: bool = True,
-) -> None:
-    """
-    Install or download a python package using PIP.
+) -> str:
+    """Make pip command."""
 
-    Parameters
-    ----------
-    package_name : str
-        Name of the package.
-    package_version : str
-        Version of the package.
-    method : str
-        Get method: ``download`` or ``install``
-    pypi_url : str
-        URL of the PyPI server.
-    private_pypi_token_name : str
-        Name of the environment variable holding the token to access to the PyPI.
-    python_executable : str
-        Path to the Python executable.
+    package_name = "poetry"
 
-    Returns
-    -------
-    None
-    """
-
-    # Set command
-    command = f"{python_executable} -m pip {method} {package_name}"
     # Add package version if specified
     if package_version != "*":
-        command += f"=={package_version}"
+        package_name += f"=={package_version}"
+    # Set command
+    command = [python_executable, "-m", "pip", method, package_name]
     # Add part related to private PyPI source
     if pypi_url != "https://pypi.org/simple":
         # Check if token is available
@@ -365,61 +390,105 @@ def get_python_package(
     # Add no-deps option
     if no_deps:
         command += " --no-deps"
-    # Run command with dummy version to force PIP to return the list of released versions
-    returncode, stdout, stderr = run_command(command, display_output=verbose)
-    if returncode != 0:
-        print(stdout)
+
+    return command
+
+
+def get_python_package(
+    package_version: str = "*",
+    method: str = "install",
+    pypi_url: str = "https://pypi.org/simple",
+    private_pypi_token_name: str = "",
+    no_deps: bool = False,
+    python_executable: str = sys.executable,
+) -> None:
+    """
+    Install or download a python package using PIP.
+
+    Parameters
+    ----------
+    package_version : str
+        Version of the package.
+    method : str
+        Get method: ``download`` or ``install``
+    pypi_url : str
+        URL of the PyPI server.
+    private_pypi_token_name : str
+        Name of the environment variable holding the token to access to the PyPI.
+    python_executable : str
+        Path to the Python executable.
+
+    Returns
+    -------
+    None
+    """
+
+    # Set pip command
+    command = set_pip_command(
+        package_version=package_version,
+        method=method,
+        pypi_url=pypi_url,
+        private_pypi_token_name=private_pypi_token_name,
+        no_deps=no_deps,
+        python_executable=python_executable,
+    )
+    # Run pip command
+    process = subprocess.run(
+        command, check=False, shell=DEPENDENCY_MANAGER_PATHS[sys.platform]["shell"], capture_output=True, text=True
+    )
+    if process.returncode != 0:
+        print(process.stdout)
+        print(process.stderr)
         raise Exception("Command failed with error.")
 
 
-def run_command(cmd, display_output=True):
-    """
-    Run command.
-    """
-    process = subprocess.Popen(cmd, stdout=subprocess.PIPE, stderr=subprocess.STDOUT)
-    if display_output:
-        stdout, stderr = b"", b""
-        if process.stdout is not None:
-            for line in process.stdout:
-                sys.stdout.buffer.write(line)
-                sys.stdout.buffer.flush()
-                stdout += line
-        process.wait()
+def get_python_package_versions(
+    pypi_url: str = "https://pypi.org/simple",
+    private_pypi_token_name: str = "",
+    python_executable: str = sys.executable,
+) -> None:
+    """Get available versions of a package."""
+
+    # Set pip command
+    command = set_pip_command(
+        package_version="x",
+        pypi_url=pypi_url,
+        private_pypi_token_name=private_pypi_token_name,
+        python_executable=python_executable,
+    )
+    # Run pip command
+    process = subprocess.run(
+        command, check=False, shell=DEPENDENCY_MANAGER_PATHS[sys.platform]["shell"], capture_output=True, text=True
+    )
+    if process.returncode == 0:
+        print(command)
+        raise Exception("This command should have failed. There is something wrong.")
     else:
-        stdout, stderr = process.communicate()
-
-    if isinstance(stdout, bytes):
-        try:
-            stdout = stdout.decode().splitlines()
-        except:
-            raise Exception("Unable to decode stdout.")
-
-    if isinstance(stderr, bytes):
-        try:
-            stderr = stderr.decode().splitlines()
-        except:
-            raise Exception("Unable to decode stderr.")
-
-    return process.returncode, stdout, stderr
+        return extract_substring_between_markers(process.stderr, "(from versions:", ")").replace(" ", "").split(",")
 
 
 def upgrade_pip(python_executable: str = sys.executable) -> None:
-    """Upgrade to latest PIP version in the virtual environment"""
+    """Upgrade to latest PIP version in the virtual environment."""
+
     print("Upgrade to latest pip version")
     subprocess.run(
         [python_executable, "-m", "pip", "install", "--upgrade", "pip"],
         check=True,
-        shell=True,
+        shell=DEPENDENCY_MANAGER_PATHS[sys.platform]["shell"],
     )
     print()
 
 
-def create_virtual_environment(args, venv: str = ".venv"):
+def create_virtual_environment(args: object, venv: str = ".venv") -> None:
     """Create a virtual environment."""
 
     print("Create virtual environment")
     if not args.has_install or args.force_clear or args.force_clear_all:
-        subprocess.run([sys.executable, "-m", "venv", venv], check=True, shell=True)
+        if sys.platform == "linux":
+            subprocess.run(["sudo", "apt-get", "install", "-y", "python3-venv"], check=True)
+        subprocess.run(
+            [sys.executable, "-m", "venv", venv], check=True, shell=DEPENDENCY_MANAGER_PATHS[sys.platform]["shell"]
+        )
     else:
         print("Skipped")
     print()
@@ -428,8 +497,9 @@ def create_virtual_environment(args, venv: str = ".venv"):
 # Dependency Management System (Build System) -----------------------------------------------------------------------
 
 
-def get_private_sources(configuration_file):
+def get_private_sources(configuration_file: str) -> list:
     """Get list of private sources from configuration file."""
+
     configuration = toml.load(configuration_file)
     try:
         private_sources = configuration["tool"]["poetry"]["source"]
@@ -438,13 +508,15 @@ def get_private_sources(configuration_file):
     return private_sources
 
 
-def get_version_from_python_specification(specification):
+def get_version_from_python_specification(specification: str) -> str:
     """Read the version."""
+
     return ".".join(read_integers_from_string(specification))
 
 
-def get_sign_from_python_specification(specification):
+def get_sign_from_python_specification(specification: str) -> str:
     """Read the mathematical symbol expressing a constraint on the version."""
+
     first_part = specification.split(".")[0]
     sign = "".join([i for i in first_part if not i.isdigit()])
     if sign == "":
@@ -452,45 +524,44 @@ def get_sign_from_python_specification(specification):
     return sign
 
 
-def install_build_system(args):
-    """Install build system."""
-    print("Install dependency management system.")
-    if args.build_system:
-        if not args.has_install or args.force_clear or args.force_clear_all:
-            configuration = toml.load(supported_dependency_management_systems[args.build_system]["configuration_file"])
+def get_build_system_version(args: object) -> str:
+    """Assign build system version."""
+
+    if not args.has_install or args.force_clear or args.force_clear_all:
+        configuration = toml.load(DEPENDENCY_MANAGER_PATHS["common"]["configuration_file"])
+        if "build-system-requirements" in configuration.keys():
             if (
                 args.build_system_version == "*"
                 and "build-system-version" in configuration["build-system-requirements"]
             ):
                 args.build_system_version = configuration["build-system-requirements"]["build-system-version"]
-            if args.build_system == "poetry":
-                create_virtual_environment(
-                    args, venv=supported_dependency_management_systems[args.build_system]["build_system_venv"]
-                )
-                upgrade_pip(
-                    python_executable=rf".\{supported_dependency_management_systems[args.build_system]['build_system_venv']}\Scripts\python"
-                )
-                get_python_package(
-                    args.build_system,
-                    args.build_system_version,
-                    method="install",
-                    python_executable=rf".\{supported_dependency_management_systems[args.build_system]['build_system_venv']}\Scripts\python",
-                    verbose=args.verbose,
-                )
-            else:
-                get_python_package(
-                    args.build_system,
-                    args.build_system_version,
-                    method="install",
-                    python_executable=rf".\{args.venv_name}\Scripts\python",
-                    verbose=args.verbose,
-                )
-            print()
-            # Create a file symbolic link from the virtual environment (.venv) that the build system (poetry) manages
-            # to the build system executable (poetry.exe) in the poetry virtual environment (.poetry/.venv).  This
-            # ensures that the correct poetry is accessible when the managed virtual environment is activated
-            build_system_executable = rf".\{supported_dependency_management_systems[args.build_system]['build_system_venv']}\Scripts\{args.build_system}.exe"
-            if os.path.exists(build_system_executable):
+        else:
+            args.build_system_version = get_python_package_versions()[-1]
+
+
+def install_build_system(args: object) -> None:
+    """Install build system."""
+
+    print("Install dependency management system.")
+    if not args.has_install or args.force_clear or args.force_clear_all:
+        configuration = toml.load(DEPENDENCY_MANAGER_PATHS["common"]["configuration_file"])
+        if args.build_system_version == "*" and "build-system-version" in configuration["build-system-requirements"]:
+            args.build_system_version = configuration["build-system-requirements"]["build-system-version"]
+
+        create_virtual_environment(args, venv=DEPENDENCY_MANAGER_PATHS["common"]["build_system_venv"])
+        upgrade_pip(python_executable=DEPENDENCY_MANAGER_PATHS[sys.platform]["poetry_python_executable"])
+        get_python_package(
+            args.build_system_version,
+            method="install",
+            python_executable=DEPENDENCY_MANAGER_PATHS[sys.platform]["poetry_python_executable"],
+        )
+        print()
+        # Create a file symbolic link from the virtual environment (.venv) that the build system (poetry) manages
+        # to the build system executable (poetry.exe) in the poetry virtual environment (.poetry/.venv).  This
+        # ensures that the correct poetry is accessible when the managed virtual environment is activated
+        build_system_executable = DEPENDENCY_MANAGER_PATHS[sys.platform]["build_sys_exec"]
+        if os.path.exists(build_system_executable):
+            if sys.platform == "win32":
                 subprocess.run(
                     [
                         "powershell",
@@ -499,61 +570,65 @@ def install_build_system(args):
                         "-ItemType",
                         "SymbolicLink",
                         "-Path",
-                        rf".\{args.venv_name}\Scripts\{args.build_system}.exe",
+                        DEPENDENCY_MANAGER_PATHS[sys.platform]["dep_bin_venv_path"],
                         "-Target",
                         build_system_executable,
                     ]
                 )
-            return
-    print("Skipped")
-    print()
-
-
-def configure_build_system(args):
-    """Configure the build system to enable connection to private sources."""
-    print("Configure dependency management system.")
-    if args.build_system:
-        if not args.has_install or args.force_clear or args.force_clear_all:
-            if args.build_system == "poetry":
-                configure_poetry(
-                    supported_dependency_management_systems[args.build_system]["build_system_venv"],
-                    args.credentials_management_method,
+            elif sys.platform == "linux":
+                subprocess.run(
+                    [
+                        "ln",
+                        "-sf",
+                        build_system_executable,
+                        DEPENDENCY_MANAGER_PATHS[sys.platform]["dep_bin_venv_path"],
+                    ]
                 )
-                print()
-            return
+        return
     print("Skipped")
     print()
 
 
-def configure_poetry(venv_name, credentials_management_method):
+def configure_build_system(args: object) -> None:
+    """Configure the build system to enable connection to private sources."""
+
+    print("Configure dependency management system.")
+    if not args.has_install or args.force_clear or args.force_clear_all:
+        configure_poetry(
+            DEPENDENCY_MANAGER_PATHS["common"]["build_system_venv"],
+            args.credentials_management_method,
+        )
+        print()
+        return
+    print("Skipped")
+    print()
+
+
+def configure_poetry(venv_name: str, credentials_management_method: str) -> None:
     """Configure Poetry."""
+    poetry_executable = DEPENDENCY_MANAGER_PATHS[sys.platform]["dep_bin_venv_path"]
     # Get list of private sources
     private_sources = get_private_sources("pyproject.toml")
-    # Delete existing configuration
-    print("Clean-up existing poetry configurations")
-    if sys.platform == "win32":
-        username = os.getlogin()
-        path_poetry_config = rf"C:\Users\{username}\AppData\Roaming\pypoetry"
-        if os.path.isfile(os.path.join(path_poetry_config, "config.toml")):
-            os.remove(os.path.join(path_poetry_config, "config.toml"))
-        if os.path.isfile(os.path.join(path_poetry_config, "auth.toml")):
-            os.remove(os.path.join(path_poetry_config, "auth.toml"))
     # Turn-on in-project
-    subprocess.run([rf".\{venv_name}\Scripts\poetry", "config", "virtualenvs.in-project", "true"], check=True)
+    subprocess.run([poetry_executable, "config", "virtualenvs.create", "false", "--local"], check=True)
+    # Turn-off virtual environment creation
+    subprocess.run([poetry_executable, "config", "virtualenvs.in-project", "true", "--local"], check=True)
     # Turn-on poetry cache
     subprocess.run(
         [
-            rf".\{venv_name}\Scripts\poetry",
+            poetry_executable,
             "config",
             "cache-dir",
-            supported_dependency_management_systems["poetry"]["cache_folder"],
+            DEPENDENCY_MANAGER_PATHS["common"]["cache_folder"],
+            "--local",
         ],
         check=True,
     )
+    # Turn-on in-project
+    subprocess.run([poetry_executable, "config", "virtualenvs.create", "false", "--local"], check=True)
     # Declare credentials for private sources
     for source in private_sources:
         print(f"Declare credentials for {source['name']}")
-        # Get source PAT
         if source["name"].lower() == "pypi":
             continue
         elif source["url"] == "https://pkgs.dev.azure.com/pyansys/_packaging/pyansys/pypi/simple/":
@@ -565,10 +640,10 @@ def configure_poetry(venv_name, credentials_management_method):
         # Store credentials
         if credentials_management_method == "keyring":
             # Declare source URL
-            command_line = f"{venv_name}/Scripts/poetry config repositories.{source['name']} {source['url']}"
+            command_line = [poetry_executable, "config", f"repositories.{source['name']}", source["url"], "--local"]
             subprocess.run(command_line, check=True)
             # Declare source credentials
-            command_line = f"{venv_name}/Scripts/poetry config http-basic.{source['name']} PAT {token}"
+            command_line = [poetry_executable, "config", f"http-basic.{source['name']}", "PAT", token, "--local"]
             subprocess.run(command_line, check=True)
         elif credentials_management_method == "environment-variables":
             # Format source name to comply with Poetry environment variable syntax
@@ -578,33 +653,26 @@ def configure_poetry(venv_name, credentials_management_method):
             os.environ[f"POETRY_HTTP_BASIC_{source_name}_PASSWORD"] = token
 
 
-def check_dependency_group(dependency_group, configuration):
+def check_dependency_group(dependency_group: str, configuration: str) -> bool:
     """Return True if the dependency group is available in the configuration file."""
+
     try:
         configuration["tool"]["poetry"]["group"][dependency_group]
         return True
     except:
         return False
 
-def configure_portal_database(venv_name):
-    subprocess.run(
-        [
-            rf".\{venv_name}\Scripts\poetry",
-            "run",
-            "configure-portal-database",
-        ],
-        check=True,
-    )
 
 # Specifics ---------------------------------------------------------------------------------------------------------
 
 
-def parser():
+def parser() -> None:
     """Parse command line arguments."""
+
     # Code Name
-    program_name = "Setup Environment"
+    program_name = "Setup Environment Utility"
     # Code description
-    program_description = "A Python script to setup the Python ecosystem of a solution or framework."
+    program_description = "A Python script to automate the setup of the Python ecosystem of a project."
     # Create top-level parser
     parser = argparse.ArgumentParser(
         prog=program_name,
@@ -624,7 +692,7 @@ def parser():
         nargs="+",
         help="List of dependency groups to be installed separated by space. Example: run tests doc style build",
         default=[],
-        choices=standard_optional_dependency_groups + ["run", "all"],
+        choices=STANDARD_OPTIONAL_DEPENDENCY_GROUPS + ["run", "all"],
         required=False,
     )
     optional_inputs.add_argument(
@@ -641,7 +709,7 @@ def parser():
         "--build-system-version",
         type=str,
         help="Build system version",
-        default="1.5.1",
+        default="*",
         required=False,
     )
     optional_inputs.add_argument(
@@ -686,8 +754,9 @@ def parser():
     return parser.parse_args()
 
 
-def clear_workspace(args):
+def clear_workspace(args: object) -> None:
     """Remove residual items form previous installation (like venv directory, lock file ...)."""
+
     print("Clear workspace")
     if args.force_clear or args.force_clear_all:
         # Remove virtual environment
@@ -695,83 +764,77 @@ def clear_workspace(args):
             print(f"Delete existing virtual environment {args.venv_name}.")
             shutil.rmtree(args.venv_name)
         # Remove poetry virtual environment
-        if os.path.isdir(supported_dependency_management_systems[args.build_system]["build_system_venv"]):
+        if os.path.isdir(DEPENDENCY_MANAGER_PATHS["common"]["build_system_venv"]):
             print("Delete existing poetry virtual environment")
-            shutil.rmtree(supported_dependency_management_systems[args.build_system]["build_system_venv"])
+            shutil.rmtree(DEPENDENCY_MANAGER_PATHS["common"]["build_system_venv"])
         # Remove poetry cache
-        if os.path.isdir(supported_dependency_management_systems[args.build_system]["cache_folder"]):
+        if os.path.isdir(DEPENDENCY_MANAGER_PATHS["common"]["cache_folder"]):
             print("Delete existing poetry cache")
-            shutil.rmtree(supported_dependency_management_systems[args.build_system]["cache_folder"])
+            shutil.rmtree(DEPENDENCY_MANAGER_PATHS["common"]["cache_folder"])
         if args.force_clear_all:
             # Remove lock file
-            if args.build_system:
-                if supported_dependency_management_systems[args.build_system]["lock_file"]:
-                    if os.path.isfile(supported_dependency_management_systems[args.build_system]["lock_file"]):
-                        print("Delete existing poetry lock file")
-                        os.remove(supported_dependency_management_systems[args.build_system]["lock_file"])
+            if DEPENDENCY_MANAGER_PATHS["common"]["lock_file"]:
+                if os.path.isfile(DEPENDENCY_MANAGER_PATHS["common"]["lock_file"]):
+                    print("Delete existing poetry lock file")
+                    os.remove(DEPENDENCY_MANAGER_PATHS["common"]["lock_file"])
     else:
         print("Skipped")
     print()
 
 
-def install_production_dependencies(args):
+def install_production_dependencies(args: object) -> None:
     """Install the package (mandatory requirements only)."""
+
     print("Install production dependencies")
-    if args.build_system and "run" in args.dependencies:
-        if args.build_system == "poetry":
-            subprocess.run(
-                [
-                    rf".\{supported_dependency_management_systems[args.build_system]['build_system_venv']}\Scripts\poetry",
-                    "install",
-                    "-vv",
-                ],
-                check=True,
-                shell=True,
-            )
-        elif args.build_system == "flit":
-            subprocess.run([rf".\{args.venv_name}\Scripts\flit", "install"], check=True, shell=True)
+    if "run" in args.dependencies:
+        subprocess.run(
+            [
+                DEPENDENCY_MANAGER_PATHS[sys.platform]["build_sys_exec"],
+                "install",
+                "-vv",
+            ],
+            check=True,
+            shell=DEPENDENCY_MANAGER_PATHS[sys.platform]["shell"],
+        )
         print()
         return
     print("Skipped")
     print()
 
 
-def install_optional_dependencies(args):
+def install_optional_dependencies(args: object) -> None:
     """Install optional requirements (doc, tests, build or style)."""
-    # Load configuration file if a dependency management system is available
-    if args.build_system:
-        configuration = toml.load(supported_dependency_management_systems[args.build_system]["configuration_file"])
-    else:
-        configuration = {}
+
+    # Load configuration file
+    configuration = toml.load(DEPENDENCY_MANAGER_PATHS["common"]["configuration_file"])
     # Install standard optional dependency groups
-    for dependency_group in standard_optional_dependency_groups:
+    for dependency_group in STANDARD_OPTIONAL_DEPENDENCY_GROUPS:
         print(f"Install {dependency_group} dependencies")
         if dependency_group in args.dependencies:
             # Install dependency group in the configuration file of the build system
-            if args.build_system:
-                has_dependency_group = check_dependency_group(dependency_group, configuration)
-                if has_dependency_group:
-                    print("Installing from build system configuration file.")
-                    subprocess.run(
-                        [
-                            rf".\{supported_dependency_management_systems[args.build_system]['build_system_venv']}\Scripts\poetry",
-                            "install",
-                            "--only",
-                            dependency_group,
-                            "-vv",
-                        ],
-                        check=True,
-                        shell=True,
-                    )
-                    print()
-                    continue
+            has_dependency_group = check_dependency_group(dependency_group, configuration)
+            if has_dependency_group:
+                print("Installing from build system configuration file.")
+                subprocess.run(
+                    [
+                        DEPENDENCY_MANAGER_PATHS[sys.platform]["build_sys_exec"],
+                        "install",
+                        "--only",
+                        dependency_group,
+                        "-vv",
+                    ],
+                    check=True,
+                    shell=DEPENDENCY_MANAGER_PATHS[sys.platform]["shell"],
+                )
+                print()
+                continue
             # Alternatively search dependency group in the requirements folder
             requirements_file = os.path.join("requirements", f"requirements_{dependency_group}.txt")
             if os.path.exists(requirements_file):
                 print("Installing from requirements file.")
                 subprocess.run(
                     [
-                        rf".\{supported_dependency_management_systems[args.build_system]['build_system_venv']}\Scripts\python",
+                        DEPENDENCY_MANAGER_PATHS[sys.platform]["poetry_python_executable"],
                         "-m",
                         "poetry",
                         "run",
@@ -782,28 +845,28 @@ def install_optional_dependencies(args):
                         "--no-warn-conflicts",
                     ],
                     check=True,
-                    shell=True,
+                    shell=DEPENDENCY_MANAGER_PATHS[sys.platform]["shell"],
                 )
                 print()
                 continue
         print("Skipped")
         print()
     # Install extra optional dependency groups
-    if args.build_system and args.extra_dependencies:
+    if args.extra_dependencies:
         for dependency_group in args.extra_dependencies:
             print(f"Install {dependency_group} dependencies")
             has_dependency_group = check_dependency_group(dependency_group, configuration)
             if has_dependency_group:
                 subprocess.run(
                     [
-                        rf".\{supported_dependency_management_systems[args.build_system]['build_system_venv']}\Scripts\poetry",
+                        DEPENDENCY_MANAGER_PATHS[sys.platform]["build_sys_exec"],
                         "install",
                         "--only",
                         dependency_group,
                         "-vv",
                     ],
                     check=True,
-                    shell=True,
+                    shell=DEPENDENCY_MANAGER_PATHS[sys.platform]["shell"],
                 )
             else:
                 print(f"No dependency group named {dependency_group}.")
@@ -811,7 +874,26 @@ def install_optional_dependencies(args):
             print()
 
 
-def main():
+def install_dotnet_linux_dependencies():
+    print("Install dotnet dependencies")
+    if sys.platform == "linux":
+        subprocess.run(
+            'set -xe \
+            && wget https://dot.net/v1/dotnet-install.sh \
+            && chmod +x dotnet-install.sh \
+            && ./dotnet-install.sh --install-dir /home/$USER/.dotnet --version 3.1.0 --runtime aspnetcore \
+            && grep -qxF "DOTNET_ROOT=/home/$USER/.dotnet" /home/$USER/.bash_profile \
+            || echo DOTNET_ROOT=/home/$USER/.dotnet >> /home/$USER/.bash_profile \
+            && grep -qxF "PATH=\$PATH:/home/$USER/.dotnet" /home/$USER/.bash_profile \
+            || echo "PATH=\$PATH:/home/$USER/.dotnet" >> /home/$USER/.bash_profile \
+            && echo "\nsource /home/$USER/.bash_profile" >> ./.venv/bin/activate \
+            && rm dotnet-install.sh',
+            check=True,
+            shell=True,
+        )
+
+
+def main() -> None:
     """Sequence of operations leading to the complete Python ecosystem."""
 
     # Start timer
@@ -831,6 +913,9 @@ def main():
     # Check inputs consistency
     check_inputs(args)
 
+    # Update build system version
+    get_build_system_version(args)
+
     # Display header
     print_main_header("Setup Environment")
 
@@ -849,7 +934,7 @@ def main():
 
     create_virtual_environment(args)
 
-    upgrade_pip(python_executable=rf".\{args.venv_name}\Scripts\python")
+    upgrade_pip(python_executable=DEPENDENCY_MANAGER_PATHS[sys.platform]["python_executable"])
 
     # Setup dependency management system ------------------------------------------------------------------------------
 
@@ -867,12 +952,10 @@ def main():
 
     install_optional_dependencies(args)
 
+    install_dotnet_linux_dependencies()
+
     # Back to current working directory
     os.chdir(working_directory)
-
-    # Configure database
-    if 'run' in args.dependencies:
-        configure_portal_database(args.venv_name)
 
     # Compute execution time
     elapsed_time = (time.time() - time_on) / 60  # in minutes
@@ -881,6 +964,7 @@ def main():
     print("Navigate to project root and activate your environment with one these commands:")
     print(rf"   - For Windows CMD       : {args.venv_name}\Scripts\activate.bat")
     print(rf"   - For Windows Powershell: {args.venv_name}\Scripts\Activate.ps1")
+    print(rf"   - For Ubuntu            : source {args.venv_name}/bin/activate")
     print("Enjoy!")
     print()
     print("Execution time: %.1f minutes." % (elapsed_time))
