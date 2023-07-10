@@ -94,12 +94,6 @@ Installation
 
       .venv\Scripts\Activate.ps1
 
-6. Configure the portal database:
-
-  .. code:: bash
-
-    poetry run configure-portal-database
-
 From now on, all the commands must be executed within the virtual environment.
 
 
@@ -116,12 +110,14 @@ To start the solution run the following command anywhere in the project:
 Documentation
 =============
 
-Find more information in the following sources:
+Refer to the `Solution Developer's Guide <https://dev-docs.solutions.ansys.com/index.html>`_ to get more information on how to the
+get started with solutions. Especially, the `Create an oSL solution <https://dev-docs.solutions.ansys.com/solution_journey/create_an_osl_solution.html>`_
+section provides specific instructions to work with optiSLang solutions.
 
-*  `Solution Developer's Guide <https://dev-docs.solutions.ansys.com/index.html>`_
-* `Create an oSL solution <https://dev-docs.solutions.ansys.com/solution_journey/create_an_osl_solution.html>`_
-* `Glow doc <https://saf.docs.solutions.ansys.com/dev/>`_
-* `Portal doc <https://fuzzy-happiness-d284bacf.pages.github.io/dev/index.html>`_
+To develop your solution, refer to the Solution Application Framework (SAF) documentations:
+
+* `GLOW doc <https://saf.docs.solutions.ansys.com/version/stable/>`_
+* `Portal doc <https://potential-adventure-ovlqkq9.pages.github.io/version/dev/>`_
 
 
 License
