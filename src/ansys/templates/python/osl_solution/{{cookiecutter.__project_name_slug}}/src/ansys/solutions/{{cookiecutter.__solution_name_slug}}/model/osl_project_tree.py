@@ -29,7 +29,7 @@ def dump_project_state(project_file: Path, project_state_file: Path) -> None:
         reset=True,
         shutdown_on_finished=True,
         dump_project_state=project_state_file,
-        ini_timeout=50,
+        ini_timeout=300,
     )
 
     osl.dispose()

@@ -256,7 +256,7 @@ class ProblemSetupStep(StepModel):
             shutdown_on_finished=True,
             import_project_properties_file=self.working_properties_file.path,
             additional_args=[f"--write-server-info={self.server_info_file.path}"],
-            ini_timeout=50,  # might need to be adjusted
+            ini_timeout=300,  # might need to be adjusted
         )
 
         osl.__logger = osl_logger.add_instance_logger(osl.name, osl, self.optislang_log_level)

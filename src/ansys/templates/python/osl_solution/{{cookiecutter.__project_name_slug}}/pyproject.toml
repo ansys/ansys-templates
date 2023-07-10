@@ -5,7 +5,7 @@ build-backend = "poetry.core.masonry.api"
 # The following lines were added to enforce the poetry version needed for the project.
 # It will be read by the setup_environment.py script to install this version.
 [build-system-requirements]
-build-system-version = "1.4.2"
+build-system-version = "1.5.1"
 
 [tool.poetry]
 name = "{{cookiecutter.__pkg_name}}"
@@ -36,15 +36,18 @@ packages = [
 [[tool.poetry.source]]
 name = "solutions-private-pypi"
 url = "https://pkgs.dev.azure.com/pyansys/_packaging/ansys-solutions/pypi/simple/"
-default = false
-secondary = true
+priority = "supplemental"
+
+[[tool.poetry.source]]
+name = "PyPI"
+priority = "primary"
 
 [tool.poetry.dependencies]
 python = ">=3.8, <3.11"
 ansys-dash-treeview = {version = "0.0.1.dev0", source = "solutions-private-pypi"}
 ansys-optislang-core = "^0.3.0"
-ansys-saf-glow = {version = "0.3.dev4", source = "solutions-private-pypi"}
-ansys-saf-portal = {version = "0.2.0", source = "solutions-private-pypi"}
+ansys-saf-glow = {version = "0.3.0", source = "solutions-private-pypi"}
+ansys-saf-portal = {version = "0.3.0", source = "solutions-private-pypi"}
 ansys-solutions-dash-lib = {version = "^0.4.1", source = "solutions-private-pypi"}
 ansys-solutions-products-ecosystem = {version = "^0.1.dev0", source = "solutions-private-pypi"}
 ansys-solutions-optislang-frontend-components = {version = "^0.1.dev6", source = "solutions-private-pypi"}
