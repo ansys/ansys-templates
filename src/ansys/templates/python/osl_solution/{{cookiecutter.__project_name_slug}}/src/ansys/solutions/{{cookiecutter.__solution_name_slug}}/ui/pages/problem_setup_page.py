@@ -255,7 +255,7 @@ def initialize_dictionary_of_ui_placeholders(n_clicks, data, ids, input_file_ids
                 pm_name = split_values[0]
                 key = split_values[1]
                 parameters[key] = data[index]
-                ui_data.update({pm_name:parameters}) 
+                ui_data.update({pm_name:parameters})
             elif "Bool" in ids[index]["placeholder"] and type(data[index])==list:
                 value=data[index]
                 if True in value:
@@ -265,19 +265,19 @@ def initialize_dictionary_of_ui_placeholders(n_clicks, data, ids, input_file_ids
                 ui_data.update({ids[index]["placeholder"]: new_value})
             else:
                 ui_data.update({ids[index]["placeholder"]:data[index]})
-            ui_data.update({"StartDesigns":designs})    
+            ui_data.update({"StartDesigns":designs})
             ui_data["start_analysis_requested"] = False
         if input_file_ids:
             problem_setup_step.setup_is_complete = False
         for index in range(len(input_file_ids)):
             ui_data.update({input_file_ids[index]["placeholder"]: ""})
-        
-        problem_setup_step.ui_placeholders = ui_data 
+
+        problem_setup_step.ui_placeholders = ui_data
         return  problem_setup_step.setup_is_complete
     else:
         return no_update
-    
-    
+
+
 @callback(
     Output({"container": "placeholders", "placeholder": MATCH}, "id"),
     Input({"container": "placeholders", "placeholder": MATCH}, "value"),
@@ -326,11 +326,11 @@ def update_ui_placeholders(value, id, pathname):
     prevent_initial_call=True,
 )
 def upload(is_completed, filenames, upload_id, component_id, pathname):
-    """This uploads an Input file to the project directory and updates the dictionary of ui placeholders everytime
+    """This uploads an Input file to the project directory and updates the dictionary of ui placeholders every time
     the ui data changes in the Input files section."""
     project = DashClient[{{ cookiecutter.__solution_definition_name }}].get_project(pathname)
     problem_setup_step = project.steps.problem_setup_step
-    
+
     name = component_id["placeholder"]
     if is_completed and filenames and len(filenames):
         filename = filenames[0]

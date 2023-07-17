@@ -23,7 +23,7 @@ from ansys.solutions.{{ cookiecutter.__solution_name_slug }}.ui.utils.monitoring
 
 class ProblemSetupStep(StepModel):
     """Step model of the problem setup step."""
-    
+
     # Parameters ------------------------------------------------------------------------------------------------------
 
     # Frontend persistence
@@ -33,7 +33,7 @@ class ProblemSetupStep(StepModel):
     app_metadata: dict = {}
     analysis_running: bool = False
     setup_is_complete: bool = True
-    
+
     # Backend data model
     tcp_server_host: str = "127.0.0.1"
     tcp_server_port: int = None
@@ -80,7 +80,7 @@ class ProblemSetupStep(StepModel):
     working_properties_file: FileReference = FileReference("Problem_Setup/working_properties_file.json")
     server_info_file: FileReference = FileReference("Problem_Setup/server_info.ini")
     optislang_log_file: FileReference = FileReference("Problem_Setup/pyoptislang.log")
-    
+
     # Methods ---------------------------------------------------------------------------------------------------------
 
     @transaction(
@@ -159,7 +159,7 @@ class ProblemSetupStep(StepModel):
         self.criteria = properties["criteria"]
         write_properties_file(properties, Path(self.working_properties_file.path))
 
-    
+
     @transaction(self=StepSpec(download=["properties_file", "ui_placeholders"], upload=["placeholders", "registered_files", "settings", "parameter_manager", "criteria"]))
     def update_osl_placeholders_with_ui_values(self) -> None:
         properties = apply_placeholders_to_properties_file(self.ui_placeholders, self.properties_file.path)
@@ -168,7 +168,7 @@ class ProblemSetupStep(StepModel):
         self.settings = properties["settings"]
         self.parameter_manager = properties["parameter_manager"]
         self.criteria = properties["criteria"]
-    
+
     @transaction(
         self=StepSpec(
             upload=["ansys_ecosystem", "ansys_ecosystem_ready"],
@@ -223,8 +223,8 @@ class ProblemSetupStep(StepModel):
                 alert_color = "success"
             self.ansys_ecosystem[product_name]["alert_message"] = alert_message
             self.ansys_ecosystem[product_name]["alert_color"] = alert_color
-    
-    
+
+
     @transaction(
         self=StepSpec(
             download=["metadata_file"],
@@ -326,4 +326,3 @@ class ProblemSetupStep(StepModel):
 
         osl.dispose()
 
-        
