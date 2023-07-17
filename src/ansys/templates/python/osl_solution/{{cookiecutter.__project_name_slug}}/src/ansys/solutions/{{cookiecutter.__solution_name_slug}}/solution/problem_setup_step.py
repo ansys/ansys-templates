@@ -50,8 +50,6 @@ class ProblemSetupStep(StepModel):
     }
     step_list: list = []
     node_list: list = []
-    system_hierarchy: list = []
-    step_list: list = []
     placeholders: dict = {}
     registered_files: List = []
     settings: dict = {}
