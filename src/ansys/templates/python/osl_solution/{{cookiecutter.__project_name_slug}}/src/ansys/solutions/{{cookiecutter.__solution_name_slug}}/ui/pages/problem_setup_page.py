@@ -172,11 +172,10 @@ for alert in ["optislang_version", "optislang_solve"]:
     Output("wait_start_analysis", "children"),
     Output("start_analysis", "disabled"),
     Input("start_analysis", "n_clicks"),
-    [State("table-placeholders", "children")],
     State("url", "pathname"),
     prevent_initial_call=True,
 )
-def start_analysis(n_clicks, table_children, pathname):
+def start_analysis(n_clicks, pathname):
     """Start optiSLang and run the simulation. Wait for the process to complete."""
 
     project = DashClient[{{ cookiecutter.__solution_definition_name }}].get_project(pathname)
