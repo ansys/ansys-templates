@@ -191,7 +191,7 @@ def start_analysis(n_clicks, pathname):
         # Wait until the analysis effectively starts
         while problem_setup_step.optislang_solve_status == "initial":
             time.sleep(1)
-        return update_alerts(problem_setup_step), True, problem_setup_step.analysis_locked
+        return update_alerts(problem_setup_step), True, True
     else:
         raise PreventUpdate
 
@@ -211,10 +211,9 @@ def update_alert_messages(n_intervals, n_clicks, pathname):
 
     if problem_setup_step.ansys_ecosystem_ready:
         status = problem_setup_step.get_long_running_method_state("start_analysis").status
-        if status != MethodStatus.Running:
-            problem_setup_step.analysis_running = False
-            problem_setup_step.analysis_locked = False
-        problem_setup_step.analysis_locked = True
+        if status == MethodStatus.Running:
+            problem_setup_step.analysis_running = True
+            problem_setup_step.analysis_locked = True
         return update_alerts(problem_setup_step), problem_setup_step.analysis_locked
     else:
         raise PreventUpdate
@@ -350,18 +349,22 @@ def upload(is_completed, filenames, upload_id, component_id, pathname):
 
 @callback(
     Output("start_analysis", "disabled"),
-    Input({"type": "upload", "placeholder": ALL}, "value"),
+    Input({"type": "upload", "placeholder": ALL}, "isCompleted"),
+    State({"type": "upload", "placeholder": ALL}, "fileNames"),
     State("url", "pathname"),
     prevent_initial_call=True,
     )
-def update_status_of_start_analysis_button(uploaded_input_files, pathname):
+def update_status_of_start_analysis_button(is_completed, filenames, pathname):
     """This enables the start analysis button if a file has been uploaded for all input files."""
     project = DashClient[{{ cookiecutter.__solution_definition_name }}].get_project(pathname)
     problem_setup_step = project.steps.problem_setup_step
-    if all(uploaded_input_files):
+    if all(filenames):
         problem_setup_step.analysis_locked = False
     else:
         problem_setup_step.analysis_locked = True
+    if filenames == True:
+        result = check_empty_strings(filenames)
+
     return problem_setup_step.analysis_locked
 
 
@@ -372,3 +375,11 @@ def update_status_of_start_analysis_button(uploaded_input_files, pathname):
 )
 def on_page_load_initialize_dictionary_of_ui_placeholder_values(pathname, n_clicks):
     return n_clicks + 1
+
+
+def check_empty_strings(lst):
+    for sublist in lst:
+        for item in sublist:
+            if not item.strip():  # Using strip() to remove leading/trailing whitespaces
+                return False
+    return True
