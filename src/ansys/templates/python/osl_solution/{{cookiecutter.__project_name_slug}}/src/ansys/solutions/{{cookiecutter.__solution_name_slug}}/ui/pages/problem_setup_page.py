@@ -91,10 +91,7 @@ def layout(problem_setup_step: ProblemSetupStep) -> html.Div:
                                         "button",
                                         "start_analysis",
                                         "Start analysis",
-                                        disabled=True
-                                        if problem_setup_step.analysis_running
-                                        or not problem_setup_step.ansys_ecosystem_ready
-                                        else False,
+                                        disabled=problem_setup_step.analysis_locked,
                                         label_width=2,
                                         value_width=4,
                                         unit_width=1,
@@ -190,11 +187,11 @@ def start_analysis(n_clicks, pathname):
         # Start analysis
         problem_setup_step.start_analysis()
         # Lock start analysis
-        problem_setup_step.analysis_running = True
+        problem_setup_step.analysis_locked = True
         # Wait until the analysis effectively starts
         while problem_setup_step.optislang_solve_status == "initial":
             time.sleep(1)
-        return update_alerts(problem_setup_step), True, True
+        return update_alerts(problem_setup_step), True, problem_setup_step.analysis_locked
     else:
         raise PreventUpdate
 
@@ -216,7 +213,9 @@ def update_alert_messages(n_intervals, n_clicks, pathname):
         status = problem_setup_step.get_long_running_method_state("start_analysis").status
         if status != MethodStatus.Running:
             problem_setup_step.analysis_running = False
-        return update_alerts(problem_setup_step), problem_setup_step.analysis_running
+            problem_setup_step.analysis_locked = False
+        problem_setup_step.analysis_locked = True
+        return update_alerts(problem_setup_step), problem_setup_step.analysis_locked
     else:
         raise PreventUpdate
 
@@ -268,12 +267,14 @@ def initialize_dictionary_of_ui_placeholders(n_clicks, data, ids, input_file_ids
             ui_data.update({"StartDesigns":designs})
             ui_data["start_analysis_requested"] = False
         if input_file_ids:
-            problem_setup_step.setup_is_complete = False
+            problem_setup_step.analysis_locked = True
+        else:
+            problem_setup_step.analysis_locked = False
         for index in range(len(input_file_ids)):
             ui_data.update({input_file_ids[index]["placeholder"]: ""})
 
         problem_setup_step.ui_placeholders = ui_data
-        return  problem_setup_step.setup_is_complete
+        return problem_setup_step.analysis_locked
     else:
         return no_update
 
@@ -345,6 +346,23 @@ def upload(is_completed, filenames, upload_id, component_id, pathname):
         return no_update
     else:
         raise PreventUpdate
+
+
+@callback(
+    Output("start_analysis", "disabled"),
+    Input({"type": "upload", "placeholder": ALL}, "value"),
+    State("url", "pathname"),
+    prevent_initial_call=True,
+    )
+def update_status_of_start_analysis_button(uploaded_input_files, pathname):
+    """This enables the start analysis button if a file has been uploaded for all input files."""
+    project = DashClient[{{ cookiecutter.__solution_definition_name }}].get_project(pathname)
+    problem_setup_step = project.steps.problem_setup_step
+    if all(uploaded_input_files):
+        problem_setup_step.analysis_locked = False
+    else:
+        problem_setup_step.analysis_locked = True
+    return problem_setup_step.analysis_locked
 
 
 @callback(

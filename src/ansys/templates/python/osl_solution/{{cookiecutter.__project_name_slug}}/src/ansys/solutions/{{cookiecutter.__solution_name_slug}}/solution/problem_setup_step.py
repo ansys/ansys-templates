@@ -32,7 +32,7 @@ class ProblemSetupStep(StepModel):
     ui_placeholders: dict = {}
     app_metadata: dict = {}
     analysis_running: bool = False
-    setup_is_complete: bool = True
+    analysis_locked: bool = True
 
     # Backend data model
     tcp_server_host: str = "127.0.0.1"
