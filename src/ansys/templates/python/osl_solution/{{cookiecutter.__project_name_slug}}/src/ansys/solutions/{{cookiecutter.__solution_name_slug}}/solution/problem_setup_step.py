@@ -2,16 +2,17 @@
 
 """Backend of the problem setup step."""
 
+import os
 import json
 from pathlib import Path
 import platform
 import time
 from typing import List
-import subprocess
-import sys
+import tempfile
+
 
 from ansys.optislang.core import Optislang, logging
-from ansys.saf.glow.solution import FileReference, AssetFileReference, StepModel, StepSpec, long_running, transaction
+from ansys.saf.glow.solution import FileReference, FileGroupReference, StepModel, StepSpec, long_running, transaction
 from ansys.solutions.optislang.frontend_components.project_properties import ProjectProperties, write_properties_file, apply_placeholders_to_properties_file
 from ansys.solutions.products_ecosystem.controller import AnsysProductsEcosystemController
 from ansys.solutions.products_ecosystem.utils import convert_to_long_version
@@ -31,6 +32,7 @@ class ProblemSetupStep(StepModel):
     ui_placeholders: dict = {}
     app_metadata: dict = {}
     analysis_running: bool = False
+    analysis_locked: bool = True
 
     # Backend data model
     tcp_server_host: str = "127.0.0.1"
@@ -70,6 +72,9 @@ class ProblemSetupStep(StepModel):
     properties_file: FileReference = FileReference("Problem_Setup/{{ cookiecutter.__optiSLang_application_archive_stem }}.json")
     metadata_file: FileReference = FileReference("Problem_Setup/metadata.json")
     project_state_file: FileReference = FileReference("Problem_Setup/project_state.json")
+    input_files: FileGroupReference = FileGroupReference("Problem_Setup/Input_Files/*.*")
+    # If folder doesn't exist, it will be created later
+    upload_directory = os.path.join(tempfile.gettempdir(), "GLOW")
 
     # Outputs
     working_properties_file: FileReference = FileReference("Problem_Setup/working_properties_file.json")
@@ -132,6 +137,38 @@ class ProblemSetupStep(StepModel):
         original_project_state_file = Path(__file__).parent.absolute().parent / "model" / "assets" / "project_state.json"
         self.project_state_file.write_bytes(original_project_state_file.read_bytes())
 
+
+    @transaction(self=StepSpec(download=["properties_file"], upload=["placeholders", "registered_files", "settings", "parameter_manager", "criteria"]))
+    def get_default_placeholder_values(self):
+        """Get placeholder values and definitions using the ProjectProperties class."""
+        pp = ProjectProperties()
+        pp.read_file(self.properties_file.path)
+        self.placeholders = pp._placeholders
+        self.registered_files = pp._registered_files
+        self.settings = pp._settings
+        self.parameter_manager = pp._parameter_manager
+        self.criteria = pp._criteria
+
+    @transaction(self=StepSpec(download=["properties_file", "ui_placeholders"], upload=["working_properties_file", "placeholders", "registered_files", "settings", "parameter_manager", "criteria"]))
+    def write_updated_properties_file(self) -> None:
+        properties = apply_placeholders_to_properties_file(self.ui_placeholders, self.properties_file.path)
+        self.placeholders = properties["placeholders"]
+        self.registered_files = properties["registered_files"]
+        self.settings = properties["settings"]
+        self.parameter_manager = properties["parameter_manager"]
+        self.criteria = properties["criteria"]
+        write_properties_file(properties, Path(self.working_properties_file.path))
+
+
+    @transaction(self=StepSpec(download=["properties_file", "ui_placeholders"], upload=["placeholders", "registered_files", "settings", "parameter_manager", "criteria"]))
+    def update_osl_placeholders_with_ui_values(self) -> None:
+        properties = apply_placeholders_to_properties_file(self.ui_placeholders, self.properties_file.path)
+        self.placeholders = properties["placeholders"]
+        self.registered_files = properties["registered_files"]
+        self.settings = properties["settings"]
+        self.parameter_manager = properties["parameter_manager"]
+        self.criteria = properties["criteria"]
+
     @transaction(
         self=StepSpec(
             upload=["ansys_ecosystem", "ansys_ecosystem_ready"],
@@ -187,22 +224,6 @@ class ProblemSetupStep(StepModel):
             self.ansys_ecosystem[product_name]["alert_message"] = alert_message
             self.ansys_ecosystem[product_name]["alert_color"] = alert_color
 
-    @transaction(self=StepSpec(download=["properties_file"], upload=["placeholders", "registered_files", "settings", "parameter_manager", "criteria"]))
-    def get_default_placeholder_values(self):
-        """Get placeholder values and definitions using the ProjectProperties class."""
-
-        pp = ProjectProperties()
-        pp.read_file(self.properties_file.path)
-        self.placeholders = pp._placeholders
-        self.registered_files = pp._registered_files
-        self.settings = pp._settings
-        self.parameter_manager = pp._parameter_manager
-        self.criteria = pp._criteria
-
-    @transaction(self=StepSpec(download=["properties_file", "ui_placeholders"], upload=["working_properties_file"]))
-    def write_updated_properties_file(self) -> None:
-        properties = apply_placeholders_to_properties_file(self.ui_placeholders, self.properties_file.path)
-        write_properties_file(properties, Path(self.working_properties_file.path))
 
     @transaction(
         self=StepSpec(
@@ -304,3 +325,4 @@ class ProblemSetupStep(StepModel):
             time.sleep(3)
 
         osl.dispose()
+
