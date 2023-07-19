@@ -332,6 +332,7 @@ SOLUTION_STRUCTURE = [
     "CHANGELOG.md",
     "CODE_OF_CONDUCT.md",
     "CODEOWNERS",
+    "compose.yaml",
     "CONTRIBUTING.md",
     "CONTRIBUTORS.md",
     "LICENSE.rst",
