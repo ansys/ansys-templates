@@ -189,7 +189,7 @@ for alert in ["optislang_version", "optislang_solve"]:
 def start_analysis(n_clicks, pathname):
     """Start optiSLang and run the simulation. Wait for the process to complete."""
 
-    project = DashClient[{{ cookiecutter.__solution_definition_name }}.get_project(pathname)
+    project = DashClient[{{ cookiecutter.__solution_definition_name }}].get_project(pathname)
     problem_setup_step = project.steps.problem_setup_step
 
     if n_clicks:
