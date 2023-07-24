@@ -150,7 +150,19 @@ class ProblemSetupStep(StepModel):
         self.parameter_manager = pp._parameter_manager
         self.criteria = pp._criteria
 
-    @transaction(self=StepSpec(download=["properties_file", "ui_placeholders"], upload=["working_properties_file", "placeholders", "registered_files", "settings", "parameter_manager", "criteria"]))
+    @transaction(
+        self=StepSpec(
+            download=["properties_file", "ui_placeholders"],
+            upload=[
+                "working_properties_file",
+                "placeholders",
+                "registered_files",
+                "settings",
+                "parameter_manager",
+                "criteria",
+            ],
+        )
+    )
     def write_updated_properties_file(self) -> None:
         properties = apply_placeholders_to_properties_file(self.ui_placeholders, self.properties_file.path)
         self.placeholders = properties["placeholders"]
@@ -160,8 +172,12 @@ class ProblemSetupStep(StepModel):
         self.criteria = properties["criteria"]
         write_properties_file(properties, Path(self.working_properties_file.path))
 
-
-    @transaction(self=StepSpec(download=["properties_file", "ui_placeholders"], upload=["placeholders", "registered_files", "settings", "parameter_manager", "criteria"]))
+    @transaction(
+        self=StepSpec(
+            download=["properties_file", "ui_placeholders"],
+            upload=["placeholders", "registered_files", "settings", "parameter_manager", "criteria"],
+        )
+    )
     def update_osl_placeholders_with_ui_values(self) -> None:
         properties = apply_placeholders_to_properties_file(self.ui_placeholders, self.properties_file.path)
         self.placeholders = properties["placeholders"]
@@ -246,6 +262,7 @@ class ProblemSetupStep(StepModel):
                 "tcp_server_stopped_states",
                 "optislang_log_level",
                 "node_list",
+                "input_files",
             ],
             upload=[
                 "optislang_solve_status",
