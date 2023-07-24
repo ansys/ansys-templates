@@ -74,7 +74,6 @@ DESIRED_STRUCTURE = [
     "CONTRIBUTING.md",
     "CONTRIBUTORS.md",
     "LICENSE.rst",
-    "poetry.lock",
     "pyproject.toml",
     "README.rst",
     "setup_environment.py",
