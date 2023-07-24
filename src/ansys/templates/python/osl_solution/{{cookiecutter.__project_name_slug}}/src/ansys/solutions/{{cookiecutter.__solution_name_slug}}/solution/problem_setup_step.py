@@ -33,6 +33,7 @@ class ProblemSetupStep(StepModel):
     app_metadata: dict = {}
     analysis_running: bool = False
     analysis_locked: bool = True
+    project_locked: bool = False
 
     # Backend data model
     tcp_server_host: str = "127.0.0.1"
