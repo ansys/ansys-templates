@@ -24,7 +24,7 @@ def layout(problem_setup_step: ProblemSetupStep) -> html.Div:
     # Upload placeholders and assets
     if problem_setup_step.placeholders == {}:
         problem_setup_step.get_default_placeholder_values()
-        project_properties_sections = to_dash_sections(
+    project_properties_sections = to_dash_sections(
             problem_setup_step.placeholders, problem_setup_step.registered_files, problem_setup_step.project_locked
         )
 
