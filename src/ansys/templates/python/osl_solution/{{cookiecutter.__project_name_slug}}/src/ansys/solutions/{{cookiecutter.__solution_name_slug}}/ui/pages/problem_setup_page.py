@@ -348,7 +348,7 @@ def update_ui_placeholders(value, id, pathname):
     State("url", "pathname"),
     prevent_initial_call=True,
 )
-def upload(is_completed, filenames, upload_id, component_id, pathname):
+def upload_input_files_to_project_and_update_ui_placeholders(is_completed, filenames, upload_id, component_id, pathname):
     """This uploads an Input file to the project directory and updates the dictionary of ui placeholders every time
     the ui data changes in the Input files section."""
     project = DashClient[{{ cookiecutter.__solution_definition_name }}].get_project(pathname)
