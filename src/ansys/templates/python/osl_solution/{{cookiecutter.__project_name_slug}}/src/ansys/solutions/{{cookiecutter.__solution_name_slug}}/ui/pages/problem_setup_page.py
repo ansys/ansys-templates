@@ -24,7 +24,9 @@ def layout(problem_setup_step: ProblemSetupStep) -> html.Div:
     # Upload placeholders and assets
     if problem_setup_step.placeholders == {}:
         problem_setup_step.get_default_placeholder_values()
-    project_properties_sections = to_dash_sections(problem_setup_step.placeholders, problem_setup_step.registered_files)
+    project_properties_sections = to_dash_sections(
+            problem_setup_step.placeholders, problem_setup_step.registered_files, problem_setup_step.project_locked
+        )
 
     return html.Div(
         [
@@ -42,6 +44,16 @@ def layout(problem_setup_step: ProblemSetupStep) -> html.Div:
             html.Hr(className="my-2"),
             html.Br(),
             # Alerts
+            dbc.Row(
+                id="project-locked-alert",
+                children=[
+                    dbc.Alert(
+                        "The selected inputs are locked. To set new inputs, create a new project.",
+                        color="info",
+                    )
+                ],
+                style={"display": "block"} if problem_setup_step.project_locked else {"display": "none"},
+            ),
             dbc.Row(
                 [
                     dbc.Col(
@@ -168,6 +180,8 @@ for alert in ["optislang_version", "optislang_solve"]:
     Output("alert_messages", "children"),
     Output("wait_start_analysis", "children"),
     Output("start_analysis", "disabled"),
+    Output("osl-dash-sections", "children"),
+    Output("project-locked-alert", "style"),
     Input("start_analysis", "n_clicks"),
     State("url", "pathname"),
     prevent_initial_call=True,
@@ -179,26 +193,34 @@ def start_analysis(n_clicks, pathname):
     problem_setup_step = project.steps.problem_setup_step
 
     if n_clicks:
-        ui_data=problem_setup_step.ui_placeholders
+        ui_data = problem_setup_step.ui_placeholders
         ui_data.update({"start_analysis_requested": True})
-        problem_setup_step.ui_placeholders=ui_data
+        problem_setup_step.ui_placeholders = ui_data
         # Update project properties file prior to the solve
         problem_setup_step.write_updated_properties_file()
         # Start analysis
         problem_setup_step.start_analysis()
-        # Lock start analysis
+        # Lock start analysis and ui data
         problem_setup_step.analysis_locked = True
+        problem_setup_step.project_locked = True
         # Wait until the analysis effectively starts
         while problem_setup_step.optislang_solve_status == "initial":
             time.sleep(1)
-        return update_alerts(problem_setup_step), True, True
+        return (
+            update_alerts(problem_setup_step),
+            True,
+            True,
+            to_dash_sections(
+                problem_setup_step.placeholders, problem_setup_step.registered_files, problem_setup_step.project_locked
+            ),
+            {"display": "block"},
+        )
     else:
         raise PreventUpdate
 
 
 @callback(
     Output("alert_messages", "children"),
-    Output("start_analysis", "disabled"),
     Input("solve_interval_component", "n_intervals"),
     Input("start_analysis", "n_clicks"),
     State("url", "pathname"),
@@ -211,10 +233,11 @@ def update_alert_messages(n_intervals, n_clicks, pathname):
 
     if problem_setup_step.ansys_ecosystem_ready:
         status = problem_setup_step.get_long_running_method_state("start_analysis").status
+
         if status == MethodStatus.Running:
             problem_setup_step.analysis_running = True
-            problem_setup_step.analysis_locked = True
-        return update_alerts(problem_setup_step), problem_setup_step.analysis_locked
+
+        return update_alerts(problem_setup_step)
     else:
         raise PreventUpdate
 
@@ -236,7 +259,7 @@ def initialize_dictionary_of_ui_placeholders(n_clicks, data, ids, input_file_ids
     designs = {}
     parameters = {}
     if problem_setup_step.ui_placeholders == {}:
-        ui_data=problem_setup_step.ui_placeholders
+        ui_data = problem_setup_step.ui_placeholders
         for index in range(len(data)):
             if ids[index]["placeholder"].startswith("StartDesigns"):
                 split_values = ids[index]["placeholder"].split("##")
@@ -253,17 +276,17 @@ def initialize_dictionary_of_ui_placeholders(n_clicks, data, ids, input_file_ids
                 pm_name = split_values[0]
                 key = split_values[1]
                 parameters[key] = data[index]
-                ui_data.update({pm_name:parameters})
-            elif "Bool" in ids[index]["placeholder"] and type(data[index])==list:
-                value=data[index]
+                ui_data.update({pm_name: parameters})
+            elif "Bool" in ids[index]["placeholder"] and type(data[index]) == list:
+                value = data[index]
                 if True in value:
                     new_value = True
                 else:
                     new_value = False
                 ui_data.update({ids[index]["placeholder"]: new_value})
             else:
-                ui_data.update({ids[index]["placeholder"]:data[index]})
-            ui_data.update({"StartDesigns":designs})
+                ui_data.update({ids[index]["placeholder"]: data[index]})
+            ui_data.update({"StartDesigns": designs})
             ui_data["start_analysis_requested"] = False
         if input_file_ids:
             problem_setup_step.analysis_locked = True
@@ -289,20 +312,20 @@ def update_ui_placeholders(value, id, pathname):
     """This updates the dictionary of ui placeholders each time the ui data changes in the Placeholders section"""
     project = DashClient[{{ cookiecutter.__solution_definition_name }}].get_project(pathname)
     problem_setup_step = project.steps.problem_setup_step
-    name=id["placeholder"]
-    ui_data=problem_setup_step.ui_placeholders
+    name = id["placeholder"]
+    ui_data = problem_setup_step.ui_placeholders
     if name.startswith("StartDesigns"):
         split_values = id["placeholder"].split("##")
         values = split_values[1:]
         rowId = values[0].split("#")[1]
         key = values[1].split("#")[1]
-        ui_data["StartDesigns"][rowId][key]=value
+        ui_data["StartDesigns"][rowId][key] = value
     elif "ParameterManager" in name:
         split_values = id["placeholder"].split("#")
         pm_name = split_values[0]
         key = split_values[1]
-        ui_data[pm_name][key]=value
-    elif "Bool" in name and type(value)==list:
+        ui_data[pm_name][key] = value
+    elif "Bool" in name and type(value) == list:
         if True in value:
             value = True
         else:
@@ -310,7 +333,7 @@ def update_ui_placeholders(value, id, pathname):
         ui_data.update({name: value})
     else:
         ui_data.update({name: value})
-    problem_setup_step.ui_placeholders=ui_data
+    problem_setup_step.ui_placeholders = ui_data
     problem_setup_step.update_osl_placeholders_with_ui_values()
 
     return no_update
@@ -325,7 +348,7 @@ def update_ui_placeholders(value, id, pathname):
     State("url", "pathname"),
     prevent_initial_call=True,
 )
-def upload(is_completed, filenames, upload_id, component_id, pathname):
+def upload_input_files_to_project_and_update_ui_placeholders(is_completed, filenames, upload_id, component_id, pathname):
     """This uploads an Input file to the project directory and updates the dictionary of ui placeholders every time
     the ui data changes in the Input files section."""
     project = DashClient[{{ cookiecutter.__solution_definition_name }}].get_project(pathname)
@@ -338,7 +361,7 @@ def upload(is_completed, filenames, upload_id, component_id, pathname):
         file_data = open(filepath, mode="rb")
 
         project.upload_file(f"Problem_Setup/Input_Files/{filename}", file_data)
-        ui_data=problem_setup_step.ui_placeholders
+        ui_data = problem_setup_step.ui_placeholders
         ui_data.update({name: filename})
         problem_setup_step.ui_placeholders = ui_data
 
@@ -353,7 +376,7 @@ def upload(is_completed, filenames, upload_id, component_id, pathname):
     State({"type": "upload", "placeholder": ALL}, "fileNames"),
     State("url", "pathname"),
     prevent_initial_call=True,
-    )
+)
 def update_status_of_start_analysis_button(is_completed, filenames, pathname):
     """This enables the start analysis button if a file has been uploaded for all input files."""
     project = DashClient[{{ cookiecutter.__solution_definition_name }}].get_project(pathname)
