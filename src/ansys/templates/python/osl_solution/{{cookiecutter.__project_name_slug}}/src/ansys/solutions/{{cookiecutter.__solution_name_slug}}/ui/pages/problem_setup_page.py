@@ -203,7 +203,7 @@ def update_alert_messages(n_intervals, n_clicks, pathname):
     problem_setup_step = project.steps.problem_setup_step
 
     if problem_setup_step.ansys_ecosystem_ready:
-        status = problem_setup_step.get_long_running_method_state("start_analysis").status
+        status = problem_setup_step.get_long_running_method_state("start").status
 
         if status == MethodStatus.Running:
             problem_setup_step.analysis_running = True

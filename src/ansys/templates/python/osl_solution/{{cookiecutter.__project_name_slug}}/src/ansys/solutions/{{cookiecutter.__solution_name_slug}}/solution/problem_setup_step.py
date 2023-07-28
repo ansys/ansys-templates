@@ -17,7 +17,7 @@ from ansys.solutions.optislang.frontend_components.project_properties import Pro
 from ansys.solutions.products_ecosystem.controller import AnsysProductsEcosystemController
 from ansys.solutions.products_ecosystem.utils import convert_to_long_version
 
-from ansys.solutions.{{ cookiecutter.__solution_name_slug }}.model.osl_project_tree import dump_project_state, get_project_tree, get_node_list, get_step_list
+from ansys.solutions.{{ cookiecutter.__solution_name_slug }}.model.optislang.project_tree import dump_project_state, get_project_tree, get_node_list, get_step_list, get_node_hids
 from ansys.solutions.{{ cookiecutter.__solution_name_slug }}.model.optislang.server_commands import run_osl_server_command
 from ansys.solutions.{{ cookiecutter.__solution_name_slug }}.ui.utils.monitoring import read_log_file
 
@@ -311,6 +311,9 @@ class ProblemSetupStep(StepModel):
     @long_running
     def start(self) -> None:
         """Start optiSLang and run the project."""
+
+        self.project_started = True
+        self.transaction.upload(["project_started"])
 
         osl_logger = logging.OslLogger(
             loglevel=self.optislang_log_level,
