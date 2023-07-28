@@ -23,7 +23,7 @@ def layout(problem_setup_step: ProblemSetupStep) -> html.Div:
     """Layout of the problem setup step."""
 
     # Upload placeholders and assets
-    
+
     project_properties_sections = to_dash_sections(
             problem_setup_step.placeholders, problem_setup_step.registered_files, problem_setup_step.project_locked
         )

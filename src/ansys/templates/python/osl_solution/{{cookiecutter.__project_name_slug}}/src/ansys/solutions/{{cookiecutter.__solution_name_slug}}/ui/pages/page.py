@@ -66,7 +66,7 @@ def display_page_body(pathname, n_clicks):
         project.steps.problem_setup_step.get_app_metadata()
         project.steps.problem_setup_step.get_default_placeholder_values()
         project.steps.problem_setup_step.project_initialized = True
-    
+
     return [
         dbc.Stack(
             [

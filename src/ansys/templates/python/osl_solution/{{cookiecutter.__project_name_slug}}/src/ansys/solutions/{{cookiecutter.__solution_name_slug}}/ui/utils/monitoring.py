@@ -19,4 +19,3 @@ def read_log_file(log_file: Union[Path, str]) -> list:
         raise FileNotFoundError(f"Unable to find log file {log_file}.")
 
     return logs
-

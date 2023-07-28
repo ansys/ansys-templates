@@ -262,5 +262,5 @@ def monitor_actor_command(n_intervals, pathname):
                 return (True, f"{command.replace('_', ' ').title()} command failed.", "danger", False, False, False, False)
             elif status == MethodStatus.Running:
                 return (False, f"{command.replace('_', ' ').title()} command is under process.", "primary", True, True, True, True)
-        
+
     raise PreventUpdate

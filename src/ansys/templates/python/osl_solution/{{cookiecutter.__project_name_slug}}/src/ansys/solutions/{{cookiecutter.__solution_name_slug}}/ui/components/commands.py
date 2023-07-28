@@ -37,7 +37,7 @@ class Commands(object):
         buttons = []
 
         if self._enable_restart:
-             buttons.append(
+            buttons.append(
                 dbc.Button(
                     html.I(className="fas fa-play", style={"display": "inline-block"}),
                     id="restart_command",
@@ -46,7 +46,7 @@ class Commands(object):
                 )
             )
         if self._enable_stop_gently:
-             buttons.append(
+            buttons.append(
                 dbc.Button(
                     html.I(className="fa fa-hand-paper", style={"display": "inline-block"}),
                     id="stop_gently_command",
@@ -55,7 +55,7 @@ class Commands(object):
                 )
             )
         if self._enable_stop:
-             buttons.append(
+            buttons.append(
                 dbc.Button(
                     html.I(className="fas fa-stop", style={"display": "inline-block"}),
                     id="stop_command",
@@ -64,7 +64,7 @@ class Commands(object):
                 )
             )
         if self._enable_reset:
-             buttons.append(
+            buttons.append(
                 dbc.Button(
                     html.I(className="fas fa-fast-backward", style={"display": "inline-block"}),
                     id="reset_command",
@@ -73,7 +73,7 @@ class Commands(object):
                 )
             )
         if self._enable_shutdown:
-             buttons.append(
+            buttons.append(
                 dbc.Button(
                     html.I(className="fas fa-power-off", style={"display": "inline-block"}),
                     id="shutdown_command",
@@ -121,11 +121,11 @@ class Commands(object):
 class ProjectCommands(Commands):
 
     def __init__(self, lock_commands: bool):
-        super().__init__(lock_commands)  
+        super().__init__(lock_commands)
 
 
 class ActorCommands(Commands):
 
     def __init__(self, lock_commands: bool):
-        super().__init__(lock_commands)  
+        super().__init__(lock_commands)
         self._enable_shutdown = False
