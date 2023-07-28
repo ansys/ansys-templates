@@ -19,7 +19,7 @@ class ActorLogsTable:
     def __init__(self) -> None:
         """Constructor."""
 
-        self.actor_info: dict = None
+        self.actor_info: dict = {}
         self.font_size: str = "15px"
 
     def _get_data(self) -> pd.DataFrame:

@@ -2,26 +2,12 @@
 
 """General purpose functions."""
 
-import json
-from pathlib import Path
+
+import dash_bootstrap_components as dbc
 import re
 from typing import Any, Iterable, Union
 
-import dash_bootstrap_components as dbc
-
 from ansys.solutions.{{ cookiecutter.__solution_name_slug }}.ui.utils.constants import MONITORING_TABS
-
-
-def read_system_hierarchy() -> list:
-
-    system_hierarchy_file = (
-        Path(__file__).parent.parent.parent.absolute() / "model" / "assets" / "system_hierarchy.json"
-    )
-
-    with open(system_hierarchy_file) as f:
-        system_hierarchy = json.load(f)
-
-    return system_hierarchy["system_hierarchy"]
 
 
 def update_list_of_tabs(node_info: dict) -> list:
@@ -60,20 +46,29 @@ def update_list_of_tabs(node_info: dict) -> list:
     return list_of_tabs
 
 
-def extract_dict_by_key(dictionaries: list, key: str, value: Any, expect_unique: bool = False) -> Union[None, dict]:
+def extract_dict_by_key(dictionaries: list, key: str, value: Any, expect_unique: bool = False, return_index: bool = True) -> Union[None, dict]:
     """Given a list of dictionaries, return the ones matching specific key and value."""
 
-    extracted_dicts = [d for d in dictionaries if d.get(key) == value]
+    matches, indexes = [], []
+
+    for (index, dictionary) in enumerate(dictionaries):
+        if dictionary.get(key) == value:
+            matches.append(dictionary)
+            indexes.append(index)
 
     if expect_unique:
-        if len(extracted_dicts) == 0:
+        if len(matches) == 0:
             raise Exception(f"No matching dictionaries with key {key} and value {value}.")
-        elif len(extracted_dicts) == 1:
-            return extracted_dicts[0]
+        elif len(matches) == 1:
+            result_m = matches[0]
+            result_i = indexes[0]
         else:
             raise Exception(f"Multiple matches found with key {key} and value {value}.")
     else:
-        return extracted_dicts
+        result_m = matches
+        result_i = indexes
+
+    return (result_m, result_i) if return_index else result_m
 
 
 def remove_key_from_dictionaries(dictionaries: list, key: str) -> list:
@@ -112,3 +107,11 @@ def sorted_nicely(l) -> Iterable:
 
 def sort_dict_by_ordered_keys(dictionary: dict, list_of_keys: list) -> dict:
     return {key: dictionary[key] for key in list_of_keys if key in dictionary}
+
+
+def check_empty_strings(lst) -> bool:
+    for sublist in lst:
+        for item in sublist:
+            if not item.strip():  # Using strip() to remove leading/trailing whitespaces
+                return False
+    return True

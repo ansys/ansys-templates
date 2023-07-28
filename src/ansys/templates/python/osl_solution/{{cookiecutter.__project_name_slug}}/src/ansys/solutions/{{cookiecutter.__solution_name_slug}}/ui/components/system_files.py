@@ -12,9 +12,9 @@ class SystemFiles(object):
     def __init__(self) -> None:
         """Constructor."""
 
-        self.node_name: str = "unknown_node"
+        self.node_name: str = None
         self.omdb_file: dict = None
-        self.font_size: str = "15px"
+        self._font_size: str = "15px"
 
     def render(self) -> html.Div:
         """Generate view."""

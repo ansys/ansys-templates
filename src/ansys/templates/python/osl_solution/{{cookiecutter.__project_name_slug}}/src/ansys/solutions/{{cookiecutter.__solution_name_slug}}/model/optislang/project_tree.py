@@ -1,5 +1,7 @@
 # ©2023, ANSYS Inc. Unauthorized use, distribution or duplication is prohibited.
 
+"""Provide functions to extract the project tree from a project state file."""
+
 import json
 import os
 from pathlib import Path
@@ -7,6 +9,7 @@ import shutil
 from typing import Union
 
 from ansys.optislang.core import Optislang
+from ansys.optislang.core.nodes import System
 
 
 def dump_project_state(project_file: Path, project_state_file: Path) -> None:
@@ -56,6 +59,7 @@ def get_project_tree(project_state_file: Path) -> dict:
             "type": None,
             "kind": None,
             "is_root": False,
+            "lock_commands": False,
         },
     ]
 
@@ -72,6 +76,7 @@ def get_project_tree(project_state_file: Path) -> dict:
                 "type": root_system["type"],
                 "kind": root_system["kind"],
                 "is_root": True,
+                "lock_commands": False,
             },
         ]
     )
@@ -88,6 +93,7 @@ def get_project_tree(project_state_file: Path) -> dict:
                 "type": node["type"],
                 "kind": node["kind"],
                 "is_root": False,
+                "lock_commands": False,
             }
         )
         if "nodes" in node.keys():
@@ -110,6 +116,7 @@ def _get_node_tree(data: Union[list, dict], depth: int = 1) -> list:
                 "type": data["type"],
                 "kind": data["kind"],
                 "is_root": False,
+                "lock_commands": False,
             }
         )
         if "nodes" in data.keys():
@@ -136,3 +143,37 @@ def get_node_list(project_tree: dict) -> list:
         for node_info in project_tree["project_tree"]
         if node_info["key"] not in ["problem_setup_step"]
     ]
+
+
+def get_node_by_uid(osl: Optislang, actor_uid: str):
+    """Get node by walking throughout the root system recursively."""
+
+    def recursive_search(nodes, actor_uid):
+
+        for node in nodes:
+            if node.uid == actor_uid:
+                return node
+            if isinstance(node, System):
+                result = recursive_search(node.get_nodes(), actor_uid)
+                if result:
+                    return result
+
+    for node in osl.project.root_system.get_nodes():
+        if node.uid == actor_uid:
+            return node
+        if isinstance(node, System):
+            result = recursive_search(node.get_nodes(), actor_uid)
+            if result:
+                return result
+
+
+def get_node_hids(osl: Optislang, actor_uid: str) -> list:
+    """Return the hirearchical ID (hid) of the actor."""
+
+    actor_states = osl.get_osl_server().get_actor_states(actor_uid)
+
+    if "states" in actor_states.keys():
+        if len(actor_states["states"]):
+            return [state["hid"] for state in actor_states["states"]]
+    else:
+        return []

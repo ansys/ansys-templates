@@ -1,18 +1,18 @@
 # ©2023, ANSYS Inc. Unauthorized use, distribution or duplication is prohibited.
 
-"""Provide a component to handle the root project information."""
+"""Provide a component to handle the actor information for system and actor node types."""
 
 from dash import dash_table
 import pandas as pd
 
 
-class ProjectSummaryTable:
-    """Project summary component."""
+class ProjectInformationTable:
+    """Project information component."""
 
-    def __init__(self) -> None:
+    def __init__(self, project_status_info: dict) -> None:
         """Constructor."""
 
-        self.project_status_info: dict = None
+        self._project_status_info: dict = project_status_info
         self.font_size: str = "15px"
 
     def _get_data(self) -> pd.DataFrame:
@@ -42,15 +42,15 @@ class ProjectSummaryTable:
             ],
         }
 
-        if self.project_status_info:
+        if self._project_status_info:
             project_summary_data["column_b"] = [
-                self.project_status_info["projects"][0]["state"],
-                self.project_status_info["projects"][0]["project_id"],
-                self.project_status_info["projects"][0]["name"],
-                self.project_status_info["projects"][0]["machine"],
-                self.project_status_info["projects"][0]["location"],
-                self.project_status_info["projects"][0]["working_dir"],
-                self.project_status_info["projects"][0]["user"],
+                self._project_status_info["projects"][0]["state"],
+                self._project_status_info["projects"][0]["project_id"],
+                self._project_status_info["projects"][0]["name"],
+                self._project_status_info["projects"][0]["machine"],
+                self._project_status_info["projects"][0]["location"],
+                self._project_status_info["projects"][0]["working_dir"],
+                self._project_status_info["projects"][0]["user"],
                 "",
                 "",
             ]

@@ -4,10 +4,9 @@
 
 from ansys.saf.glow.client.dashclient import DashClient
 import dash_bootstrap_components as dbc
-from dash_extensions.enrich import Input, Output, State, callback, dcc, html
+from dash_extensions.enrich import Input, Output, State, callback, html
 
 from ansys.solutions.{{ cookiecutter.__solution_name_slug }}.solution.definition import {{ cookiecutter.__solution_definition_name }}
-from ansys.solutions.{{ cookiecutter.__solution_name_slug }}.solution.monitoring_step import MonitoringStep
 from ansys.solutions.{{ cookiecutter.__solution_name_slug }}.solution.problem_setup_step import ProblemSetupStep
 from ansys.solutions.{{ cookiecutter.__solution_name_slug }}.ui.components.logs_table import LogsTable
 from ansys.solutions.{{ cookiecutter.__solution_name_slug }}.ui.utils.alerts import update_monitoring_alert
@@ -23,9 +22,9 @@ from ansys.solutions.{{ cookiecutter.__solution_name_slug }}.ui.views import (
 )
 
 
-def layout(problem_setup_step: ProblemSetupStep, monitoring_step: MonitoringStep, node_info: dict) -> html.Div:
+def layout(problem_setup_step: ProblemSetupStep) -> html.Div:
 
-    list_of_tabs = update_list_of_tabs(node_info)
+    list_of_tabs = update_list_of_tabs(problem_setup_step.selected_actor_info)
 
     return html.Div(
         [
@@ -46,7 +45,6 @@ def layout(problem_setup_step: ProblemSetupStep, monitoring_step: MonitoringStep
             html.Div(
                 id="monitoring_page_content",
             ),
-            dcc.Store(id="node_info", data=node_info),
             html.Br(),
             html.Div(
                 [
@@ -64,11 +62,6 @@ def layout(problem_setup_step: ProblemSetupStep, monitoring_step: MonitoringStep
                     ),
                 ]
             ),
-            dcc.Interval(
-                id="update_data_interval",
-                interval=1 * 3000,  # in milliseconds
-                n_intervals=0,
-            ),
         ]
     )
 
@@ -76,37 +69,28 @@ def layout(problem_setup_step: ProblemSetupStep, monitoring_step: MonitoringStep
 @callback(
     Output("monitoring_page_content", "children"),
     Input("monitoring_tabs", "active_tab"),
-    Input("update_data_interval", "n_intervals"),
     Input("url", "pathname"),
-    State("node_info", "data"),
 )
-def update_page_content(active_tab, n_intervals, pathname, node_info):
+def update_page_content(active_tab, pathname):
     """Update the page content according to the selected tab."""
 
     project = DashClient[{{ cookiecutter.__solution_definition_name }}].get_project(pathname)
     problem_setup_step = project.steps.problem_setup_step
 
     if active_tab == "project_summary_tab":
-        return project_summary_page.layout(problem_setup_step.project_status_info)
+        return project_summary_page.layout(problem_setup_step)
     elif active_tab == "summary_tab":
-        return summary_page.layout(
-            problem_setup_step.actors_info,
-            problem_setup_step.actors_status_info,
-            problem_setup_step.results_files,
-            node_info["uid"],
-        )
+        return summary_page.layout(problem_setup_step)
     elif active_tab == "result_files_tab":
-        return result_files_page.layout(problem_setup_step.project_status_info, node_info["uid"])
+        return result_files_page.layout(problem_setup_step)
     elif active_tab == "scenery_tab":
-        return scenery_page.layout(problem_setup_step.project_status_info)
+        return scenery_page.layout(problem_setup_step)
     elif active_tab == "design_table_tab":
-        return design_table_page.layout(
-            problem_setup_step.actors_info, problem_setup_step.actors_status_info, node_info["uid"]
-        )
+        return design_table_page.layout(problem_setup_step)
     elif active_tab == "visualization_tab":
-        return visualization_page.layout(problem_setup_step.project_status_info, node_info["uid"])
+        return visualization_page.layout(problem_setup_step)
     elif active_tab == "status_overview_tab":
-        return status_overview_page.layout(problem_setup_step.project_status_info)
+        return status_overview_page.layout(problem_setup_step)
 
 
 @callback(
@@ -128,4 +112,3 @@ def display_optislang_logs(n_clicks, pathname, is_in):
     table = LogsTable(problem_setup_step.optislang_logs)
 
     return table.render(), not is_in
-

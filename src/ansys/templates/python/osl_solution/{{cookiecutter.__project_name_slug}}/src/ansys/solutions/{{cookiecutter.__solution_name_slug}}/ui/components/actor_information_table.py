@@ -12,8 +12,8 @@ class ActorInformationTable:
     def __init__(self) -> None:
         """Constructor."""
 
-        self.actor_info: dict = None
-        self.actor_status_info: dict = None
+        self.actor_info: dict = {}
+        self.actor_status_info: dict = {}
         self.font_size: str = "15px"
 
     def _get_data(self) -> pd.DataFrame:
@@ -24,6 +24,7 @@ class ActorInformationTable:
         }
 
         if self.actor_info and self.actor_status_info:
+            
             actor_information_data["column_b"] = [
                 self.actor_status_info["working dir"],
                 self.actor_status_info["state"],

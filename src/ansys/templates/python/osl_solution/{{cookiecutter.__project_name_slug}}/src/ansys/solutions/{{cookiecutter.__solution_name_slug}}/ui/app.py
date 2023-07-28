@@ -12,7 +12,7 @@ import dash_uploader as du
 
 app = DashProxy(
     __name__,
-    external_stylesheets=[dbc.themes.BOOTSTRAP],
+    external_stylesheets=[dbc.themes.BOOTSTRAP, dbc.icons.FONT_AWESOME],
     suppress_callback_exceptions=True,
     transforms=[NoOutputTransform(), TriggerTransform(), MultiplexerTransform()],
 )
