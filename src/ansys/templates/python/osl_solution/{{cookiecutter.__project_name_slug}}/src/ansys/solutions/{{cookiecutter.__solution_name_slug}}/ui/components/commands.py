@@ -18,6 +18,7 @@ class Commands(object):
         self._enable_stop: bool = True
         self._enable_reset: bool = True
         self._enable_shutdown: bool = True
+        self._property_suffix: str = None
 
     def render(self) -> html.Div:
         """Generate view."""
@@ -40,7 +41,7 @@ class Commands(object):
             buttons.append(
                 dbc.Button(
                     html.I(className="fas fa-play", style={"display": "inline-block"}),
-                    id="restart_command",
+                    id=f"restart_{self._property_suffix}",
                     disabled=self._lock_commands,
                     style=button_style,
                 )
@@ -49,7 +50,7 @@ class Commands(object):
             buttons.append(
                 dbc.Button(
                     html.I(className="fa fa-hand-paper", style={"display": "inline-block"}),
-                    id="stop_gently_command",
+                    id=f"stop_gently_{self._property_suffix}",
                     disabled=self._lock_commands,
                     style=button_style,
                 )
@@ -58,7 +59,7 @@ class Commands(object):
             buttons.append(
                 dbc.Button(
                     html.I(className="fas fa-stop", style={"display": "inline-block"}),
-                    id="stop_command",
+                    id=f"stop_{self._property_suffix}",
                     disabled=self._lock_commands,
                     style=button_style,
                 )
@@ -67,7 +68,7 @@ class Commands(object):
             buttons.append(
                 dbc.Button(
                     html.I(className="fas fa-fast-backward", style={"display": "inline-block"}),
-                    id="reset_command",
+                    id=f"reset_{self._property_suffix}",
                     disabled=self._lock_commands,
                     style=button_style,
                 )
@@ -76,7 +77,7 @@ class Commands(object):
             buttons.append(
                 dbc.Button(
                     html.I(className="fas fa-power-off", style={"display": "inline-block"}),
-                    id="shutdown_command",
+                    id=f"shutdown_{self._property_suffix}",
                     disabled=self._lock_commands,
                     style=button_style,
                 ),
@@ -122,6 +123,7 @@ class ProjectCommands(Commands):
 
     def __init__(self, lock_commands: bool):
         super().__init__(lock_commands)
+        self._property_suffix = "project"
 
 
 class ActorCommands(Commands):
@@ -129,3 +131,4 @@ class ActorCommands(Commands):
     def __init__(self, lock_commands: bool):
         super().__init__(lock_commands)
         self._enable_shutdown = False
+        self._property_suffix = "actor"

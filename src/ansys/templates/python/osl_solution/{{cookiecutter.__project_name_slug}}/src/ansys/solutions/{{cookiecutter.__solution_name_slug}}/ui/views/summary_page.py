@@ -174,24 +174,24 @@ def update_actor_information(n_intervals, pathname):
 
 
 @callback(
-    Output("restart_command", "n_clicks"),
-    Output("stop_gently_command", "n_clicks"),
-    Output("stop_command", "n_clicks"),
-    Output("reset_command", "n_clicks"),
+    Output("restart_actor", "n_clicks"),
+    Output("stop_gently_actor", "n_clicks"),
+    Output("stop_actor", "n_clicks"),
+    Output("reset_actor", "n_clicks"),
     Output("commands_alert", "dismissable"),
     Output("commands_alert", "is_open"),
-    Output("restart_command", "disabled"),
-    Output("stop_gently_command", "disabled"),
-    Output("stop_command", "disabled"),
-    Output("reset_command", "disabled"),
-    Input("restart_command", "n_clicks"),
-    Input("stop_gently_command", "n_clicks"),
-    Input("stop_command", "n_clicks"),
-    Input("reset_command", "n_clicks"),
+    Output("restart_actor", "disabled"),
+    Output("stop_gently_actor", "disabled"),
+    Output("stop_actor", "disabled"),
+    Output("reset_actor", "disabled"),
+    Input("restart_actor", "n_clicks"),
+    Input("stop_gently_actor", "n_clicks"),
+    Input("stop_actor", "n_clicks"),
+    Input("reset_actor", "n_clicks"),
     State("url", "pathname"),
     prevent_initial_call=True,
 )
-def run_actor_command(restart_command, stop_gently_command, stop_command, reset_command, pathname):
+def run_actor_command(restart_actor, stop_gently_actor, stop_actor, reset_actor, pathname):
     """Pause OptiSLang project."""
 
     project = DashClient[{{ cookiecutter.__solution_definition_name }}].get_project(pathname)
@@ -199,19 +199,19 @@ def run_actor_command(restart_command, stop_gently_command, stop_command, reset_
 
     run_command = False
 
-    if restart_command:
+    if restart_actor:
         run_command = True
         problem_setup_step.selected_actor_command = f"{problem_setup_step.selected_actor_info['uid']}_restart"
         problem_setup_step.restart()
-    elif stop_gently_command:
+    elif stop_gently_actor:
         run_command = True
         problem_setup_step.selected_actor_command = f"{problem_setup_step.selected_actor_info['uid']}_stop_gently"
         problem_setup_step.stop_gently()
-    elif stop_command:
+    elif stop_actor:
         run_command = True
         problem_setup_step.selected_actor_command = f"{problem_setup_step.selected_actor_info['uid']}_stop"
         problem_setup_step.stop()
-    elif reset_command:
+    elif reset_actor:
         run_command = True
         problem_setup_step.selected_actor_command = f"{problem_setup_step.selected_actor_info['uid']}_reset"
         problem_setup_step.reset()
@@ -227,10 +227,10 @@ def run_actor_command(restart_command, stop_gently_command, stop_command, reset_
     Output("commands_alert", "dismissable"),
     Output("commands_alert", "children"),
     Output("commands_alert", "color"),
-    Output("restart_command", "disabled"),
-    Output("stop_gently_command", "disabled"),
-    Output("stop_command", "disabled"),
-    Output("reset_command", "disabled"),
+    Output("restart_actor", "disabled"),
+    Output("stop_gently_actor", "disabled"),
+    Output("stop_actor", "disabled"),
+    Output("reset_actor", "disabled"),
     Input("summary_auto_update", "n_intervals"),
     State("url", "pathname"),
 )
