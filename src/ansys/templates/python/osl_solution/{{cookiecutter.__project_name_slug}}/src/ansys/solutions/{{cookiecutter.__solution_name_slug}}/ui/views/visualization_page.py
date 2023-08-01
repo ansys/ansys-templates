@@ -15,7 +15,7 @@ def layout(problem_setup_step: ProblemSetupStep) -> html.Div:
             optislang_dash_lib.VisualizationComponent(
                 id="visualization-component",
                 project_state=problem_setup_step.project_status_info,
-                system_id=problem_setup_step.selected_actor_info["uid"],
+                system_id=problem_setup_step.selected_actor_from_treeview,
                 state_idx=0,
             ),
         ]

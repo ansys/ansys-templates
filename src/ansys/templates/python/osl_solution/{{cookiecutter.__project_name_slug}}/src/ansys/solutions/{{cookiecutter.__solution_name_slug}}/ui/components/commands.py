@@ -100,8 +100,10 @@ class Commands(object):
                                 "",
                                 color="light",
                                 id="commands_alert",
-                                dismissable=False if self._lock_commands else True,
-                                is_open=True if self._lock_commands else False,
+                                # dismissable=False if self._lock_commands else True,
+                                # is_open=True if self._lock_commands else False,
+                                dismissable = False,
+                                is_open=True,
                                 fade=False,
                                 style={
                                     "width": "600px",

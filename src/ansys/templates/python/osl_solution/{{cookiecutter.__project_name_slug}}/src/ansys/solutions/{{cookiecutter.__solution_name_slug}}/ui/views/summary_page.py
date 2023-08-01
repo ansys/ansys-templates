@@ -6,7 +6,7 @@ from ansys.saf.glow.client.dashclient import DashClient
 from ansys.saf.glow.core.method_status import MethodStatus
 from dash.exceptions import PreventUpdate
 import dash_bootstrap_components as dbc
-from dash_extensions.enrich import Input, Output, State, callback, html, dcc
+from dash_extensions.enrich import Input, Output, State, callback, html, dcc, callback_context
 
 from ansys.solutions.{{ cookiecutter.__solution_name_slug }}.solution.problem_setup_step import ProblemSetupStep
 from ansys.solutions.{{ cookiecutter.__solution_name_slug }}.solution.definition import {{ cookiecutter.__solution_definition_name }}
@@ -26,14 +26,14 @@ def layout(problem_setup_step: ProblemSetupStep) -> html.Div:
     actor_log_table = ActorLogsTable()
     actor_statistics_table = ActorStatisticsTable()
 
-    if problem_setup_step.selected_actor_info["uid"] in problem_setup_step.actors_info.keys():
-        actor_information_table.actor_info = problem_setup_step.actors_info[problem_setup_step.selected_actor_info["uid"]]
-        system_files.node_name = problem_setup_step.actors_info[problem_setup_step.selected_actor_info["uid"]]["name"]
-        actor_log_table.actor_info = problem_setup_step.actors_info[problem_setup_step.selected_actor_info["uid"]]
-        actor_statistics_table.actor_info = problem_setup_step.actors_info[problem_setup_step.selected_actor_info["uid"]]
+    if problem_setup_step.selected_actor_from_treeview in problem_setup_step.actors_info.keys():
+        actor_information_table.actor_info = problem_setup_step.actors_info[problem_setup_step.selected_actor_from_treeview]
+        system_files.node_name = problem_setup_step.actors_info[problem_setup_step.selected_actor_from_treeview]["name"]
+        actor_log_table.actor_info = problem_setup_step.actors_info[problem_setup_step.selected_actor_from_treeview]
+        actor_statistics_table.actor_info = problem_setup_step.actors_info[problem_setup_step.selected_actor_from_treeview]
 
-    if problem_setup_step.selected_actor_info["uid"] in problem_setup_step.actors_status_info.keys():
-        actor_information_table.actor_status_info = problem_setup_step.actors_status_info[problem_setup_step.selected_actor_info["uid"]][0]
+    if problem_setup_step.selected_actor_from_treeview in problem_setup_step.actors_status_info.keys():
+        actor_information_table.actor_status_info = problem_setup_step.actors_status_info[problem_setup_step.selected_actor_from_treeview][0]
 
     actor_information_card = dbc.Card(
         [
@@ -115,8 +115,8 @@ def layout(problem_setup_step: ProblemSetupStep) -> html.Div:
         ),
     ]
 
-    if problem_setup_step.selected_actor_info["uid"] in problem_setup_step.actors_info.keys():
-        if problem_setup_step.actors_info[problem_setup_step.selected_actor_info["uid"]]["kind"] == "system":
+    if problem_setup_step.selected_actor_from_treeview in problem_setup_step.actors_info.keys():
+        if problem_setup_step.actors_info[problem_setup_step.selected_actor_from_treeview]["kind"] == "system":
             content.extend(
                 [
                     html.Br(),
@@ -165,21 +165,21 @@ def update_actor_information(n_intervals, pathname):
     problem_setup_step = project.steps.problem_setup_step
 
     actor_information_table = ActorInformationTable()
-    if problem_setup_step.selected_actor_info["uid"] in problem_setup_step.actors_info.keys():
-        actor_information_table.actor_info = problem_setup_step.actors_info[problem_setup_step.selected_actor_info["uid"]]
-    if problem_setup_step.selected_actor_info["uid"] in problem_setup_step.actors_status_info.keys():
-        actor_information_table.actor_status_info = problem_setup_step.actors_status_info[problem_setup_step.selected_actor_info["uid"]][0]
+    if problem_setup_step.selected_actor_from_treeview in problem_setup_step.actors_info.keys():
+        actor_information_table.actor_info = problem_setup_step.actors_info[problem_setup_step.selected_actor_from_treeview]
+    if problem_setup_step.selected_actor_from_treeview in problem_setup_step.actors_status_info.keys():
+        actor_information_table.actor_status_info = problem_setup_step.actors_status_info[problem_setup_step.selected_actor_from_treeview][0]
 
     return actor_information_table.render()
 
 
 @callback(
+    Output("commands_alert", "children"),
+    Output("commands_alert", "color"),
     Output("restart_actor", "n_clicks"),
     Output("stop_gently_actor", "n_clicks"),
     Output("stop_actor", "n_clicks"),
     Output("reset_actor", "n_clicks"),
-    Output("commands_alert", "dismissable"),
-    Output("commands_alert", "is_open"),
     Output("restart_actor", "disabled"),
     Output("stop_gently_actor", "disabled"),
     Output("stop_actor", "disabled"),
@@ -188,79 +188,102 @@ def update_actor_information(n_intervals, pathname):
     Input("stop_gently_actor", "n_clicks"),
     Input("stop_actor", "n_clicks"),
     Input("reset_actor", "n_clicks"),
+    Input("summary_auto_update", "n_intervals"),
     State("url", "pathname"),
     prevent_initial_call=True,
 )
-def run_actor_command(restart_actor, stop_gently_actor, stop_actor, reset_actor, pathname):
-    """Pause OptiSLang project."""
+def run_actor_command(restart_actor, stop_gently_actor, stop_actor, reset_actor, n_intervals, pathname):
+    """Run command against actor."""
+
+    triggered_id = callback_context.triggered[0]["prop_id"].split(".")[0]
 
     project = DashClient[{{ cookiecutter.__solution_definition_name }}].get_project(pathname)
     problem_setup_step = project.steps.problem_setup_step
 
-    run_command = False
+    # Click on button
+    if triggered_id in ["restart_actor", "stop_gently_actor", "stop_actor", "reset_actor"]:
+        run_command = False
+        if restart_actor:
+            run_command = True
+            problem_setup_step.selected_command = "restart"
+            problem_setup_step.restart()
+        elif stop_gently_actor:
+            run_command = True
+            problem_setup_step.selected_command = "stop_gently"
+            problem_setup_step.stop_gently()
+        elif stop_actor:
+            run_command = True
+            problem_setup_step.selected_command = "stop"
+            problem_setup_step.stop()
+        elif reset_actor:
+            run_command = True
+            problem_setup_step.selected_command = "reset"
+            problem_setup_step.reset()
+        if run_command:
+            problem_setup_step.lock_commands = True
+            uid = problem_setup_step.selected_actor_from_treeview
+            problem_setup_step.selected_actor_from_command = uid
+            return (
+                "",
+                "light",
+                0,
+                0,
+                0,
+                0,
+                True,
+                True,
+                True,
+                True,
+            )
 
-    if restart_actor:
-        run_command = True
-        problem_setup_step.selected_actor_command = f"{problem_setup_step.selected_actor_info['uid']}_restart"
-        problem_setup_step.restart()
-    elif stop_gently_actor:
-        run_command = True
-        problem_setup_step.selected_actor_command = f"{problem_setup_step.selected_actor_info['uid']}_stop_gently"
-        problem_setup_step.stop_gently()
-    elif stop_actor:
-        run_command = True
-        problem_setup_step.selected_actor_command = f"{problem_setup_step.selected_actor_info['uid']}_stop"
-        problem_setup_step.stop()
-    elif reset_actor:
-        run_command = True
-        problem_setup_step.selected_actor_command = f"{problem_setup_step.selected_actor_info['uid']}_reset"
-        problem_setup_step.reset()
+    # Monitoring
+    if triggered_id == "summary_auto_update":
+        if problem_setup_step.selected_command:
+            if problem_setup_step.selected_actor_from_command == problem_setup_step.selected_actor_from_treeview:
+                status = problem_setup_step.get_long_running_method_state(problem_setup_step.selected_command).status
+                if status == MethodStatus.Completed:
+                    problem_setup_step.lock_commands = False
+                    return (
+                        f"{problem_setup_step.selected_command.replace('_', ' ').title()} command completed successfully.",
+                        "success",
+                        restart_actor,
+                        stop_gently_actor,
+                        stop_actor,
+                        reset_actor,
+                        False,
+                        False,
+                        False,
+                        False,
+                    )
+                elif status == MethodStatus.Failed:
+                    problem_setup_step.lock_commands = False
+                    return (
+                        f"{problem_setup_step.selected_command.replace('_', ' ').title()} command failed.",
+                        "danger",
+                        restart_actor,
+                        stop_gently_actor,
+                        stop_actor,
+                        reset_actor,
+                        False,
+                        False,
+                        False,
+                        False,
+                    )
+                elif status == MethodStatus.Running:
+                    return (
+                        f"{problem_setup_step.selected_command.replace('_', ' ').title()} command is under process.",
+                        "primary",
+                        restart_actor,
+                        stop_gently_actor,
+                        stop_actor,
+                        reset_actor,
+                        True,
+                        True,
+                        True,
+                        True,
+                    )
+                else:
+                    raise Exception(f"Method {problem_setup_step.selected_command} should be in one of these states: Completed, Failed or Running.")
 
-    if run_command:
-        problem_setup_step.lock_commands = True
-        return (0, 0, 0, 0, False, True, True, True, True, True)
-    else:
-        raise PreventUpdate
-
-
-@callback(
-    Output("commands_alert", "dismissable"),
-    Output("commands_alert", "children"),
-    Output("commands_alert", "color"),
-    Output("restart_actor", "disabled"),
-    Output("stop_gently_actor", "disabled"),
-    Output("stop_actor", "disabled"),
-    Output("reset_actor", "disabled"),
-    Input("summary_auto_update", "n_intervals"),
-    State("url", "pathname"),
-)
-def monitor_actor_command(n_intervals, pathname):
-    """Pause OptiSLang project."""
-
-    project = DashClient[{{ cookiecutter.__solution_definition_name }}].get_project(pathname)
-    problem_setup_step = project.steps.problem_setup_step
-
-    if problem_setup_step.selected_actor_command:
-        if problem_setup_step.selected_actor_command.startswith(problem_setup_step.selected_actor_info['uid']):
-            command = problem_setup_step.selected_actor_command.split("_")[1]
-            status = problem_setup_step.get_long_running_method_state(command).status
-            if status == MethodStatus.Completed:
-                problem_setup_step.lock_commands = False
-                problem_setup_step.selected_actor_command = None
-                return (
-                    True,
-                    f"{command.replace('_', ' ').title()} command completed successfully.",
-                    "success",
-                    False,
-                    False,
-                    False,
-                    False,
-                )
-            elif status == MethodStatus.Failed:
-                problem_setup_step.lock_commands = False
-                problem_setup_step.selected_actor_command = None
-                return (True, f"{command.replace('_', ' ').title()} command failed.", "danger", False, False, False, False)
-            elif status == MethodStatus.Running:
-                return (False, f"{command.replace('_', ' ').title()} command is under process.", "primary", True, True, True, True)
 
     raise PreventUpdate

@@ -14,10 +14,10 @@ def layout(problem_setup_step: ProblemSetupStep) -> html.Div:
 
     design_table = DesignTable()
 
-    if problem_setup_step.selected_actor_info["uid"] in problem_setup_step.actors_info.keys():
-        design_table.actor_info = problem_setup_step.actors_info[problem_setup_step.selected_actor_info["uid"]]
-    if problem_setup_step.selected_actor_info["uid"] in problem_setup_step.actors_status_info.keys():
-        design_table.actor_status_info = problem_setup_step.actors_status_info[problem_setup_step.selected_actor_info["uid"]]
+    if problem_setup_step.selected_actor_from_treeview in problem_setup_step.actors_info.keys():
+        design_table.actor_info = problem_setup_step.actors_info[problem_setup_step.selected_actor_from_treeview]
+    if problem_setup_step.selected_actor_from_treeview in problem_setup_step.actors_status_info.keys():
+        design_table.actor_status_info = problem_setup_step.actors_status_info[problem_setup_step.selected_actor_from_treeview]
 
     return html.Div(
         [

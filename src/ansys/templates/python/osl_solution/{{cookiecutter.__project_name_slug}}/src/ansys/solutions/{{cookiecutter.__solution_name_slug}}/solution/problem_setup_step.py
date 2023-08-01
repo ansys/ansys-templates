@@ -20,6 +20,7 @@ from ansys.solutions.products_ecosystem.utils import convert_to_long_version
 from ansys.solutions.{{ cookiecutter.__solution_name_slug }}.model.optislang.project_tree import dump_project_state, get_project_tree, get_node_list, get_step_list, get_node_hids
 from ansys.solutions.{{ cookiecutter.__solution_name_slug }}.model.optislang.server_commands import run_osl_server_command
 from ansys.solutions.{{ cookiecutter.__solution_name_slug }}.ui.utils.monitoring import read_log_file
+from ansys.solutions.{{ cookiecutter.__solution_name_slug }}.ui.utils.common_functions import extract_dict_by_key
 
 
 class ProblemSetupStep(StepModel):
@@ -34,9 +35,9 @@ class ProblemSetupStep(StepModel):
     analysis_running: bool = False
     analysis_locked: bool = True
     project_locked: bool = False
-    selected_actor_info: dict = {}
-    selected_actor_index: int = None
-    selected_actor_command: str = None # expect a string with format <actor-uid>-<actor-command>
+    selected_actor_from_treeview: str = None
+    selected_command: str = None
+    selected_actor_from_command: str = None
     lock_commands: bool = False
     project_initialized: bool = False
     project_started: bool = False
@@ -380,7 +381,7 @@ class ProblemSetupStep(StepModel):
 
     @transaction(
         self=StepSpec(
-            download=["tcp_server_host", "tcp_server_port", "command_timeout", "command_retries", "selected_actor_command", "selected_actor_info"],
+            download=["tcp_server_host", "tcp_server_port", "command_timeout", "command_retries", "selected_command", "selected_actor_from_command", "step_list"],
             upload=["server_command_log_file"],
         )
     )
@@ -388,10 +389,12 @@ class ProblemSetupStep(StepModel):
     def restart(self) -> None:
         """Restart project/actor."""
 
-        if self.selected_actor_info["is_root"]:
+        actor_info = extract_dict_by_key(self.step_list, "uid", self.selected_actor_from_command, expect_unique=True, return_index=False)
+
+        if actor_info["is_root"]:
             actor_uid = None
         else:
-            actor_uid = self.selected_actor_info["uid"]
+            actor_uid = actor_info["uid"]
 
         run_osl_server_command(
             self.tcp_server_host,
@@ -406,7 +409,7 @@ class ProblemSetupStep(StepModel):
 
     @transaction(
         self=StepSpec(
-            download=["tcp_server_host", "tcp_server_port", "command_timeout", "command_retries", "selected_actor_command", "selected_actor_info"],
+            download=["tcp_server_host", "tcp_server_port", "command_timeout", "command_retries", "selected_actor_from_command", "step_list"],
             upload=["server_command_log_file"],
         )
     )
@@ -414,10 +417,12 @@ class ProblemSetupStep(StepModel):
     def stop_gently(self) -> None:
         """Stop project/actor gently."""
 
-        if self.selected_actor_info["is_root"]:
+        actor_info = extract_dict_by_key(self.step_list, "uid", self.selected_actor_from_command, expect_unique=True, return_index=False)
+
+        if actor_info["is_root"]:
             actor_uid = None
         else:
-            actor_uid = self.selected_actor_info["uid"]
+            actor_uid = actor_info["uid"]
 
         run_osl_server_command(
             self.tcp_server_host,
@@ -432,7 +437,7 @@ class ProblemSetupStep(StepModel):
 
     @transaction(
         self=StepSpec(
-            download=["tcp_server_host", "tcp_server_port", "command_timeout", "command_retries", "selected_actor_command", "selected_actor_info"],
+            download=["tcp_server_host", "tcp_server_port", "command_timeout", "command_retries", "selected_actor_from_command", "step_list"],
             upload=["server_command_log_file"],
         )
     )
@@ -440,10 +445,12 @@ class ProblemSetupStep(StepModel):
     def stop(self) -> None:
         """Stop project/actor."""
 
-        if self.selected_actor_info["is_root"]:
+        actor_info = extract_dict_by_key(self.step_list, "uid", self.selected_actor_from_command, expect_unique=True, return_index=False)
+
+        if actor_info["is_root"]:
             actor_uid = None
         else:
-            actor_uid = self.selected_actor_info["uid"]
+            actor_uid = actor_info["uid"]
 
         run_osl_server_command(
             self.tcp_server_host,
@@ -458,7 +465,7 @@ class ProblemSetupStep(StepModel):
 
     @transaction(
         self=StepSpec(
-            download=["tcp_server_host", "tcp_server_port", "command_timeout", "command_retries", "selected_actor_command", "selected_actor_info"],
+            download=["tcp_server_host", "tcp_server_port", "command_timeout", "command_retries", "selected_actor_from_command", "step_list"],
             upload=["server_command_log_file"],
         )
     )
@@ -466,10 +473,12 @@ class ProblemSetupStep(StepModel):
     def reset(self) -> None:
         """Reset project/actor."""
 
-        if self.selected_actor_info["is_root"]:
+        actor_info = extract_dict_by_key(self.step_list, "uid", self.selected_actor_from_command, expect_unique=True, return_index=False)
+
+        if actor_info["is_root"]:
             actor_uid = None
         else:
-            actor_uid = self.selected_actor_info["uid"]
+            actor_uid = actor_info["uid"]
 
         run_osl_server_command(
             self.tcp_server_host,

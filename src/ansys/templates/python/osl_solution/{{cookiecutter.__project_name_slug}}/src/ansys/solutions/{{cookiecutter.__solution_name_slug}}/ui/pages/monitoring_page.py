@@ -20,11 +20,13 @@ from ansys.solutions.{{ cookiecutter.__solution_name_slug }}.ui.views import (
     summary_page,
     visualization_page,
 )
+from ansys.solutions.{{ cookiecutter.__solution_name_slug }}.ui.utils.common_functions import extract_dict_by_key
 
 
 def layout(problem_setup_step: ProblemSetupStep) -> html.Div:
 
-    list_of_tabs = update_list_of_tabs(problem_setup_step.selected_actor_info)
+    actor_info = extract_dict_by_key(problem_setup_step.step_list, "uid", problem_setup_step.selected_actor_from_treeview, expect_unique=True, return_index=False)
+    list_of_tabs = update_list_of_tabs(actor_info)
 
     return html.Div(
         [

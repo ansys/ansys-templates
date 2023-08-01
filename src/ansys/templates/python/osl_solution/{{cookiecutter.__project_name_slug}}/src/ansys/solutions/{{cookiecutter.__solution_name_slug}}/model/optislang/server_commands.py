@@ -144,6 +144,8 @@ def run_osl_server_command(
             if status == "failure":
                 break
 
+    osl.dispose()
+
     if status == "failure":
         if is_root:
             node_level = "project"
