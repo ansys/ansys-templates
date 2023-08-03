@@ -86,7 +86,7 @@ The usage of `pipx`_ is encouraged too. See `installing ansys-templates using
 pipx`_.
 
 .. _pipx: https://pypa.github.io/pipx/
-.. _installing ansys-templates using pipx: https://templates.pyansys.com/getting_started/index.html#installing-pipx
+.. _installing ansys-templates using pipx: https://templates.ansys.com/version/stable/getting_started/index.html#installing-pipx
 
 
 Basic commands
