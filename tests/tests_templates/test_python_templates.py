@@ -416,7 +416,6 @@ OSL_SOLUTION_STRUCTURE = [
     "CONTRIBUTORS.md",
     "LICENSE.rst",
     "poetry.lock",
-    "poetry.toml",
     "pyproject.toml",
     "README.rst",
     "setup_environment.py",
