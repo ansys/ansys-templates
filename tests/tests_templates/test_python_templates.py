@@ -363,7 +363,7 @@ OSL_SOLUTION_STRUCTURE = [
     f"src/ansys/solutions/{OSL_SOLUTION_VARS['__solution_name_slug']}/model/optislang/project_tree.py",
     f"src/ansys/solutions/{OSL_SOLUTION_VARS['__solution_name_slug']}/model/optislang/server_commands.py",
     f"src/ansys/solutions/{OSL_SOLUTION_VARS['__solution_name_slug']}/model/scripts/README.md",
-    f"src/ansys/solutions/{OSL_SOLUTION_VARS['__solution_name_slug']}/model/osl_project_tree.py",
+    f"src/ansys/solutions/{OSL_SOLUTION_VARS['__solution_name_slug']}/model/project_tree.py",
     f"src/ansys/solutions/{OSL_SOLUTION_VARS['__solution_name_slug']}/model/utils.py",
     f"src/ansys/solutions/{OSL_SOLUTION_VARS['__solution_name_slug']}/solution/definition.py",
     f"src/ansys/solutions/{OSL_SOLUTION_VARS['__solution_name_slug']}/solution/monitoring_step.py",
