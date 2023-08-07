@@ -8,17 +8,17 @@ from typing import Union
 from ansys.optislang.core import utils
 
 
-def get_available_optislang_installations(outout_format: str = "short") -> list:
+def get_available_optislang_installations(output_format: str = "short") -> list:
     """Return a list of available optiSLang installations."""
 
     versions = list(dict(utils.find_all_osl_exec()).keys())
 
-    if outout_format == "short":
+    if output_format == "short":
         return versions
-    elif outout_format == "long":
+    elif output_format == "long":
         return [convert_to_long_version(version) for version in versions]
     else:
-        raise ValueError("Argument outout_format takes one of these two values: short, long.")
+        raise ValueError("Argument output_format takes one of these two values: short, long.")
 
 
 def get_optislang_executable(version: Union[int, str]) -> Path:

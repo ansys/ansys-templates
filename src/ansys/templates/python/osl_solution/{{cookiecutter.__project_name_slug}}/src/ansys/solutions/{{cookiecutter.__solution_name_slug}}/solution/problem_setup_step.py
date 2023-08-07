@@ -225,7 +225,7 @@ class ProblemSetupStep(StepModel):
 
         # Collect optiSLang installations
         self.ansys_ecosystem["optislang"]["installed_versions"] = get_available_optislang_installations(
-            outout_format="long"
+            output_format="long"
         )
         self.ansys_ecosystem["optislang"]["compatible_versions"] = [
             product_version
@@ -238,7 +238,7 @@ class ProblemSetupStep(StepModel):
         for product_name in self.ansys_ecosystem.keys():
             if product_name != "optislang":
                 self.ansys_ecosystem[product_name]["installed_versions"] = controller.get_installed_versions(
-                    product_name, outout_format="long"
+                    product_name, output_format="long"
                 )
                 self.ansys_ecosystem[product_name]["compatible_versions"] = [
                     product_version
