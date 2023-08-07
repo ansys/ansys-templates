@@ -73,9 +73,8 @@ def layout(problem_setup_step: ProblemSetupStep) -> html.Div:
     Output("monitoring_page_content", "children"),
     Input("monitoring_tabs", "active_tab"),
     Input("url", "pathname"),
-    State("node_info", "data"),
 )
-def update_page_content(active_tab, pathname, node_info):
+def update_page_content(active_tab, pathname):
     """Update the page content according to the selected tab."""
 
     project = DashClient[{{ cookiecutter.__solution_definition_name }}].get_project(pathname)
