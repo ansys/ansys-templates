@@ -4,6 +4,7 @@ import dash_bootstrap_components as dbc
 from dash_extensions.enrich import html
 
 from ansys.solutions.{{ cookiecutter.__solution_name_slug }}.solution.problem_setup_step import ProblemSetupStep
+from ansys.solutions.{{ cookiecutter.__solution_name_slug }}.ui.utils.constants import PROJECT_STATES
 
 
 def update_alerts(problem_setup_step: ProblemSetupStep) -> list:
@@ -37,26 +38,8 @@ def update_alerts(problem_setup_step: ProblemSetupStep) -> list:
         )
 
     # optiSLang solve alert
-    if problem_setup_step.project_state == "NOT STARTED":
-        solve_message, solve_color = "optiSLang project not started.", "warning"
-    elif problem_setup_step.project_state == "IDLE":
-        solve_message, solve_color = "optiSLang project is pending.", "warning"
-    elif problem_setup_step.project_state == "PROCESSING":
-        solve_message, solve_color = "optiSLang project in progress.", "primary"
-    elif problem_setup_step.project_state == "PAUSED":
-        solve_message, solve_color = "optiSLang project paused.", "warning"
-    elif problem_setup_step.project_state == "PAUSE_REQUESTED":
-        solve_message, solve_color = "optiSLang project requested to pause.", "warning"
-    elif problem_setup_step.project_state == "STOPPED":
-        solve_message, solve_color = "optiSLang project stopped.", "warning"
-    elif problem_setup_step.project_state == "STOP_REQUESTED":
-        solve_message, solve_color = "optiSLang project requetsed to stop.", "warning"
-    elif problem_setup_step.project_state == "GENTLY_STOPPED":
-        solve_message, solve_color = "optiSLang project gently stopped.", "warning"
-    elif problem_setup_step.project_state == "GENTLE_STOP_REQUESTED":
-        solve_message, solve_color = "optiSLang project requested to gently stop.", "warning"
-    elif problem_setup_step.project_state == "FINISHED":
-        solve_message, solve_color = "optiSLang project completed successfully.", "success"
+    if problem_setup_step.project_state in PROJECT_STATES.keys():
+        solve_message, solve_color = PROJECT_STATES[problem_setup_step.project_state]["alert"], PROJECT_STATES[problem_setup_step.project_state]["color"]
     else:
         raise ValueError(f"Unknown optiSLang state: {problem_setup_step.project_state}.")
 
