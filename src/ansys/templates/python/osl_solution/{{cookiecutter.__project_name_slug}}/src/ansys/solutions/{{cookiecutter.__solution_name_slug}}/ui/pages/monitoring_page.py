@@ -10,7 +10,6 @@ from ansys.solutions.{{ cookiecutter.__solution_name_slug }}.solution.definition
 from ansys.solutions.{{ cookiecutter.__solution_name_slug }}.solution.monitoring_step import MonitoringStep
 from ansys.solutions.{{ cookiecutter.__solution_name_slug }}.solution.problem_setup_step import ProblemSetupStep
 from ansys.solutions.{{ cookiecutter.__solution_name_slug }}.ui.components.logs_table import LogsTable
-from ansys.solutions.{{ cookiecutter.__solution_name_slug }}.ui.utils.alerts import update_monitoring_alert
 from ansys.solutions.{{ cookiecutter.__solution_name_slug }}.ui.utils.common_functions import update_list_of_tabs
 from ansys.solutions.{{ cookiecutter.__solution_name_slug }}.ui.views import (
     design_table_page,
@@ -31,10 +30,6 @@ def layout(problem_setup_step: ProblemSetupStep) -> html.Div:
 
     return html.Div(
         [
-            html.Div(
-                id="monitoring_alert",
-                children=update_monitoring_alert(problem_setup_step),
-            ),
             dbc.Tabs(
                 list_of_tabs,
                 id="monitoring_tabs",
