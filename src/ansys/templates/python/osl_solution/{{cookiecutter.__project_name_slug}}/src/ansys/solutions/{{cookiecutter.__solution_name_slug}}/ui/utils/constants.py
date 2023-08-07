@@ -15,3 +15,46 @@ MONITORING_TABS = [
     {"label": "Visualization", "tab_id": "visualization_tab", "is_root": True, "is_system": True, "is_actor": False},
     {"label": "Status Overview", "tab_id": "status_overview_tab", "is_root": True, "is_system": True, "is_actor": True},
 ]
+
+PROJECT_STATES = {
+    "NOT STARTED": {
+        "alert": "optiSLang project not started.",
+        "color": "warning"
+    },
+    "IDLE": {
+        "alert": "optiSLang project is pending.",
+        "color": "warning"
+    },
+    "PROCESSING": {
+        "alert": "optiSLang project in progress.",
+        "color": "primary"
+    },
+    "PAUSED": {
+        "alert": "optiSLang project paused.",
+        "color": "warning"
+    },
+    "PAUSE_REQUESTED": {
+        "alert": "optiSLang project requested to pause.",
+        "color": "warning"
+    },
+    "STOPPED": {
+        "alert": "optiSLang project stopped.",
+        "color": "warning"
+    },
+    "STOP_REQUESTED": {
+        "alert": "optiSLang project requetsed to stop.",
+        "color": "warning"
+    },
+    "GENTLY_STOPPED": {
+        "alert": "optiSLang project gently stopped.",
+        "color": "warning"
+    },
+    "GENTLE_STOP_REQUESTED": {
+        "alert": "optiSLang project requested to gently stop.",
+        "color": "warning"
+    },
+    "FINISHED": {
+        "alert": "optiSLang project completed successfully.",
+        "color": "success"
+    },
+}

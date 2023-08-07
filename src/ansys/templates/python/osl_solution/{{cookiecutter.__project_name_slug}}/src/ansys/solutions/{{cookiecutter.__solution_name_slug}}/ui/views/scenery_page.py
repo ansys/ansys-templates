@@ -4,12 +4,13 @@
 
 from dash_extensions.enrich import html
 import optislang_dash_lib
+from ansys.solutions.{{ cookiecutter.__solution_name_slug }}.solution.problem_setup_step import ProblemSetupStep
 
 
-def layout(project_status_info: dict) -> html.Div:
+def layout(problem_setup_step: ProblemSetupStep) -> html.Div:
     """Layout of the scenery view."""
 
-    if project_status_info:
+    if problem_setup_step.project_status_info:
         return html.Div(
             [
                 html.Br(),
@@ -17,7 +18,7 @@ def layout(project_status_info: dict) -> html.Div:
                     [
                         optislang_dash_lib.SceneryComponent(
                             id="input",
-                            project_state=project_status_info,
+                            project_state=problem_setup_step.project_status_info,
                         ),
                     ]
                 ),

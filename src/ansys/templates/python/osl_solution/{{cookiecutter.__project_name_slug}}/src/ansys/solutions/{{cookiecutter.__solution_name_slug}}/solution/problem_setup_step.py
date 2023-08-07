@@ -17,8 +17,9 @@ from ansys.solutions.optislang.frontend_components.project_properties import Pro
 from ansys.solutions.products_ecosystem.controller import AnsysProductsEcosystemController
 from ansys.solutions.products_ecosystem.utils import convert_to_long_version
 
-from ansys.solutions.{{ cookiecutter.__solution_name_slug }}.model.osl_project_tree import dump_project_state, get_project_tree, get_node_list, get_step_list
-from ansys.solutions.{{ cookiecutter.__solution_name_slug }}.ui.utils.monitoring import _get_actor_hids, read_optislang_logs
+from ansys.solutions.{{ cookiecutter.__solution_name_slug }}.model.optislang.project_tree import dump_project_state, get_project_tree, get_node_list, get_step_list, get_node_hids
+from ansys.solutions.{{ cookiecutter.__solution_name_slug }}.model.optislang.install import get_available_optislang_installations
+from ansys.solutions.{{ cookiecutter.__solution_name_slug }}.ui.utils.monitoring import read_log_file
 
 
 class ProblemSetupStep(StepModel):
@@ -28,12 +29,15 @@ class ProblemSetupStep(StepModel):
 
     # Frontend persistence
     ansys_ecosystem_ready: bool = False
-    optislang_solve_status: str = "initial"  # initial, processing, finished, stopped, aborted, idle
     ui_placeholders: dict = {}
     app_metadata: dict = {}
-    analysis_running: bool = False
     analysis_locked: bool = True
     project_locked: bool = False
+    treeview_locked: bool = True
+    selected_actor_from_treeview: str = None
+    selected_command: str = None
+    selected_actor_from_command: str = None
+    commands_locked: bool = False
 
     # Backend data model
     tcp_server_host: str = "127.0.0.1"
@@ -60,7 +64,31 @@ class ProblemSetupStep(StepModel):
     actors_info: dict = {}
     actors_status_info: dict = {}
     results_files: dict = {}
-    tcp_server_stopped_states = ["idle", "finished", "stopped", "aborted"]
+    project_state: str = "NOT STARTED"
+    osl_project_states: list = [
+        "IDLE",
+        "PROCESSING",
+        "PAUSED",
+        "PAUSE_REQUESTED",
+        "STOPPED",
+        "STOP_REQUESTED",
+        "GENTLY_STOPPED",
+        "GENTLE_STOP_REQUESTED",
+        "FINISHED"
+    ]
+    osl_actor_states: list = [
+        "Idle",
+        "Succeeded",
+        "Failed",
+        "Running",
+        "Aborted",
+        "Predecessor failed",
+        "Skipped",
+        "Incomplete",
+        "Processing done",
+        "Stopped",
+        "Gently stopped"
+    ]
     optislang_logs: list = []
     optislang_log_level: str = "INFO"
     project_initialized: bool = False
@@ -138,7 +166,6 @@ class ProblemSetupStep(StepModel):
         original_project_state_file = Path(__file__).parent.absolute().parent / "model" / "assets" / "project_state.json"
         self.project_state_file.write_bytes(original_project_state_file.read_bytes())
 
-
     @transaction(self=StepSpec(download=["properties_file"], upload=["placeholders", "registered_files", "settings", "parameter_manager", "criteria"]))
     def get_default_placeholder_values(self):
         """Get placeholder values and definitions using the ProjectProperties class."""
@@ -196,19 +223,31 @@ class ProblemSetupStep(StepModel):
 
         self.ansys_ecosystem_ready = True
 
+        # Collect optiSLang installations
+        self.ansys_ecosystem["optislang"]["installed_versions"] = get_available_optislang_installations(
+            output_format="long"
+        )
+        self.ansys_ecosystem["optislang"]["compatible_versions"] = [
+            product_version
+            for product_version in self.ansys_ecosystem["optislang"]["installed_versions"]
+            if product_version in self.ansys_ecosystem["optislang"]["authorized_versions"]
+        ]
+
+        # Collect additonnal Ansys products installations
         controller = AnsysProductsEcosystemController()
-
         for product_name in self.ansys_ecosystem.keys():
+            if product_name != "optislang":
+                self.ansys_ecosystem[product_name]["installed_versions"] = controller.get_installed_versions(
+                    product_name, output_format="long"
+                )
+                self.ansys_ecosystem[product_name]["compatible_versions"] = [
+                    product_version
+                    for product_version in self.ansys_ecosystem[product_name]["installed_versions"]
+                    if product_version in self.ansys_ecosystem[product_name]["authorized_versions"]
+                ]
 
-            self.ansys_ecosystem[product_name]["installed_versions"] = controller.get_installed_versions(
-                product_name, outout_format="long"
-            )
-            self.ansys_ecosystem[product_name]["compatible_versions"] = [
-                product_version
-                for product_version in self.ansys_ecosystem[product_name]["installed_versions"]
-                if product_version in self.ansys_ecosystem[product_name]["authorized_versions"]
-            ]
-
+        # Check ecosystem
+        for product_name in self.ansys_ecosystem.keys():
             if len(self.ansys_ecosystem[product_name]["installed_versions"]) == 0:
                 alert_message = f"No installation of {product_name.title()} found in the machine {platform.node()}."
                 alert_color = "danger"
@@ -241,7 +280,6 @@ class ProblemSetupStep(StepModel):
             self.ansys_ecosystem[product_name]["alert_message"] = alert_message
             self.ansys_ecosystem[product_name]["alert_color"] = alert_color
 
-
     @transaction(
         self=StepSpec(
             download=["metadata_file"],
@@ -257,29 +295,32 @@ class ProblemSetupStep(StepModel):
     @transaction(
         self=StepSpec(
             download=[
+                "input_files",
+                "node_list",
+                "optislang_log_level",
                 "project_file",
                 "working_properties_file",
-                "tcp_server_stopped_states",
-                "optislang_log_level",
-                "node_list",
-                "input_files",
             ],
             upload=[
-                "optislang_solve_status",
-                "server_info_file",
                 "actors_info",
                 "actors_status_info",
-                "tcp_server_port",
+                "optislang_logs",
+                "optislang_log_file",
+                "project_state",
                 "project_status_info",
                 "results_files",
-                "optislang_log_file",
-                "optislang_logs",
+                "server_info_file",
+                "tcp_server_port",
+                "treeview_locked",
             ],
         )
     )
     @long_running
-    def start_analysis(self) -> None:
+    def start(self) -> None:
         """Start optiSLang and run the project."""
+
+        self.treeview_locked = False
+        self.transaction.upload(["treeview_locked"])
 
         osl_logger = logging.OslLogger(
             loglevel=self.optislang_log_level,
@@ -292,7 +333,7 @@ class ProblemSetupStep(StepModel):
             project_path=self.project_file.path,
             loglevel=self.optislang_log_level,
             reset=True,
-            shutdown_on_finished=True,
+            shutdown_on_finished=False,
             import_project_properties_file=self.working_properties_file.path,
             additional_args=[f"--write-server-info={self.server_info_file.path}"],
             ini_timeout=300,  # might need to be adjusted
@@ -310,37 +351,36 @@ class ProblemSetupStep(StepModel):
                         break
             else:
                 raise Exception("No server info file detected. Unable to retrieve TCP port number.")
+            self.transaction.upload(["tcp_server_port"])
 
         osl.start(wait_for_started=True, wait_for_finished=False)
 
         while True:
+            # Get project state
+            self.project_state = osl.project.get_status()
+            osl.log.info(f"Analysis status: {self.project_state}")
             # Get project status info
             self.project_status_info = osl.get_osl_server().get_full_project_status_info()
             # Read pyoptislang logs
-            self.optislang_logs = read_optislang_logs(self.optislang_log_file.path)
+            self.optislang_logs = read_log_file(self.optislang_log_file.path)
             # Get actor status info
             for node_info in self.node_list:
                 self.actors_info[node_info["uid"]] = osl.get_osl_server().get_actor_info(node_info["uid"])
-                node_hids = _get_actor_hids(osl.get_osl_server().get_actor_states(node_info["uid"]))
+                node_hids = get_node_hids(osl, node_info["uid"])
                 if len(node_hids):
                     self.actors_status_info[node_info["uid"]] = []
                     for hid in node_hids:
                         self.actors_status_info[node_info["uid"]].append(
                             osl.get_osl_server().get_actor_status_info(node_info["uid"], hid)
                         )
-            # Get status
-            self.optislang_solve_status = osl.project.get_status().lower()
-            osl.log.info(f"Analysis status: {self.optislang_solve_status}")
-            # Upload fields
-            self.transaction.upload(["optislang_solve_status"])
+             # Upload fields
+            self.transaction.upload(["project_state"])
             self.transaction.upload(["project_status_info"])
             self.transaction.upload(["actors_info"])
             self.transaction.upload(["actors_status_info"])
             self.transaction.upload(["optislang_logs"])
-            # Check if analysis stopped
-            if self.optislang_solve_status in self.tcp_server_stopped_states:
+            if self.project_state == "FINISHED":
                 break
             time.sleep(3)
 
         osl.dispose()
-

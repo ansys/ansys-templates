@@ -4,6 +4,7 @@ import dash_bootstrap_components as dbc
 from dash_extensions.enrich import html
 
 from ansys.solutions.{{ cookiecutter.__solution_name_slug }}.solution.problem_setup_step import ProblemSetupStep
+from ansys.solutions.{{ cookiecutter.__solution_name_slug }}.ui.utils.constants import PROJECT_STATES
 
 
 def update_alerts(problem_setup_step: ProblemSetupStep) -> list:
@@ -37,18 +38,10 @@ def update_alerts(problem_setup_step: ProblemSetupStep) -> list:
         )
 
     # optiSLang solve alert
-    if problem_setup_step.optislang_solve_status == "initial":
-        solve_message, solve_color = "optiSLang simulation not started.", "warning"
-    elif problem_setup_step.optislang_solve_status == "processing":
-        solve_message, solve_color = "optiSLang simulation in progress.", "primary"
-    elif problem_setup_step.optislang_solve_status == "stopped":
-        solve_message, solve_color = "optiSLang simulation stopped.", "danger"
-    elif problem_setup_step.optislang_solve_status == "aborted":
-        solve_message, solve_color = "optiSLang simulation aborted.", "danger"
-    elif problem_setup_step.optislang_solve_status == "finished":
-        solve_message, solve_color = "optiSLang simulation completed successfully.", "success"
+    if problem_setup_step.project_state in PROJECT_STATES.keys():
+        solve_message, solve_color = PROJECT_STATES[problem_setup_step.project_state]["alert"], PROJECT_STATES[problem_setup_step.project_state]["color"]
     else:
-        raise ValueError(f"Unknown optiSLang status: {problem_setup_step.optislang_solve_status}.")
+        raise ValueError(f"Unknown optiSLang state: {problem_setup_step.project_state}.")
 
     alerts.append(
         html.Div(
@@ -78,7 +71,7 @@ def update_alerts(problem_setup_step: ProblemSetupStep) -> list:
 
 def update_monitoring_alert(problem_setup_step: ProblemSetupStep) -> dbc.Alert:
 
-    if problem_setup_step.optislang_solve_status == "initial":
+    if problem_setup_step.project_state == "NOT STARTED":
         return dbc.Alert(
             "No analysis started. No data to display.",
             color="warning",
