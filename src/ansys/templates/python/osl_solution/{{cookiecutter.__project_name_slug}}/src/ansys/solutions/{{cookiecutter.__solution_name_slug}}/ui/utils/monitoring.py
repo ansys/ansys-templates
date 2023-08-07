@@ -1,6 +1,5 @@
 # ©2023, ANSYS Inc. Unauthorized use, distribution or duplication is prohibited.
 
-import json
 from pathlib import Path
 from typing import Union
 

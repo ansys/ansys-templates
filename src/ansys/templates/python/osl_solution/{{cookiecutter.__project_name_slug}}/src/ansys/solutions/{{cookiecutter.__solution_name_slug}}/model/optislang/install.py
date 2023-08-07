@@ -2,7 +2,6 @@
 
 """Common functions."""
 
-import json
 from pathlib import Path
 from typing import Union
 
@@ -91,4 +90,3 @@ def check_version_syntax(version: str) -> None:
         version = convert_to_short_version(version)
     else:
         raise Exception(f"Unknown format for product version: {version}.")
-    

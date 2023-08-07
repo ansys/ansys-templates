@@ -382,5 +382,5 @@ class ProblemSetupStep(StepModel):
             if self.project_state == "FINISHED":
                 break
             time.sleep(3)
-            
+
         osl.dispose()
