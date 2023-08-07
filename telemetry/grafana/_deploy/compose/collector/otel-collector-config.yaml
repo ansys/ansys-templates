@@ -1,0 +1,72 @@
+receivers:
+  otlp:
+    protocols:
+      grpc:
+
+exporters:
+  file:
+    path: /etc/output/logs.json
+
+  logging:
+    loglevel: debug
+
+  prometheus:
+    endpoint: "0.0.0.0:8889"
+    send_timestamps: true
+    # service name and instance id will become labels on metrics
+    resource_to_telemetry_conversion:
+      enabled: true
+
+  jaeger:
+    endpoint: "jaeger:14250"
+    tls:
+      insecure: true
+
+  loki:
+    endpoint: "http://loki:3100/loki/api/v1/push"
+    tls:
+      insecure: true
+
+  otlp:
+    endpoint: "tracelens:4317"
+    tls:
+      insecure: true
+
+extensions:
+  health_check:
+
+processors:
+  batch:
+
+  attributes:
+    actions:
+      - action: insert
+        key: loki.attribute.labels
+        value: otelServiceName
+service:
+  extensions: [ health_check ]
+  pipelines:
+    traces:
+      receivers: [ otlp ]
+      processors: [ batch ]
+      exporters: [ jaeger ]
+    metrics:
+      receivers: [ otlp ]
+      processors: [ batch ]
+      exporters: [ prometheus ]
+    logs:
+      receivers: [ otlp ]
+      processors: [ attributes ]
+      exporters: [ loki, logging ]
+    traces/2:
+      receivers: [ otlp ]
+      processors: [ batch ]
+      exporters: [ otlp ]
+    logs/2:
+      receivers: [ otlp ]
+      processors: [ batch ]
+      exporters: [ otlp ]
+    metrics/2:
+      receivers: [ otlp ]
+      processors: [ batch ]
+      exporters: [ otlp ]
