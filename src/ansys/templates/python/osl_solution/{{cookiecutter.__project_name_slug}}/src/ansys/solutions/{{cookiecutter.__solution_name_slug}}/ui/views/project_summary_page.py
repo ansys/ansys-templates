@@ -6,15 +6,16 @@ import dash_bootstrap_components as dbc
 from dash_extensions.enrich import html
 
 from ansys.solutions.{{ cookiecutter.__solution_name_slug }}.ui.components.project_summary_table import ProjectSummaryTable
+from ansys.solutions.{{ cookiecutter.__solution_name_slug }}.solution.problem_setup_step import ProblemSetupStep
 
 
-def layout(project_status_info: dict, font_size: str = "15px") -> html.Div:
+def layout(problem_setup_step: ProblemSetupStep) -> html.Div:
     """Layout of the project summary view."""
 
     project_summary_table = ProjectSummaryTable()
 
-    if project_status_info:
-        project_summary_table.project_status_info = project_status_info
+    if problem_setup_step.project_status_info:
+        project_summary_table.project_status_info = problem_setup_step.project_status_info
 
     return html.Div(
         [

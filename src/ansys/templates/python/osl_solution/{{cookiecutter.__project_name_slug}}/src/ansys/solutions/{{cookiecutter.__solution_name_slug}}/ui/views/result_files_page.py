@@ -3,9 +3,10 @@
 """Frontend of the results file view."""
 
 from dash_extensions.enrich import html
+from ansys.solutions.{{ cookiecutter.__solution_name_slug }}.solution.problem_setup_step import ProblemSetupStep
 
 
-def layout(project_status_info: dict, uid: str) -> html.Div:
+def layout(problem_setup_step: ProblemSetupStep) -> html.Div:
     """Layout of the result files view."""
 
     return html.Div([])

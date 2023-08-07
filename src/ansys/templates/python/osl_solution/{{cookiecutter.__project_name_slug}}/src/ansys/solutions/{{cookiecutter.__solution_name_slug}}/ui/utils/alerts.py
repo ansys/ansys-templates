@@ -37,18 +37,28 @@ def update_alerts(problem_setup_step: ProblemSetupStep) -> list:
         )
 
     # optiSLang solve alert
-    if problem_setup_step.optislang_solve_status == "initial":
-        solve_message, solve_color = "optiSLang simulation not started.", "warning"
-    elif problem_setup_step.optislang_solve_status == "processing":
-        solve_message, solve_color = "optiSLang simulation in progress.", "primary"
-    elif problem_setup_step.optislang_solve_status == "stopped":
-        solve_message, solve_color = "optiSLang simulation stopped.", "danger"
-    elif problem_setup_step.optislang_solve_status == "aborted":
-        solve_message, solve_color = "optiSLang simulation aborted.", "danger"
-    elif problem_setup_step.optislang_solve_status == "finished":
-        solve_message, solve_color = "optiSLang simulation completed successfully.", "success"
+    if problem_setup_step.project_state == "NOT STARTED":
+        solve_message, solve_color = "optiSLang project not started.", "warning"
+    elif problem_setup_step.project_state == "IDLE":
+        solve_message, solve_color = "optiSLang project is pending.", "warning"
+    elif problem_setup_step.project_state == "PROCESSING":
+        solve_message, solve_color = "optiSLang project in progress.", "primary"
+    elif problem_setup_step.project_state == "PAUSED":
+        solve_message, solve_color = "optiSLang project paused.", "warning"
+    elif problem_setup_step.project_state == "PAUSE_REQUESTED":
+        solve_message, solve_color = "optiSLang project requested to pause.", "warning"
+    elif problem_setup_step.project_state == "STOPPED":
+        solve_message, solve_color = "optiSLang project stopped.", "warning"
+    elif problem_setup_step.project_state == "STOP_REQUESTED":
+        solve_message, solve_color = "optiSLang project requetsed to stop.", "warning"
+    elif problem_setup_step.project_state == "GENTLY_STOPPED":
+        solve_message, solve_color = "optiSLang project gently stopped.", "warning"
+    elif problem_setup_step.project_state == "GENTLE_STOP_REQUESTED":
+        solve_message, solve_color = "optiSLang project requested to gently stop.", "warning"
+    elif problem_setup_step.project_state == "FINISHED":
+        solve_message, solve_color = "optiSLang project completed successfully.", "success"
     else:
-        raise ValueError(f"Unknown optiSLang status: {problem_setup_step.optislang_solve_status}.")
+        raise ValueError(f"Unknown optiSLang state: {problem_setup_step.project_state}.")
 
     alerts.append(
         html.Div(
@@ -78,7 +88,7 @@ def update_alerts(problem_setup_step: ProblemSetupStep) -> list:
 
 def update_monitoring_alert(problem_setup_step: ProblemSetupStep) -> dbc.Alert:
 
-    if problem_setup_step.optislang_solve_status == "initial":
+    if problem_setup_step.project_state == "NOT STARTED":
         return dbc.Alert(
             "No analysis started. No data to display.",
             color="warning",

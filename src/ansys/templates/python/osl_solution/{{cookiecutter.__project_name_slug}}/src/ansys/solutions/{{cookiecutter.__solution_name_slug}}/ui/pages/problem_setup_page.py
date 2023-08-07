@@ -16,14 +16,13 @@ from ansys.solutions.optislang.frontend_components.load_sections import to_dash_
 from ansys.solutions.{{ cookiecutter.__solution_name_slug }}.solution.definition import {{ cookiecutter.__solution_definition_name }}
 from ansys.solutions.{{ cookiecutter.__solution_name_slug }}.solution.problem_setup_step import ProblemSetupStep
 from ansys.solutions.{{ cookiecutter.__solution_name_slug }}.ui.utils.alerts import update_alerts
+from ansys.solutions.{{ cookiecutter.__solution_name_slug }}.ui.utils.common_functions import check_empty_strings
+
 
 
 def layout(problem_setup_step: ProblemSetupStep) -> html.Div:
     """Layout of the problem setup step."""
 
-    # Upload placeholders and assets
-    if problem_setup_step.placeholders == {}:
-        problem_setup_step.get_default_placeholder_values()
     project_properties_sections = to_dash_sections(
             problem_setup_step.placeholders, problem_setup_step.registered_files, problem_setup_step.project_locked
         )
@@ -78,27 +77,6 @@ def layout(problem_setup_step: ProblemSetupStep) -> html.Div:
                         [
                             dbc.AccordionItem(
                                 [
-                                    # InputRow(
-                                    #     "button",
-                                    #     "check_ansys_ecosystem",
-                                    #     "Check Ansys ecosystem",
-                                    #     disabled=False,
-                                    #     label_width=2,
-                                    #     value_width=4,
-                                    #     unit_width=1,
-                                    #     description_width=4,
-                                    #     class_name="button",
-                                    # ).get(),
-                                    # dcc.Loading(
-                                    #     type="circle",
-                                    #     fullscreen=True,
-                                    #     color="#ffb71b",
-                                    #     style={
-                                    #         "background-color": "rgba(55, 58, 54, 0.1)",
-                                    #     },
-                                    #     children=html.Div(id="wait_ecosystem_ckeck"),
-                                    # ),
-                                    # html.Br(),
                                     InputRow(
                                         "button",
                                         "start_analysis",
@@ -155,27 +133,6 @@ for alert in ["optislang_version", "optislang_solve"]:
         return is_open
 
 
-# @callback(
-#     Output("alert_messages", "children"),
-#     Output("wait_ecosystem_ckeck", "children"),
-#     Output("start_analysis", "disabled"),
-#     Input("check_ansys_ecosystem", "n_clicks"),
-#     State("url", "pathname"),
-#     prevent_initial_call=True,
-# )
-# def check_ansys_ecosystem(n_clicks, pathname):
-#     """Start optiSLang and run the simulation. Wait for the process to complete."""
-
-#     project = DashClient[{{ cookiecutter.__solution_definition_name }}].get_project(pathname)
-#     problem_setup_step = project.steps.problem_setup_step
-
-#     if n_clicks:
-#         problem_setup_step.check_ansys_ecosystem()
-#         return update_alerts(problem_setup_step), True, False if problem_setup_step.ansys_ecosystem_ready else True
-#     else:
-#         raise PreventUpdate
-
-
 @callback(
     Output("alert_messages", "children"),
     Output("wait_start_analysis", "children"),
@@ -196,25 +153,38 @@ def start_analysis(n_clicks, pathname):
         ui_data = problem_setup_step.ui_placeholders
         ui_data.update({"start_analysis_requested": True})
         problem_setup_step.ui_placeholders = ui_data
-        # Update project properties file prior to the solve
-        problem_setup_step.write_updated_properties_file()
-        # Start analysis
-        problem_setup_step.start_analysis()
-        # Lock start analysis and ui data
-        problem_setup_step.analysis_locked = True
-        problem_setup_step.project_locked = True
-        # Wait until the analysis effectively starts
-        while problem_setup_step.optislang_solve_status == "initial":
-            time.sleep(1)
-        return (
-            update_alerts(problem_setup_step),
-            True,
-            True,
-            to_dash_sections(
-                problem_setup_step.placeholders, problem_setup_step.registered_files, problem_setup_step.project_locked
-            ),
-            {"display": "block"},
-        )
+        # Check if Ansys products are available
+        project.steps.problem_setup_step.check_ansys_ecosystem()
+        if problem_setup_step.ansys_ecosystem_ready:
+            # Update project properties file prior to the solve
+            problem_setup_step.write_updated_properties_file()
+            # Start analysis
+            problem_setup_step.start()
+            # Lock start analysis and ui data
+            problem_setup_step.analysis_locked = True
+            problem_setup_step.project_locked = True
+            # Wait until the analysis effectively starts
+            while problem_setup_step.project_state == "NOT STARTED":
+                time.sleep(1)
+            return (
+                update_alerts(problem_setup_step),
+                True,
+                True,
+                to_dash_sections(
+                    problem_setup_step.placeholders, problem_setup_step.registered_files, problem_setup_step.project_locked
+                ),
+                {"display": "block"},
+            )
+        else:
+            return (
+                update_alerts(problem_setup_step),
+                True,
+                False,
+                to_dash_sections(
+                    problem_setup_step.placeholders, problem_setup_step.registered_files, problem_setup_step.project_locked
+                ),
+                {"display": "block"},
+            )
     else:
         raise PreventUpdate
 
@@ -232,11 +202,6 @@ def update_alert_messages(n_intervals, n_clicks, pathname):
     problem_setup_step = project.steps.problem_setup_step
 
     if problem_setup_step.ansys_ecosystem_ready:
-        status = problem_setup_step.get_long_running_method_state("start_analysis").status
-
-        if status == MethodStatus.Running:
-            problem_setup_step.analysis_running = True
-
         return update_alerts(problem_setup_step)
     else:
         raise PreventUpdate
@@ -398,11 +363,3 @@ def update_status_of_start_analysis_button(is_completed, filenames, pathname):
 )
 def on_page_load_initialize_dictionary_of_ui_placeholder_values(pathname, n_clicks):
     return n_clicks + 1
-
-
-def check_empty_strings(lst):
-    for sublist in lst:
-        for item in sublist:
-            if not item.strip():  # Using strip() to remove leading/trailing whitespaces
-                return False
-    return True
