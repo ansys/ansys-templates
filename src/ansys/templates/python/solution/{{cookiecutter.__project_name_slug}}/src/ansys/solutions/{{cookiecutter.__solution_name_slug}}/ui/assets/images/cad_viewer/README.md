@@ -1,0 +1,2 @@
+# Here, in the cad_viewer folder, you can find the images you'll find all the images you need for the cad viewer to work properly. 
+# If you're not using the ansys-solutions-3d-viewers package in your solution, you won't need these images.
