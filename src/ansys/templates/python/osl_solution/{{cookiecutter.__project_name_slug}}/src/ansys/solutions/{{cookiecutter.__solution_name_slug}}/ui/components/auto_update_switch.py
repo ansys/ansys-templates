@@ -12,11 +12,11 @@ from ansys.solutions.{{ cookiecutter.__solution_name_slug }}.solution.definition
 from ansys.solutions.{{ cookiecutter.__solution_name_slug }}.solution.problem_setup_step import ProblemSetupStep
 
 
-class AutoUpdateButtonAIO(html.Div): 
+class AutoUpdateSwitchAIO(html.Div): 
 
     class ids:
         switch = lambda aio_id: {
-            'component': 'AutoUpdateButtonAIO',
+            'component': 'AutoUpdateSwitchAIO',
             'subcomponent': 'switch',
             'aio_id': aio_id
         }
@@ -24,7 +24,7 @@ class AutoUpdateButtonAIO(html.Div):
     ids = ids
 
     def __init__(self, problem_setup_step: ProblemSetupStep, aio_id: str = None):
-        """AutoUpdateButtonAIO is an All-in-One component that is composed
+        """AutoUpdateSwitchAIO is an All-in-One component that is composed
         of a parent `html.Div` with a `dcc.Interval` and a `dash_table.DataTable` as children.
         
         - `problem_setup_step` - The StepModel object of the problem setup step.

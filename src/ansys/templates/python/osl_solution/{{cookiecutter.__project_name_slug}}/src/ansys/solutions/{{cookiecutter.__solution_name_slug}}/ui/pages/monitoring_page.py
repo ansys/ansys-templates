@@ -21,6 +21,7 @@ from ansys.solutions.{{ cookiecutter.__solution_name_slug }}.ui.views import (
     visualization_view,
 )
 from ansys.solutions.{{ cookiecutter.__solution_name_slug }}.ui.utils.common_functions import extract_dict_by_key
+from ansys.solutions.{{ cookiecutter.__solution_name_slug }}.ui.components.auto_update_switch import AutoUpdateSwitch
 
 
 def layout(problem_setup_step: ProblemSetupStep) -> html.Div:
@@ -30,6 +31,7 @@ def layout(problem_setup_step: ProblemSetupStep) -> html.Div:
 
     return html.Div(
         [
+            AutoUpdateSwitch(problem_setup_step),
             dbc.Tabs(
                 list_of_tabs,
                 id="monitoring_tabs",

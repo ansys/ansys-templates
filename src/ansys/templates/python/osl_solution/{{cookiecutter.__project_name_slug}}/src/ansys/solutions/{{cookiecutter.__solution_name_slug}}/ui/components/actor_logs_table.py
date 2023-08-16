@@ -1,5 +1,6 @@
 # ©2023, ANSYS Inc. Unauthorized use, distribution or duplication is prohibited.
 
+from datetime import datetime
 import dash_bootstrap_components as dbc
 from dash import Output, Input, State, html, dcc, callback, MATCH, dash_table
 import uuid

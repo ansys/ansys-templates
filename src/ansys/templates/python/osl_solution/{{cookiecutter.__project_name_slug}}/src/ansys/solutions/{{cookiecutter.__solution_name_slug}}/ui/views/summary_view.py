@@ -42,7 +42,7 @@ def layout(problem_setup_step: ProblemSetupStep) -> html.Div:
                     html.Br(),
                     dbc.Row(
                         [
-                            dbc.Col(SystemFilesAIO, width=12),
+                            dbc.Col(SystemFilesAIO(problem_setup_step), width=12),
                         ]
                     ),
                 ]
@@ -53,13 +53,13 @@ def layout(problem_setup_step: ProblemSetupStep) -> html.Div:
                 html.Br(),
                 dbc.Row(
                     [
-                        dbc.Col(ActorLogsTableAIO, width=12),
+                        dbc.Col(ActorLogsTableAIO(problem_setup_step), width=12),
                     ]
                 ),
                 html.Br(),
                 dbc.Row(
                     [
-                        dbc.Col(ActorStatisticsTableAIO, width=12),
+                        dbc.Col(ActorStatisticsTableAIO(problem_setup_step), width=12),
                     ]
                 ),
             ]
