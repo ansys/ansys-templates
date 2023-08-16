@@ -7,7 +7,7 @@ from dash_extensions.enrich import html
 
 from ansys.solutions.{{ cookiecutter.__solution_name_slug }}.solution.problem_setup_step import ProblemSetupStep
 from ansys.solutions.{{ cookiecutter.__solution_name_slug }}.ui.components.project_information_table import ProjectInformationTableAIO
-from ansys.solutions.{{ cookiecutter.__solution_name_slug }}.ui.components.project_commands import ProjectCommandsAIO
+from ansys.solutions.{{ cookiecutter.__solution_name_slug }}.ui.components.commands import ProjectCommandsAIO
 
 
 def layout(problem_setup_step: ProblemSetupStep) -> html.Div:
