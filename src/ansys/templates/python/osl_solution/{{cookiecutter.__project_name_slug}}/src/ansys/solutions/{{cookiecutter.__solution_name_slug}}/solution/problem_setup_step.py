@@ -20,6 +20,8 @@ from ansys.solutions.products_ecosystem.utils import convert_to_long_version
 from ansys.solutions.{{ cookiecutter.__solution_name_slug }}.model.optislang.project_tree import dump_project_state, get_project_tree, get_node_list, get_step_list, get_node_hids
 from ansys.solutions.{{ cookiecutter.__solution_name_slug }}.model.optislang.install import get_available_optislang_installations
 from ansys.solutions.{{ cookiecutter.__solution_name_slug }}.ui.utils.monitoring import read_log_file
+from ansys.solutions.{{ cookiecutter.__solution_name_slug }}.ui.utils.common_functions import extract_dict_by_key
+from ansys.solutions.{{ cookiecutter.__solution_name_slug }}.model.optislang.server_commands import run_osl_server_command
 
 
 class ProblemSetupStep(StepModel):
@@ -38,6 +40,8 @@ class ProblemSetupStep(StepModel):
     selected_command: str = None
     selected_actor_from_command: str = None
     commands_locked: bool = False
+    auto_update_frequency: float = 2000
+    auto_update_activated: bool = True
 
     # Backend data model
     tcp_server_host: str = "127.0.0.1"
@@ -93,6 +97,8 @@ class ProblemSetupStep(StepModel):
     optislang_log_level: str = "INFO"
     project_initialized: bool = False
     has_project_state: bool = False
+    command_timeout: int = 30
+    command_retries: int = 0
 
     # File storage ----------------------------------------------------------------------------------------------------
 
@@ -109,6 +115,7 @@ class ProblemSetupStep(StepModel):
     working_properties_file: FileReference = FileReference("Problem_Setup/working_properties_file.json")
     server_info_file: FileReference = FileReference("Problem_Setup/server_info.ini")
     optislang_log_file: FileReference = FileReference("Problem_Setup/pyoptislang.log")
+    server_command_log_file: FileReference = FileReference("server_commands.log")
 
     # Methods ---------------------------------------------------------------------------------------------------------
 
@@ -384,3 +391,136 @@ class ProblemSetupStep(StepModel):
             time.sleep(3)
 
         osl.dispose()
+
+    @transaction(
+        self=StepSpec(
+            download=["tcp_server_host", "tcp_server_port", "command_timeout", "command_retries", "selected_command", "selected_actor_from_command", "step_list"],
+            upload=["server_command_log_file"],
+        )
+    )
+    @long_running
+    def restart(self) -> None:
+        """Restart project/actor."""
+
+        actor_info = extract_dict_by_key(self.step_list, "uid", self.selected_actor_from_command, expect_unique=True, return_index=False)
+
+        if actor_info["is_root"]:
+            actor_uid = None
+        else:
+            actor_uid = actor_info["uid"]
+
+        run_osl_server_command(
+            self.tcp_server_host,
+            self.tcp_server_port,
+            "restart",
+            actor_uid=actor_uid,
+            wait_for_completion=True,
+            retries=self.command_retries,
+            timeout=self.command_timeout,
+            working_directory=self.server_command_log_file.project_path,
+        )
+
+    @transaction(
+        self=StepSpec(
+            download=["tcp_server_host", "tcp_server_port", "command_timeout", "command_retries", "selected_command", "selected_actor_from_command", "step_list"],
+            upload=["server_command_log_file"],
+        )
+    )
+    @long_running
+    def stop_gently(self) -> None:
+        """Restart project/actor."""
+
+        actor_info = extract_dict_by_key(self.step_list, "uid", self.selected_actor_from_command, expect_unique=True, return_index=False)
+
+        if actor_info["is_root"]:
+            actor_uid = None
+        else:
+            actor_uid = actor_info["uid"]
+
+        run_osl_server_command(
+            self.tcp_server_host,
+            self.tcp_server_port,
+            "stop_gently",
+            actor_uid=actor_uid,
+            wait_for_completion=True,
+            retries=self.command_retries,
+            timeout=self.command_timeout,
+            working_directory=self.server_command_log_file.project_path,
+        )
+
+    @transaction(
+        self=StepSpec(
+            download=["tcp_server_host", "tcp_server_port", "command_timeout", "command_retries", "selected_command", "selected_actor_from_command", "step_list"],
+            upload=["server_command_log_file"],
+        )
+    )
+    @long_running
+    def stop(self) -> None:
+        """Restart project/actor."""
+
+        actor_info = extract_dict_by_key(self.step_list, "uid", self.selected_actor_from_command, expect_unique=True, return_index=False)
+
+        if actor_info["is_root"]:
+            actor_uid = None
+        else:
+            actor_uid = actor_info["uid"]
+
+        run_osl_server_command(
+            self.tcp_server_host,
+            self.tcp_server_port,
+            "stop",
+            actor_uid=actor_uid,
+            wait_for_completion=True,
+            retries=self.command_retries,
+            timeout=self.command_timeout,
+            working_directory=self.server_command_log_file.project_path,
+        )
+
+    @transaction(
+        self=StepSpec(
+            download=["tcp_server_host", "tcp_server_port", "command_timeout", "command_retries", "selected_command", "selected_actor_from_command", "step_list"],
+            upload=["server_command_log_file"],
+        )
+    )
+    @long_running
+    def reset(self) -> None:
+        """Restart project/actor."""
+
+        actor_info = extract_dict_by_key(self.step_list, "uid", self.selected_actor_from_command, expect_unique=True, return_index=False)
+
+        if actor_info["is_root"]:
+            actor_uid = None
+        else:
+            actor_uid = actor_info["uid"]
+
+        run_osl_server_command(
+            self.tcp_server_host,
+            self.tcp_server_port,
+            "reset",
+            actor_uid=actor_uid,
+            wait_for_completion=True,
+            retries=self.command_retries,
+            timeout=self.command_timeout,
+            working_directory=self.server_command_log_file.project_path,
+        )
+
+    @transaction(
+        self=StepSpec(
+            download=["tcp_server_host", "tcp_server_port", "command_timeout", "command_retries", "selected_command", "selected_actor_from_command", "step_list"],
+            upload=["server_command_log_file"],
+        )
+    )
+    @long_running
+    def shutdown(self) -> None:
+        """Restart project/actor."""
+
+        run_osl_server_command(
+            self.tcp_server_host,
+            self.tcp_server_port,
+            "shutdown",
+            wait_for_completion=True,
+            retries=self.command_retries,
+            timeout=self.command_timeout,
+            working_directory=self.server_command_log_file.project_path,
+        )
+

@@ -2,57 +2,67 @@
 
 """Frontend of the summary view."""
 
-from dash_extensions.enrich import html, dcc, Input, Output, State
-
-from ansys.saf.glow.client.dashclient import DashClient, callback
+import dash_bootstrap_components as dbc
+from dash_extensions.enrich import html
 
 from ansys.solutions.{{ cookiecutter.__solution_name_slug }}.solution.definition import {{ cookiecutter.__solution_definition_name }}
 from ansys.solutions.{{ cookiecutter.__solution_name_slug }}.solution.problem_setup_step import ProblemSetupStep
-from ansys.solutions.{{ cookiecutter.__solution_name_slug }}.ui.components.summary_view import SummaryView
+from ansys.solutions.{{ cookiecutter.__solution_name_slug }}.ui.components.actor_information_table import ActorInformationTableAIO
+from ansys.solutions.{{ cookiecutter.__solution_name_slug }}.ui.components.commands import ActorCommandsAIO
+from ansys.solutions.{{ cookiecutter.__solution_name_slug }}.ui.components.system_files import SystemFilesAIO
+from ansys.solutions.{{ cookiecutter.__solution_name_slug }}.ui.components.actor_logs_table import ActorLogsTableAIO
+from ansys.solutions.{{ cookiecutter.__solution_name_slug }}.ui.components.actor_statistics_table import ActorStatisticsTableAIO
+from ansys.solutions.{{ cookiecutter.__solution_name_slug }}.ui.utils.common_functions import extract_dict_by_key
 
 
 def layout(problem_setup_step: ProblemSetupStep) -> html.Div:
     """Layout of the summary view."""
 
-    summary_view = SummaryView()
+    actor_info = extract_dict_by_key(problem_setup_step.step_list, "uid", problem_setup_step.selected_actor_from_treeview, expect_unique=True, return_index=False)
 
-    if problem_setup_step.selected_actor_from_treeview in problem_setup_step.actors_info.keys():
-        summary_view.actor_info = problem_setup_step.actors_info[problem_setup_step.selected_actor_from_treeview]
-    if problem_setup_step.selected_actor_from_treeview in problem_setup_step.actors_status_info.keys():
-        summary_view.actor_status_info = problem_setup_step.actors_status_info[problem_setup_step.selected_actor_from_treeview][0]
+    content = [
+        html.Br(),
+        dbc.Row(
+            [
+                dbc.Col(ActorInformationTableAIO(problem_setup_step), width=12),
+            ]
+        ),
+        html.Br(),
+        dbc.Row(
+            [
+                dbc.Col(ActorCommandsAIO(problem_setup_step), width=12),
+            ]
+        ),
+    ]
 
-    return html.Div(
-        [
-            html.Div(
-                summary_view.render(),
-                id="summary_table"
-            ),
-            dcc.Interval(
-                id="summary_auto_update",
-                interval=1 * 2000,  # in milliseconds
-                n_intervals=0,
-                disabled=False
-            ),
-        ]
-    )
+    if actor_info:
+        if actor_info["kind"] == "system":
+            content.extend(
+                [
+                    html.Br(),
+                    dbc.Row(
+                        [
+                            dbc.Col(SystemFilesAIO, width=12),
+                        ]
+                    ),
+                ]
+            )
 
+    content.extend(
+            [
+                html.Br(),
+                dbc.Row(
+                    [
+                        dbc.Col(ActorLogsTableAIO, width=12),
+                    ]
+                ),
+                html.Br(),
+                dbc.Row(
+                    [
+                        dbc.Col(ActorStatisticsTableAIO, width=12),
+                    ]
+                ),
+            ]
+        )
 
-@callback(
-    Output("summary_table", "children"),
-    Input("summary_auto_update", "n_intervals"),
-    State("url", "pathname"),
-    prevent_initial_call=True,
-)
-def update_design_table(n_intervals, pathname):
-
-    project = DashClient[{{ cookiecutter.__solution_definition_name }}].get_project(pathname)
-    problem_setup_step = project.steps.problem_setup_step
-
-    summary_view = SummaryView()
-
-    if problem_setup_step.selected_actor_from_treeview in problem_setup_step.actors_info.keys():
-        summary_view.actor_info = problem_setup_step.actors_info[problem_setup_step.selected_actor_from_treeview]
-    if problem_setup_step.selected_actor_from_treeview in problem_setup_step.actors_status_info.keys():
-        summary_view.actor_status_info = problem_setup_step.actors_status_info[problem_setup_step.selected_actor_from_treeview][0]
-
-    return summary_view.render()
+    return html.Div(content)

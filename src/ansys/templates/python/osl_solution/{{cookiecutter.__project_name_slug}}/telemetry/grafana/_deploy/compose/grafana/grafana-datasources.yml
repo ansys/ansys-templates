@@ -1,0 +1,58 @@
+apiVersion: 1
+
+datasources:
+  - name: prometheus
+    type: prometheus
+    uid: my-prometheus
+    access: proxy
+    orgId: 1
+    url: http://prometheus:9090
+    isDefault: true
+    version: 1
+    editable: true
+
+  - name: loki
+    type: loki
+    uid: my-loki
+    access: proxy
+    url: http://loki:3100
+    basicAuth: false
+    isDefault: false
+    version: 1
+    editable: true
+    jsonData:
+      derivedFields:
+        # Regex is used to extract TraceId from a log line. Ensure you always log it this way.
+        - datasourceUid: my-jaeger
+          matcherRegex: '"traceid":"(\w+)'
+          url: '$${__value.raw}'
+          name: TraceID
+
+  - name: jaeger
+    type: jaeger
+    uid: my-jaeger
+    access: browser
+    url: http://jaeger:16686
+    isDefault: false
+    version: 1
+    editable: true
+    basicAuth: false
+    jsonData:
+      nodeGraph:
+        enabled: true
+      tracesToLogs:
+        datasourceUid: my-loki
+        mapTagNamesEnabled: true
+        tags: [ { key: 'app', value: 'app' } ]
+        filterByTraceID: true
+        filterBySpanID: false
+        lokiSearch: true
+      # tracesToMetrics:
+      #   datasourceUid: my-prometheus
+      #   tags: [ { key: 'app', value: 'service_name' } ]
+      #   # Missing spanStartTimeShift & spanEndTimeShift option there
+      #   # https://github.com/grafana/grafana/issues/54710 (coming in 9.3.0)
+      #   # Time window must be adjusted manually
+      #   queries:
+      #     - name: ''
+      #       query: ''

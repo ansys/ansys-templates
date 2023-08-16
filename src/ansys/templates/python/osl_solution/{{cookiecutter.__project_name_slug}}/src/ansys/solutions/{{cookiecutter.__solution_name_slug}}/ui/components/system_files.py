@@ -1,51 +1,95 @@
 # ©2023, ANSYS Inc. Unauthorized use, distribution or duplication is prohibited.
 
-"""Component to display the system files view."""
-
 import dash_bootstrap_components as dbc
-from dash_extensions.enrich import dcc, html
+from dash import Output, Input, State, html, dcc, callback, MATCH, dash_table
+import uuid
+import pandas as pd
+
+from ansys.saf.glow.client.dashclient import DashClient
+from ansys.solutions.{{ cookiecutter.__solution_name_slug }}.solution.problem_setup_step import ProblemSetupStep
+from ansys.solutions.{{ cookiecutter.__solution_name_slug }}.solution.definition import {{ cookiecutter.__solution_definition_name }}
+from ansys.solutions.{{ cookiecutter.__solution_name_slug }}.ui.utils.common_functions import (
+    remove_key_from_dictionaries,
+    sort_dict_by_ordered_keys,
+)
 
 
-class SystemFiles(object):
-    """Design table component."""
+class SystemFilesAIO(html.Div): 
 
-    def __init__(self) -> None:
-        """Constructor."""
+    class ids:
+        button_omdb = lambda aio_id: {
+            'component': 'SystemFilesAIO',
+            'subcomponent': 'button_omdb',
+            'aio_id': aio_id
+        }
+        button_csv = lambda aio_id: {
+            'component': 'SystemFilesAIO',
+            'subcomponent': 'button_csv',
+            'aio_id': aio_id
+        }
+        download_omdb = lambda aio_id: {
+            'component': 'SystemFilesAIO',
+            'subcomponent': 'download_omdb',
+            'aio_id': aio_id
+        }
+        download_csv = lambda aio_id: {
+            'component': 'SystemFilesAIO',
+            'subcomponent': 'download_csv',
+            'aio_id': aio_id
+        }
 
-        self.node_name: str = "unknown_node"
-        self.omdb_file: dict = None
-        self.font_size: str = "15px"
+    ids = ids
 
-    def render(self) -> html.Div:
-        """Generate view."""
+    def __init__(self, problem_setup_step: ProblemSetupStep, aio_id: str = None):
+        """SystemFilesAIO is an All-in-One component that is composed
+        of a parent `html.Div` with a `dcc.Interval` and a `dash_table.DataTable` as children.
+        
+        - `problem_setup_step` - The StepModel object of the problem setup step.
+        - `datatable_props` - A dictionary of properties passed into the dash_table.DataTable component.
+        - `interval_props` - A dictionary of properties passed into the dcc.Interval component.
+        - `aio_id` - The All-in-One component ID used to generate the table components's dictionary IDs.
+        """
 
-        return html.Div(
-            [
-                dbc.Stack(
-                    [
-                        html.Div(
-                            [
-                                html.Button(
-                                    "Download OMDB",
-                                    disabled=True if not self.omdb_file else False,
-                                    id=f"download_button_{self.node_name}_omdb",
-                                ),
-                                dcc.Download(id=f"download_{self.node_name}_omdb"),
-                            ]
-                        ),
-                        html.Div(
-                            [
-                                html.Button(
-                                    "Download CSV",
-                                    disabled=True if not self.omdb_file else False,
-                                    id=f"download_button_{self.node_name}_csv",
-                                ),
-                                dcc.Download(id=f"download_{self.node_name}_csv"),
-                            ]
-                        ),
-                    ],
-                    direction="horizontal",
-                    gap=3,
-                )
-            ]
-        )
+        if aio_id is None:
+            aio_id = str(uuid.uuid4())
+
+        button_props = {}
+        download_props = {}
+
+        super().__init__([ 
+            dbc.Card(
+                [
+                    dbc.CardBody(
+                        [
+                            html.H4("System Files", className="card-title"),
+                            dbc.Stack(
+                                [
+                                    html.Div(
+                                        [
+                                            dbc.Button(
+                                                children="Download OMDB",
+                                                id=self.ids.button_omdb(aio_id),
+                                                **button_props
+                                            ),
+                                            dcc.Download(id=self.ids.download_omdb(aio_id), **download_props),
+                                        ]
+                                    ),
+                                    html.Div(
+                                        [
+                                            dbc.Button(
+                                                children="Download CSV",
+                                                id=self.ids.button_csv(aio_id),
+                                                **button_props
+                                            ),
+                                            dcc.Download(id=self.ids.download_csv(aio_id), **download_props),
+                                        ]
+                                    ),
+                                ],
+                                direction="horizontal",
+                                gap=3,
+                            )
+                        ]
+                    )
+                ]
+            )
+        ])

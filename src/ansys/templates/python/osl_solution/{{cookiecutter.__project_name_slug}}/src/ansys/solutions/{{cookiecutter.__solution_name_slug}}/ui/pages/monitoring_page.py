@@ -12,13 +12,13 @@ from ansys.solutions.{{ cookiecutter.__solution_name_slug }}.solution.problem_se
 from ansys.solutions.{{ cookiecutter.__solution_name_slug }}.ui.components.logs_table import LogsTable
 from ansys.solutions.{{ cookiecutter.__solution_name_slug }}.ui.utils.common_functions import update_list_of_tabs
 from ansys.solutions.{{ cookiecutter.__solution_name_slug }}.ui.views import (
-    design_table_page,
-    project_summary_page,
-    result_files_page,
-    scenery_page,
-    status_overview_page,
-    summary_page,
-    visualization_page,
+    design_table_view,
+    project_summary_view,
+    result_files_view,
+    scenery_view,
+    status_overview_view,
+    summary_view,
+    visualization_view,
 )
 from ansys.solutions.{{ cookiecutter.__solution_name_slug }}.ui.utils.common_functions import extract_dict_by_key
 
@@ -76,19 +76,19 @@ def update_page_content(active_tab, pathname):
     problem_setup_step = project.steps.problem_setup_step
 
     if active_tab == "project_summary_tab":
-        return project_summary_page.layout(problem_setup_step)
+        return project_summary_view.layout(problem_setup_step)
     elif active_tab == "summary_tab":
-        return summary_page.layout(problem_setup_step)
+        return summary_view.layout(problem_setup_step)
     elif active_tab == "result_files_tab":
-        return result_files_page.layout(problem_setup_step)
+        return result_files_view.layout(problem_setup_step)
     elif active_tab == "scenery_tab":
-        return scenery_page.layout(problem_setup_step)
+        return scenery_view.layout(problem_setup_step)
     elif active_tab == "design_table_tab":
-        return design_table_page.layout(problem_setup_step)
+        return design_table_view.layout(problem_setup_step)
     elif active_tab == "visualization_tab":
-        return visualization_page.layout(problem_setup_step)
+        return visualization_view.layout(problem_setup_step)
     elif active_tab == "status_overview_tab":
-        return status_overview_page.layout(problem_setup_step)
+        return status_overview_view.layout(problem_setup_step)
 
 
 @callback(
