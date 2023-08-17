@@ -84,7 +84,7 @@ def layout(problem_setup_step: ProblemSetupStep) -> html.Div:
 )
 def activate_auto_update(on, pathname):
 
-    return not on, not on, not on
+    return not on
 
 
 @callback(
