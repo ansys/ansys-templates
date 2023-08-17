@@ -120,8 +120,15 @@ class ActorInformationTableAIO(html.Div):
         project = DashClient[{{ cookiecutter.__solution_definition_name }}].get_project(pathname)
         problem_setup_step = project.steps.problem_setup_step
 
-        actor_info = problem_setup_step.actors_info[problem_setup_step.selected_actor_from_treeview]
-        actor_status_info = problem_setup_step.actors_status_info[problem_setup_step.selected_actor_from_treeview][0]
+        if problem_setup_step.selected_actor_from_treeview in problem_setup_step.actors_info.keys():
+            actor_info = problem_setup_step.actors_info[problem_setup_step.selected_actor_from_treeview]
+        else:
+            actor_info = {}
+
+        if problem_setup_step.selected_actor_from_treeview in problem_setup_step.actors_status_info.keys():
+            actor_status_info = problem_setup_step.actors_status_info[problem_setup_step.selected_actor_from_treeview][0]
+        else:
+            actor_status_info = {}
 
         data = ActorInformationTableAIO.get_data(actor_info, actor_status_info)
 

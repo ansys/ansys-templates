@@ -128,8 +128,11 @@ class ActorStatisticsTableAIO(html.Div):
         project = DashClient[{{ cookiecutter.__solution_definition_name }}].get_project(pathname)
         problem_setup_step = project.steps.problem_setup_step
 
-        actor_info = problem_setup_step.actors_info[problem_setup_step.selected_actor_from_treeview]
-   
+        if problem_setup_step.selected_actor_from_treeview in problem_setup_step.actors_info.keys():
+            actor_info = problem_setup_step.actors_info[problem_setup_step.selected_actor_from_treeview]
+        else:
+            actor_info = {}
+               
         data = ActorStatisticsTableAIO.get_data(actor_info)
 
         return data.to_dict('records'), [{"name": i, "id": i, "type": "text"} for i in data.columns]
