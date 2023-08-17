@@ -153,8 +153,6 @@ def start_analysis(n_clicks, pathname):
         ui_data = problem_setup_step.ui_placeholders
         ui_data.update({"start_analysis_requested": True})
         problem_setup_step.ui_placeholders = ui_data
-        # Check if Ansys products are available
-        project.steps.problem_setup_step.check_ansys_ecosystem()
         if problem_setup_step.ansys_ecosystem_ready:
             # Update project properties file prior to the solve
             problem_setup_step.write_updated_properties_file()

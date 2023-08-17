@@ -48,7 +48,7 @@ class ProblemSetupStep(StepModel):
     tcp_server_port: int = None
     ansys_ecosystem: dict = {
         "optislang": {
-            "authorized_versions": ["2022.2", "2023.1"],
+            "authorized_versions": ["2023.1"],
             "installed_versions": [],
             "compatible_versions": [],
             "selected_version": None,
@@ -523,4 +523,3 @@ class ProblemSetupStep(StepModel):
             timeout=self.command_timeout,
             working_directory=self.server_command_log_file.project_path,
         )
-
