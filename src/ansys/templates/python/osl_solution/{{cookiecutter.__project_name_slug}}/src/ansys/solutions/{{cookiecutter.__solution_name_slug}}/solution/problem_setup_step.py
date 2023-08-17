@@ -317,6 +317,7 @@ class ProblemSetupStep(StepModel):
                 "project_status_info",
                 "results_files",
                 "server_info_file",
+                "tcp_server_host",
                 "tcp_server_port",
                 "treeview_locked",
             ],
@@ -348,19 +349,11 @@ class ProblemSetupStep(StepModel):
 
         osl.__logger = osl_logger.add_instance_logger(osl.name, osl, self.optislang_log_level)
 
-        if self.tcp_server_port is None:
-            if self.server_info_file.exists():
-                with open(self.server_info_file.path, "r") as file:
-                    lines = [line.rstrip("\n") for line in file.readlines()]
-                for line in lines:
-                    if line.startswith("server_port="):
-                        self.tcp_server_port = int(line.split("=")[1])
-                        break
-            else:
-                raise Exception("No server info file detected. Unable to retrieve TCP port number.")
-            self.transaction.upload(["tcp_server_port"])
-
-        osl.start(wait_for_started=True, wait_for_finished=False)
+        server_info = osl.get_osl_server().get_server_info()
+        self.tcp_server_host = server_info["server"]["server_address"]
+        self.tcp_server_port = server_info["server"]["server_port"]
+        self.transaction.upload(["tcp_server_port"])
+        self.transaction.upload(["tcp_server_host"])
 
         while True:
             # Get project state

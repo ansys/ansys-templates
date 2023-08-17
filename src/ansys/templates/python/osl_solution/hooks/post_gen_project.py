@@ -40,6 +40,7 @@ DESIRED_STRUCTURE = [
     f"src/ansys/solutions/{{ cookiecutter.__solution_name_slug }}/ui/components/design_table.py",
     f"src/ansys/solutions/{{ cookiecutter.__solution_name_slug }}/ui/components/logs_table.py",
     f"src/ansys/solutions/{{ cookiecutter.__solution_name_slug }}/ui/components/project_information_table.py",
+    f"src/ansys/solutions/{{ cookiecutter.__solution_name_slug }}/ui/components/service_table.py",
     f"src/ansys/solutions/{{ cookiecutter.__solution_name_slug }}/ui/components/system_files.py",
     f"src/ansys/solutions/{{ cookiecutter.__solution_name_slug }}/ui/pages/monitoring_page.py",
     f"src/ansys/solutions/{{ cookiecutter.__solution_name_slug }}/ui/pages/page.py",

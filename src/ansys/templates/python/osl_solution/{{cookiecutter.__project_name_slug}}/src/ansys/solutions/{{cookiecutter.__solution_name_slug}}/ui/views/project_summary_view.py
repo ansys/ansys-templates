@@ -10,6 +10,7 @@ from ansys.saf.glow.client.dashclient import DashClient, callback
 from ansys.solutions.{{ cookiecutter.__solution_name_slug }}.solution.definition import {{ cookiecutter.__solution_definition_name }}
 from ansys.solutions.{{ cookiecutter.__solution_name_slug }}.solution.problem_setup_step import ProblemSetupStep
 from ansys.solutions.{{ cookiecutter.__solution_name_slug }}.ui.components.project_information_table import ProjectInformationTableAIO
+from ansys.solutions.{{ cookiecutter.__solution_name_slug }}.ui.components.service_table import ServiceTableAIO
 from ansys.solutions.{{ cookiecutter.__solution_name_slug }}.ui.components.commands import ProjectCommandsAIO
 
 
@@ -21,7 +22,8 @@ def layout(problem_setup_step: ProblemSetupStep) -> html.Div:
             html.Br(),
             dbc.Row(
                 [
-                    dbc.Col(html.Div(ProjectInformationTableAIO(problem_setup_step), id="project_information_table"), width=12),
+                    dbc.Col(html.Div(ProjectInformationTableAIO(problem_setup_step), id="project_information_table"), width=8),
+                    dbc.Col(html.Div(ServiceTableAIO(problem_setup_step), id="service_table"), width=4),
                 ]
             ),
             html.Br(),
