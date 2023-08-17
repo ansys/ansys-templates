@@ -36,7 +36,6 @@ DESIRED_STRUCTURE = [
     f"src/ansys/solutions/{{ cookiecutter.__solution_name_slug }}/ui/components/actor_information_table.py",
     f"src/ansys/solutions/{{ cookiecutter.__solution_name_slug }}/ui/components/actor_logs_table.py",
     f"src/ansys/solutions/{{ cookiecutter.__solution_name_slug }}/ui/components/actor_statistics_table.py",
-    f"src/ansys/solutions/{{ cookiecutter.__solution_name_slug }}/ui/components/auto_update_switch.py",
     f"src/ansys/solutions/{{ cookiecutter.__solution_name_slug }}/ui/components/commands.py",
     f"src/ansys/solutions/{{ cookiecutter.__solution_name_slug }}/ui/components/design_table.py",
     f"src/ansys/solutions/{{ cookiecutter.__solution_name_slug }}/ui/components/logs_table.py",
