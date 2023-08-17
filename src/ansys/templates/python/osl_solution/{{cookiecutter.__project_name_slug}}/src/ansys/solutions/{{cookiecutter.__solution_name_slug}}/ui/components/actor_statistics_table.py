@@ -10,7 +10,7 @@ from ansys.solutions.{{ cookiecutter.__solution_name_slug }}.solution.definition
 from ansys.solutions.{{ cookiecutter.__solution_name_slug }}.ui.utils.common_functions import convert_microseconds
 
 
-class ActorStatisticsTableAIO(html.Div): 
+class ActorStatisticsTableAIO(html.Div):
 
     class ids:
         datatable = lambda aio_id: {
@@ -24,7 +24,7 @@ class ActorStatisticsTableAIO(html.Div):
     def __init__(self, problem_setup_step: ProblemSetupStep, aio_id: str = None):
         """ActorStatisticsTableAIO is an All-in-One component that is composed
         of a parent `html.Div` with a `dcc.Interval` and a `dash_table.DataTable` as children.
-        
+
         - `problem_setup_step` - The StepModel object of the problem setup step.
         - `datatable_props` - A dictionary of properties passed into the dash_table.DataTable component.
         - `interval_props` - A dictionary of properties passed into the dcc.Interval component.
@@ -67,7 +67,7 @@ class ActorStatisticsTableAIO(html.Div):
             "style_as_list_view": True,
         }
 
-        super().__init__([ 
+        super().__init__([
             dbc.Card(
                 [
                     dbc.CardBody(

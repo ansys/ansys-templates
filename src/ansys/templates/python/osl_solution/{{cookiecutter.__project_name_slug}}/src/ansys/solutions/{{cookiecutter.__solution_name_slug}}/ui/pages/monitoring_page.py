@@ -43,7 +43,7 @@ def layout(problem_setup_step: ProblemSetupStep) -> html.Div:
                 ],
                 direction="horizontal",
                 gap=1,
-            ), 
+            ),
             dbc.Tabs(
                 list_of_tabs,
                 id="monitoring_tabs",
