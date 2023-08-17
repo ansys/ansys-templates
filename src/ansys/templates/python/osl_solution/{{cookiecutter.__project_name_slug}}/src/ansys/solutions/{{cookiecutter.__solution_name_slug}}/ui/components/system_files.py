@@ -90,6 +90,8 @@ class SystemFilesAIO(html.Div):
                             )
                         ]
                     )
-                ]
+                ],
+                color="warning",
+                outline=True,
             )
         ])

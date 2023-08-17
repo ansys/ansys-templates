@@ -3,9 +3,9 @@
 """Frontend of the design table view."""
 
 import dash_bootstrap_components as dbc
-from dash_extensions.enrich import html, dcc, Input, Output, State
+from dash_extensions.enrich import html, Input, Output, State
 
-from ansys.saf.glow.client.dashclient import DashClient, callback
+from ansys.saf.glow.client.dashclient import callback
 
 from ansys.solutions.{{ cookiecutter.__solution_name_slug }}.solution.definition import {{ cookiecutter.__solution_definition_name }}
 from ansys.solutions.{{ cookiecutter.__solution_name_slug }}.solution.problem_setup_step import ProblemSetupStep
@@ -20,8 +20,19 @@ def layout(problem_setup_step: ProblemSetupStep) -> html.Div:
             html.Br(),
             dbc.Row(
                 [
-                    dbc.Col(DesignTableAIO(problem_setup_step), width=12),
+                    dbc.Col(DesignTableAIO(problem_setup_step, aio_id="design_table"), width=12),
                 ]
             ),
         ]
     )
+
+
+@callback(
+    Output({'component': 'DesignTableAIO', 'subcomponent': 'interval', 'aio_id': 'design_table'}, "disabled"),
+    Input("activate_auto_update", "on"),
+    State("url", "pathname"),
+    prevent_initial_call=True,
+)
+def activate_auto_update(on, pathname):
+
+    return not on

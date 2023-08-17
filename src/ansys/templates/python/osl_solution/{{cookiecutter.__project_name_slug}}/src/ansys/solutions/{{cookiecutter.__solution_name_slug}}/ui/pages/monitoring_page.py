@@ -4,7 +4,8 @@
 
 from ansys.saf.glow.client.dashclient import DashClient
 import dash_bootstrap_components as dbc
-from dash_extensions.enrich import Input, Output, State, callback, dcc, html
+from dash_extensions.enrich import Input, Output, State, callback, html
+from dash.exceptions import PreventUpdate
 
 from ansys.solutions.{{ cookiecutter.__solution_name_slug }}.solution.definition import {{ cookiecutter.__solution_definition_name }}
 from ansys.solutions.{{ cookiecutter.__solution_name_slug }}.solution.monitoring_step import MonitoringStep
@@ -21,7 +22,7 @@ from ansys.solutions.{{ cookiecutter.__solution_name_slug }}.ui.views import (
     visualization_view,
 )
 from ansys.solutions.{{ cookiecutter.__solution_name_slug }}.ui.utils.common_functions import extract_dict_by_key
-from ansys.solutions.{{ cookiecutter.__solution_name_slug }}.ui.components.auto_update_switch import AutoUpdateSwitch
+import dash_daq as daq
 
 
 def layout(problem_setup_step: ProblemSetupStep) -> html.Div:
@@ -31,7 +32,19 @@ def layout(problem_setup_step: ProblemSetupStep) -> html.Div:
 
     return html.Div(
         [
-            AutoUpdateSwitch(problem_setup_step),
+            dbc.Stack(
+                [
+                    daq.BooleanSwitch(
+                        id='activate_auto_update',
+                        on=problem_setup_step.auto_update_activated,
+                        color="#FFB71B",
+                        className="ms-auto",
+                    ),
+                    html.Div("Auto update")
+                ],
+                direction="horizontal",
+                gap=1,
+            ), 
             dbc.Tabs(
                 list_of_tabs,
                 id="monitoring_tabs",
@@ -112,3 +125,19 @@ def display_optislang_logs(n_clicks, pathname, is_in):
     table = LogsTable(problem_setup_step.optislang_logs)
 
     return table.render(), not is_in
+
+
+@callback(
+    Output("activate_auto_update", "disabled"),
+    Input("activate_auto_update", "on"),
+    State("url", "pathname"),
+    prevent_initial_call=True,
+)
+def activate_auto_update(on, pathname):
+
+    project = DashClient[{{ cookiecutter.__solution_definition_name }}].get_project(pathname)
+    problem_setup_step = project.steps.problem_setup_step
+
+    problem_setup_step.auto_update_activated = on
+
+    raise PreventUpdate

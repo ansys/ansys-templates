@@ -3,7 +3,9 @@
 """Frontend of the summary view."""
 
 import dash_bootstrap_components as dbc
-from dash_extensions.enrich import html
+from dash_extensions.enrich import html, Input, Output, State
+
+from ansys.saf.glow.client.dashclient import callback
 
 from ansys.solutions.{{ cookiecutter.__solution_name_slug }}.solution.definition import {{ cookiecutter.__solution_definition_name }}
 from ansys.solutions.{{ cookiecutter.__solution_name_slug }}.solution.problem_setup_step import ProblemSetupStep
@@ -24,13 +26,13 @@ def layout(problem_setup_step: ProblemSetupStep) -> html.Div:
         html.Br(),
         dbc.Row(
             [
-                dbc.Col(ActorInformationTableAIO(problem_setup_step), width=12),
+                dbc.Col(ActorInformationTableAIO(problem_setup_step, aio_id="actor_information_table"), width=12),
             ]
         ),
         html.Br(),
         dbc.Row(
             [
-                dbc.Col(ActorCommandsAIO(problem_setup_step), width=12),
+                dbc.Col(ActorCommandsAIO(problem_setup_step, aio_id="actor_commands"), width=12),
             ]
         ),
     ]
@@ -42,7 +44,7 @@ def layout(problem_setup_step: ProblemSetupStep) -> html.Div:
                     html.Br(),
                     dbc.Row(
                         [
-                            dbc.Col(SystemFilesAIO(problem_setup_step), width=12),
+                            dbc.Col(SystemFilesAIO(problem_setup_step, aio_id="system_files"), width=12),
                         ]
                     ),
                 ]
@@ -53,16 +55,29 @@ def layout(problem_setup_step: ProblemSetupStep) -> html.Div:
                 html.Br(),
                 dbc.Row(
                     [
-                        dbc.Col(ActorLogsTableAIO(problem_setup_step), width=12),
+                        dbc.Col(ActorLogsTableAIO(problem_setup_step, aio_id="actor_logs_table"), width=12),
                     ]
                 ),
                 html.Br(),
                 dbc.Row(
                     [
-                        dbc.Col(ActorStatisticsTableAIO(problem_setup_step), width=12),
+                        dbc.Col(ActorStatisticsTableAIO(problem_setup_step, aio_id="actor_statistics_table"), width=12),
                     ]
                 ),
             ]
         )
 
     return html.Div(content)
+
+
+@callback(
+    Output({'component': 'ActorInformationTableAIO', 'subcomponent': 'interval', 'aio_id': 'actor_information_table'}, "disabled"),
+    Output({'component': 'ActorLogsTableAIO', 'subcomponent': 'interval', 'aio_id': 'actor_logs_table'}, "disabled"),
+    Output({'component': 'ActorStatisticsTableAIO', 'subcomponent': 'interval', 'aio_id': 'actor_statistics_table'}, "disabled"),
+    Input("activate_auto_update", "on"),
+    State("url", "pathname"),
+    prevent_initial_call=True,
+)
+def activate_auto_update(on, pathname):
+
+    return not on, not on, not on

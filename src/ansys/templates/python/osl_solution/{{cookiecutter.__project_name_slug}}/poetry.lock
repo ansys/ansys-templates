@@ -873,6 +873,19 @@ files = [
 ]
 
 [[package]]
+name = "dash-daq"
+version = "0.5.0"
+description = "DAQ components for Dash"
+optional = false
+python-versions = "*"
+files = [
+    {file = "dash_daq-0.5.0.tar.gz", hash = "sha256:a1d85b6799f7b885652fbc44aebdb58c41254616a8d350b943beeb42ade4256a"},
+]
+
+[package.dependencies]
+dash = ">=1.6.1"
+
+[[package]]
 name = "dash-extensions"
 version = "0.1.13"
 description = "Extensions for Plotly Dash."
@@ -3703,4 +3716,4 @@ testing = ["big-O", "jaraco.functools", "jaraco.itertools", "more-itertools", "p
 [metadata]
 lock-version = "2.0"
 python-versions = ">=3.8, <3.11"
-content-hash = "c84481191f4dfd5070ed32a7c5281590253f507859b3f51af67eb80d0f9f4157"
+content-hash = "ff2bcedb82617584529c14f94e9d91bee59c8869438ac9e311f1fb3175252274"
