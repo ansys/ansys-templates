@@ -2,13 +2,12 @@
 
 """Frontend of the monitoring step."""
 
-from ansys.saf.glow.client.dashclient import DashClient
+from ansys.saf.glow.client.dashclient import DashClient, callback
 import dash_bootstrap_components as dbc
-from dash_extensions.enrich import Input, Output, State, callback, html
+from dash_extensions.enrich import Input, Output, State, html
 from dash.exceptions import PreventUpdate
 
 from ansys.solutions.{{ cookiecutter.__solution_name_slug }}.solution.definition import {{ cookiecutter.__solution_definition_name }}
-from ansys.solutions.{{ cookiecutter.__solution_name_slug }}.solution.monitoring_step import MonitoringStep
 from ansys.solutions.{{ cookiecutter.__solution_name_slug }}.solution.problem_setup_step import ProblemSetupStep
 from ansys.solutions.{{ cookiecutter.__solution_name_slug }}.ui.components.logs_table import LogsTable
 from ansys.solutions.{{ cookiecutter.__solution_name_slug }}.ui.utils.common_functions import update_list_of_tabs

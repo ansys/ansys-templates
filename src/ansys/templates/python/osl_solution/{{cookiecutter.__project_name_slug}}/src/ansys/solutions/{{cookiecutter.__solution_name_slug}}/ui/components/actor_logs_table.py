@@ -1,12 +1,11 @@
 # ©2023, ANSYS Inc. Unauthorized use, distribution or duplication is prohibited.
 
-from datetime import datetime
 import dash_bootstrap_components as dbc
-from dash import Output, Input, State, html, dcc, callback, MATCH, dash_table
+from dash import html, dash_table
+from datetime import datetime
 import uuid
 import pandas as pd
 
-from ansys.saf.glow.client.dashclient import DashClient
 from ansys.solutions.{{ cookiecutter.__solution_name_slug }}.solution.problem_setup_step import ProblemSetupStep
 from ansys.solutions.{{ cookiecutter.__solution_name_slug }}.solution.definition import {{ cookiecutter.__solution_definition_name }}
 from ansys.solutions.{{ cookiecutter.__solution_name_slug }}.ui.utils.common_functions import (
@@ -18,11 +17,6 @@ from ansys.solutions.{{ cookiecutter.__solution_name_slug }}.ui.utils.common_fun
 class ActorLogsTableAIO(html.Div): 
 
     class ids:
-        interval = lambda aio_id: {
-            'component': 'ActorLogsTableAIO',
-            'subcomponent': 'interval',
-            'aio_id': aio_id
-        }
         datatable = lambda aio_id: {
             'component': 'ActorLogsTableAIO',
             'subcomponent': 'datatable',
@@ -31,7 +25,7 @@ class ActorLogsTableAIO(html.Div):
 
     ids = ids
 
-    def __init__(self, problem_setup_step: ProblemSetupStep, datatable_props: dict = None, interval_props: dict = None, aio_id: str = None):
+    def __init__(self, problem_setup_step: ProblemSetupStep, aio_id: str = None):
         """ActorLogsTableAIO is an All-in-One component that is composed
         of a parent `html.Div` with a `dcc.Interval` and a `dash_table.DataTable` as children.
         
@@ -44,50 +38,41 @@ class ActorLogsTableAIO(html.Div):
         if aio_id is None:
             aio_id = str(uuid.uuid4())
 
-        if interval_props:
-            interval_props = interval_props.copy()
-        else:
-            interval_props = {
-                "interval": problem_setup_step.auto_update_frequency,
-                "n_intervals": 0,
-                "disabled": not problem_setup_step.auto_update_activated
-            }
+        data = self.get_data(problem_setup_step)
 
-        if datatable_props:
-            datatable_props = datatable_props.copy()
-        else:
-            datatable_props = {
-                "fixed_rows": {"headers": True},
-                "style_header": {"font_family": "Roboto", "font_size": "15px", "fontWeight": "bold"},
-                "style_cell": {
-                    "textAlign": "left",
-                    "font_family": "Roboto",
-                    "font_size": "15px",
+        datatable_props = {
+            "data": data.to_dict('records'),
+            "columns": [{"name": i, "id": i, "type": "text"} for i in data.columns],
+            "fixed_rows": {"headers": True},
+            "style_header": {"font_family": "Roboto", "font_size": "15px", "fontWeight": "bold"},
+            "style_cell": {
+                "textAlign": "left",
+                "font_family": "Roboto",
+                "font_size": "15px",
+            },
+            "style_cell_conditional": [
+                {"if": {"column_id": "Time"}, "minWidth": "60px", "maxWidth": "60px", "width": "60px"},
+                {
+                    "if": {"column_id": "Level"},
+                    "minWidth": "30px",
+                    "maxWidth": "30px",
+                    "width": "30px",
+                    "textAlign": "center",
                 },
-                "style_cell_conditional": [
-                    {"if": {"column_id": "Time"}, "minWidth": "60px", "maxWidth": "60px", "width": "60px"},
-                    {
-                        "if": {"column_id": "Level"},
-                        "minWidth": "30px",
-                        "maxWidth": "30px",
-                        "width": "30px",
-                        "textAlign": "center",
-                    },
-                    {"if": {"column_id": "Message"}, "minWidth": "200px", "maxWidth": "200px", "width": "200px"},
-                ],
-                "style_data_conditional": [
-                    {
-                        "if": {"column_id": "Level", "filter_query": '{Level} eq "INFO"'},
-                        "backgroundColor": "rgb(227, 245, 252)",
-                        "color": "rgb(0, 0, 0)",
-                        "textAlign": "center",
-                    }
-                ],
-                "style_as_list_view": True,
-            }
+                {"if": {"column_id": "Message"}, "minWidth": "200px", "maxWidth": "200px", "width": "200px"},
+            ],
+            "style_data_conditional": [
+                {
+                    "if": {"column_id": "Level", "filter_query": '{Level} eq "INFO"'},
+                    "backgroundColor": "rgb(227, 245, 252)",
+                    "color": "rgb(0, 0, 0)",
+                    "textAlign": "center",
+                }
+            ],
+            "style_as_list_view": True,
+        }
 
         super().__init__([ 
-            dcc.Interval(id=self.ids.interval(aio_id), **interval_props),
             dbc.Card(
                 [
                     dbc.CardBody(
@@ -102,7 +87,12 @@ class ActorLogsTableAIO(html.Div):
             )
         ])
 
-    def get_data(actor_info: dict) -> pd.DataFrame:
+    def get_data(self, problem_setup_step) -> pd.DataFrame:
+
+        if problem_setup_step.selected_actor_from_treeview in problem_setup_step.actors_info.keys():
+            actor_info = problem_setup_step.actors_info[problem_setup_step.selected_actor_from_treeview]
+        else:
+            actor_info = {}
 
         has_data = False
 
@@ -133,23 +123,3 @@ class ActorLogsTableAIO(html.Div):
             actor_logs_data = {"Time": [], "Level": [], "Message": []}
 
         return pd.DataFrame(actor_logs_data)
-
-    @callback(
-        Output(ids.datatable(MATCH), 'data'),
-        Output(ids.datatable(MATCH), 'columns'),
-        Input(ids.interval(MATCH), 'n_intervals'),
-        State("url", "pathname"),
-    )
-    def auto_update(n_intervals, pathname):
-
-        project = DashClient[{{ cookiecutter.__solution_definition_name }}].get_project(pathname)
-        problem_setup_step = project.steps.problem_setup_step
-
-        if problem_setup_step.selected_actor_from_treeview in problem_setup_step.actors_info.keys():
-            actor_info = problem_setup_step.actors_info[problem_setup_step.selected_actor_from_treeview]
-        else:
-            actor_info = {}
-            
-        data = ActorLogsTableAIO.get_data(actor_info)
-
-        return data.to_dict('records'), [{"name": i, "id": i, "type": "text"} for i in data.columns]

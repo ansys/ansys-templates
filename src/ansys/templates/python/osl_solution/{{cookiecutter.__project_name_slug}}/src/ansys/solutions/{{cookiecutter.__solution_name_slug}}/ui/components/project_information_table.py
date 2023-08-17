@@ -1,11 +1,10 @@
 # ©2023, ANSYS Inc. Unauthorized use, distribution or duplication is prohibited.
 
 import dash_bootstrap_components as dbc
-from dash import Output, Input, State, html, dcc, callback, MATCH, dash_table
+from dash import html, dash_table
 import uuid
 import pandas as pd
 
-from ansys.saf.glow.client.dashclient import DashClient
 from ansys.solutions.{{ cookiecutter.__solution_name_slug }}.solution.problem_setup_step import ProblemSetupStep
 from ansys.solutions.{{ cookiecutter.__solution_name_slug }}.solution.definition import {{ cookiecutter.__solution_definition_name }}
 
@@ -13,11 +12,6 @@ from ansys.solutions.{{ cookiecutter.__solution_name_slug }}.solution.definition
 class ProjectInformationTableAIO(html.Div): 
 
     class ids:
-        interval = lambda aio_id: {
-            'component': 'ProjectInformationTableAIO',
-            'subcomponent': 'interval',
-            'aio_id': aio_id
-        }
         datatable = lambda aio_id: {
             'component': 'ProjectInformationTableAIO',
             'subcomponent': 'datatable',
@@ -39,40 +33,31 @@ class ProjectInformationTableAIO(html.Div):
         if aio_id is None:
             aio_id = str(uuid.uuid4())
 
-        if interval_props:
-            interval_props = interval_props.copy()
-        else:
-            interval_props = {
-                "interval": problem_setup_step.auto_update_frequency,
-                "n_intervals": 0,
-                "disabled": not problem_setup_step.auto_update_activated
-            }
+        data = self.get_data(problem_setup_step)
 
-        if datatable_props:
-            datatable_props = datatable_props.copy()
-        else:
-            datatable_props = {
-                "fixed_rows": {"headers": True},
-                "style_header": {
-                    "textAlign": "left",
-                    "font_family": "Roboto",
-                    "font_size": "15px",
-                    "fontWeight": "bold",
-                    "border": "none",
-                    "display": "none",
-                },
-                "style_cell": {
-                    "textAlign": "left",
-                    "font_family": "Roboto",
-                    "font_size": "15px",
-                    "border": "none"
-                },
-                "style_as_list_view": True,
-                "style_table": {"border": "none"}, # Hide table borders
-            }
+        datatable_props = {
+            "data": data.to_dict('records'),
+            "columns": [{"name": i, "id": i, "type": "text"} for i in data.columns],
+            "fixed_rows": {"headers": True},
+            "style_header": {
+                "textAlign": "left",
+                "font_family": "Roboto",
+                "font_size": "15px",
+                "fontWeight": "bold",
+                "border": "none",
+                "display": "none",
+            },
+            "style_cell": {
+                "textAlign": "left",
+                "font_family": "Roboto",
+                "font_size": "15px",
+                "border": "none"
+            },
+            "style_as_list_view": True,
+            "style_table": {"border": "none"}, # Hide table borders
+        }
 
         super().__init__([ 
-            dcc.Interval(id=self.ids.interval(aio_id), **interval_props),
             dbc.Card(
                 [
                     dbc.CardBody(
@@ -87,7 +72,7 @@ class ProjectInformationTableAIO(html.Div):
             )
         ])
 
-    def get_data(project_status_info: dict) -> pd.DataFrame:
+    def get_data(self, problem_setup_step) -> pd.DataFrame:
 
         project_summary_data = {
             "column_a": [
@@ -114,32 +99,17 @@ class ProjectInformationTableAIO(html.Div):
             ],
         }
 
-        if project_status_info:
+        if problem_setup_step.project_status_info:
             project_summary_data["column_b"] = [
-                project_status_info["projects"][0]["state"],
-                project_status_info["projects"][0]["project_id"],
-                project_status_info["projects"][0]["name"],
-                project_status_info["projects"][0]["machine"],
-                project_status_info["projects"][0]["location"],
-                project_status_info["projects"][0]["working_dir"],
-                project_status_info["projects"][0]["user"],
+                problem_setup_step.project_status_info["projects"][0]["state"],
+                problem_setup_step.project_status_info["projects"][0]["project_id"],
+                problem_setup_step.project_status_info["projects"][0]["name"],
+                problem_setup_step.project_status_info["projects"][0]["machine"],
+                problem_setup_step.project_status_info["projects"][0]["location"],
+                problem_setup_step.project_status_info["projects"][0]["working_dir"],
+                problem_setup_step.project_status_info["projects"][0]["user"],
                 "",
                 "",
             ]
 
         return pd.DataFrame(project_summary_data)
-
-    @callback(
-        Output(ids.datatable(MATCH), 'data'),
-        Output(ids.datatable(MATCH), 'columns'),
-        Input(ids.interval(MATCH), 'n_intervals'),
-        State("url", "pathname"),
-    )
-    def auto_update(n_intervals, pathname):
-
-        project = DashClient[{{ cookiecutter.__solution_definition_name }}].get_project(pathname)
-        problem_setup_step = project.steps.problem_setup_step
-        
-        data = ProjectInformationTableAIO.get_data(problem_setup_step.project_status_info)
-
-        return data.to_dict('records'), [{"name": i, "id": i, "type": "text"} for i in data.columns]
