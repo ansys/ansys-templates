@@ -88,8 +88,22 @@ ASSETS_DIRCTORY = Path(f"src/ansys/solutions/{{ cookiecutter.__solution_name_slu
 
 def unzip_archive(archive_path: Path, extract_path: Path) -> None:
     """Unzip an archive."""
-
+    import os
+    print("Current Workign Directory:" + os.getcwd())
+    print("Archive_path:" + archive_path)
+    _archive_path = Path(archive_path)
+    print(_archive_path.absolute())
+    # archive_path = 
+    # print(archive_path.absolute())
+    # print(extract_path)
+    # if archive_path.exists():
+    #     print(f"The file '{archive_path}' exists.")
+    # else:
+    #     print(f"The file '{archive_path}' does not exist.")
+    # archive_path=Path(archive_path)
+    archive_path = "/home/vgelbgra/Downloads/ansys-templates/arch.owa" 
     with zipfile.ZipFile(archive_path, "r") as zip_ref:
+        # print(" test ")
         zip_ref.extractall(extract_path)
 
 
