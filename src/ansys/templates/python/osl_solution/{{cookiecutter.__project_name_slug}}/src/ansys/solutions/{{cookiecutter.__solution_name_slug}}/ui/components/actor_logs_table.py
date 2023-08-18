@@ -1,7 +1,7 @@
 # ©2023, ANSYS Inc. Unauthorized use, distribution or duplication is prohibited.
 
 import dash_bootstrap_components as dbc
-from dash import html, dash_table
+from dash_extensions.enrich import html, dash_table
 from datetime import datetime
 import uuid
 import pandas as pd

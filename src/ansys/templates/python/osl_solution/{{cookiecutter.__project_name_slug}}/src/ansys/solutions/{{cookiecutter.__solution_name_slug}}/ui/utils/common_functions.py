@@ -2,8 +2,6 @@
 
 """General purpose functions."""
 
-import json
-from pathlib import Path
 import re
 from typing import Any, Iterable, Union
 

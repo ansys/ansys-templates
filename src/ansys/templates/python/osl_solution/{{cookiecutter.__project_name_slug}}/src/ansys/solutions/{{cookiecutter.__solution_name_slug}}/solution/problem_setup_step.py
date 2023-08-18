@@ -44,7 +44,7 @@ class ProblemSetupStep(StepModel):
     auto_update_activated: bool = True
 
     # Backend data model
-    tcp_server_host: str = "127.0.0.1"
+    tcp_server_host: str = None
     tcp_server_port: int = None
     ansys_ecosystem: dict = {
         "optislang": {
@@ -354,6 +354,8 @@ class ProblemSetupStep(StepModel):
         self.tcp_server_port = server_info["server"]["server_port"]
         self.transaction.upload(["tcp_server_port"])
         self.transaction.upload(["tcp_server_host"])
+
+        osl.start(wait_for_started=True, wait_for_finished=False)
 
         while True:
             # Get project state
