@@ -2,13 +2,10 @@
 
 import dash_bootstrap_components as dbc
 from dash.exceptions import PreventUpdate
-from dash import Output, Input, State, html, dcc, callback, MATCH, callback_context
+from dash_extensions.enrich import Output, Input, State, html, dcc, callback, MATCH, callback_context
 import uuid
-import pandas as pd
-import time
 
 from ansys.saf.glow.client.dashclient import DashClient
-from ansys.saf.glow.core.method_status import MethodStatus
 from ansys.solutions.{{ cookiecutter.__solution_name_slug }}.solution.problem_setup_step import ProblemSetupStep
 from ansys.solutions.{{ cookiecutter.__solution_name_slug }}.solution.definition import {{ cookiecutter.__solution_definition_name }}
 
