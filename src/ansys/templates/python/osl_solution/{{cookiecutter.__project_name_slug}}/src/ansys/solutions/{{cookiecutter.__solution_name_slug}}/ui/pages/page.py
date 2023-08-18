@@ -8,8 +8,8 @@ import dash_bootstrap_components as dbc
 from dash_extensions.enrich import Input, Output, State, callback_context, dcc, html
 from dash.exceptions import PreventUpdate
 from dash_iconify import DashIconify
-import dash_loading_spinners as dls
 from pathlib import Path
+import webbrowser
 
 from ansys.solutions.{{ cookiecutter.__solution_name_slug }}.solution.definition import {{ cookiecutter.__solution_definition_name }}
 from ansys.solutions.{{ cookiecutter.__solution_name_slug }}.ui.pages import monitoring_page, problem_setup_page
@@ -76,16 +76,44 @@ layout = html.Div(
                     style={"background-color": "rgba(242, 242, 242, 0.6)"},  # Ansys grey
                 ),
                 dbc.Col(
-                    html.Div(
-                        id="page_content",
-                        style={"padding-right": "1%"}
-                    ),
+                    [
+                        dbc.Row(
+                            html.Div(
+                                id="page_content",
+                                style={"padding-right": "1%"}
+                            ),
+                        ),
+                        html.Br(),
+                        dbc.Row(
+                            dbc.Col(
+                                dbc.Stack(
+                                    [
+                                         dbc.Button(
+                                            "Open in browser",
+                                            id="open_in_browser",
+                                            style={
+                                                "background-color": "rgba(242, 242, 242, 0.6)",
+                                                "border-color": "rgba(242, 242, 242, 0.6)",
+                                                "color": "rgba(0, 0, 0, 1)",
+                                                "width": "150px",
+                                                "height": "30px",
+                                            },
+                                            n_clicks=0,
+                                            className="ms-auto",
+                                        )
+                                    ],
+                                    direction="horizontal",
+                                    gap=1,
+                                ),
+                                width=12,
+                            )
+                        )
+                    ],
                     width=10
                 ),
             ],
         ),
-        dcc.Store(id='project_initialized'),
-         dbc.Button(
+        dbc.Button(
             id="dummy_button",
             style={"display": "none"},
             n_clicks=0,
@@ -211,3 +239,18 @@ def return_to_portal(pathname):
         ]
     )
     return children
+
+
+@callback(
+    Output("open_in_browser", "children"),
+    Input("open_in_browser", "n_clicks"),
+    State("url", "pathname"),
+    prevent_initial_call=True,
+)
+def open_in_browser(n_clicks, pathname):
+    """Open the Portal UI in browser view."""
+
+    portal_ui_url = DashClient.get_portal_ui_url()
+    webbrowser.open_new(portal_ui_url)
+
+    raise PreventUpdate
