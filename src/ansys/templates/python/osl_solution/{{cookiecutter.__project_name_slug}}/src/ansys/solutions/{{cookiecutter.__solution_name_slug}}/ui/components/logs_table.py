@@ -4,7 +4,7 @@
 
 from typing import Union
 
-from dash import dash_table
+from dash_extensions.enrich import dash_table
 import pandas as pd
 
 

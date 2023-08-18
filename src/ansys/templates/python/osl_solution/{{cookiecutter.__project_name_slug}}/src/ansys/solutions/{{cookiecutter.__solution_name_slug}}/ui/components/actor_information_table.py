@@ -1,9 +1,10 @@
 # ©2023, ANSYS Inc. Unauthorized use, distribution or duplication is prohibited.
 
 import dash_bootstrap_components as dbc
-from dash import html, dash_table
+from dash_extensions.enrich import html, dash_table, dcc
 import uuid
 import pandas as pd
+import plotly.express as px
 
 from ansys.solutions.{{ cookiecutter.__solution_name_slug }}.solution.problem_setup_step import ProblemSetupStep
 from ansys.solutions.{{ cookiecutter.__solution_name_slug }}.solution.definition import {{ cookiecutter.__solution_definition_name }}
@@ -15,6 +16,11 @@ class ActorInformationTableAIO(html.Div):
         datatable = lambda aio_id: {
             'component': 'ActorInformationTableAIO',
             'subcomponent': 'datatable',
+            'aio_id': aio_id
+        }
+        pie_chart = lambda aio_id: {
+            'component': 'ActorStatisticsTableAIO',
+            'subcomponent': 'pie_chart',
             'aio_id': aio_id
         }
 
@@ -33,11 +39,11 @@ class ActorInformationTableAIO(html.Div):
         if aio_id is None:
             aio_id = str(uuid.uuid4())
 
-        data = self.get_data(problem_setup_step)
+        table_data, pie_chart_data = self.get_data(problem_setup_step)
 
         datatable_props = {
-            "data": data.to_dict('records'),
-            "columns": [{"name": i, "id": i, "type": "text"} for i in data.columns],
+            "data": table_data.to_dict('records'),
+            "columns": [{"name": i, "id": i, "type": "text"} for i in table_data.columns],
             "fixed_rows": {"headers": True},
             "style_header": {
                 "textAlign": "left",
@@ -52,15 +58,46 @@ class ActorInformationTableAIO(html.Div):
             "style_table": {"border": "none"},  # Hide table borders
         }
 
+        if pie_chart_data:
+            pie_chart_props = {
+                "figure": px.pie(
+                    pie_chart_data,
+                    values='Count',
+                    names='Category',
+                    color='Category',
+                    color_discrete_map={
+                        'Success': 'rgba(173, 191, 11, 1)',
+                        'Failure': 'rgba(248, 105, 80, 1)',
+                        'Pending': 'rgba(251, 201, 93, 1)'
+                    },
+                ).update_traces(textinfo='none', hole=0.8, showlegend=True),
+                "style": {
+                    "width": "300px",
+                    "height": "300px",
+                    "display": "inline-block",
+                },
+            }
+
         super().__init__([
             dbc.Card(
                 [
-                    dbc.CardBody(
+                    dbc.Row(
                         [
-                            html.H4("Actor information", className="card-title"),
-                            dash_table.DataTable(id=self.ids.datatable(aio_id), **datatable_props),
+                            dbc.Col(
+                                [
+                                    html.H4("Actor information", className="card-title"),
+                                    dash_table.DataTable(id=self.ids.datatable(aio_id), **datatable_props),
+                                ],
+                                width=8
+                            ),
+                            dbc.Col(
+                                [
+                                    dcc.Graph(id=self.ids.pie_chart(aio_id), **pie_chart_props) if pie_chart_data else None,
+                                ],
+                                width=2
+                            ),
                         ]
-                    ),
+                    )
                 ],
                 color="warning",
                 outline=True,
@@ -84,6 +121,8 @@ class ActorInformationTableAIO(html.Div):
             "column_b": [None, None, None],
         }
 
+        pie_chart_data = None
+
         if actor_info and actor_status_info:
             actor_information_data["column_b"] = [
                 actor_status_info["working dir"],
@@ -102,4 +141,8 @@ class ActorInformationTableAIO(html.Div):
                     [f"{processed_designs} / {total_designs}", f"{status}%", succeeded_designs, failed_designs]
                 )
 
-        return pd.DataFrame(actor_information_data)
+                pie_chart_data = {'Category': ['Success', 'Failure', 'Pending'], 'Count': [0, 0, 0]}
+                for index, state in enumerate(["succeeded_designs", "failed_designs", "pending_designs"]):
+                    pie_chart_data["Count"][index] = actor_status_info[state]
+
+        return pd.DataFrame(actor_information_data), pie_chart_data
