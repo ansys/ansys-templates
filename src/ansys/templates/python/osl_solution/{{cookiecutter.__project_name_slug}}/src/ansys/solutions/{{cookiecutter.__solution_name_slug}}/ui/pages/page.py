@@ -2,10 +2,10 @@
 
 """Initialization of the frontend layout across all the steps."""
 
-from ansys.saf.glow.client.dashclient import DashClient
 from ansys_dash_treeview import AnsysDashTreeview
+from ansys.saf.glow.client.dashclient import DashClient, callback
 import dash_bootstrap_components as dbc
-from dash_extensions.enrich import Input, Output, State, callback, callback_context, dcc, html
+from dash_extensions.enrich import Input, Output, State, callback_context, dcc, html
 from dash.exceptions import PreventUpdate
 from dash_iconify import DashIconify
 import dash_loading_spinners as dls

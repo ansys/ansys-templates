@@ -8,10 +8,15 @@ from typing import Union
 
 from ansys.optislang.core import Optislang
 from ansys.optislang.core.nodes import System
+from ansys.solutions.{{ cookiecutter.__solution_name_slug }}.model.optislang.install import get_available_optislang_installations
 
 
 def dump_project_state(project_file: Path, project_state_file: Path) -> None:
     """Start PyOptiSLang and dump project state file."""
+
+    versions = get_available_optislang_installations()
+    if len(versions) == 0:
+        raise Exception("To run PyOptiSLang, you must have access to a licensed copy of optiSLang. The first supported version of optiSLang is 2023 R1.")
 
     working_directory = project_file.parent
     temporary_directory = working_directory / "extract_project_tree.tmp"
@@ -19,7 +24,7 @@ def dump_project_state(project_file: Path, project_state_file: Path) -> None:
     if not os.path.exists(temporary_directory):
         os.makedirs(temporary_directory)
     else:
-        os.rmdir(temporary_directory)
+        shutil.rmtree(temporary_directory)
         os.makedirs(temporary_directory)
 
     shutil.copy(project_file, temporary_directory / project_file.name)

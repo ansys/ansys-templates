@@ -1,0 +1,55 @@
+# This Docker Compose file is used to start up the Tracelens visualization platform and its required services. It includes containers for the Tracelens frontend,
+# backend, and database, as well as an Elasticsearch instance for storing and indexing traces.
+# Before running the solution, set the following environment variables:
+# $env:OTEL_EXPORTER_OTLP_ENDPOINT = 'http://localhost:4317'
+# $env:OTEL_EXPORTER_OTLP_TRACES_ENDPOINT = 'http://localhost:4317'
+
+version: '3.5'
+
+x-app:
+  &default-observable
+  environment:
+    - OTEL_EXPORTER_OTLP_ENDPOINT=http://tracelens:4317
+    - OTEL_EXPORTER_OTLP_METRICS_INSECURE=true
+    - OTEL_EXPORTER_OTLP_TRACES_ENDPOINT=http://tracelens:4317
+    - OTEL_EXPORTER_OTLP_TRACES_INSECURE=true
+  extra_hosts:
+    - "host.docker.internal:host-gateway"
+
+services:
+
+  redis:
+    image: redis:latest
+    ports:
+      - 6379:6379
+    networks:
+      - rep-obs
+    extra_hosts:
+      - "host.docker.internal:host-gateway"
+
+  tracelens:
+    image: azwepsifujiaksacr.azurecr.io/ansys/md1-obs/tracelens:latest
+    ports:
+      - 5000:5001
+      - 4317:4317
+    environment:
+      - PlantUml__RemoteUrl=http://host.docker.internal:8082
+      - Redis__Server=host.docker.internal
+    networks:
+      - rep-obs
+    extra_hosts:
+      - "host.docker.internal:host-gateway"
+
+  plantuml-server:
+    image: plantuml/plantuml-server:tomcat-v1.2022.14
+    container_name: plantuml-server
+    ports:
+      - 8082:8080
+    networks:
+      - rep-obs
+    extra_hosts:
+      - "host.docker.internal:host-gateway"
+
+networks:
+  rep-obs:
+    name: rep-obs

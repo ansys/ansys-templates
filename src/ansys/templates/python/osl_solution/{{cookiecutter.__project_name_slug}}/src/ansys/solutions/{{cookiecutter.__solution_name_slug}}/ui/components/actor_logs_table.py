@@ -1,42 +1,112 @@
 # ©2023, ANSYS Inc. Unauthorized use, distribution or duplication is prohibited.
 
-"""Provide a component to handle the actor logs for system and actor node types."""
-
+import dash_bootstrap_components as dbc
+from dash import html, dash_table
 from datetime import datetime
-
-from dash import dash_table
+import uuid
 import pandas as pd
 
+from ansys.solutions.{{ cookiecutter.__solution_name_slug }}.solution.problem_setup_step import ProblemSetupStep
+from ansys.solutions.{{ cookiecutter.__solution_name_slug }}.solution.definition import {{ cookiecutter.__solution_definition_name }}
 from ansys.solutions.{{ cookiecutter.__solution_name_slug }}.ui.utils.common_functions import (
     remove_key_from_dictionaries,
     sort_dict_by_ordered_keys,
 )
 
 
-class ActorLogsTable:
-    """Actor logs component."""
+class ActorLogsTableAIO(html.Div):
 
-    def __init__(self) -> None:
-        """Constructor."""
+    class ids:
+        datatable = lambda aio_id: {
+            'component': 'ActorLogsTableAIO',
+            'subcomponent': 'datatable',
+            'aio_id': aio_id
+        }
 
-        self.actor_info: dict = None
-        self.font_size: str = "15px"
+    ids = ids
 
-    def _get_data(self) -> pd.DataFrame:
+    def __init__(self, problem_setup_step: ProblemSetupStep, aio_id: str = None):
+        """ActorLogsTableAIO is an All-in-One component that is composed
+        of a parent `html.Div` with a `dcc.Interval` and a `dash_table.DataTable` as children.
+
+        - `problem_setup_step` - The StepModel object of the problem setup step.
+        - `datatable_props` - A dictionary of properties passed into the dash_table.DataTable component.
+        - `interval_props` - A dictionary of properties passed into the dcc.Interval component.
+        - `aio_id` - The All-in-One component ID used to generate the table components's dictionary IDs.
+        """
+
+        if aio_id is None:
+            aio_id = str(uuid.uuid4())
+
+        data = self.get_data(problem_setup_step)
+
+        datatable_props = {
+            "data": data.to_dict('records'),
+            "columns": [{"name": i, "id": i, "type": "text"} for i in data.columns],
+            "fixed_rows": {"headers": True},
+            "style_header": {"font_family": "Roboto", "font_size": "15px", "fontWeight": "bold"},
+            "style_cell": {
+                "textAlign": "left",
+                "font_family": "Roboto",
+                "font_size": "15px",
+            },
+            "style_cell_conditional": [
+                {"if": {"column_id": "Time"}, "minWidth": "60px", "maxWidth": "60px", "width": "60px"},
+                {
+                    "if": {"column_id": "Level"},
+                    "minWidth": "30px",
+                    "maxWidth": "30px",
+                    "width": "30px",
+                    "textAlign": "center",
+                },
+                {"if": {"column_id": "Message"}, "minWidth": "200px", "maxWidth": "200px", "width": "200px"},
+            ],
+            "style_data_conditional": [
+                {
+                    "if": {"column_id": "Level", "filter_query": '{Level} eq "INFO"'},
+                    "backgroundColor": "rgb(227, 245, 252)",
+                    "color": "rgb(0, 0, 0)",
+                    "textAlign": "center",
+                }
+            ],
+            "style_as_list_view": True,
+        }
+
+        super().__init__([
+            dbc.Card(
+                [
+                    dbc.CardBody(
+                        [
+                            html.H4("Actor Log", className="card-title"),
+                            dash_table.DataTable(id=self.ids.datatable(aio_id), **datatable_props),
+                        ]
+                    ),
+                ],
+                color="warning",
+                outline=True,
+            )
+        ])
+
+    def get_data(self, problem_setup_step) -> pd.DataFrame:
+
+        if problem_setup_step.selected_actor_from_treeview in problem_setup_step.actors_info.keys():
+            actor_info = problem_setup_step.actors_info[problem_setup_step.selected_actor_from_treeview]
+        else:
+            actor_info = {}
 
         has_data = False
 
-        if self.actor_info:
-            if "log_messages" in self.actor_info.keys():
-                if len(self.actor_info["log_messages"]):
+        if actor_info:
+            if "log_messages" in actor_info.keys():
+                if len(actor_info["log_messages"]):
                     has_data = True
                     # Remove hid key from list dictionaries because it is useless for UI
                     # and prevent transformation to DataFrame.
-                    actor_logs_data = remove_key_from_dictionaries(self.actor_info["log_messages"], "hid")
+                    actor_logs_data = remove_key_from_dictionaries(actor_info["log_messages"], "hid")
                     # Transform list of dictionaries into dictionary
                     actor_logs_data = {
-                        key: [d[key] for d in self.actor_info["log_messages"]]
-                        for key in self.actor_info["log_messages"][0]
+                        key: [d[key] for d in actor_info["log_messages"]]
+                        for key in actor_info["log_messages"][0]
                     }
                     # Sort keys in order
                     actor_logs_data = sort_dict_by_ordered_keys(actor_logs_data, ["time_stamp", "level", "message"])
@@ -53,40 +123,3 @@ class ActorLogsTable:
             actor_logs_data = {"Time": [], "Level": [], "Message": []}
 
         return pd.DataFrame(actor_logs_data)
-
-    def render(self):
-        """Generate table."""
-
-        data = self._get_data()
-
-        return dash_table.DataTable(
-            data=data.to_dict("records"),
-            columns=[{"name": i, "id": i, "type": "text"} for i in data.columns],
-            fixed_rows={"headers": True},
-            style_header={"font_family": "Roboto", "font_size": self.font_size, "fontWeight": "bold"},
-            style_cell={
-                "textAlign": "left",
-                "font_family": "Roboto",
-                "font_size": self.font_size,
-            },
-            style_cell_conditional=[
-                {"if": {"column_id": "Time"}, "minWidth": "60px", "maxWidth": "60px", "width": "60px"},
-                {
-                    "if": {"column_id": "Level"},
-                    "minWidth": "30px",
-                    "maxWidth": "30px",
-                    "width": "30px",
-                    "textAlign": "center",
-                },
-                {"if": {"column_id": "Message"}, "minWidth": "200px", "maxWidth": "200px", "width": "200px"},
-            ],
-            style_data_conditional=[
-                {
-                    "if": {"column_id": "Level", "filter_query": '{Level} eq "INFO"'},
-                    "backgroundColor": "rgb(227, 245, 252)",
-                    "color": "rgb(0, 0, 0)",
-                    "textAlign": "center",
-                }
-            ],
-            style_as_list_view=True,
-        )

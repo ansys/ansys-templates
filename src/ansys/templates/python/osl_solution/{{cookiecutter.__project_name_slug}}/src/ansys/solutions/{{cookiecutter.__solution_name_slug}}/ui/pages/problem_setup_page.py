@@ -7,9 +7,8 @@ import time
 import dash_bootstrap_components as dbc
 
 from dash.exceptions import PreventUpdate
-from ansys.saf.glow.solution import MethodStatus
-from dash_extensions.enrich import Input, Output, State, dcc, html, callback, ALL, MATCH, no_update
-from ansys.saf.glow.client.dashclient import DashClient
+from dash_extensions.enrich import Input, Output, State, dcc, html, ALL, MATCH, no_update
+from ansys.saf.glow.client.dashclient import DashClient, callback
 from ansys.solutions.dash_components.table import InputRow
 from ansys.solutions.optislang.frontend_components.load_sections import to_dash_sections
 
