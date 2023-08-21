@@ -7,10 +7,10 @@ import time
 import dash_bootstrap_components as dbc
 
 from dash.exceptions import PreventUpdate
-from dash_extensions.enrich import Input, Output, State, dcc, html, ALL, MATCH, no_update
+from dash_extensions.enrich import Input, Output, State, dcc, html, ALL, MATCH, no_update, callback_context
 from ansys.saf.glow.client.dashclient import DashClient, callback
 from ansys.solutions.dash_components.table import InputRow
-from ansys.solutions.optislang.frontend_components.load_sections import to_dash_sections
+from ansys.solutions.optislang.frontend_components.load_sections import to_dash_sections, update_designs_to_dash_section
 
 from ansys.solutions.{{ cookiecutter.__solution_name_slug }}.solution.definition import {{ cookiecutter.__solution_definition_name }}
 from ansys.solutions.{{ cookiecutter.__solution_name_slug }}.solution.problem_setup_step import ProblemSetupStep
@@ -239,7 +239,12 @@ def initialize_dictionary_of_ui_placeholders(n_clicks, data, ids, input_file_ids
                 split_values = ids[index]["placeholder"].split("#")
                 pm_name = split_values[0]
                 key = split_values[1]
-                parameters[key] = data[index]
+                if isinstance(data[index], list) and True in data[index]:
+                    parameters[key] = True
+                elif isinstance(data[index], list) and False in data[index]:
+                    parameters[key] = False
+                else:
+                    parameters[key] = data[index]
                 ui_data.update({pm_name: parameters})
             elif "Bool" in ids[index]["placeholder"] and type(data[index]) == list:
                 value = data[index]
@@ -288,6 +293,10 @@ def update_ui_placeholders(value, id, pathname):
         split_values = id["placeholder"].split("#")
         pm_name = split_values[0]
         key = split_values[1]
+        if isinstance(value, list) and True in value:
+            value = True
+        elif isinstance(value, list) and False in value:
+            value = False
         ui_data[pm_name][key] = value
     elif "Bool" in name and type(value) == list:
         if True in value:
@@ -362,3 +371,59 @@ def update_status_of_start_analysis_button(is_completed, filenames, pathname):
 )
 def on_page_load_initialize_dictionary_of_ui_placeholder_values(pathname, n_clicks):
     return n_clicks + 1
+
+
+@callback(
+    Output("start-designs-view", "children"),
+    Input({"type": "button-add", "index": ALL}, "n_clicks"),
+    Input({"type": "button-del", "index": ALL}, "n_clicks"),
+    State({"type": "button-del", "index": ALL}, "disabled"),
+    State({"type": "row", "index": ALL}, "id"),
+    State("url", "pathname"),
+    prevent_initial_call=True,
+)
+def update_start_designs_table(n_clicks_add, n_clicks_del, disabled_states, row_id, pathname):
+    """This updates the StartDesigns table every time the '+' or '-' button is clicked."""
+    project = DashClient[Overview_Osl_SolutionSolution].get_project(pathname)
+    problem_setup_step = project.steps.problem_setup_step
+    ctx = callback_context
+    triggered_button = ctx.triggered[0]["prop_id"].split(".")[0]
+    if (
+        ctx.triggered
+        and not all(n_click is None for n_click in n_clicks_del)
+        or not all(n_click is None for n_click in n_clicks_add)
+    ):
+        ui_data = problem_setup_step.ui_placeholders
+        designs = ui_data["StartDesigns"]
+        button_type = triggered_button.split('"type":"')[1].split('"}')[0]
+        row_id = triggered_button.split('"index":')[1].split(",")[0]
+        if button_type == "button-add":
+            designs = add_row(designs, row_id)
+        elif button_type == "button-del":
+            designs = delete_row(designs, row_id)
+
+        # Rebuild the dictionary with updated keys
+        new_designs = {str(index): value for index, (_, value) in enumerate(designs.items(), start=1)}
+        ui_data.update({"StartDesigns": new_designs})
+
+        problem_setup_step.ui_placeholders = ui_data
+        problem_setup_step.update_osl_placeholders_with_ui_values()
+
+        return update_designs_to_dash_section(problem_setup_step.placeholders, problem_setup_step.project_locked)
+    else:
+        raise PreventUpdate
+
+
+def add_row(designs, id_):
+    new_value = designs[id_]  # Value from the target key
+    new_designs = {}
+    for key, value in designs.items():
+        new_designs[key] = value
+        if key == id_:
+            new_designs["temp"] = new_value
+    return new_designs
+
+
+def delete_row(designs, id_):
+    del designs[id_]
+    return designs

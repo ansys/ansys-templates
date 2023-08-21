@@ -228,13 +228,13 @@ reference = "solutions-private-pypi"
 
 [[package]]
 name = "ansys-solutions-dash-lib"
-version = "0.4.4"
+version = "0.4.5"
 description = "A collection of functions and classes to design solution's frontend using Dash components."
 optional = false
 python-versions = ">=3.8,<3.11"
 files = [
-    {file = "ansys_solutions_dash_lib-0.4.4-py3-none-any.whl", hash = "sha256:26e4bdffc8bf6857ee85beac82a87ca9ef4ff2e28c9f4a82cd8602bc28ba7f30"},
-    {file = "ansys_solutions_dash_lib-0.4.4.tar.gz", hash = "sha256:ca0769b41d373fce0b776bea60a71876c0c44ca2d43b1304d4c19f1281113697"},
+    {file = "ansys_solutions_dash_lib-0.4.5-py3-none-any.whl", hash = "sha256:6dd00b5d0b8e53f4c70369903f9a439a45a4df0557003343c4ffb5dee8b3c14e"},
+    {file = "ansys_solutions_dash_lib-0.4.5.tar.gz", hash = "sha256:c2c5e4272a582a7d038f54232148e5fe288b5e37d9f8251f3a4b42902717d7aa"},
 ]
 
 [package.dependencies]
@@ -248,17 +248,17 @@ reference = "solutions-private-pypi"
 
 [[package]]
 name = "ansys-solutions-optislang-frontend-components"
-version = "0.1.dev9"
+version = "0.1.dev10"
 description = ""
 optional = false
 python-versions = ">=3.8,<3.11"
 files = [
-    {file = "ansys_solutions_optislang_frontend_components-0.1.dev9-py3-none-any.whl", hash = "sha256:c5ba16a3396c0083a9748cf1c4cc045ef530f55f75e080acf993df2cbf5d4081"},
-    {file = "ansys_solutions_optislang_frontend_components-0.1.dev9.tar.gz", hash = "sha256:bc757d03b030b172462427949ff9c1a2c91a1d015565424fb13eb530cdc995a4"},
+    {file = "ansys_solutions_optislang_frontend_components-0.1.dev10-py3-none-any.whl", hash = "sha256:c96dd3b0c09a8a97aa0b68e9c0679a98eea4aae903d40dca5225b166c94ebf95"},
+    {file = "ansys_solutions_optislang_frontend_components-0.1.dev10.tar.gz", hash = "sha256:200193f89613759e21b62187eb6078b9e8b6acea87d2c5ffadd90bc2bab9a0e4"},
 ]
 
 [package.dependencies]
-ansys-solutions-dash-lib = "0.4.4"
+ansys-solutions-dash-lib = "0.4.5"
 
 [package.source]
 type = "legacy"
@@ -3716,4 +3716,4 @@ testing = ["big-O", "jaraco.functools", "jaraco.itertools", "more-itertools", "p
 [metadata]
 lock-version = "2.0"
 python-versions = ">=3.8, <3.11"
-content-hash = "ff2bcedb82617584529c14f94e9d91bee59c8869438ac9e311f1fb3175252274"
+content-hash = "94cc47baf97ed8fbd2d1f5a35841e80f9fcef31a7e9746ac72ea770c5f87255c"
