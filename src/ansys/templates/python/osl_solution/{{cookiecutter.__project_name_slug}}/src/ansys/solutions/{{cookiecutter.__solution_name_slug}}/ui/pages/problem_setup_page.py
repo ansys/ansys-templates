@@ -384,7 +384,7 @@ def on_page_load_initialize_dictionary_of_ui_placeholder_values(pathname, n_clic
 )
 def update_start_designs_table(n_clicks_add, n_clicks_del, disabled_states, row_id, pathname):
     """This updates the StartDesigns table every time the '+' or '-' button is clicked."""
-    project = DashClient[Overview_Osl_SolutionSolution].get_project(pathname)
+    project = DashClient[{{ cookiecutter.__solution_definition_name }}].get_project(pathname)
     problem_setup_step = project.steps.problem_setup_step
     ctx = callback_context
     triggered_button = ctx.triggered[0]["prop_id"].split(".")[0]
