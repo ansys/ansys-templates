@@ -124,6 +124,7 @@ class ProblemSetupStep(StepModel):
             upload=["has_project_state"]
         )
     )
+    @long_running
     def generate_project_state(self) -> None:
         """Generate a project state from an optiSLang opf file."""
 
@@ -139,6 +140,7 @@ class ProblemSetupStep(StepModel):
             upload=["step_list", "node_list"]
         )
     )
+    @long_running
     def read_project_tree(self) -> None:
         """Read project tree from optiSLang project state file."""
 
@@ -156,6 +158,7 @@ class ProblemSetupStep(StepModel):
             ]
         )
     )
+    @long_running
     def upload_bulk_files_to_project_directory(self) -> None:
         """Upload bulk files to project directory."""
 
@@ -174,6 +177,7 @@ class ProblemSetupStep(StepModel):
         self.project_state_file.write_bytes(original_project_state_file.read_bytes())
 
     @transaction(self=StepSpec(download=["properties_file"], upload=["placeholders", "registered_files", "settings", "parameter_manager", "criteria"]))
+    @long_running
     def get_default_placeholder_values(self):
         """Get placeholder values and definitions using the ProjectProperties class."""
         pp = ProjectProperties()
@@ -293,6 +297,7 @@ class ProblemSetupStep(StepModel):
             upload=["app_metadata"]
         )
     )
+    @long_running
     def get_app_metadata(self) -> None:
         """Read OWA metadata file."""
 
@@ -349,8 +354,8 @@ class ProblemSetupStep(StepModel):
 
         osl.__logger = osl_logger.add_instance_logger(osl.name, osl, self.optislang_log_level)
 
+        self.tcp_server_host = osl.get_osl_server().get_host()
         server_info = osl.get_osl_server().get_server_info()
-        self.tcp_server_host = server_info["server"]["server_address"]
         self.tcp_server_port = server_info["server"]["server_port"]
         self.transaction.upload(["tcp_server_port"])
         self.transaction.upload(["tcp_server_host"])
