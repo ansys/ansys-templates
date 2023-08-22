@@ -69,50 +69,58 @@ def layout(problem_setup_step: ProblemSetupStep) -> html.Div:
             ),
             html.Br(),
             # Input form
+            html.H1("Input Form", style={"font-size": "20px"}),
+            html.Hr(className="my-2"),
             dbc.Row(id="osl-dash-sections",children=project_properties_sections),
+            html.Br(),
+            # Start analysis
+            html.H1("Start Analysis", style={"font-size": "20px"}),
+            html.Hr(className="my-2"),
             dbc.Row(
                 [
-                    dbc.Accordion(
+                    html.Div(
                         [
-                            dbc.AccordionItem(
-                                [
-                                    InputRow(
-                                        "button",
-                                        "start_analysis",
-                                        "Start analysis",
-                                        disabled=problem_setup_step.analysis_locked,
-                                        label_width=2,
-                                        value_width=4,
-                                        unit_width=1,
-                                        description_width=4,
-                                        class_name="button",
-                                    ).get(),
-                                    dcc.Loading(
-                                        type="circle",
-                                        fullscreen=True,
-                                        color="#ffb71b",
-                                        style={
-                                            "background-color": "rgba(55, 58, 54, 0.1)",
-                                        },
-                                        children=html.Div(id="wait_start_analysis"),
-                                    ),
-                                    dcc.Interval(
-                                        id="solve_interval_component",
-                                        interval=1 * 3000,  # in milliseconds
-                                        n_intervals=0,
-                                    ),
-                                ],
-                                title="Start Analysis",
-                                item_id="start_analysis_accordion",
-                            ),
                             dbc.Button(
-                                id="dummy_button_2",
-                                style={"display": "none"},
-                                n_clicks=0,
-                                color="dark"
+                                html.I(className="fas fa-play", style={"display": "inline-block"}),
+                                id="start_analysis",
+                                disabled=problem_setup_step.analysis_locked,
+                                style = {
+                                    "display": "flex",
+                                    "justify-content": "center",
+                                    "align-items": "center",
+                                    "fontSize": "150%",
+                                    "background-color": "rgba(0, 0, 0, 1)",
+                                    "border-color": "rgba(0, 0, 0, 1)",
+                                    "height": "30px",
+                                }
                             ),
-                        ]
-                    )
+                            dbc.Tooltip(
+                                "Start optiSLang project execution.",
+                                target="start_analysis",
+                            ),
+                        ],
+                        className="d-grid gap-2 col-5 mx-auto",
+                    ),
+                    dcc.Loading(
+                        type="circle",
+                        fullscreen=True,
+                        color="#ffb71b",
+                        style={
+                            "background-color": "rgba(55, 58, 54, 0.1)",
+                        },
+                        children=html.Div(id="wait_start_analysis"),
+                    ),
+                    dcc.Interval(
+                        id="solve_interval_component",
+                        interval=1 * 3000,  # in milliseconds
+                        n_intervals=0,
+                    ),
+                    dbc.Button(
+                        id="dummy_button_2",
+                        style={"display": "none"},
+                        n_clicks=0,
+                        color="dark"
+                    ),
                 ]
             ),
         ]

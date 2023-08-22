@@ -117,26 +117,51 @@ class ProjectCommandsAIO(html.Div):
                                                     id=self.ids.restart_button(aio_id),
                                                     **button_props
                                                 ),
+                                                dbc.Tooltip(
+                                                    "Restart optiSLang project.",
+                                                    target=self.ids.restart_button(aio_id),
+                                                    placement="bottom"
+                                                ),
                                                 dbc.Button(
                                                     children=html.I(className="fa fa-hand-paper", style={"display": "inline-block"}),
                                                     id=self.ids.stop_gently_button(aio_id),
                                                     **button_props
+                                                ),
+                                                dbc.Tooltip(
+                                                    "Stop optiSLang project gently.",
+                                                    target=self.ids.stop_gently_button(aio_id),
+                                                    placement="bottom"
                                                 ),
                                                 dbc.Button(
                                                     children=html.I(className="fas fa-stop", style={"display": "inline-block"}),
                                                     id=self.ids.stop_button(aio_id),
                                                     **button_props
                                                 ),
+                                                dbc.Tooltip(
+                                                    "Stop optiSLang project.",
+                                                    target=self.ids.stop_button(aio_id),
+                                                    placement="bottom"
+                                                ),
                                                 dbc.Button(
                                                     children=html.I(className="fas fa-fast-backward", style={"display": "inline-block"}),
                                                     id=self.ids.reset_button(aio_id),
                                                     **button_props
                                                 ),
+                                                dbc.Tooltip(
+                                                    "Reset optiSLang project.",
+                                                    target=self.ids.reset_button(aio_id),
+                                                    placement="bottom"
+                                                ),
                                                 dbc.Button(
                                                     children=html.I(className="fas fa-power-off", style={"display": "inline-block"}),
                                                     id=self.ids.shutdown_button(aio_id),
                                                     **button_props
-                                                )
+                                                ),
+                                                dbc.Tooltip(
+                                                    "Shutdown optiSLang project.",
+                                                    target=self.ids.shutdown_button(aio_id),
+                                                    placement="bottom"
+                                                ),
                                             ],
                                             direction="horizontal",
                                             gap=1,
@@ -291,21 +316,41 @@ class ActorCommandsAIO(html.Div):
                                                     id=self.ids.restart_button(aio_id),
                                                     **button_props
                                                 ),
+                                                dbc.Tooltip(
+                                                    "Restart node.",
+                                                    target=self.ids.restart_button(aio_id),
+                                                    placement="bottom"
+                                                ),
                                                 dbc.Button(
                                                     children=html.I(className="fa fa-hand-paper", style={"display": "inline-block"}),
                                                     id=self.ids.stop_gently_button(aio_id),
                                                     **button_props
+                                                ),
+                                                dbc.Tooltip(
+                                                    "Stop node gently.",
+                                                    target=self.ids.stop_gently_button(aio_id),
+                                                    placement="bottom"
                                                 ),
                                                 dbc.Button(
                                                     children=html.I(className="fas fa-stop", style={"display": "inline-block"}),
                                                     id=self.ids.stop_button(aio_id),
                                                     **button_props
                                                 ),
+                                                dbc.Tooltip(
+                                                    "Stop node.",
+                                                    target=self.ids.stop_button(aio_id),
+                                                    placement="bottom"
+                                                ),
                                                 dbc.Button(
                                                     children=html.I(className="fas fa-fast-backward", style={"display": "inline-block"}),
                                                     id=self.ids.reset_button(aio_id),
                                                     **button_props
-                                                )
+                                                ),
+                                                dbc.Tooltip(
+                                                    "Reset node.",
+                                                    target=self.ids.reset_button(aio_id),
+                                                    placement="bottom"
+                                                ),
                                             ],
                                             direction="horizontal",
                                             gap=1,
