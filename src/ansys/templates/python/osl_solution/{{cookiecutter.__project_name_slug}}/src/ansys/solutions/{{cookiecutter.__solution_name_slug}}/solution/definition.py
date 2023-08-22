@@ -12,7 +12,6 @@ from ansys.solutions.{{ cookiecutter.__solution_name_slug }}.solution.monitoring
 class Steps(StepsModel):
     """Workflow definition."""
     problem_setup_step: ProblemSetupStep
-    monitoring_step: MonitoringStep
 
 
 class {{ cookiecutter.__solution_definition_name }}(Solution):
