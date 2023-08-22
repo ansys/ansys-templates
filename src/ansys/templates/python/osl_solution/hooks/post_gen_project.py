@@ -22,7 +22,6 @@ DESIRED_STRUCTURE = [
     "examples/README.md",
     f"src/ansys/solutions/{{ cookiecutter.__solution_name_slug }}/model/assets/README.md",
     f"src/ansys/solutions/{{ cookiecutter.__solution_name_slug }}/model/optislang/project_tree.py",
-    f"src/ansys/solutions/{{ cookiecutter.__solution_name_slug }}/model/optislang/install.py",
     f"src/ansys/solutions/{{ cookiecutter.__solution_name_slug }}/model/optislang/server_commands.py",
     f"src/ansys/solutions/{{ cookiecutter.__solution_name_slug }}/model/utils.py",
     f"src/ansys/solutions/{{ cookiecutter.__solution_name_slug }}/solution/definition.py",

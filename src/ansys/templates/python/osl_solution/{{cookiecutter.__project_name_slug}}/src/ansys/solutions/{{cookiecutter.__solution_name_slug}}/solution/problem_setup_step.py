@@ -11,14 +11,14 @@ from typing import List
 import tempfile
 
 
-from ansys.optislang.core import Optislang, logging
+from ansys.optislang.core import Optislang, logging, utils
+
 from ansys.saf.glow.solution import FileReference, FileGroupReference, StepModel, StepSpec, long_running, transaction
 from ansys.solutions.optislang.frontend_components.project_properties import ProjectProperties, write_properties_file, apply_placeholders_to_properties_file
 from ansys.solutions.products_ecosystem.controller import AnsysProductsEcosystemController
 from ansys.solutions.products_ecosystem.utils import convert_to_long_version
 
 from ansys.solutions.{{ cookiecutter.__solution_name_slug }}.model.optislang.project_tree import dump_project_state, get_project_tree, get_node_list, get_step_list, get_node_hids
-from ansys.solutions.{{ cookiecutter.__solution_name_slug }}.model.optislang.install import get_available_optislang_installations
 from ansys.solutions.{{ cookiecutter.__solution_name_slug }}.ui.utils.monitoring import read_log_file
 from ansys.solutions.{{ cookiecutter.__solution_name_slug }}.ui.utils.common_functions import extract_dict_by_key
 from ansys.solutions.{{ cookiecutter.__solution_name_slug }}.model.optislang.server_commands import run_osl_server_command
@@ -235,9 +235,7 @@ class ProblemSetupStep(StepModel):
         self.ansys_ecosystem_ready = True
 
         # Collect optiSLang installations
-        self.ansys_ecosystem["optislang"]["installed_versions"] = get_available_optislang_installations(
-            output_format="long"
-        )
+        self.ansys_ecosystem["optislang"]["installed_versions"] = list(dict(utils.find_all_osl_exec()).keys())
         self.ansys_ecosystem["optislang"]["compatible_versions"] = [
             product_version
             for product_version in self.ansys_ecosystem["optislang"]["installed_versions"]
@@ -272,7 +270,7 @@ class ProblemSetupStep(StepModel):
                 for authorized_version in self.ansys_ecosystem[product_name]["authorized_versions"]:
                     self.ansys_ecosystem[product_name][
                         "alert_message"
-                    ] += f" {convert_to_long_version(authorized_version)}"
+                    ] += f" {authorized_version}"
                 alert_message += "."
                 alert_color = "danger"
                 self.ansys_ecosystem_ready = False
@@ -284,7 +282,7 @@ class ProblemSetupStep(StepModel):
                 ]  # Latest
                 alert_message = f"{product_name.title()} install detected. Compatible versions are:"
                 for compatible_version in self.ansys_ecosystem[product_name]["compatible_versions"]:
-                    alert_message += f" {convert_to_long_version(compatible_version)}"
+                    alert_message += f" {compatible_version}"
                 alert_message += ".\n"
                 alert_message += "Selected version is %s." % (self.ansys_ecosystem[product_name]["selected_version"])
                 alert_color = "success"
