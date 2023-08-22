@@ -366,7 +366,6 @@ OSL_SOLUTION_STRUCTURE = [
     "doc/Makefile",
     "examples/README.md",
     f"src/ansys/solutions/{OSL_SOLUTION_VARS['__solution_name_slug']}/model/assets/README.md",
-    f"src/ansys/solutions/{OSL_SOLUTION_VARS['__solution_name_slug']}/model/scripts/README.md",
     f"src/ansys/solutions/{OSL_SOLUTION_VARS['__solution_name_slug']}/model/optislang/project_tree.py",
     f"src/ansys/solutions/{OSL_SOLUTION_VARS['__solution_name_slug']}/model/optislang/install.py",
     f"src/ansys/solutions/{OSL_SOLUTION_VARS['__solution_name_slug']}/model/optislang/server_commands.py",

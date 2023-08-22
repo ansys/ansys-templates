@@ -21,7 +21,6 @@ DESIRED_STRUCTURE = [
     "doc/Makefile",
     "examples/README.md",
     f"src/ansys/solutions/{{ cookiecutter.__solution_name_slug }}/model/assets/README.md",
-    f"src/ansys/solutions/{{ cookiecutter.__solution_name_slug }}/model/scripts/README.md",
     f"src/ansys/solutions/{{ cookiecutter.__solution_name_slug }}/model/optislang/project_tree.py",
     f"src/ansys/solutions/{{ cookiecutter.__solution_name_slug }}/model/optislang/install.py",
     f"src/ansys/solutions/{{ cookiecutter.__solution_name_slug }}/model/optislang/server_commands.py",
