@@ -27,11 +27,15 @@ import os
 import click
 
 from ansys.templates import AVAILABLE_TEMPLATES_AND_DESCRIPTION, __version__
-from ansys.templates.paths import TEMPLATE_PATH_FINDER
-from ansys.templates.utils import bake_template
+from ansys.templates.paths import (
+    PYTHON_TEMPLATES_OSL_SOLUTION_PATH,
+    PYTHON_TEMPLATES_SOLUTION_PATH,
+    TEMPLATE_PATH_FINDER,
+)
+from ansys.templates.utils import bake_template, load_inputs_from_configuration_file
 
 
-def create_project(template):
+def create_project(template, no_input=False, extra_context={}):
     """Create Python project based on a given template.
 
     Parameters
@@ -40,7 +44,7 @@ def create_project(template):
         Name of the template to be used as basis for the project
 
     """
-    bake_template(TEMPLATE_PATH_FINDER[template], os.getcwd(), overwrite_if_exists=True)
+    bake_template(TEMPLATE_PATH_FINDER[template], os.getcwd(), overwrite_if_exists=True, no_input=no_input, extra_context=extra_context)
 
 
 @click.group()
@@ -125,9 +129,28 @@ def pyace_grpc():
 @new.command()
 @click.option('-f',  '--from', '_from' , help='From existing optiSLang application archive (OWA).',
               type=click.Choice(['owa'], case_sensitive=False))
-def solution(_from):
+@click.option('-s', '--solution-name', type=str, help="Name of the solution in the definition.")
+@click.option('-d', '--solution-display-name', type=str, help="Name of the solution in the user interface.")
+@click.option("-u", "--with-dash-ui", is_flag=True, flag_value="1", help="With Dash UI")
+@click.option('-a', '--application-archive', type=click.Path(), help="Path to the optiSLang application archive.")
+def solution(_from, solution_name, solution_display_name, with_dash_ui, application_archive):
     """[Ansys Internal Use Only] Create a solution based on SAF."""
     if _from == 'owa':
-        create_project("osl-solution")
+        template = "osl-solution"
+        extra_context = load_inputs_from_configuration_file(PYTHON_TEMPLATES_OSL_SOLUTION_PATH)
+        no_input = True if solution_name or solution_display_name or application_archive else False
+        if solution_name:
+            extra_context["application_archive"] = application_archive
     else:
-        create_project("solution")
+        template = "solution"
+        extra_context = load_inputs_from_configuration_file(PYTHON_TEMPLATES_SOLUTION_PATH)
+        no_input = True if solution_name or solution_display_name or with_dash_ui else False
+        if with_dash_ui:
+            extra_context["with_dash_ui"] = "yes"
+
+    if solution_name:
+        extra_context["solution_name"] = solution_name
+    if solution_display_name:
+        extra_context["solution_display_name"] = solution_display_name
+
+    create_project(template, no_input=no_input, extra_context=extra_context)
