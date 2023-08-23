@@ -206,7 +206,7 @@ def bake_template(template_path, output_path, license_path=MIT_LICENSE, **cookie
 
 def load_inputs_from_configuration_file(template_path):
     """
-    Read the cookiecutter.json file and return the content in a dictionary.
+    Read the cookiecutter.json file and return the inputs only.
 
     Parameters
     ----------
