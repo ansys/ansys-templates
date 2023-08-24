@@ -138,19 +138,18 @@ def solution(_from, solution_name, solution_display_name, with_dash_ui, applicat
     if _from == 'owa':
         template = "osl-solution"
         extra_context = load_inputs_from_configuration_file(PYTHON_TEMPLATES_OSL_SOLUTION_PATH)
-        no_input = True if solution_name or solution_display_name or application_archive else False
-        if solution_name:
-            extra_context["application_archive"] = application_archive
+        no_input = True if application_archive else False
+        if application_archive:
+            extra_context["optiSLang_application_archive"] = application_archive
     else:
         template = "solution"
         extra_context = load_inputs_from_configuration_file(PYTHON_TEMPLATES_SOLUTION_PATH)
         no_input = True if solution_name or solution_display_name or with_dash_ui else False
+        if solution_name:
+            extra_context["solution_name"] = solution_name
+        if solution_display_name:
+            extra_context["solution_display_name"] = solution_display_name
         if with_dash_ui:
             extra_context["with_dash_ui"] = "yes"
-
-    if solution_name:
-        extra_context["solution_name"] = solution_name
-    if solution_display_name:
-        extra_context["solution_display_name"] = solution_display_name
 
     create_project(template, no_input=no_input, extra_context=extra_context)

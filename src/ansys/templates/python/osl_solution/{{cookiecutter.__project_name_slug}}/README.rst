@@ -1,5 +1,5 @@
 ##############################################
-{{cookiecutter.solution_name}}
+{{cookiecutter.__project_name_slug}}
 ##############################################
 |python|
 
