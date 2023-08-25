@@ -83,7 +83,7 @@ def get_treeview_items_from_project_tree(project_tree: list) -> list:
     ]
 
     for node in project_tree:
-        if node["kind"] in ["RootSystem", "ParametricSystem"]:
+        if node["kind"] == "system":
             treeview_items.append(
                 {
                     "key": f'{node["name"].lower()}_{node["uid"]}_toggle',
@@ -96,7 +96,7 @@ def get_treeview_items_from_project_tree(project_tree: list) -> list:
             {
                 "key": f'{node["name"].lower()}_{node["uid"]}',
                 "text": node["name"],
-                "depth": node["level"] + 1 if node["kind"] in ["RootSystem", "ParametricSystem"] else node["level"],
+                "depth": node["level"] + 1 if node["kind"] == "system" else node["level"],
                 "uid": node["uid"],
             }
         )
@@ -159,10 +159,10 @@ def update_list_of_tabs(node_info: dict) -> list:
             node_info["is_root"]
             and tab_info["is_root"]
             or not node_info["is_root"]
-            and node_info["kind"] == "ParametricSystem"
+            and node_info["kind"] == "system"
             and tab_info["is_system"]
             or not node_info["is_root"]
-            and node_info["kind"] == "Node"
+            and node_info["kind"] == "actor"
             and tab_info["is_actor"]
         ):
             list_of_tabs.append(

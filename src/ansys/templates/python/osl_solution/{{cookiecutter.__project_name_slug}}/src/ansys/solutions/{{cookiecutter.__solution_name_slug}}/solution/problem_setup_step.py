@@ -330,7 +330,7 @@ class ProblemSetupStep(StepModel):
         self.transaction.upload(["tcp_server_port"])
 
         # Get project tree
-        self.project_tree = osl.project.get_project_tree()
+        self.project_tree = osl.project._get_project_tree()
         self.transaction.upload(["project_tree"])
 
         # Update treeview items
