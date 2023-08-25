@@ -26,7 +26,7 @@ from ansys.solutions.{{ cookiecutter.__solution_name_slug }}.utilities.common_fu
 
 def layout(problem_setup_step: ProblemSetupStep) -> html.Div:
 
-    actor_info = extract_dict_by_key(problem_setup_step.step_list, "uid", problem_setup_step.selected_actor_from_treeview, expect_unique=True, return_index=False)
+    actor_info = extract_dict_by_key(problem_setup_step.project_tree, "uid", problem_setup_step.selected_actor_from_treeview, expect_unique=True, return_index=False)
     list_of_tabs = update_list_of_tabs(actor_info)
 
     return html.Div(

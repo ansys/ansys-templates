@@ -328,7 +328,7 @@ class ProblemSetupStep(StepModel):
         server_info = osl.get_osl_server().get_server_info()
         self.tcp_server_port = server_info["server"]["server_port"]
         self.transaction.upload(["tcp_server_port"])
-        
+
         # Get project tree
         self.project_tree = osl.project.get_project_tree()
         self.transaction.upload(["project_tree"])
@@ -355,7 +355,7 @@ class ProblemSetupStep(StepModel):
                     node = osl.project.root_system
                 else:
                     node = osl.project.root_system.find_node_by_uid(node_info["uid"], search_depth=-1)
-                self.actors_info[node.uid] = osl.get_osl_server().get_actor_info(node.uid)                
+                self.actors_info[node.uid] = osl.get_osl_server().get_actor_info(node.uid)
                 if node.get_states_ids():
                     self.actors_status_info[node.uid] = []
                     for hid in node.get_states_ids():
@@ -411,10 +411,10 @@ class ProblemSetupStep(StepModel):
     @transaction(
         self=StepSpec(
             download=[
-                "tcp_server_host", 
-                "tcp_server_port", 
-                "command_timeout", 
-                "selected_actor_from_command", 
+                "tcp_server_host",
+                "tcp_server_port",
+                "command_timeout",
+                "selected_actor_from_command",
                 "project_tree"
             ],
         )
@@ -440,14 +440,14 @@ class ProblemSetupStep(StepModel):
 
         if status == "failure":
             raise Exception(f"Stop gently command against node {node.get_name()} failed.")
- 
+
     @transaction(
         self=StepSpec(
             download=[
-                "tcp_server_host", 
-                "tcp_server_port", 
-                "command_timeout", 
-                "selected_actor_from_command", 
+                "tcp_server_host",
+                "tcp_server_port",
+                "command_timeout",
+                "selected_actor_from_command",
                 "project_tree"
             ],
         )
@@ -477,10 +477,10 @@ class ProblemSetupStep(StepModel):
     @transaction(
         self=StepSpec(
             download=[
-                "tcp_server_host", 
-                "tcp_server_port", 
-                "command_timeout", 
-                "selected_actor_from_command", 
+                "tcp_server_host",
+                "tcp_server_port",
+                "command_timeout",
+                "selected_actor_from_command",
                 "project_tree"
             ],
         )

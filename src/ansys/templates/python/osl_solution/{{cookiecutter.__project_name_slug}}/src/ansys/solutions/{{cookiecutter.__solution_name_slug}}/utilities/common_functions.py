@@ -5,10 +5,9 @@
 import dash_bootstrap_components as dbc
 import re
 
+from dash_extensions.enrich import html
 from pathlib import Path
 from typing import Any, Iterable, Union
-
-from ansys.solutions.{{ cookiecutter.__solution_name_slug }}.solution.problem_setup_step import ProblemSetupStep
 
 
 MONITORING_TABS = [
@@ -160,10 +159,10 @@ def update_list_of_tabs(node_info: dict) -> list:
             node_info["is_root"]
             and tab_info["is_root"]
             or not node_info["is_root"]
-            and node_info["kind"] == "system"
+            and node_info["kind"] == "ParametricSystem"
             and tab_info["is_system"]
             or not node_info["is_root"]
-            and node_info["kind"] == "actor"
+            and node_info["kind"] == "Node"
             and tab_info["is_actor"]
         ):
             list_of_tabs.append(
@@ -243,7 +242,7 @@ def update_placeholders(ui_values: list, placeholders: dict) -> dict:
     return updated_dict
 
 
-def update_alerts(problem_setup_step: ProblemSetupStep) -> list:
+def update_alerts(problem_setup_step) -> list:
     """Update all Alerts."""
 
     alerts = []
