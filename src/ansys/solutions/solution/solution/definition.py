@@ -19,5 +19,5 @@ class Steps(StepsModel):
 
 class SolutionSolution(Solution):
     """Solution definition."""
-    display_name = "My Solution"
+    display_name: str = "My Solution"
     steps: Steps
