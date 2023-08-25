@@ -3,6 +3,7 @@
 """Frontend of the results file view."""
 
 from dash_extensions.enrich import html
+
 from ansys.solutions.{{ cookiecutter.__solution_name_slug }}.solution.problem_setup_step import ProblemSetupStep
 
 

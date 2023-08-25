@@ -2,7 +2,6 @@
 
 """Solution definition module."""
 
-
 from ansys.saf.glow.solution import Solution, StepsModel
 
 from ansys.solutions.{{ cookiecutter.__solution_name_slug }}.solution.problem_setup_step import ProblemSetupStep

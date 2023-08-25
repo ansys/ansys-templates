@@ -3,6 +3,7 @@
 """Frontend of the summary view."""
 
 import dash_bootstrap_components as dbc
+
 from dash_extensions.enrich import html, Input, Output, State, dcc
 
 from ansys.saf.glow.client.dashclient import DashClient, callback
@@ -14,7 +15,7 @@ from ansys.solutions.{{ cookiecutter.__solution_name_slug }}.ui.components.comma
 from ansys.solutions.{{ cookiecutter.__solution_name_slug }}.ui.components.system_files import SystemFilesAIO
 from ansys.solutions.{{ cookiecutter.__solution_name_slug }}.ui.components.actor_logs_table import ActorLogsTableAIO
 from ansys.solutions.{{ cookiecutter.__solution_name_slug }}.ui.components.actor_statistics_table import ActorStatisticsTableAIO
-from ansys.solutions.{{ cookiecutter.__solution_name_slug }}.ui.utils.common_functions import extract_dict_by_key
+from ansys.solutions.{{ cookiecutter.__solution_name_slug }}.utilities.common_functions import extract_dict_by_key
 
 
 def layout(problem_setup_step: ProblemSetupStep) -> html.Div:

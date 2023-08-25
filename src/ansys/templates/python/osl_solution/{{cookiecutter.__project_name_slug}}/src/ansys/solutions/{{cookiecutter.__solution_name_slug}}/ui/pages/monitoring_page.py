@@ -2,8 +2,9 @@
 
 """Frontend of the monitoring step."""
 
-import dash_daq as daq
 import dash_bootstrap_components as dbc
+import dash_daq as daq
+
 from dash_extensions.enrich import Input, Output, State, html
 from dash.exceptions import PreventUpdate
 
@@ -11,7 +12,6 @@ from ansys.saf.glow.client.dashclient import DashClient, callback
 
 from ansys.solutions.{{ cookiecutter.__solution_name_slug }}.solution.definition import {{ cookiecutter.__solution_definition_name }}
 from ansys.solutions.{{ cookiecutter.__solution_name_slug }}.solution.problem_setup_step import ProblemSetupStep
-from ansys.solutions.{{ cookiecutter.__solution_name_slug }}.ui.utils.common_functions import update_list_of_tabs
 from ansys.solutions.{{ cookiecutter.__solution_name_slug }}.ui.views import (
     design_table_view,
     project_summary_view,
@@ -21,7 +21,7 @@ from ansys.solutions.{{ cookiecutter.__solution_name_slug }}.ui.views import (
     summary_view,
     visualization_view,
 )
-from ansys.solutions.{{ cookiecutter.__solution_name_slug }}.ui.utils.common_functions import extract_dict_by_key
+from ansys.solutions.{{ cookiecutter.__solution_name_slug }}.utilities.common_functions import extract_dict_by_key, update_list_of_tabs
 
 
 def layout(problem_setup_step: ProblemSetupStep) -> html.Div:
