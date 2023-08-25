@@ -7,7 +7,7 @@ import json
 from pathlib import Path
 import platform
 import time
-from typing import List
+from typing import List, Optional
 import tempfile
 
 
@@ -36,16 +36,16 @@ class ProblemSetupStep(StepModel):
     analysis_locked: bool = True
     project_locked: bool = False
     treeview_locked: bool = True
-    selected_actor_from_treeview: str = None
-    selected_command: str = None
-    selected_actor_from_command: str = None
+    selected_actor_from_treeview: Optional[str] = None
+    selected_command: Optional[str] = None
+    selected_actor_from_command: Optional[str] = None
     commands_locked: bool = False
     auto_update_frequency: float = 2000
     auto_update_activated: bool = True
 
     # Backend data model
-    tcp_server_host: str = None
-    tcp_server_port: int = None
+    tcp_server_host: Optional[str] = None
+    tcp_server_port: Optional[int] = None
     ansys_ecosystem: dict = {
         "optislang": {
             "authorized_versions": ["2023.1"],
@@ -109,7 +109,7 @@ class ProblemSetupStep(StepModel):
     project_state_file: FileReference = FileReference("Problem_Setup/project_state.json")
     input_files: FileGroupReference = FileGroupReference("Problem_Setup/Input_Files/*.*")
     # If folder doesn't exist, it will be created later
-    upload_directory = os.path.join(tempfile.gettempdir(), "GLOW")
+    upload_directory: str = os.path.join(tempfile.gettempdir(), "GLOW")
 
     # Outputs
     working_properties_file: FileReference = FileReference("Problem_Setup/working_properties_file.json")
