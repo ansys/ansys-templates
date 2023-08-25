@@ -135,7 +135,6 @@ def pyace_grpc():
 @click.option('-a', '--application-archive', type=click.Path(), help="Path to the optiSLang application archive.")
 def solution(_from, solution_name, solution_display_name, with_dash_ui, application_archive):
     """[Ansys Internal Use Only] Create a solution based on SAF."""
-    # print("{{ cookiecutter.__optiSLang_application_archive }}")
     if _from == 'owa':
         template = "osl-solution"
         extra_context = load_inputs_from_configuration_file(PYTHON_TEMPLATES_OSL_SOLUTION_PATH)
