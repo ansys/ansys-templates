@@ -152,5 +152,5 @@ def solution(_from, solution_name, solution_display_name, with_dash_ui, applicat
         extra_context["solution_name"] = solution_name
     if solution_display_name:
         extra_context["solution_display_name"] = solution_display_name
-    print(extra_context)
+
     create_project(template, no_input=no_input, extra_context=extra_context)
