@@ -164,5 +164,6 @@ def main():
                 )
         shutil.rmtree(str(ASSETS_DIRCTORY / "{{ cookiecutter.__optiSLang_application_archive_stem }}"))
 
+
 if __name__ == "__main__":
     main()
