@@ -139,9 +139,9 @@ def main():
         archive_path = Path("{{ cookiecutter.__optiSLang_application_archive }}".strip())
         
         if not archive_path.is_absolute():
-            raise Exception("Relative path not allowed, please provide the absolute path of the owa archive ")
+            raise Exception("Relative path not allowed, please provide the absolute path of the owa archive.")
         if not archive_path.exists():
-            raise Exception(f"File not found: {archive_path.absolute()}")
+            raise Exception(f"File not found: {archive_path}")
 
         unzip_archive(archive_path, ASSETS_DIRCTORY / "{{ cookiecutter.__optiSLang_application_archive_stem }}")
         
