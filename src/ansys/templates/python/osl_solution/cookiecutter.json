@@ -1,7 +1,7 @@
 {
   "__template_name": "osl-solution",
   "optiSLang_application_archive": "",
-  "__optiSLang_application_archive": "{{ cookiecutter.optiSLang_application_archive|lower|replace('\\\\', '/') }} ",
+  "__optiSLang_application_archive": "{{ cookiecutter.optiSLang_application_archive|replace('\\\\', '/') }} ",
   "__optiSLang_application_archive_name": "{{ cookiecutter.__optiSLang_application_archive.split('/')[-1] }}",
   "__optiSLang_application_archive_stem": "{{ cookiecutter.__optiSLang_application_archive_name.split('.')[0] }}",
   "__solution_name_slug": "{{ cookiecutter.__optiSLang_application_archive_stem.lower().replace('-', '_').replace(' ', '_') }}",
