@@ -12,10 +12,17 @@ from ansys.solutions.{{ cookiecutter.__solution_name_slug }}.solution.problem_se
 from ansys.solutions.{{ cookiecutter.__solution_name_slug }}.ui.components.project_information_table import ProjectInformationTableAIO
 from ansys.solutions.{{ cookiecutter.__solution_name_slug }}.ui.components.service_table import ServiceTableAIO
 from ansys.solutions.{{ cookiecutter.__solution_name_slug }}.ui.components.commands import ProjectCommandsAIO
+from ansys.solutions.{{ cookiecutter.__solution_name_slug }}.ui.components.button_group import ButtonGroup
 
 
 def layout(problem_setup_step: ProblemSetupStep) -> html.Div:
     """Layout of the project summary view."""
+    alert_props = {
+        "children":problem_setup_step.project_command_execution_status["alert-message"],
+        "color":problem_setup_step.project_command_execution_status["alert-color"],
+        "is_open": bool(problem_setup_step.project_command_execution_status["alert-message"]),
+    }
+    button_group = ButtonGroup(options=problem_setup_step.project_btn_group_options, disabled=problem_setup_step.commands_locked).buttons
 
     return html.Div(
         [
@@ -29,7 +36,7 @@ def layout(problem_setup_step: ProblemSetupStep) -> html.Div:
             html.Br(),
             dbc.Row(
                 [
-                    dbc.Col(ProjectCommandsAIO(problem_setup_step, aio_id="project_commands"), width=12),
+                    dbc.Col(ProjectCommandsAIO(button_group, alert_props, "project-commands"), width=12),
                 ]
             ),
             dcc.Interval(

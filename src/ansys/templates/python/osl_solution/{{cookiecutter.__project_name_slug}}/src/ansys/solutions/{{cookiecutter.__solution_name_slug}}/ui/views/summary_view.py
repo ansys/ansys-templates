@@ -10,7 +10,8 @@ from ansys.saf.glow.client.dashclient import DashClient, callback
 from ansys.solutions.{{ cookiecutter.__solution_name_slug }}.solution.definition import {{ cookiecutter.__solution_definition_name }}
 from ansys.solutions.{{ cookiecutter.__solution_name_slug }}.solution.problem_setup_step import ProblemSetupStep
 from ansys.solutions.{{ cookiecutter.__solution_name_slug }}.ui.components.actor_information_table import ActorInformationTableAIO
-from ansys.solutions.{{ cookiecutter.__solution_name_slug }}.ui.components.commands import ActorCommandsAIO
+from ansys.solutions.{{ cookiecutter.__solution_name_slug }}.ui.components.button_group import ButtonGroup
+from ansys.solutions.{{ cookiecutter.__solution_name_slug }}.ui.components.commands import ProjectCommandsAIO
 from ansys.solutions.{{ cookiecutter.__solution_name_slug }}.ui.components.system_files import SystemFilesAIO
 from ansys.solutions.{{ cookiecutter.__solution_name_slug }}.ui.components.actor_logs_table import ActorLogsTableAIO
 from ansys.solutions.{{ cookiecutter.__solution_name_slug }}.ui.components.actor_statistics_table import ActorStatisticsTableAIO
@@ -21,6 +22,12 @@ def layout(problem_setup_step: ProblemSetupStep) -> html.Div:
     """Layout of the summary view."""
 
     actor_info = extract_dict_by_key(problem_setup_step.step_list, "uid", problem_setup_step.selected_actor_from_treeview, expect_unique=True, return_index=False)
+    alert_props = {
+        "children": problem_setup_step.actor_command_execution_status["alert-message"],
+        "color": problem_setup_step.actor_command_execution_status["alert-color"],
+        "is_open": bool(problem_setup_step.actor_command_execution_status["alert-message"]),
+    }
+    button_group = ButtonGroup(options=problem_setup_step.actor_btn_group_options, disabled=problem_setup_step.commands_locked).buttons
 
     content = [
         html.Br(),
@@ -32,7 +39,7 @@ def layout(problem_setup_step: ProblemSetupStep) -> html.Div:
         html.Br(),
         dbc.Row(
             [
-                dbc.Col(ActorCommandsAIO(problem_setup_step, aio_id="actor_commands"), width=12),
+                dbc.Col(ProjectCommandsAIO(button_group, alert_props, "actor-commands"), width=12),
             ]
         ),
     ]
