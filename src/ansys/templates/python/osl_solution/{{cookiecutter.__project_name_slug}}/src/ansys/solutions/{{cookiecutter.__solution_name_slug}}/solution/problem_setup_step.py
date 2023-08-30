@@ -9,7 +9,7 @@ import tempfile
 import time
 
 from pathlib import Path
-from typing import List
+from typing import List, Optional
 
 from ansys.optislang.core import Optislang, logging, utils
 from ansys.saf.glow.solution import FileReference, FileGroupReference, StepModel, StepSpec, long_running, transaction
