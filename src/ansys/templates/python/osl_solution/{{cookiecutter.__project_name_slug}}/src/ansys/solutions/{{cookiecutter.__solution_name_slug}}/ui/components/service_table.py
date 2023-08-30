@@ -1,9 +1,10 @@
 # ©2023, ANSYS Inc. Unauthorized use, distribution or duplication is prohibited.
 
 import dash_bootstrap_components as dbc
-from dash_extensions.enrich import html, dash_table
-import uuid
 import pandas as pd
+import uuid
+
+from dash_extensions.enrich import html, dash_table
 
 from ansys.solutions.{{ cookiecutter.__solution_name_slug }}.solution.problem_setup_step import ProblemSetupStep
 
@@ -19,7 +20,7 @@ class ServiceTableAIO(html.Div):
 
     ids = ids
 
-    def __init__(self, problem_setup_step: ProblemSetupStep, datatable_props: dict = None, interval_props: dict = None, aio_id: str = None):
+    def __init__(self, problem_setup_step: ProblemSetupStep, datatable_props: dict = None, aio_id: str = None):
         """ServiceTableAIO is an All-in-One component that is composed
         of a parent `html.Div` with a `dcc.Interval` and a `dash_table.DataTable` as children.
 
