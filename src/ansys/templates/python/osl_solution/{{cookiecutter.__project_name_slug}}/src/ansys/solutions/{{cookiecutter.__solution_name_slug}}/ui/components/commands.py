@@ -10,7 +10,7 @@ import uuid
 from ansys.saf.glow.client.dashclient import DashClient
 from ansys.saf.glow.solution import MethodStatus
 
-from ansys.solutions.oscillator_progress.solution.definition import Oscillator_ProgressSolution
+from ansys.solutions.oscillator_progress.solution.definition import {{ cookiecutter.__solution_name_slug }}
 from ansys.solutions.oscillator_progress.ui.components.button_group import ButtonGroup
 
 class ProjectCommandsAIO(html.Div):
