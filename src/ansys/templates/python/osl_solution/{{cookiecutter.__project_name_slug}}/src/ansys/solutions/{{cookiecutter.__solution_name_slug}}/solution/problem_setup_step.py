@@ -32,7 +32,7 @@ class ProblemSetupStep(StepModel):
     project_locked: bool = False
     selected_actor_from_treeview: Optional[str] = None
     selected_command: Optional[str] = None
-    selected_actor_from_command: str = None
+    selected_actor_from_command: Optional[str] = None
     commands_locked: bool = False
     auto_update_frequency: float = 2000
     auto_update_activated: bool = True
