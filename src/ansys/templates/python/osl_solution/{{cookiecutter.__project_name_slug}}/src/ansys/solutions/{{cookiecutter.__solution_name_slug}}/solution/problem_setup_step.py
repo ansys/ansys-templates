@@ -36,7 +36,7 @@ class ProblemSetupStep(StepModel):
     commands_locked: bool = False
     auto_update_frequency: float = 2000
     auto_update_activated: bool = True
-    actor_uid: dict = {}
+    actor_uid: str = None
     project_command_execution_status: dict = {"alert-message": "", "alert-color": "info"}
     actor_command_execution_status: dict = {"alert-message": "", "alert-color": "info"}
     project_btn_group_options: List = [
@@ -401,27 +401,28 @@ class ProblemSetupStep(StepModel):
                 "project_tree",
                 "selected_command"
             ],
-            upload=["server_command_log_file", "actor_uid"],
+            upload=["actor_uid"],
         )
-        def run_selected_project_command(self) -> None:
-            """Run the selected project command."""
-            osl = Optislang(
-                    host=self.tcp_server_host,
-                    port=self.tcp_server_port,
-                    shutdown_on_finished=False
-                )
-            if not self.selected_actor_from_command == "shutdown":
-                if self.selected_actor_from_command == osl.project.root_system.uid:
-                    node = osl.project.root_system
-                else:
-                    node = osl.project.root_system.find_node_by_uid(self.selected_actor_from_command, search_depth=-1)
-
-                status = node.control(self.selected_command, wait_for_completion=True, timeout=self.command_timeout)
-            else:
+    def run_selected_project_command(self) -> None:
+        """Run the selected project command."""
+        osl = Optislang(
+                host=self.tcp_server_host,
+                port=self.tcp_server_port,
+                shutdown_on_finished=False
+            )
+        if not self.selected_actor_from_command == "shutdown":
+            if self.selected_actor_from_command == osl.project.root_system.uid:
                 node = osl.project.root_system
-                status = node.control(self.selected_command, wait_for_completion=True, timeout=self.command_timeout)
+                self.actor_uid = None
+            else:
+                node = osl.project.root_system.find_node_by_uid(self.selected_actor_from_command, search_depth=-1)
+                self.actor_uid = node
+        else:
+            node = osl.project.root_system
 
-            osl.dispose()
+        status = node.control(self.selected_command, wait_for_completion=True, timeout=self.command_timeout)
 
-            if not status:
-                raise Exception(f"{self.selected_command.capitalize()} command against node {node.get_name()} failed.")
+        if not status:
+            raise Exception(f"{self.selected_command.capitalize()} command against node {node.get_name()} failed.")
+
+        osl.dispose()

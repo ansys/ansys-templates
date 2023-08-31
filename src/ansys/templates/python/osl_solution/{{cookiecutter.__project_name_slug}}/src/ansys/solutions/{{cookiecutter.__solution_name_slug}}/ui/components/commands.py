@@ -4,11 +4,11 @@ import json
 import dash_bootstrap_components as dbc
 import uuid
 
-from dash_extensions.enrich import Output, Input, State, html, dcc, callback, MATCH, callback_context
+from dash_extensions.enrich import Output, Input, State, html, dcc, callback, MATCH, callback_context, ALL
+from dash.exceptions import PreventUpdate
 
 from ansys.saf.glow.client.dashclient import DashClient
-from ansys.solutions.{{ cookiecutter.__solution_name_slug }}.solution.definition import {{ cookiecutter.__solution_definition_name }}
-from ansys.solutions.{{ cookiecutter.__solution_name_slug }}.solution.problem_setup_step import ProblemSetupStep
+from ansys.saf.glow.core.method_status import MethodStatus
 
 from ansys.solutions.{{ cookiecutter.__solution_name_slug }}.solution.definition import {{ cookiecutter.__solution_definition_name }}
 from ansys.solutions.{{ cookiecutter.__solution_name_slug }}.ui.components.button_group import ButtonGroup
@@ -110,7 +110,7 @@ class ProjectCommandsAIO(html.Div):
                 alert_status["alert-color"] = "warning"
         else:
             raise PreventUpdate
-        if problem_setup_step.actor_uid != {}:
+        if problem_setup_step.actor_uid:
             problem_setup_step.actor_command_execution_status = alert_status
             problem_setup_step.project_command_execution_status = {"alert-message": "", "alert-color": ""}
             btn_group_options = problem_setup_step.actor_btn_group_options
@@ -131,7 +131,7 @@ class ProjectCommandsAIO(html.Div):
     )
     def set_selected_command_and_disable_buttons(n_clicks_actions, button_states, pathname):
         """This disables all project and actor command buttons on click of a button and sends and returns a bool for action requested."""
-        project = DashClient[Oscillator_ProgressSolution].get_project(pathname)
+        project = DashClient[{{ cookiecutter.__solution_definition_name }}].get_project(pathname)
         problem_setup_step = project.steps.problem_setup_step
         problem_setup_step.selected_actor_from_command = problem_setup_step.selected_actor_from_treeview
         ctx = callback_context
