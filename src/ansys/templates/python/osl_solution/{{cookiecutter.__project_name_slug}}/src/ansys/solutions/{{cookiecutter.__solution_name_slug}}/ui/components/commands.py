@@ -143,6 +143,7 @@ class ProjectCommandsAIO(html.Div):
             action = json.loads(triggered_button)["action"]
             problem_setup_step.selected_command = action
             disable_buttons = [True] * len(button_states)
+            problem_setup_step.commands_locked = True
         else:
             raise PreventUpdate
         return True, disable_buttons
