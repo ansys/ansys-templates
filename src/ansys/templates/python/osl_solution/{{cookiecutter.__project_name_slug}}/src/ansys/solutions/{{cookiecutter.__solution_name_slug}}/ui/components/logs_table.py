@@ -2,10 +2,10 @@
 
 """Logs table"""
 
-from typing import Union
+import pandas as pd
 
 from dash_extensions.enrich import dash_table
-import pandas as pd
+from typing import Union
 
 
 class LogsTable:

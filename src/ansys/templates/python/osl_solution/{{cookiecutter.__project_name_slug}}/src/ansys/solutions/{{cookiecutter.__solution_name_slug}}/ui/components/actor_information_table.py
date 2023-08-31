@@ -1,13 +1,14 @@
 # ©2023, ANSYS Inc. Unauthorized use, distribution or duplication is prohibited.
 
 import dash_bootstrap_components as dbc
-from dash_extensions.enrich import html, dash_table, dcc
-import uuid
 import pandas as pd
 import plotly.express as px
+import uuid
 
-from ansys.solutions.{{ cookiecutter.__solution_name_slug }}.solution.problem_setup_step import ProblemSetupStep
+from dash_extensions.enrich import html, dash_table, dcc
+
 from ansys.solutions.{{ cookiecutter.__solution_name_slug }}.solution.definition import {{ cookiecutter.__solution_definition_name }}
+from ansys.solutions.{{ cookiecutter.__solution_name_slug }}.solution.problem_setup_step import ProblemSetupStep
 
 
 class ActorInformationTableAIO(html.Div):

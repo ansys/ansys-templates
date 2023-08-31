@@ -3,15 +3,16 @@
 """Frontend of the project summary step."""
 
 import dash_bootstrap_components as dbc
+
 from dash_extensions.enrich import html, Input, Output, State, dcc
 
 from ansys.saf.glow.client.dashclient import DashClient, callback
 
 from ansys.solutions.{{ cookiecutter.__solution_name_slug }}.solution.definition import {{ cookiecutter.__solution_definition_name }}
 from ansys.solutions.{{ cookiecutter.__solution_name_slug }}.solution.problem_setup_step import ProblemSetupStep
+from ansys.solutions.{{ cookiecutter.__solution_name_slug }}.ui.components.commands import ProjectCommandsAIO
 from ansys.solutions.{{ cookiecutter.__solution_name_slug }}.ui.components.project_information_table import ProjectInformationTableAIO
 from ansys.solutions.{{ cookiecutter.__solution_name_slug }}.ui.components.service_table import ServiceTableAIO
-from ansys.solutions.{{ cookiecutter.__solution_name_slug }}.ui.components.commands import ProjectCommandsAIO
 from ansys.solutions.{{ cookiecutter.__solution_name_slug }}.ui.components.button_group import ButtonGroup
 
 

@@ -135,8 +135,8 @@ tests = ["matplotlib (>=3.5.3)", "pytest (==7.3.1)", "pytest-cov (==4.1.0)"]
 [package.source]
 type = "git"
 url = "https://github.com/ansys/pyoptislang.git"
-reference = "a372c8c99610d247ec6863e58ed69584c5792cae"
-resolved_reference = "a372c8c99610d247ec6863e58ed69584c5792cae"
+reference = "dd780ae"
+resolved_reference = "dd780ae012f406dcfbc9c35c03f93a73a1b9820c"
 
 [[package]]
 name = "ansys-platform-instancemanagement"
@@ -3845,4 +3845,4 @@ testing = ["big-O", "jaraco.functools", "jaraco.itertools", "more-itertools", "p
 [metadata]
 lock-version = "2.0"
 python-versions = ">=3.8, <3.11"
-content-hash = "e74b2a726e0cfe27bfa468fbc3ba18c8b8ce5ddbacb4085845ee44e2e4be0dc9"
+content-hash = "83dfa7147c6105fdff75a8713debaec81e84d9e6242992bc7ee1752849bc927b"

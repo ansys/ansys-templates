@@ -2,13 +2,13 @@
 
 import json
 import dash_bootstrap_components as dbc
-from dash.exceptions import PreventUpdate
-from dash_extensions.enrich import Output, Input, State, html, callback, MATCH, callback_context, ALL
-
 import uuid
 
+from dash_extensions.enrich import Output, Input, State, html, dcc, callback, MATCH, callback_context
+
 from ansys.saf.glow.client.dashclient import DashClient
-from ansys.saf.glow.solution import MethodStatus
+from ansys.solutions.{{ cookiecutter.__solution_name_slug }}.solution.definition import {{ cookiecutter.__solution_definition_name }}
+from ansys.solutions.{{ cookiecutter.__solution_name_slug }}.solution.problem_setup_step import ProblemSetupStep
 
 from ansys.solutions.{{ cookiecutter.__solution_name_slug }}.solution.definition import {{ cookiecutter.__solution_definition_name }}
 from ansys.solutions.{{ cookiecutter.__solution_name_slug }}.ui.components.button_group import ButtonGroup
@@ -95,6 +95,7 @@ class ProjectCommandsAIO(html.Div):
         """This performs actions such as stopping, restarting, and shutting down on an instance of optiSlang when action is requested. A message with the status of the method execution and states of each button is updated on completion of the method."""
         project = DashClient[{{ cookiecutter.__solution_definition_name }}].get_project(pathname)
         problem_setup_step = project.steps.problem_setup_step
+        problem_setup_step.selected_actor_from_command = problem_setup_step.selected_actor_from_treeview
         ctx = callback_context
         if (ctx.triggered and action_requested):
             alert_status = {"alert-message": "", "alert-color": ""}
@@ -132,6 +133,7 @@ class ProjectCommandsAIO(html.Div):
         """This disables all project and actor command buttons on click of a button and sends and returns a bool for action requested."""
         project = DashClient[Oscillator_ProgressSolution].get_project(pathname)
         problem_setup_step = project.steps.problem_setup_step
+        problem_setup_step.selected_actor_from_command = problem_setup_step.selected_actor_from_treeview
         ctx = callback_context
         if (
             ctx.triggered
