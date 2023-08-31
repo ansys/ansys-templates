@@ -2,13 +2,13 @@
 
 """Initialization of the frontend layout across all the steps."""
 
-from ansys_dash_treeview import AnsysDashTreeview
 import dash_bootstrap_components as dbc
-from dash_extensions.enrich import Input, Output, State, callback_context, dcc, html
-from dash.exceptions import PreventUpdate
-from dash_iconify import DashIconify
-from pathlib import Path
 import webbrowser
+
+from ansys_dash_treeview import AnsysDashTreeview
+from dash.exceptions import PreventUpdate
+from dash_extensions.enrich import Input, Output, State, callback_context, dcc, html
+from dash_iconify import DashIconify
 
 from ansys.saf.glow.client.dashclient import DashClient, callback
 from ansys.saf.glow.core.method_status import MethodStatus
@@ -16,7 +16,7 @@ from ansys.saf.glow.core.method_status import MethodStatus
 from ansys.solutions.{{ cookiecutter.__solution_name_slug }}.solution.definition import {{ cookiecutter.__solution_definition_name }}
 from ansys.solutions.{{ cookiecutter.__solution_name_slug }}.ui.components.logs_table import LogsTable
 from ansys.solutions.{{ cookiecutter.__solution_name_slug }}.ui.pages import monitoring_page, problem_setup_page
-from ansys.solutions.{{ cookiecutter.__solution_name_slug }}.ui.utils.common_functions import extract_dict_by_key
+from ansys.solutions.{{ cookiecutter.__solution_name_slug }}.utilities.common_functions import extract_dict_by_key
 
 
 layout = html.Div(
@@ -52,15 +52,7 @@ def initialization(pathname):
     project = DashClient[{{ cookiecutter.__solution_definition_name }}].get_project(pathname)
 
     if not project.steps.problem_setup_step.project_initialized:
-        # Solution-specific code
-        project_tree_path = Path(__file__).absolute().parent.parent.parent / "model" / "assets" / "project_state.json"
-        if not project_tree_path.exists():
-            long_running = project.steps.problem_setup_step.generate_project_state()
-            long_running.wait()
-        # Project-specific code
         long_running = project.steps.problem_setup_step.upload_bulk_files_to_project_directory() # to be replaced by AssetFileReference
-        long_running.wait()
-        long_running = project.steps.problem_setup_step.read_project_tree()
         long_running.wait()
         long_running = project.steps.problem_setup_step.get_app_metadata()
         long_running.wait()
@@ -89,12 +81,7 @@ def update_progress_bar(n_intervals, pathname):
 
         completion_rate = 0
         message = None
-        methods = []
-
-        project_tree_path = Path(__file__).absolute().parent.parent.parent / "model" / "assets" / "project_state.json"
-        if not project_tree_path.exists():
-            methods.append("generate_project_state")
-        methods.extend(["upload_bulk_files_to_project_directory", "read_project_tree", "get_app_metadata", "get_default_placeholder_values"] )
+        methods = ["upload_bulk_files_to_project_directory", "get_app_metadata", "get_default_placeholder_values"]
 
         for method in methods:
             status = problem_setup_step.get_long_running_method_state(method).status
@@ -126,7 +113,7 @@ def update_progress_bar(n_intervals, pathname):
 
 
 @callback(
-    Output("trigger_treeview_display", "data"),
+    Output("trigger_body_display", "data"),
     Output("page_layout", "children"),
     Input("url", "pathname"),
     Input("trigger_layout_display", "data"),
@@ -188,17 +175,7 @@ def display_page_layout(pathname, trigger_layout_display):
                         dbc.Col(
                             AnsysDashTreeview(
                                 id="navigation_tree",
-                                items=[
-                                    {
-                                        "key": "problem_setup_step",
-                                        "text": "Problem Setup",
-                                        "depth": 0,
-                                        "uid": None,
-                                        "type": None,
-                                        "kind": None,
-                                        "is_root": False,
-                                    },
-                                ],
+                                items=problem_setup_step.treeview_items,
                                 children=[
                                     DashIconify(icon="bi:caret-right-square-fill"),
                                     DashIconify(icon="bi:caret-down-square-fill"),
@@ -266,24 +243,6 @@ def display_page_layout(pathname, trigger_layout_display):
 
 
 @callback(
-    Output("trigger_body_display", "data"),
-    Output("navigation_tree", "items"),
-    Input("url", "pathname"),
-    Input("trigger_treeview_display", "data"),
-)
-def display_tree_view(pathname, trigger_treeview_display):
-    """Display treeview with all project nodes."""
-
-    project = DashClient[{{ cookiecutter.__solution_definition_name }}].get_project(pathname)
-    problem_setup_step = project.steps.problem_setup_step
-
-    if problem_setup_step.project_initialized:
-        return True, problem_setup_step.step_list
-    else:
-        raise PreventUpdate
-
-
-@callback(
     Output("body_content", "children"),
     Input("navigation_tree", "focus"),
     Input("url", "pathname"),
@@ -298,7 +257,7 @@ def display_body_content(value, pathname, trigger_body_display):
 
     if problem_setup_step.project_initialized:
         triggered_id = callback_context.triggered[0]["prop_id"].split(".")[0]
-        if triggered_id == "url" or triggered_id == "trigger_body_display":
+        if triggered_id == "url" or triggered_id == "trigger_body_display" or trigger_body_display and len(triggered_id) == 0:
             return problem_setup_page.layout(problem_setup_step)
         if triggered_id == "navigation_tree":
             if value is None:
@@ -306,12 +265,26 @@ def display_body_content(value, pathname, trigger_body_display):
             elif value == "problem_setup_step":
                 page_layout = problem_setup_page.layout(problem_setup_step)
             else:
-                if not problem_setup_step.treeview_locked:
-                    problem_setup_step.selected_actor_from_treeview = extract_dict_by_key(problem_setup_step.step_list, "key", value, expect_unique=True, return_index=False)["uid"]
-                    page_layout = monitoring_page.layout(problem_setup_step)
-                else:
-                    page_layout = problem_setup_page.layout(problem_setup_step)
+                problem_setup_step.selected_actor_from_treeview = extract_dict_by_key(problem_setup_step.treeview_items, "key", value, expect_unique=True, return_index=False)["uid"]
+                page_layout = monitoring_page.layout(problem_setup_step)
             return page_layout
+    else:
+        raise PreventUpdate
+
+
+@callback(
+    Output("navigation_tree", "items"),
+    Input("url", "pathname"),
+    Input("trigger_treeview_display", "data"),
+)
+def display_tree_view(pathname, trigger_treeview_display):
+    """Display treeview with all project nodes."""
+
+    project = DashClient[{{ cookiecutter.__solution_definition_name }}].get_project(pathname)
+    problem_setup_step = project.steps.problem_setup_step
+
+    if problem_setup_step.project_initialized:
+        return problem_setup_step.treeview_items
     else:
         raise PreventUpdate
 

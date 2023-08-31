@@ -1,12 +1,13 @@
 # ©2023, ANSYS Inc. Unauthorized use, distribution or duplication is prohibited.
 
 import dash_bootstrap_components as dbc
-from dash_extensions.enrich import html, dcc
 import uuid
 
-from ansys.solutions.{{ cookiecutter.__solution_name_slug }}.solution.problem_setup_step import ProblemSetupStep
+from dash_extensions.enrich import html, dcc
+
 from ansys.solutions.{{ cookiecutter.__solution_name_slug }}.solution.definition import {{ cookiecutter.__solution_definition_name }}
-from ansys.solutions.{{ cookiecutter.__solution_name_slug }}.ui.utils.common_functions import (
+from ansys.solutions.{{ cookiecutter.__solution_name_slug }}.solution.problem_setup_step import ProblemSetupStep
+from ansys.solutions.{{ cookiecutter.__solution_name_slug }}.utilities.common_functions import (
     remove_key_from_dictionaries,
     sort_dict_by_ordered_keys,
 )
