@@ -30,13 +30,13 @@ class ProblemSetupStep(StepModel):
     app_metadata: dict = {}
     analysis_locked: bool = True
     project_locked: bool = False
-    selected_actor_from_treeview: str = None
-    selected_command: str = None
+    selected_actor_from_treeview: Optional[str] = None
+    selected_command: Optional[str] = None
     selected_actor_from_command: str = None
     commands_locked: bool = False
     auto_update_frequency: float = 2000
     auto_update_activated: bool = True
-    actor_uid: str = None
+    actor_uid: Optional[str] = None
     project_command_execution_status: dict = {"alert-message": "", "alert-color": "info"}
     actor_command_execution_status: dict = {"alert-message": "", "alert-color": "info"}
     project_btn_group_options: List = [
@@ -423,6 +423,6 @@ class ProblemSetupStep(StepModel):
         status = node.control(self.selected_command, wait_for_completion=True, timeout=self.command_timeout)
 
         if not status:
-            raise Exception(f"{self.selected_command.capitalize()} command against node {node.get_name()} failed.")
+            raise Exception(f"{problem_setup_step.selected_command.replace('_', ' ').title()} command against node {node.get_name()} failed.")
 
         osl.dispose()

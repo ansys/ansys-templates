@@ -106,7 +106,7 @@ class ProjectCommandsAIO(html.Div):
                     alert_status["alert-message"] =  f"{problem_setup_step.selected_command.replace('_', ' ').title()} command completed successfully.",
                     alert_status["alert-color"] = "success"
             except Exception as e:
-                alert_status["alert-message"] = str(e)
+                alert_status["alert-message"] = f"{problem_setup_step.selected_command.replace('_', ' ').title()} command failed. For details, review the logs.",
                 alert_status["alert-color"] = "warning"
         else:
             raise PreventUpdate
