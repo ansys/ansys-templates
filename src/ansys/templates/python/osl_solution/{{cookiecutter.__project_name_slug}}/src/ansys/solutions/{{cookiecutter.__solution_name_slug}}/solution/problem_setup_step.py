@@ -403,6 +403,7 @@ class ProblemSetupStep(StepModel):
             ],
             upload=["actor_uid"],
         )
+    )
     def run_selected_project_command(self) -> None:
         """Run the selected project command."""
         osl = Optislang(
