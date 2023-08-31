@@ -9,7 +9,7 @@ import tempfile
 import time
 
 from pathlib import Path
-from typing import List
+from typing import List, Optional
 
 from ansys.optislang.core import Optislang, logging, utils
 from ansys.saf.glow.solution import FileReference, FileGroupReference, StepModel, StepSpec, long_running, transaction
@@ -38,8 +38,8 @@ class ProblemSetupStep(StepModel):
     auto_update_activated: bool = True
 
     # Backend data model
-    tcp_server_host: str = None
-    tcp_server_port: int = None
+    tcp_server_host: Optional[str] = None
+    tcp_server_port: Optional[int] = None
     ansys_ecosystem: dict = {
         "optislang": {
             "authorized_versions": [231, 232],
@@ -108,7 +108,7 @@ class ProblemSetupStep(StepModel):
     project_state_file: FileReference = FileReference("Problem_Setup/project_state.json")
     input_files: FileGroupReference = FileGroupReference("Problem_Setup/Input_Files/*.*")
     # If folder doesn't exist, it will be created later
-    upload_directory = os.path.join(tempfile.gettempdir(), "GLOW")
+    upload_directory: str = os.path.join(tempfile.gettempdir(), "GLOW")
 
     # Outputs
     working_properties_file: FileReference = FileReference("Problem_Setup/working_properties_file.json")
