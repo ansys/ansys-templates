@@ -375,6 +375,7 @@ OSL_SOLUTION_STRUCTURE = [
     f"src/ansys/solutions/{OSL_SOLUTION_VARS['__solution_name_slug']}/ui/components/actor_information_table.py",
     f"src/ansys/solutions/{OSL_SOLUTION_VARS['__solution_name_slug']}/ui/components/actor_logs_table.py",
     f"src/ansys/solutions/{OSL_SOLUTION_VARS['__solution_name_slug']}/ui/components/actor_statistics_table.py",
+    f"src/ansys/solutions/{OSL_SOLUTION_VARS['__solution_name_slug']}/ui/components/button_group.py",
     f"src/ansys/solutions/{OSL_SOLUTION_VARS['__solution_name_slug']}/ui/components/commands.py",
     f"src/ansys/solutions/{OSL_SOLUTION_VARS['__solution_name_slug']}/ui/components/design_table.py",
     f"src/ansys/solutions/{OSL_SOLUTION_VARS['__solution_name_slug']}/ui/components/logs_table.py",
