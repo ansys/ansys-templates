@@ -93,7 +93,7 @@ class ProjectCommandsAIO(html.Div):
     )
     def run_command(action_requested, pathname):
         """This performs actions such as stopping, restarting, and shutting down on an instance of optiSlang when action is requested. A message with the status of the method execution and states of each button is updated on completion of the method."""
-        project = DashClient[Oscillator_ProgressSolution].get_project(pathname)
+        project = DashClient[{{ cookiecutter.__solution_definition_name }}].get_project(pathname)
         problem_setup_step = project.steps.problem_setup_step
         ctx = callback_context
         if (ctx.triggered and action_requested):
@@ -109,7 +109,7 @@ class ProjectCommandsAIO(html.Div):
                 alert_status["alert-color"] = "warning"
         else:
             raise PreventUpdate
-        if problem_setup_step.actor_uid:
+        if problem_setup_step.actor_uid != {}:
             problem_setup_step.actor_command_execution_status = alert_status
             problem_setup_step.project_command_execution_status = {"alert-message": "", "alert-color": ""}
             btn_group_options = problem_setup_step.actor_btn_group_options

@@ -7,7 +7,7 @@ import json
 from pathlib import Path
 import platform
 import time
-from typing import List, Optional
+from typing import Dict, List, Optional
 import tempfile
 
 
@@ -42,17 +42,17 @@ class ProblemSetupStep(StepModel):
     commands_locked: bool = False
     auto_update_frequency: float = 2000
     auto_update_activated: bool = True
-    actor_uid: dict = None
+    actor_uid: dict = {}
     project_command_execution_status: dict = {"alert-message": "", "alert-color": "info"}
     actor_command_execution_status: dict = {"alert-message": "", "alert-color": "info"}
-    project_btn_group_options = [
+    project_btn_group_options: List = [
                                 {"icon": "fas fa-play", "tooltip": "Restart optiSLang project.", "value": "restart", "id": {"type":"action-button", "action":"restart"}},
                                 {"icon":"fa fa-hand-paper", "tooltip": "Stop optiSLang project gently.", "value": "stop_gently", "id": {"type":"action-button", "action":"stop_gently"}},
                                 {"icon": "fas fa-stop", "tooltip":"Stop optiSLang project.", "value": "stop", "id": {"type": "action-button", "action":"stop"}},
                                 {"icon": "fas fa-fast-backward", "tooltip": "Reset optiSLang project.", "value": "reset", "id": {"type":"action-button", "action":"reset"}},
                                 {"icon": "fas fa-power-off", "tooltip": "Shutdown optiSLang project.", "value": "shutdown", "id": {"type":"action-button", "action":"shutdown"}},
                             ]
-    actor_btn_group_options = [
+    actor_btn_group_options: List = [
                             {"icon": "fas fa-play", "tooltip": "Restart node.", "value": "restart", "id": {"type":"action-button", "action":"restart"}},
                             {"icon":"fa fa-hand-paper", "tooltip": "Stop node gently.", "value": "stop_gently", "id": {"type":"action-button", "action":"stop_gently"}},
                             {"icon": "fas fa-stop", "tooltip":"Stop node.", "value": "stop", "id": {"type": "action-button", "action":"stop"}},
@@ -73,8 +73,8 @@ class ProblemSetupStep(StepModel):
             "alias": "optiSLang",
         }
     }
-    step_list: list = []
-    node_list: list = []
+    step_list: List = []
+    node_list: List = []
     placeholders: dict = {}
     registered_files: List = []
     settings: dict = {}
@@ -85,7 +85,7 @@ class ProblemSetupStep(StepModel):
     actors_status_info: dict = {}
     results_files: dict = {}
     project_state: str = "NOT STARTED"
-    osl_project_states: list = [
+    osl_project_states: List = [
         "IDLE",
         "PROCESSING",
         "PAUSED",
@@ -96,7 +96,7 @@ class ProblemSetupStep(StepModel):
         "GENTLE_STOP_REQUESTED",
         "FINISHED"
     ]
-    osl_actor_states: list = [
+    osl_actor_states: List = [
         "Idle",
         "Succeeded",
         "Failed",
@@ -109,7 +109,7 @@ class ProblemSetupStep(StepModel):
         "Stopped",
         "Gently stopped"
     ]
-    optislang_logs: list = []
+    optislang_logs: List = []
     optislang_log_level: str = "INFO"
     project_initialized: bool = False
     has_project_state: bool = False
@@ -420,7 +420,7 @@ class ProblemSetupStep(StepModel):
                 actor_info = extract_dict_by_key(self.step_list, "uid", self.selected_actor_from_command, expect_unique=True, return_index=False)
 
                 if actor_info["is_root"]:
-                    actor_uid = None
+                    actor_uid = {}
                 else:
                     actor_uid = actor_info["uid"]
 
