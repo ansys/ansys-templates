@@ -2,19 +2,21 @@
 
 """Frontend of the problem setup step."""
 
-import dash_bootstrap_components as dbc
 import os
 import time
+import dash_bootstrap_components as dbc
 
 from dash.exceptions import PreventUpdate
 from dash_extensions.enrich import Input, Output, State, dcc, html, ALL, MATCH, no_update, callback_context
-
 from ansys.saf.glow.client.dashclient import DashClient, callback
+from ansys.solutions.dash_components.table import InputRow
 from ansys.solutions.optislang.frontend_components.load_sections import to_dash_sections, update_designs_to_dash_section
 
 from ansys.solutions.{{ cookiecutter.__solution_name_slug }}.solution.definition import {{ cookiecutter.__solution_definition_name }}
 from ansys.solutions.{{ cookiecutter.__solution_name_slug }}.solution.problem_setup_step import ProblemSetupStep
-from ansys.solutions.{{ cookiecutter.__solution_name_slug }}.utilities.common_functions import check_empty_strings, update_alerts
+from ansys.solutions.{{ cookiecutter.__solution_name_slug }}.ui.utils.alerts import update_alerts
+from ansys.solutions.{{ cookiecutter.__solution_name_slug }}.ui.utils.common_functions import check_empty_strings
+
 
 
 def layout(problem_setup_step: ProblemSetupStep) -> html.Div:
@@ -139,8 +141,6 @@ for alert in ["optislang_version", "optislang_solve"]:
 
 
 @callback(
-    Output("trigger_treeview_display", "data"),
-    Output("navigation_tree", "items"),
     Output("alert_messages", "children"),
     Output("wait_start_analysis", "children"),
     Output("start_analysis", "disabled"),
@@ -174,8 +174,6 @@ def start_analysis(n_clicks, pathname):
             while problem_setup_step.project_state == "NOT STARTED":
                 time.sleep(1)
             return (
-                True,
-                problem_setup_step.treeview_items,
                 update_alerts(problem_setup_step),
                 True,
                 True,
@@ -186,8 +184,6 @@ def start_analysis(n_clicks, pathname):
             )
         else:
             return (
-                True,
-                problem_setup_step.treeview_items,
                 update_alerts(problem_setup_step),
                 True,
                 False,
