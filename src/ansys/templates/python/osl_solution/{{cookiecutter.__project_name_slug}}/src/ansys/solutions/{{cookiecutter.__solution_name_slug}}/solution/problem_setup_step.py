@@ -405,7 +405,7 @@ class ProblemSetupStep(StepModel):
 
         osl.dispose()
 
-        if status == "failure":
+        if not status:
             raise Exception(f"Restart command against node {node.get_name()} failed.")
 
     @transaction(
@@ -438,7 +438,7 @@ class ProblemSetupStep(StepModel):
 
         osl.dispose()
 
-        if status == "failure":
+        if not status:
             raise Exception(f"Stop gently command against node {node.get_name()} failed.")
 
     @transaction(
@@ -471,7 +471,7 @@ class ProblemSetupStep(StepModel):
 
         osl.dispose()
 
-        if status == "failure":
+        if not status:
             raise Exception(f"Stop command against node {node.get_name()} failed.")
 
     @transaction(
@@ -504,7 +504,7 @@ class ProblemSetupStep(StepModel):
 
         osl.dispose()
 
-        if status == "failure":
+        if not status:
             raise Exception(f"Reset command against node {node.get_name()} failed.")
 
     @transaction(
@@ -532,5 +532,5 @@ class ProblemSetupStep(StepModel):
 
         osl.dispose()
 
-        if status == "failure":
+        if not status:
             raise Exception(f"Shutdown command against node {node.get_name()} failed.")
