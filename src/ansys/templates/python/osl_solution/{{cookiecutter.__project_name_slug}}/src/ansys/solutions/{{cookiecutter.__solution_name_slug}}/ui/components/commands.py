@@ -100,8 +100,8 @@ class ProjectCommandsAIO(html.Div):
         if (ctx.triggered and action_requested):
             alert_status = {"alert-message": "", "alert-color": ""}
             try:
-                problem_setup_step.run_selected_project_command()
-                command_execution_state = problem_setup_step.get_method_state("run_selected_project_command").status
+                problem_setup_step.control_node_state()
+                command_execution_state = problem_setup_step.get_method_state("control_node_state").status
                 if command_execution_state == MethodStatus.Completed:
                     alert_status["alert-message"] =  f"{problem_setup_step.selected_command.replace('_', ' ').title()} command completed successfully.",
                     alert_status["alert-color"] = "success"

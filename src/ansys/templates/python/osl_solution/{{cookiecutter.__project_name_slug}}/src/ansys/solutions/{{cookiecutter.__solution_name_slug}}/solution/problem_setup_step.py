@@ -404,8 +404,8 @@ class ProblemSetupStep(StepModel):
             upload=["actor_uid"],
         )
     )
-    def run_selected_project_command(self) -> None:
-        """Run the selected project command."""
+    def control_node_state(self) -> None:
+        """Update the state of root or actor node based on the project command in the UI."""
         osl = Optislang(
                 host=self.tcp_server_host,
                 port=self.tcp_server_port,
@@ -424,6 +424,6 @@ class ProblemSetupStep(StepModel):
         status = node.control(self.selected_command, wait_for_completion=True, timeout=self.command_timeout)
 
         if not status:
-            raise Exception(f"{problem_setup_step.selected_command.replace('_', ' ').title()} command against node {node.get_name()} failed.")
+            raise Exception(f"{self.selected_command.replace('_', ' ').title()} command against node {node.get_name()} failed.")
 
         osl.dispose()
