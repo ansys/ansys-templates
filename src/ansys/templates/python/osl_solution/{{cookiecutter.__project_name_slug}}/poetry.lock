@@ -208,13 +208,12 @@ reference = "solutions-private-pypi"
 
 [[package]]
 name = "ansys-saf-portal"
-version = "0.4.1"
+version = "0.4.3"
 description = "Ansys SAF Portal"
 optional = false
 python-versions = ">=3.8,<3.11"
 files = [
-    {file = "ansys_saf_portal-0.4.1-py3-none-any.whl", hash = "sha256:d5f74995208434b1a9dc399b2dd9a6b31066fcbc61fa3530139743efcfd8b378"},
-    {file = "ansys_saf_portal-0.4.1.tar.gz", hash = "sha256:64a83d306d8fc0e103e77a98c9b08ebfb749262285a9e721c2a8b8f91dcf2812"},
+    {file = "ansys_saf_portal-0.4.3-py3-none-any.whl", hash = "sha256:a13eab4719f740628bb5fc3370626de92354fc2f0c47ecb1cc53ba9f3484cdaa"},
 ]
 
 [package.dependencies]
@@ -228,6 +227,8 @@ opentelemetry-instrumentation-flask = ">=0.39b0,<0.40"
 opentelemetry-instrumentation-httpx = ">=0.39b0,<0.40"
 opentelemetry-instrumentation-logging = ">=0.39b0,<0.40"
 opentelemetry-sdk = ">=1.18.0,<2.0.0"
+pydantic = ">=2,<3"
+pydantic-settings = ">=2,<3"
 python-dotenv = ">=1.0.0,<2.0.0"
 python-multipart = ">=0.0.6,<0.0.7"
 pyyaml = ">=6.0,<7.0"
@@ -3848,4 +3849,4 @@ testing = ["big-O", "jaraco.functools", "jaraco.itertools", "more-itertools", "p
 [metadata]
 lock-version = "2.0"
 python-versions = ">=3.8, <3.11"
-content-hash = "dcfcce48de0674a3e4c2c169f520f7a378fb4c21df2cb52b2767f562227cb188"
+content-hash = "0f207c1b59b8c44567a6387787e8814a0b791ce7a91375645768c49b4d29c8a3"
