@@ -152,10 +152,11 @@ for alert in ["optislang_version", "optislang_solve"]:
     prevent_initial_call=True,
 )
 def start_analysis(n_clicks, pathname):
-    """Start optiSLang and run the simulation. Wait for the process to complete."""
+    """Start optiSLang and run the project."""
 
     project = DashClient[{{ cookiecutter.__solution_definition_name }}].get_project(pathname)
     problem_setup_step = project.steps.problem_setup_step
+    monitoring_step = project.steps.monitoring_step
 
     if n_clicks:
         ui_data = problem_setup_step.ui_placeholders
@@ -164,6 +165,8 @@ def start_analysis(n_clicks, pathname):
         # Check if Ansys products are available
         project.steps.problem_setup_step.check_ansys_ecosystem()
         if problem_setup_step.ansys_ecosystem_ready:
+            # Read project tree and update treeview
+            problem_setup_step.get_project_tree()
             # Update project properties file prior to the solve
             problem_setup_step.write_updated_properties_file()
             # Start analysis
@@ -171,8 +174,10 @@ def start_analysis(n_clicks, pathname):
             # Lock start analysis and ui data
             problem_setup_step.analysis_locked = True
             problem_setup_step.project_locked = True
+            # Start monitoring
+            monitoring_step.upload_project_data()
             # Wait until the analysis effectively starts
-            while problem_setup_step.project_state == "NOT STARTED":
+            while monitoring_step.project_state == "NOT STARTED":
                 time.sleep(1)
             return (
                 True,

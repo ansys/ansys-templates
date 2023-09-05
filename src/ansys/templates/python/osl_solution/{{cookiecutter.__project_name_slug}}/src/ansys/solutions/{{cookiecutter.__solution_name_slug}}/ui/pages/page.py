@@ -252,8 +252,8 @@ def display_body_content(value, pathname, trigger_body_display):
     """Display body content."""
 
     project = DashClient[{{ cookiecutter.__solution_definition_name }}].get_project(pathname)
-
     problem_setup_step = project.steps.problem_setup_step
+    monitoring_step = project.steps.monitoring_step
 
     if problem_setup_step.project_initialized:
         triggered_id = callback_context.triggered[0]["prop_id"].split(".")[0]
@@ -265,8 +265,8 @@ def display_body_content(value, pathname, trigger_body_display):
             elif value == "problem_setup_step":
                 page_layout = problem_setup_page.layout(problem_setup_step)
             else:
-                problem_setup_step.selected_actor_from_treeview = extract_dict_by_key(problem_setup_step.treeview_items, "key", value, expect_unique=True, return_index=False)["uid"]
-                page_layout = monitoring_page.layout(problem_setup_step)
+                monitoring_step.selected_actor_from_treeview = extract_dict_by_key(problem_setup_step.treeview_items, "key", value, expect_unique=True, return_index=False)["uid"]
+                page_layout = monitoring_page.layout(problem_setup_step, monitoring_step)
             return page_layout
     else:
         raise PreventUpdate
@@ -300,13 +300,13 @@ def display_tree_view(pathname, trigger_treeview_display):
 def display_optislang_logs(n_clicks, pathname, is_open):
 
     project = DashClient[{{ cookiecutter.__solution_definition_name }}].get_project(pathname)
-    problem_setup_step = project.steps.problem_setup_step
+    monitoring_step = project.steps.monitoring_step
 
     if not n_clicks:
         # Button has never been clicked
         return None, False
 
-    table = LogsTable(problem_setup_step.optislang_logs)
+    table = LogsTable(monitoring_step.optislang_logs)
 
     return table.render(), not is_open
 

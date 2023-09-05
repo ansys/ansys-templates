@@ -6,7 +6,6 @@ import json
 import os
 import platform
 import tempfile
-import time
 
 from pathlib import Path
 from typing import List, Optional
@@ -26,32 +25,9 @@ class ProblemSetupStep(StepModel):
 
     # Frontend persistence
     ansys_ecosystem_ready: bool = False
-    ui_placeholders: dict = {}
-    app_metadata: dict = {}
+    project_initialized: bool = False
     analysis_locked: bool = True
     project_locked: bool = False
-    selected_actor_from_treeview: Optional[str] = None
-    selected_command: Optional[str] = None
-    selected_actor_from_command: Optional[str] = None
-    commands_locked: bool = False
-    auto_update_frequency: float = 2000
-    auto_update_activated: bool = True
-    actor_uid: Optional[str] = None
-    project_command_execution_status: dict = {"alert-message": "", "alert-color": "info"}
-    actor_command_execution_status: dict = {"alert-message": "", "alert-color": "info"}
-    project_btn_group_options: List = [
-                                {"icon": "fas fa-play", "tooltip": "Restart optiSLang project.", "value": "restart", "id": {"type":"action-button", "action":"restart"}},
-                                {"icon":"fa fa-hand-paper", "tooltip": "Stop optiSLang project gently.", "value": "stop_gently", "id": {"type":"action-button", "action":"stop_gently"}},
-                                {"icon": "fas fa-stop", "tooltip":"Stop optiSLang project.", "value": "stop", "id": {"type": "action-button", "action":"stop"}},
-                                {"icon": "fas fa-fast-backward", "tooltip": "Reset optiSLang project.", "value": "reset", "id": {"type":"action-button", "action":"reset"}},
-                                {"icon": "fas fa-power-off", "tooltip": "Shutdown optiSLang project.", "value": "shutdown", "id": {"type":"action-button", "action":"shutdown"}},
-                            ]
-    actor_btn_group_options: List = [
-                            {"icon": "fas fa-play", "tooltip": "Restart node.", "value": "restart", "id": {"type":"action-button", "action":"restart"}},
-                            {"icon":"fa fa-hand-paper", "tooltip": "Stop node gently.", "value": "stop_gently", "id": {"type":"action-button", "action":"stop_gently"}},
-                            {"icon": "fas fa-stop", "tooltip":"Stop node.", "value": "stop", "id": {"type": "action-button", "action":"stop"}},
-                            {"icon": "fas fa-fast-backward", "tooltip": "Reset node.", "value": "reset", "id": {"type":"action-button", "action":"reset"}},
-                        ]
 
     # Backend data model
     tcp_server_host: Optional[str] = None
@@ -67,54 +43,14 @@ class ProblemSetupStep(StepModel):
             "alias": "optiSLang",
         }
     }
-    project_tree: list = []
-    treeview_items: list = [
-        {
-            "key": "problem_setup_step",
-            "text": "Problem Setup",
-            "depth": 0,
-            "uid": None
-        },
-    ]
     placeholders: dict = {}
     registered_files: List = []
     settings: dict = {}
     parameter_manager: dict = {}
     criteria: dict = {}
-    project_status_info: dict = {}
-    actors_info: dict = {}
-    actors_status_info: dict = {}
-    results_files: dict = {}
-    project_state: str = "NOT STARTED"
-    osl_project_states: List = [
-        "IDLE",
-        "PROCESSING",
-        "PAUSED",
-        "PAUSE_REQUESTED",
-        "STOPPED",
-        "STOP_REQUESTED",
-        "GENTLY_STOPPED",
-        "GENTLE_STOP_REQUESTED",
-        "FINISHED"
-    ]
-    osl_actor_states: List = [
-        "Idle",
-        "Succeeded",
-        "Failed",
-        "Running",
-        "Aborted",
-        "Predecessor failed",
-        "Skipped",
-        "Incomplete",
-        "Processing done",
-        "Stopped",
-        "Gently stopped"
-    ]
-    optislang_logs: List = []
-    optislang_log_level: str = "INFO"
-    project_initialized: bool = False
-    command_timeout: int = 30
-
+    ui_placeholders: dict = {}
+    app_metadata: dict = {}
+    
     # File storage ----------------------------------------------------------------------------------------------------
 
     # Inputs
@@ -128,7 +64,6 @@ class ProblemSetupStep(StepModel):
 
     # Outputs
     working_properties_file: FileReference = FileReference("Problem_Setup/working_properties_file.json")
-    server_info_file: FileReference = FileReference("Problem_Setup/server_info.ini")
     optislang_log_file: FileReference = FileReference("Problem_Setup/pyoptislang.log")
 
     # Methods ---------------------------------------------------------------------------------------------------------
@@ -291,24 +226,42 @@ class ProblemSetupStep(StepModel):
     @transaction(
         self=StepSpec(
             download=[
+                "project_file",
+            ],
+            upload=[
+                "project_tree",
+                "treeview_items"
+            ],
+        )
+    )
+    @long_running
+    def get_project_tree(self) -> None:
+        """Get the project tree of the optiSLang project."""
+
+        # Start optiSLang instance.
+        osl = Optislang(
+            project_path=self.project_file.path,
+            reset=True,
+            shutdown_on_finished=True,
+            ini_timeout=300,
+        )
+
+        # Get project tree
+        self.project_tree = osl.project._get_project_tree()
+
+        # Update treeview items
+        self.treeview_items = get_treeview_items_from_project_tree(self.project_tree)
+
+    @transaction(
+        self=StepSpec(
+            download=[
                 "input_files",
-                "optislang_log_level",
                 "project_file",
                 "working_properties_file",
             ],
             upload=[
                 "tcp_server_host",
                 "tcp_server_port",
-                "project_tree",
-                "treeview_items",
-                "actors_info",
-                "actors_status_info",
-                "optislang_logs",
-                "optislang_log_file",
-                "project_state",
-                "project_status_info",
-                "results_files",
-                "server_info_file",
             ],
         )
     )
@@ -316,114 +269,24 @@ class ProblemSetupStep(StepModel):
     def start(self) -> None:
         """Start optiSLang and run the project."""
 
-        # Start optiSLang instance
+        # Start optiSLang instance.
         osl = Optislang(
             project_path=self.project_file.path,
-            loglevel=self.optislang_log_level,
             reset=True,
             shutdown_on_finished=False,
             import_project_properties_file=self.working_properties_file.path,
-            additional_args=[f"--write-server-info={self.server_info_file.path}"],
             ini_timeout=300,  # might need to be adjusted depending on the hardware
         )
 
-        # Configure logging
-        osl_logger = logging.OslLogger(
-            loglevel=self.optislang_log_level,
-            log_to_file=True,
-            logfile_name=self.optislang_log_file.path,
-            log_to_stdout=True,
-        )
-        osl.__logger = osl_logger.add_instance_logger(osl.name, osl, self.optislang_log_level)
-
         # Get server host
         self.tcp_server_host = osl.get_osl_server().get_host()
-        self.transaction.upload(["tcp_server_host"])
 
         # Get server port
         server_info = osl.get_osl_server().get_server_info()
         self.tcp_server_port = server_info["server"]["server_port"]
-        self.transaction.upload(["tcp_server_port"])
-
-        # Get project tree
-        self.project_tree = osl.project._get_project_tree()
-        self.transaction.upload(["project_tree"])
-
-        # Update treeview items
-        self.treeview_items = get_treeview_items_from_project_tree(self.project_tree)
-        self.transaction.upload(["treeview_items"])
 
         # Start optiSLang project
         osl.start(wait_for_started=True, wait_for_finished=False)
 
-        # Monitor project state and upload results
-        while True:
-            # Get project state
-            self.project_state = osl.project.get_status()
-            osl.log.info(f"Analysis status: {self.project_state}")
-            # Get project status info
-            self.project_status_info = osl.get_osl_server().get_full_project_status_info()
-            # Read pyoptislang logs
-            self.optislang_logs = read_log_file(self.optislang_log_file.path)
-            # Get actor status info
-            for node_info in self.project_tree:
-                if node_info["uid"] == osl.project.root_system.uid:
-                    node = osl.project.root_system
-                else:
-                    node = osl.project.root_system.find_node_by_uid(node_info["uid"], search_depth=-1)
-                self.actors_info[node.uid] = osl.get_osl_server().get_actor_info(node.uid)
-                if node.get_states_ids():
-                    self.actors_status_info[node.uid] = []
-                    for hid in node.get_states_ids():
-                        self.actors_status_info[node.uid].append(
-                            osl.get_osl_server().get_actor_status_info(node.uid, hid)
-                        )
-            # Upload fields
-            self.transaction.upload(["project_state"])
-            self.transaction.upload(["project_status_info"])
-            self.transaction.upload(["actors_info"])
-            self.transaction.upload(["actors_status_info"])
-            self.transaction.upload(["optislang_logs"])
-            if self.project_state == "FINISHED":
-                break
-            time.sleep(3)
-
         # Close connection with optiSLang server
-        osl.dispose()
-
-    @transaction(
-        self=StepSpec(
-            download=[
-                "tcp_server_host",
-                "tcp_server_port",
-                "command_timeout",
-                "selected_actor_from_command",
-                "project_tree",
-                "selected_command"
-            ],
-            upload=["actor_uid"],
-        )
-    )
-    def control_node_state(self) -> None:
-        """Update the state of root or actor node based on the project command in the UI."""
-        osl = Optislang(
-                host=self.tcp_server_host,
-                port=self.tcp_server_port,
-                shutdown_on_finished=False
-            )
-        if not self.selected_actor_from_command == "shutdown":
-            if self.selected_actor_from_command == osl.project.root_system.uid:
-                node = osl.project.root_system
-                self.actor_uid = None
-            else:
-                node = osl.project.root_system.find_node_by_uid(self.selected_actor_from_command, search_depth=-1)
-                self.actor_uid = node
-        else:
-            node = osl.project.root_system
-
-        status = node.control(self.selected_command, wait_for_completion=True, timeout=self.command_timeout)
-
-        if not status:
-            raise Exception(f"{self.selected_command.replace('_', ' ').title()} command against node {node.get_name()} failed.")
-
         osl.dispose()

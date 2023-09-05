@@ -7,7 +7,7 @@ import uuid
 from dash_extensions.enrich import html, dash_table
 
 from ansys.solutions.{{ cookiecutter.__solution_name_slug }}.solution.definition import {{ cookiecutter.__solution_definition_name }}
-from ansys.solutions.{{ cookiecutter.__solution_name_slug }}.solution.problem_setup_step import ProblemSetupStep
+from ansys.solutions.{{ cookiecutter.__solution_name_slug }}.solution.monitoring_step import MonitoringStep
 
 
 class ProjectInformationTableAIO(html.Div):
@@ -21,11 +21,11 @@ class ProjectInformationTableAIO(html.Div):
 
     ids = ids
 
-    def __init__(self, problem_setup_step: ProblemSetupStep, datatable_props: dict = None, interval_props: dict = None, aio_id: str = None):
+    def __init__(self, monitoring_step: MonitoringStep, datatable_props: dict = None, interval_props: dict = None, aio_id: str = None):
         """ProjectInformationTableAIO is an All-in-One component that is composed
         of a parent `html.Div` with a `dcc.Interval` and a `dash_table.DataTable` as children.
 
-        - `problem_setup_step` - The StepModel object of the problem setup step.
+        - `monitoring_step` - The StepModel object of the monitoring step.
         - `datatable_props` - A dictionary of properties passed into the dash_table.DataTable component.
         - `interval_props` - A dictionary of properties passed into the dcc.Interval component.
         - `aio_id` - The All-in-One component ID used to generate the table components's dictionary IDs.
@@ -34,7 +34,7 @@ class ProjectInformationTableAIO(html.Div):
         if aio_id is None:
             aio_id = str(uuid.uuid4())
 
-        data = self.get_data(problem_setup_step)
+        data = self.get_data(monitoring_step)
 
         datatable_props = {
             "data": data.to_dict('records'),
@@ -73,7 +73,7 @@ class ProjectInformationTableAIO(html.Div):
             )
         ])
 
-    def get_data(self, problem_setup_step) -> pd.DataFrame:
+    def get_data(self, monitoring_step: MonitoringStep) -> pd.DataFrame:
 
         project_summary_data = {
             "column_a": [
@@ -100,15 +100,15 @@ class ProjectInformationTableAIO(html.Div):
             ],
         }
 
-        if problem_setup_step.project_status_info:
+        if monitoring_step.project_status_info:
             project_summary_data["column_b"] = [
-                problem_setup_step.project_status_info["projects"][0]["state"],
-                problem_setup_step.project_status_info["projects"][0]["project_id"],
-                problem_setup_step.project_status_info["projects"][0]["name"],
-                problem_setup_step.project_status_info["projects"][0]["machine"],
-                problem_setup_step.project_status_info["projects"][0]["location"],
-                problem_setup_step.project_status_info["projects"][0]["working_dir"],
-                problem_setup_step.project_status_info["projects"][0]["user"],
+                monitoring_step.project_status_info["projects"][0]["state"],
+                monitoring_step.project_status_info["projects"][0]["project_id"],
+                monitoring_step.project_status_info["projects"][0]["name"],
+                monitoring_step.project_status_info["projects"][0]["machine"],
+                monitoring_step.project_status_info["projects"][0]["location"],
+                monitoring_step.project_status_info["projects"][0]["working_dir"],
+                monitoring_step.project_status_info["projects"][0]["user"],
                 "",
                 "",
             ]
