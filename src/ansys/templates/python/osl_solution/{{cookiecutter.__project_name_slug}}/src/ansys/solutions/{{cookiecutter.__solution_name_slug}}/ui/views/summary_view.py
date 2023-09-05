@@ -40,7 +40,7 @@ def layout(monitoring_step: MonitoringStep) -> html.Div:
         html.Br(),
         dbc.Row(
             [
-                dbc.Col(ProjectCommandsAIO(button_group, alert_props, "actor-commands"), width=12),
+                dbc.Col(NodeControlAIO(button_group, alert_props, "actor-commands"), width=12),
             ]
         ),
     ]
