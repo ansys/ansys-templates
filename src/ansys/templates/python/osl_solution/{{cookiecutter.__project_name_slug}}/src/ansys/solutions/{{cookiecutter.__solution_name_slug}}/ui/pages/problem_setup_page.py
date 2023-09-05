@@ -10,6 +10,7 @@ from dash.exceptions import PreventUpdate
 from dash_extensions.enrich import Input, Output, State, dcc, html, ALL, MATCH, no_update, callback_context
 
 from ansys.saf.glow.client.dashclient import DashClient, callback
+from ansys.saf.glow.core.method_status import MethodStatus
 from ansys.solutions.optislang.frontend_components.load_sections import to_dash_sections, update_designs_to_dash_section
 
 from ansys.solutions.{{ cookiecutter.__solution_name_slug }}.solution.definition import {{ cookiecutter.__solution_definition_name }}
@@ -319,6 +320,9 @@ def update_ui_placeholders(value, id, pathname):
     else:
         ui_data.update({name: value})
     problem_setup_step.ui_placeholders = ui_data
+    update_state = problem_setup_step.get_method_state("update_osl_placeholders_with_ui_values").status
+    while update_state == MethodStatus.Running: # current workaround to avoid raising ConflictError: {"detail":"update_osl_placeholders_with_ui_values is already running"}
+        time.sleep(0.1)
     problem_setup_step.update_osl_placeholders_with_ui_values()
 
     return no_update
@@ -419,6 +423,9 @@ def update_start_designs_table(n_clicks_add, n_clicks_del, disabled_states, row_
         ui_data.update({"StartDesigns": new_designs})
 
         problem_setup_step.ui_placeholders = ui_data
+        update_state = problem_setup_step.get_method_state("update_osl_placeholders_with_ui_values").status
+        while update_state == MethodStatus.Running: # current workaround to avoid raising ConflictError: {"detail":"update_osl_placeholders_with_ui_values is already running"}
+            time.sleep(0.1)
         problem_setup_step.update_osl_placeholders_with_ui_values()
 
         return update_designs_to_dash_section(problem_setup_step.placeholders, problem_setup_step.project_locked)

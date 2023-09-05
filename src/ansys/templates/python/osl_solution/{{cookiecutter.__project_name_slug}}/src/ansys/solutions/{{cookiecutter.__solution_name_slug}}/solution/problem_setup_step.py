@@ -30,12 +30,28 @@ class ProblemSetupStep(StepModel):
     app_metadata: dict = {}
     analysis_locked: bool = True
     project_locked: bool = False
-    selected_actor_from_treeview: str = None
-    selected_command: str = None
-    selected_actor_from_command: str = None
+    selected_actor_from_treeview: Optional[str] = None
+    selected_command: Optional[str] = None
+    selected_actor_from_command: Optional[str] = None
     commands_locked: bool = False
     auto_update_frequency: float = 2000
     auto_update_activated: bool = True
+    actor_uid: Optional[str] = None
+    project_command_execution_status: dict = {"alert-message": "", "alert-color": "info"}
+    actor_command_execution_status: dict = {"alert-message": "", "alert-color": "info"}
+    project_btn_group_options: List = [
+                                {"icon": "fas fa-play", "tooltip": "Restart optiSLang project.", "value": "restart", "id": {"type":"action-button", "action":"restart"}},
+                                {"icon":"fa fa-hand-paper", "tooltip": "Stop optiSLang project gently.", "value": "stop_gently", "id": {"type":"action-button", "action":"stop_gently"}},
+                                {"icon": "fas fa-stop", "tooltip":"Stop optiSLang project.", "value": "stop", "id": {"type": "action-button", "action":"stop"}},
+                                {"icon": "fas fa-fast-backward", "tooltip": "Reset optiSLang project.", "value": "reset", "id": {"type":"action-button", "action":"reset"}},
+                                {"icon": "fas fa-power-off", "tooltip": "Shutdown optiSLang project.", "value": "shutdown", "id": {"type":"action-button", "action":"shutdown"}},
+                            ]
+    actor_btn_group_options: List = [
+                            {"icon": "fas fa-play", "tooltip": "Restart node.", "value": "restart", "id": {"type":"action-button", "action":"restart"}},
+                            {"icon":"fa fa-hand-paper", "tooltip": "Stop node gently.", "value": "stop_gently", "id": {"type":"action-button", "action":"stop_gently"}},
+                            {"icon": "fas fa-stop", "tooltip":"Stop node.", "value": "stop", "id": {"type": "action-button", "action":"stop"}},
+                            {"icon": "fas fa-fast-backward", "tooltip": "Reset node.", "value": "reset", "id": {"type":"action-button", "action":"reset"}},
+                        ]
 
     # Backend data model
     tcp_server_host: Optional[str] = None
@@ -70,7 +86,7 @@ class ProblemSetupStep(StepModel):
     actors_status_info: dict = {}
     results_files: dict = {}
     project_state: str = "NOT STARTED"
-    osl_project_states: list = [
+    osl_project_states: List = [
         "IDLE",
         "PROCESSING",
         "PAUSED",
@@ -81,7 +97,7 @@ class ProblemSetupStep(StepModel):
         "GENTLE_STOP_REQUESTED",
         "FINISHED"
     ]
-    osl_actor_states: list = [
+    osl_actor_states: List = [
         "Idle",
         "Succeeded",
         "Failed",
@@ -94,7 +110,7 @@ class ProblemSetupStep(StepModel):
         "Stopped",
         "Gently stopped"
     ]
-    optislang_logs: list = []
+    optislang_logs: List = []
     optislang_log_level: str = "INFO"
     project_initialized: bool = False
     command_timeout: int = 30
@@ -362,7 +378,7 @@ class ProblemSetupStep(StepModel):
                         self.actors_status_info[node.uid].append(
                             osl.get_osl_server().get_actor_status_info(node.uid, hid)
                         )
-             # Upload fields
+            # Upload fields
             self.transaction.upload(["project_state"])
             self.transaction.upload(["project_status_info"])
             self.transaction.upload(["actors_info"])
@@ -382,155 +398,32 @@ class ProblemSetupStep(StepModel):
                 "tcp_server_port",
                 "command_timeout",
                 "selected_actor_from_command",
-                "project_tree"
+                "project_tree",
+                "selected_command"
             ],
+            upload=["actor_uid"],
         )
     )
-    @long_running
-    def restart(self) -> None:
-        """Restart project/actor."""
-
+    def control_node_state(self) -> None:
+        """Update the state of root or actor node based on the project command in the UI."""
         osl = Optislang(
-            host=self.tcp_server_host,
-            port=self.tcp_server_port,
-            shutdown_on_finished=False
-        )
-
-        if self.selected_actor_from_command == osl.project.root_system.uid:
-            node = osl.project.root_system
+                host=self.tcp_server_host,
+                port=self.tcp_server_port,
+                shutdown_on_finished=False
+            )
+        if not self.selected_actor_from_command == "shutdown":
+            if self.selected_actor_from_command == osl.project.root_system.uid:
+                node = osl.project.root_system
+                self.actor_uid = None
+            else:
+                node = osl.project.root_system.find_node_by_uid(self.selected_actor_from_command, search_depth=-1)
+                self.actor_uid = node
         else:
-            node = osl.project.root_system.find_node_by_uid(self.selected_actor_from_command, search_depth=-1)
-
-        status = node.control("restart", wait_for_completion=True, timeout=self.command_timeout)
-
-        osl.dispose()
-
-        if not status:
-            raise Exception(f"Restart command against node {node.get_name()} failed.")
-
-    @transaction(
-        self=StepSpec(
-            download=[
-                "tcp_server_host",
-                "tcp_server_port",
-                "command_timeout",
-                "selected_actor_from_command",
-                "project_tree"
-            ],
-        )
-    )
-    @long_running
-    def stop_gently(self) -> None:
-        """Stop gently project/actor."""
-
-        osl = Optislang(
-            host=self.tcp_server_host,
-            port=self.tcp_server_port,
-            shutdown_on_finished=False
-        )
-
-        if self.selected_actor_from_command == osl.project.root_system.uid:
             node = osl.project.root_system
-        else:
-            node = osl.project.root_system.find_node_by_uid(self.selected_actor_from_command, search_depth=-1)
 
-        status = node.control("stop_gently", wait_for_completion=True, timeout=self.command_timeout)
-
-        osl.dispose()
+        status = node.control(self.selected_command, wait_for_completion=True, timeout=self.command_timeout)
 
         if not status:
-            raise Exception(f"Stop gently command against node {node.get_name()} failed.")
-
-    @transaction(
-        self=StepSpec(
-            download=[
-                "tcp_server_host",
-                "tcp_server_port",
-                "command_timeout",
-                "selected_actor_from_command",
-                "project_tree"
-            ],
-        )
-    )
-    @long_running
-    def stop(self) -> None:
-        """Stop project/actor."""
-
-        osl = Optislang(
-            host=self.tcp_server_host,
-            port=self.tcp_server_port,
-            shutdown_on_finished=False
-        )
-
-        if self.selected_actor_from_command == osl.project.root_system.uid:
-            node = osl.project.root_system
-        else:
-            node = osl.project.root_system.find_node_by_uid(self.selected_actor_from_command, search_depth=-1)
-
-        status = node.control("stop", wait_for_completion=True, timeout=self.command_timeout)
+            raise Exception(f"{self.selected_command.replace('_', ' ').title()} command against node {node.get_name()} failed.")
 
         osl.dispose()
-
-        if not status:
-            raise Exception(f"Stop command against node {node.get_name()} failed.")
-
-    @transaction(
-        self=StepSpec(
-            download=[
-                "tcp_server_host",
-                "tcp_server_port",
-                "command_timeout",
-                "selected_actor_from_command",
-                "project_tree"
-            ],
-        )
-    )
-    @long_running
-    def reset(self) -> None:
-        """Reset project/actor."""
-
-        osl = Optislang(
-            host=self.tcp_server_host,
-            port=self.tcp_server_port,
-            shutdown_on_finished=False
-        )
-
-        if self.selected_actor_from_command == osl.project.root_system.uid:
-            node = osl.project.root_system
-        else:
-            node = osl.project.root_system.find_node_by_uid(self.selected_actor_from_command, search_depth=-1)
-
-        status = node.control("reset", wait_for_completion=True, timeout=self.command_timeout)
-
-        osl.dispose()
-
-        if not status:
-            raise Exception(f"Reset command against node {node.get_name()} failed.")
-
-    @transaction(
-        self=StepSpec(
-            download=[
-                "tcp_server_host",
-                "tcp_server_port",
-                "command_timeout"
-            ],
-        )
-    )
-    @long_running
-    def shutdown(self) -> None:
-        """Shutdown project."""
-
-        osl = Optislang(
-            host=self.tcp_server_host,
-            port=self.tcp_server_port,
-            shutdown_on_finished=False
-        )
-
-        node = osl.project.root_system
-
-        status = node.control("shutdown", wait_for_completion=True, timeout=self.command_timeout)
-
-        osl.dispose()
-
-        if not status:
-            raise Exception(f"Shutdown command against node {node.get_name()} failed.")
