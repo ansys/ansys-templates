@@ -71,12 +71,13 @@ def update_page_content(active_tab, pathname):
     """Update the page content according to the selected tab."""
 
     project = DashClient[{{ cookiecutter.__solution_definition_name }}].get_project(pathname)
+    problem_setup_step = project.steps.problem_setup_step
     monitoring_step = project.steps.monitoring_step
 
     if active_tab == "project_summary_tab":
-        return project_summary_view.layout(monitoring_step)
+        return project_summary_view.layout(problem_setup_step, monitoring_step)
     elif active_tab == "summary_tab":
-        return summary_view.layout(monitoring_step)
+        return summary_view.layout(problem_setup_step, monitoring_step)
     elif active_tab == "result_files_tab":
         return result_files_view.layout(monitoring_step)
     elif active_tab == "scenery_tab":

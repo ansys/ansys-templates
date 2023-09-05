@@ -50,6 +50,16 @@ class ProblemSetupStep(StepModel):
     criteria: dict = {}
     ui_placeholders: dict = {}
     app_metadata: dict = {}
+    project_tree: list = []
+    treeview_items: list = [
+        {
+            "key": "problem_setup_step",
+            "text": "Problem Setup",
+            "depth": 0,
+            "uid": None
+        },
+    ]
+    optislang_log_level: str = "INFO"
     
     # File storage ----------------------------------------------------------------------------------------------------
 
@@ -57,14 +67,12 @@ class ProblemSetupStep(StepModel):
     project_file: FileReference = FileReference("Problem_Setup/{{ cookiecutter.__optiSLang_application_archive_stem }}.opf")
     properties_file: FileReference = FileReference("Problem_Setup/{{ cookiecutter.__optiSLang_application_archive_stem }}.json")
     metadata_file: FileReference = FileReference("Problem_Setup/metadata.json")
-    project_state_file: FileReference = FileReference("Problem_Setup/project_state.json")
     input_files: FileGroupReference = FileGroupReference("Problem_Setup/Input_Files/*.*")
     # If folder doesn't exist, it will be created later
     upload_directory: str = os.path.join(tempfile.gettempdir(), "GLOW")
 
     # Outputs
     working_properties_file: FileReference = FileReference("Problem_Setup/working_properties_file.json")
-    optislang_log_file: FileReference = FileReference("Problem_Setup/pyoptislang.log")
 
     # Methods ---------------------------------------------------------------------------------------------------------
 
@@ -258,6 +266,7 @@ class ProblemSetupStep(StepModel):
                 "input_files",
                 "project_file",
                 "working_properties_file",
+                "optislang_log_level"
             ],
             upload=[
                 "tcp_server_host",
@@ -273,6 +282,7 @@ class ProblemSetupStep(StepModel):
         osl = Optislang(
             project_path=self.project_file.path,
             reset=True,
+            loglevel=self.optislang_log_level,
             shutdown_on_finished=False,
             import_project_properties_file=self.working_properties_file.path,
             ini_timeout=300,  # might need to be adjusted depending on the hardware

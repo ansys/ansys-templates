@@ -9,6 +9,7 @@ from dash_extensions.enrich import html, Input, Output, State, dcc
 from ansys.saf.glow.client.dashclient import DashClient, callback
 
 from ansys.solutions.{{ cookiecutter.__solution_name_slug }}.solution.definition import {{ cookiecutter.__solution_definition_name }}
+from ansys.solutions.{{ cookiecutter.__solution_name_slug }}.solution.problem_setup_step import ProblemSetupStep
 from ansys.solutions.{{ cookiecutter.__solution_name_slug }}.solution.monitoring_step import MonitoringStep
 from ansys.solutions.{{ cookiecutter.__solution_name_slug }}.ui.components.node_control import NodeControlAIO
 from ansys.solutions.{{ cookiecutter.__solution_name_slug }}.ui.components.project_information_table import ProjectInformationTableAIO
@@ -16,7 +17,7 @@ from ansys.solutions.{{ cookiecutter.__solution_name_slug }}.ui.components.servi
 from ansys.solutions.{{ cookiecutter.__solution_name_slug }}.ui.components.button_group import ButtonGroup
 
 
-def layout(monitoring_step: MonitoringStep) -> html.Div:
+def layout(problem_setup_step: ProblemSetupStep, monitoring_step: MonitoringStep) -> html.Div:
     """Layout of the project summary view."""
     alert_props = {
         "children":monitoring_step.project_command_execution_status["alert-message"],
@@ -31,7 +32,7 @@ def layout(monitoring_step: MonitoringStep) -> html.Div:
             dbc.Row(
                 [
                     dbc.Col(html.Div(ProjectInformationTableAIO(monitoring_step), id="project_information_table"), width=8),
-                    dbc.Col(html.Div(ServiceTableAIO(monitoring_step), id="service_table"), width=4),
+                    dbc.Col(html.Div(ServiceTableAIO(problem_setup_step), id="service_table"), width=4),
                 ]
             ),
             html.Br(),

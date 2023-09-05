@@ -149,7 +149,6 @@ class MonitoringStep(StepModel):
         "Gently stopped"
     ]
     optislang_logs: List = []
-    optislang_log_level: str = "INFO"
     command_timeout: int = 30
 
     # File storage ----------------------------------------------------------------------------------------------------
@@ -187,12 +186,14 @@ class MonitoringStep(StepModel):
     def upload_project_data(self, problem_setup_step: ProblemSetupStep) -> None:
         """Monitor the progress of the optiSLang project and continuously upload project data."""
 
+        Path(self.optislang_log_file.path).parent.mkdir(parents=True, exist_ok=True)
+
         # Connect to optiSLang instance.
         osl = Optislang(
             host=problem_setup_step.tcp_server_host,
             port=problem_setup_step.tcp_server_port,
-            loglevel=self.optislang_log_level,
-            shutdown_on_finished=False
+            loglevel=problem_setup_step.optislang_log_level,
+            shutdown_on_finished=True
         )
 
         # Configure logging.
@@ -245,14 +246,13 @@ class MonitoringStep(StepModel):
                 "tcp_server_host",
                 "tcp_server_port",
                 "project_tree",
-                "optislang_log_level",
             ]
         ),
         self=StepSpec(
             download=[
                 "command_timeout",
                 "selected_actor_from_command",
-                "selected_command"
+                "selected_command",
             ],
             upload=["actor_uid"],
         )

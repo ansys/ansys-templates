@@ -258,12 +258,12 @@ def display_body_content(value, pathname, trigger_body_display):
     if problem_setup_step.project_initialized:
         triggered_id = callback_context.triggered[0]["prop_id"].split(".")[0]
         if triggered_id == "url" or triggered_id == "trigger_body_display" or trigger_body_display and len(triggered_id) == 0:
-            return problem_setup_page.layout(problem_setup_step)
+            return problem_setup_page.layout(problem_setup_step, monitoring_step)
         if triggered_id == "navigation_tree":
             if value is None:
                 page_layout = html.H1("Welcome!")
             elif value == "problem_setup_step":
-                page_layout = problem_setup_page.layout(problem_setup_step)
+                page_layout = problem_setup_page.layout(problem_setup_step, monitoring_step)
             else:
                 monitoring_step.selected_actor_from_treeview = extract_dict_by_key(problem_setup_step.treeview_items, "key", value, expect_unique=True, return_index=False)["uid"]
                 page_layout = monitoring_page.layout(problem_setup_step, monitoring_step)
