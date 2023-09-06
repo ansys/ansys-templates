@@ -60,7 +60,7 @@ class ProblemSetupStep(StepModel):
         },
     ]
     optislang_log_level: str = "INFO"
-    
+
     # File storage ----------------------------------------------------------------------------------------------------
 
     # Inputs
