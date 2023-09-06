@@ -48,7 +48,6 @@ layout = html.Div(
 )
 def initialization(pathname):
     """Run methods to initialize the solution."""
-
     project = DashClient[{{ cookiecutter.__solution_definition_name }}].get_project(pathname)
 
     if not project.steps.problem_setup_step.project_initialized:
@@ -73,7 +72,6 @@ def initialization(pathname):
 )
 def update_progress_bar(n_intervals, pathname):
     """Track status of solution initialization."""
-
     project = DashClient[{{ cookiecutter.__solution_definition_name }}].get_project(pathname)
     problem_setup_step = project.steps.problem_setup_step
 
@@ -120,7 +118,6 @@ def update_progress_bar(n_intervals, pathname):
 )
 def display_page_layout(pathname, trigger_layout_display):
     """Display page layout."""
-
     project = DashClient[{{ cookiecutter.__solution_definition_name }}].get_project(pathname)
     problem_setup_step = project.steps.problem_setup_step
 
@@ -162,7 +159,7 @@ def display_page_layout(pathname, trigger_layout_display):
                                 n_clicks = 0,
                                 href=DashClient.get_portal_ui_url(),
                                 style = {"background-color": "rgba(0, 0, 0, 1)", "border-color": "rgba(0, 0, 0, 1)"},
-                            )
+                            ) if DashClient.get_portal_ui_url() else []
                         ],
                     ),
                 ],
@@ -250,7 +247,6 @@ def display_page_layout(pathname, trigger_layout_display):
 )
 def display_body_content(value, pathname, trigger_body_display):
     """Display body content."""
-
     project = DashClient[{{ cookiecutter.__solution_definition_name }}].get_project(pathname)
     problem_setup_step = project.steps.problem_setup_step
     monitoring_step = project.steps.monitoring_step
@@ -279,7 +275,6 @@ def display_body_content(value, pathname, trigger_body_display):
 )
 def display_tree_view(pathname, trigger_treeview_display):
     """Display treeview with all project nodes."""
-
     project = DashClient[{{ cookiecutter.__solution_definition_name }}].get_project(pathname)
     problem_setup_step = project.steps.problem_setup_step
 
@@ -298,7 +293,7 @@ def display_tree_view(pathname, trigger_treeview_display):
     prevent_initial_call=True,
 )
 def display_optislang_logs(n_clicks, pathname, is_open):
-
+    """Display optiSLang logs."""
     project = DashClient[{{ cookiecutter.__solution_definition_name }}].get_project(pathname)
     monitoring_step = project.steps.monitoring_step
 
@@ -319,7 +314,6 @@ def display_optislang_logs(n_clicks, pathname, is_open):
 )
 def open_in_browser(n_clicks, pathname):
     """Open the Portal UI in browser view."""
-
     portal_ui_url = DashClient.get_portal_ui_url()
     webbrowser.open_new(portal_ui_url)
 

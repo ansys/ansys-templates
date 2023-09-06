@@ -1,6 +1,7 @@
 # ©2023, ANSYS Inc. Unauthorized use, distribution or duplication is prohibited.
 
 import dash_bootstrap_components as dbc
+import json
 import pandas as pd
 import uuid
 
@@ -85,8 +86,10 @@ class ActorStatisticsTableAIO(html.Div):
 
     def get_data(self, monitoring_step: MonitoringStep) -> pd.DataFrame:
 
-        if monitoring_step.selected_actor_from_treeview in monitoring_step.actors_info.keys():
-            actor_info = monitoring_step.actors_info[monitoring_step.selected_actor_from_treeview]
+        actors_info = json.loads(monitoring_step.actors_info_file.read_text())
+
+        if monitoring_step.selected_actor_from_treeview in actors_info.keys():
+            actor_info = actors_info[monitoring_step.selected_actor_from_treeview]
         else:
             actor_info = {}
 

@@ -2,6 +2,7 @@
 
 """Backend of the problem setup step."""
 
+import json
 import time
 
 from pathlib import Path
@@ -119,9 +120,6 @@ class MonitoringStep(StepModel):
                         ]
 
     # Backend data model
-    project_status_info: dict = {}
-    actors_info: dict = {}
-    actors_status_info: dict = {}
     results_files: dict = {}
     project_state: str = "NOT STARTED"
     osl_project_states: List = [
@@ -155,6 +153,9 @@ class MonitoringStep(StepModel):
 
     # Output
     optislang_log_file: FileReference = FileReference("Problem_Setup/pyoptislang.log")
+    project_status_info_file: FileReference = FileReference("Problem_Setup/project_status_info.json")
+    actors_info_file: FileReference = FileReference("Problem_Setup/actors_info.json")
+    actors_status_info_file: FileReference = FileReference("Problem_Setup/actors_status_info.json")
 
     # Methods ---------------------------------------------------------------------------------------------------------
 
@@ -169,12 +170,12 @@ class MonitoringStep(StepModel):
         ),
         self=StepSpec(
             upload=[
-                "actors_info",
-                "actors_status_info",
+                "project_state",
+                "project_status_info_file",
+                "actors_info_file",
+                "actors_status_info_file",
                 "optislang_logs",
                 "optislang_log_file",
-                "project_state",
-                "project_status_info",
                 "results_files",
             ],
         )
@@ -182,7 +183,7 @@ class MonitoringStep(StepModel):
     @long_running
     def upload_project_data(self, problem_setup_step: ProblemSetupStep) -> None:
         """Monitor the progress of the optiSLang project and continuously upload project data."""
-
+        # Creat monitoring directory
         Path(self.optislang_log_file.path).parent.mkdir(parents=True, exist_ok=True)
 
         # Connect to optiSLang instance.
@@ -208,27 +209,30 @@ class MonitoringStep(StepModel):
             self.project_state = osl.project.get_status()
             osl.log.info(f"Analysis status: {self.project_state}")
             # Get project status info
-            self.project_status_info = osl.get_osl_server().get_full_project_status_info()
+            with open(self.project_status_info_file.path, "w") as json_file: json.dump(osl.get_osl_server().get_full_project_status_info(), json_file)
             # Read pyoptislang logs
             self.optislang_logs = read_log_file(self.optislang_log_file.path)
             # Get actor status info
+            actors_info, actors_status_info = {}, {}
             for node_info in problem_setup_step.project_tree:
                 if node_info["uid"] == osl.project.root_system.uid:
                     node = osl.project.root_system
                 else:
                     node = osl.project.root_system.find_node_by_uid(node_info["uid"], search_depth=-1)
-                self.actors_info[node.uid] = osl.get_osl_server().get_actor_info(node.uid)
+                actors_info[node.uid] = osl.get_osl_server().get_actor_info(node.uid)
                 if node.get_states_ids():
-                    self.actors_status_info[node.uid] = []
+                    actors_status_info[node.uid] = []
                     for hid in node.get_states_ids():
-                        self.actors_status_info[node.uid].append(
+                        actors_status_info[node.uid].append(
                             osl.get_osl_server().get_actor_status_info(node.uid, hid)
                         )
+            with open(self.actors_info_file.path, "w") as json_file: json.dump(actors_info, json_file)
+            with open(self.actors_status_info_file.path, "w") as json_file: json.dump(actors_status_info, json_file)
             # Upload fields
             self.transaction.upload(["project_state"])
-            self.transaction.upload(["project_status_info"])
-            self.transaction.upload(["actors_info"])
-            self.transaction.upload(["actors_status_info"])
+            self.transaction.upload(["project_status_info_file"])
+            self.transaction.upload(["actors_info_file"])
+            self.transaction.upload(["actors_status_info_file"])
             self.transaction.upload(["optislang_logs"])
             if self.project_state == "FINISHED":
                 break
@@ -255,7 +259,7 @@ class MonitoringStep(StepModel):
         )
     )
     def control_node_state(self, problem_setup_step: ProblemSetupStep) -> None:
-        """Update the state of root or actor node based on the project command in the UI."""
+        """Update the state of root or actor node based on the selected command in the UI."""
         osl = Optislang(
                 host=problem_setup_step.tcp_server_host,
                 port=problem_setup_step.tcp_server_port,

@@ -1,6 +1,7 @@
 # ©2023, ANSYS Inc. Unauthorized use, distribution or duplication is prohibited.
 
 import dash_bootstrap_components as dbc
+import json
 import pandas as pd
 import uuid
 
@@ -97,13 +98,16 @@ class DesignTableAIO(html.Div):
 
     def get_data(self, monitoring_step: MonitoringStep) -> pd.DataFrame:
 
-        if monitoring_step.selected_actor_from_treeview in monitoring_step.actors_info.keys():
-            actor_info = monitoring_step.actors_info[monitoring_step.selected_actor_from_treeview]
+        actors_info = json.loads(monitoring_step.actors_info_file.read_text())
+        actors_status_info = json.loads(monitoring_step.actors_status_info.read_text())
+
+        if monitoring_step.selected_actor_from_treeview in actors_info.keys():
+            actor_info = actors_info[monitoring_step.selected_actor_from_treeview]
         else:
             actor_info = {}
 
-        if monitoring_step.selected_actor_from_treeview in monitoring_step.actors_status_info.keys():
-            actor_status_info = monitoring_step.actors_status_info[monitoring_step.selected_actor_from_treeview][0]
+        if monitoring_step.selected_actor_from_treeview in actors_status_info.keys():
+            actor_status_info = actors_status_info[monitoring_step.selected_actor_from_treeview][0]
         else:
             actor_status_info = {}
 

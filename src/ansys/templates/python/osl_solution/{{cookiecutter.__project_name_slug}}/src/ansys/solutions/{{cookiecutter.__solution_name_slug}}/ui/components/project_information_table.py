@@ -1,6 +1,7 @@
 # ©2023, ANSYS Inc. Unauthorized use, distribution or duplication is prohibited.
 
 import dash_bootstrap_components as dbc
+import json
 import pandas as pd
 import uuid
 
@@ -75,6 +76,8 @@ class ProjectInformationTableAIO(html.Div):
 
     def get_data(self, monitoring_step: MonitoringStep) -> pd.DataFrame:
 
+        project_status_info = json.loads(monitoring_step.project_status_info_file.read_text())
+
         project_summary_data = {
             "column_a": [
                 "State",
@@ -100,15 +103,15 @@ class ProjectInformationTableAIO(html.Div):
             ],
         }
 
-        if monitoring_step.project_status_info:
+        if project_status_info:
             project_summary_data["column_b"] = [
-                monitoring_step.project_status_info["projects"][0]["state"],
-                monitoring_step.project_status_info["projects"][0]["project_id"],
-                monitoring_step.project_status_info["projects"][0]["name"],
-                monitoring_step.project_status_info["projects"][0]["machine"],
-                monitoring_step.project_status_info["projects"][0]["location"],
-                monitoring_step.project_status_info["projects"][0]["working_dir"],
-                monitoring_step.project_status_info["projects"][0]["user"],
+                project_status_info["projects"][0]["state"],
+                project_status_info["projects"][0]["project_id"],
+                project_status_info["projects"][0]["name"],
+                project_status_info["projects"][0]["machine"],
+                project_status_info["projects"][0]["location"],
+                project_status_info["projects"][0]["working_dir"],
+                project_status_info["projects"][0]["user"],
                 "",
                 "",
             ]

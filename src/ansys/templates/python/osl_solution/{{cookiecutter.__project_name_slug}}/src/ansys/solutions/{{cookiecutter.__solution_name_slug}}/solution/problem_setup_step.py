@@ -88,7 +88,6 @@ class ProblemSetupStep(StepModel):
     @long_running
     def upload_bulk_files_to_project_directory(self) -> None:
         """Upload bulk files to project directory."""
-
         original_project_file = Path(__file__).parent.absolute().parent / "model" / "assets" / "{{ cookiecutter.__optiSLang_application_archive_stem }}.opf"
         self.project_file.write_bytes(original_project_file.read_bytes())
 
@@ -131,6 +130,7 @@ class ProblemSetupStep(StepModel):
         )
     )
     def write_updated_properties_file(self) -> None:
+        """Write updated optiSLang project properties file."""
         properties = apply_placeholders_to_properties_file(self.ui_placeholders, self.properties_file.path)
         self.placeholders = properties["placeholders"]
         self.registered_files = properties["registered_files"]
@@ -146,6 +146,7 @@ class ProblemSetupStep(StepModel):
         )
     )
     def update_osl_placeholders_with_ui_values(self) -> None:
+        """Update placeholders with values selected by the user in the UI."""
         properties = apply_placeholders_to_properties_file(self.ui_placeholders, self.properties_file.path)
         self.placeholders = properties["placeholders"]
         self.registered_files = properties["registered_files"]
@@ -160,7 +161,6 @@ class ProblemSetupStep(StepModel):
     )
     def check_ansys_ecosystem(self) -> None:
         """Check if Ansys Products are installed and if the appropriate versions are available."""
-
         self.ansys_ecosystem_ready = True
 
         # Collect optiSLang installations
@@ -227,7 +227,6 @@ class ProblemSetupStep(StepModel):
     @long_running
     def get_app_metadata(self) -> None:
         """Read OWA metadata file."""
-
         with open(self.metadata_file.path) as f:
             self.app_metadata = json.load(f)
 
@@ -245,7 +244,6 @@ class ProblemSetupStep(StepModel):
     @long_running
     def get_project_tree(self) -> None:
         """Get the project tree of the optiSLang project."""
-
         # Start optiSLang instance.
         osl = Optislang(
             project_path=self.project_file.path,
@@ -276,7 +274,6 @@ class ProblemSetupStep(StepModel):
     )
     def start(self) -> None:
         """Start optiSLang and run the project."""
-
         # Start optiSLang instance.
         osl = Optislang(
             project_path=self.project_file.path,
