@@ -13,7 +13,6 @@ from typing import List, Optional
 from ansys.optislang.core import Optislang, logging, utils
 from ansys.saf.glow.solution import FileReference, FileGroupReference, StepModel, StepSpec, long_running, transaction
 from ansys.solutions.optislang.frontend_components.project_properties import ProjectProperties, write_properties_file, apply_placeholders_to_properties_file
-from ansys.solutions.products_ecosystem.controller import AnsysProductsEcosystemController
 
 from ansys.solutions.{{ cookiecutter.__solution_name_slug }}.utilities.common_functions import get_treeview_items_from_project_tree, read_log_file
 
@@ -170,19 +169,6 @@ class ProblemSetupStep(StepModel):
             for product_version in self.ansys_ecosystem["optislang"]["installed_versions"]
             if product_version in self.ansys_ecosystem["optislang"]["authorized_versions"]
         ]
-
-        # Collect additonnal Ansys products installations
-        controller = AnsysProductsEcosystemController()
-        for product_name in self.ansys_ecosystem.keys():
-            if product_name != "optislang":
-                self.ansys_ecosystem[product_name]["installed_versions"] = controller.get_installed_versions(
-                    product_name, output_format="long"
-                )
-                self.ansys_ecosystem[product_name]["compatible_versions"] = [
-                    product_version
-                    for product_version in self.ansys_ecosystem[product_name]["installed_versions"]
-                    if product_version in self.ansys_ecosystem[product_name]["authorized_versions"]
-                ]
 
         # Check ecosystem
         for product_name in self.ansys_ecosystem.keys():
