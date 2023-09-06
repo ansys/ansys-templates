@@ -2,6 +2,7 @@
 
 """Frontend of the visualization view."""
 
+import json
 import optislang_dash_lib
 
 from dash_extensions.enrich import html
@@ -12,11 +13,13 @@ from ansys.solutions.{{ cookiecutter.__solution_name_slug }}.solution.monitoring
 def layout(monitoring_step: MonitoringStep) -> html.Div:
     """Layout of the visualization view."""
 
+    project_status_info = json.loads(monitoring_step.project_status_info_file.read_text())
+
     return html.Div(
         [
             optislang_dash_lib.VisualizationComponent(
                 id="visualization-component",
-                project_state=monitoring_step.project_status_info,
+                project_state=project_status_info,
                 system_id=monitoring_step.selected_actor_from_treeview,
                 state_idx=0,
             ),

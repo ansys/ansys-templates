@@ -99,7 +99,7 @@ class DesignTableAIO(html.Div):
     def get_data(self, monitoring_step: MonitoringStep) -> pd.DataFrame:
 
         actors_info = json.loads(monitoring_step.actors_info_file.read_text())
-        actors_status_info = json.loads(monitoring_step.actors_status_info.read_text())
+        actors_status_info = json.loads(monitoring_step.actors_status_info_file.read_text())
 
         if monitoring_step.selected_actor_from_treeview in actors_info.keys():
             actor_info = actors_info[monitoring_step.selected_actor_from_treeview]
