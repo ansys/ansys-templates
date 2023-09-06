@@ -168,9 +168,6 @@ class MonitoringStep(StepModel):
             ]
         ),
         self=StepSpec(
-            download=[
-                "optislang_log_level",
-            ],
             upload=[
                 "actors_info",
                 "actors_status_info",
@@ -198,7 +195,7 @@ class MonitoringStep(StepModel):
 
         # Configure logging.
         osl_logger = logging.OslLogger(
-            loglevel=self.optislang_log_level,
+            loglevel=problem_setup_step.optislang_log_level,
             log_to_file=True,
             logfile_name=self.optislang_log_file.path,
             log_to_stdout=True,

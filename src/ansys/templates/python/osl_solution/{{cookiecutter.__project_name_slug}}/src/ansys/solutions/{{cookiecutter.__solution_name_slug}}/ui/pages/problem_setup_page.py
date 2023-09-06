@@ -15,10 +15,11 @@ from ansys.solutions.optislang.frontend_components.load_sections import to_dash_
 
 from ansys.solutions.{{ cookiecutter.__solution_name_slug }}.solution.definition import {{ cookiecutter.__solution_definition_name }}
 from ansys.solutions.{{ cookiecutter.__solution_name_slug }}.solution.problem_setup_step import ProblemSetupStep
+from ansys.solutions.{{ cookiecutter.__solution_name_slug }}.solution.monitoring_step import MonitoringStep
 from ansys.solutions.{{ cookiecutter.__solution_name_slug }}.utilities.common_functions import check_empty_strings, update_alerts
 
 
-def layout(problem_setup_step: ProblemSetupStep) -> html.Div:
+def layout(problem_setup_step: ProblemSetupStep, monitoring_step: MonitoringStep) -> html.Div:
     """Layout of the problem setup step."""
 
     project_properties_sections = to_dash_sections(
@@ -56,7 +57,7 @@ def layout(problem_setup_step: ProblemSetupStep) -> html.Div:
                     dbc.Col(
                         [
                             dbc.Stack(
-                                update_alerts(problem_setup_step),
+                                update_alerts(problem_setup_step, monitoring_step),
                                 id="alert_messages",
                                 direction="horizontal",
                                 gap=3,
@@ -182,7 +183,7 @@ def start_analysis(n_clicks, pathname):
             return (
                 True,
                 problem_setup_step.treeview_items,
-                update_alerts(problem_setup_step),
+                update_alerts(problem_setup_step, monitoring_step),
                 True,
                 True,
                 to_dash_sections(
@@ -194,7 +195,7 @@ def start_analysis(n_clicks, pathname):
             return (
                 True,
                 problem_setup_step.treeview_items,
-                update_alerts(problem_setup_step),
+                update_alerts(problem_setup_step, monitoring_step),
                 True,
                 False,
                 to_dash_sections(
@@ -217,9 +218,10 @@ def update_alert_messages(n_intervals, n_clicks, pathname):
 
     project = DashClient[{{ cookiecutter.__solution_definition_name }}].get_project(pathname)
     problem_setup_step = project.steps.problem_setup_step
+    monitoring_step = project.steps.monitoring_step
 
     if problem_setup_step.ansys_ecosystem_ready:
-        return update_alerts(problem_setup_step)
+        return update_alerts(problem_setup_step, monitoring_step)
     else:
         raise PreventUpdate
 

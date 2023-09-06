@@ -274,7 +274,6 @@ class ProblemSetupStep(StepModel):
             ],
         )
     )
-    @long_running
     def start(self) -> None:
         """Start optiSLang and run the project."""
 
