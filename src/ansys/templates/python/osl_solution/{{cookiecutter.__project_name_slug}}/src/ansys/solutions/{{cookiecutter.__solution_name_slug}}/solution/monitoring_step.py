@@ -236,7 +236,7 @@ class MonitoringStep(StepModel):
             self.transaction.upload(["optislang_logs"])
             if self.project_state == "FINISHED":
                 break
-            time.sleep(3)
+            time.sleep(3) # Waiting 3 sec before pulling new data. The frequency might be adjusted in the future.
 
         # Close connection with optiSLang server.
         osl.dispose()
