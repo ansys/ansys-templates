@@ -72,7 +72,7 @@ class ServiceTableAIO(html.Div):
             )
         ])
 
-    def get_data(self, problem_setup_step) -> pd.DataFrame:
+    def get_data(self, problem_setup_step: ProblemSetupStep) -> pd.DataFrame:
 
         data = {
             "column_a": [

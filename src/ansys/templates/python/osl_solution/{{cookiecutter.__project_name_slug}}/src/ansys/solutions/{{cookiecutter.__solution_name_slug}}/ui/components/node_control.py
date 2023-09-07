@@ -13,16 +13,16 @@ from ansys.saf.glow.core.method_status import MethodStatus
 from ansys.solutions.{{ cookiecutter.__solution_name_slug }}.solution.definition import {{ cookiecutter.__solution_definition_name }}
 from ansys.solutions.{{ cookiecutter.__solution_name_slug }}.ui.components.button_group import ButtonGroup
 
-class ProjectCommandsAIO(html.Div):
+class NodeControlAIO(html.Div):
 
     class ids:
         button_group = lambda aio_id: {
-            'component': 'ProjectCommandsAIO',
+            'component': 'NodeControlAIO',
             'subcomponent': 'btn_group',
             'aio_id': aio_id
         }
         alert = lambda aio_id: {
-            'component': 'ProjectCommandsAIO',
+            'component': 'NodeControlAIO',
             'subcomponent': 'alert',
             'aio_id': aio_id
         }
@@ -30,7 +30,7 @@ class ProjectCommandsAIO(html.Div):
     ids = ids
 
     def __init__(self, button_group, alert_props, aio_id: str = None):
-        """ProjectCommandsAIO is an All-in-One component that is composed
+        """NodeControlAIO is an All-in-One component that is composed
         of a parent `html.Div` with a `dbc.Stack` and a `dbc.Alert` as children.
 
         - `button_group` - The container of buttons used to build the project commands.
@@ -94,32 +94,32 @@ class ProjectCommandsAIO(html.Div):
     def run_command(action_requested, pathname):
         """This performs actions such as stopping, restarting, and shutting down on an instance of optiSlang when action is requested. A message with the status of the method execution and states of each button is updated on completion of the method."""
         project = DashClient[{{ cookiecutter.__solution_definition_name }}].get_project(pathname)
-        problem_setup_step = project.steps.problem_setup_step
-        problem_setup_step.selected_actor_from_command = problem_setup_step.selected_actor_from_treeview
+        monitoring_step = project.steps.monitoring_step
+        monitoring_step.selected_actor_from_command = monitoring_step.selected_actor_from_treeview
         ctx = callback_context
         if (ctx.triggered and action_requested):
             alert_status = {"alert-message": "", "alert-color": ""}
             try:
-                problem_setup_step.control_node_state()
-                command_execution_state = problem_setup_step.get_method_state("control_node_state").status
+                monitoring_step.control_node_state()
+                command_execution_state = monitoring_step.get_method_state("control_node_state").status
                 if command_execution_state == MethodStatus.Completed:
-                    alert_status["alert-message"] =  f"{problem_setup_step.selected_command.replace('_', ' ').title()} command completed successfully.",
+                    alert_status["alert-message"] =  f"{monitoring_step.selected_command.replace('_', ' ').title()} command completed successfully.",
                     alert_status["alert-color"] = "success"
             except Exception as e:
-                alert_status["alert-message"] = f"{problem_setup_step.selected_command.replace('_', ' ').title()} command failed. For details, review the logs.",
+                alert_status["alert-message"] = f"{monitoring_step.selected_command.replace('_', ' ').title()} command failed. For details, review the logs.",
                 alert_status["alert-color"] = "warning"
         else:
             raise PreventUpdate
-        if problem_setup_step.actor_uid:
-            problem_setup_step.actor_command_execution_status = alert_status
-            problem_setup_step.project_command_execution_status = {"alert-message": "", "alert-color": ""}
-            btn_group_options = problem_setup_step.actor_btn_group_options
+        if monitoring_step.actor_uid:
+            monitoring_step.actor_command_execution_status = alert_status
+            monitoring_step.project_command_execution_status = {"alert-message": "", "alert-color": ""}
+            btn_group_options = monitoring_step.actor_btn_group_options
         else:
-            problem_setup_step.project_command_execution_status = alert_status
-            problem_setup_step.actor_command_execution_status = {"alert-message": "", "alert-color": ""}
-            btn_group_options = problem_setup_step.project_btn_group_options
-        problem_setup_step.commands_locked = False
-        return alert_status["alert-message"], alert_status["alert-color"], bool(alert_status["alert-message"]), ButtonGroup(options=btn_group_options, disabled=problem_setup_step.commands_locked).buttons
+            monitoring_step.project_command_execution_status = alert_status
+            monitoring_step.actor_command_execution_status = {"alert-message": "", "alert-color": ""}
+            btn_group_options = monitoring_step.project_btn_group_options
+        monitoring_step.commands_locked = False
+        return alert_status["alert-message"], alert_status["alert-color"], bool(alert_status["alert-message"]), ButtonGroup(options=btn_group_options, disabled=monitoring_step.commands_locked).buttons
 
     @callback(
         Output("action-requested", "children"),
@@ -132,8 +132,8 @@ class ProjectCommandsAIO(html.Div):
     def set_selected_command_and_disable_buttons(n_clicks_actions, button_states, pathname):
         """This disables all project and actor command buttons on click of a button and sends and returns a bool for action requested."""
         project = DashClient[{{ cookiecutter.__solution_definition_name }}].get_project(pathname)
-        problem_setup_step = project.steps.problem_setup_step
-        problem_setup_step.selected_actor_from_command = problem_setup_step.selected_actor_from_treeview
+        monitoring_step = project.steps.monitoring_step
+        monitoring_step.selected_actor_from_command = monitoring_step.selected_actor_from_treeview
         ctx = callback_context
         if (
             ctx.triggered
@@ -141,9 +141,9 @@ class ProjectCommandsAIO(html.Div):
         ):
             triggered_button = callback_context.triggered[0]["prop_id"].split(".")[0]
             action = json.loads(triggered_button)["action"]
-            problem_setup_step.selected_command = action
+            monitoring_step.selected_command = action
             disable_buttons = [True] * len(button_states)
-            problem_setup_step.commands_locked = True
+            monitoring_step.commands_locked = True
         else:
             raise PreventUpdate
         return True, disable_buttons

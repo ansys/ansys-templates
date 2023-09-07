@@ -283,22 +283,6 @@ url = "https://pkgs.dev.azure.com/pyansys/_packaging/ansys-solutions/pypi/simple
 reference = "solutions-private-pypi"
 
 [[package]]
-name = "ansys-solutions-products-ecosystem"
-version = "0.1.dev0"
-description = ""
-optional = false
-python-versions = ">=3.8,<3.11"
-files = [
-    {file = "ansys-solutions-products-ecosystem-0.1.dev0.tar.gz", hash = "sha256:23a68f100675d85371f5911c99ab5f3498702b2c05374fd772db104499f56dc8"},
-    {file = "ansys_solutions_products_ecosystem-0.1.dev0-py3-none-any.whl", hash = "sha256:e2d44ee3ccd9f7200e80982760647eb9949af77e65be10c2d6ae831731867d18"},
-]
-
-[package.source]
-type = "legacy"
-url = "https://pkgs.dev.azure.com/pyansys/_packaging/ansys-solutions/pypi/simple"
-reference = "solutions-private-pypi"
-
-[[package]]
 name = "ansys-sphinx-theme"
 version = "0.8.2"
 description = "A theme devised by ANSYS, Inc. for Sphinx documentation."
@@ -3846,4 +3830,4 @@ testing = ["big-O", "jaraco.functools", "jaraco.itertools", "more-itertools", "p
 [metadata]
 lock-version = "2.0"
 python-versions = ">=3.8, <3.11"
-content-hash = "83978388a3ae2a90c0715101ed67c7e002d898f9bcb49e924c577cb24c6efa09"
+content-hash = "de6eb34f2b0b51da930d3420b066f17e45d73056ed62e3dec97709dc1fcb20ab"

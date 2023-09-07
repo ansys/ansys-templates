@@ -242,7 +242,7 @@ def update_placeholders(ui_values: list, placeholders: dict) -> dict:
     return updated_dict
 
 
-def update_alerts(problem_setup_step) -> list:
+def update_alerts(problem_setup_step, monitoring_step) -> list:
     """Update all Alerts."""
 
     alerts = []
@@ -273,10 +273,10 @@ def update_alerts(problem_setup_step) -> list:
         )
 
     # optiSLang solve alert
-    if problem_setup_step.project_state in PROJECT_STATES.keys():
-        solve_message, solve_color = PROJECT_STATES[problem_setup_step.project_state]["alert"], PROJECT_STATES[problem_setup_step.project_state]["color"]
+    if monitoring_step.project_state in PROJECT_STATES.keys():
+        solve_message, solve_color = PROJECT_STATES[monitoring_step.project_state]["alert"], PROJECT_STATES[monitoring_step.project_state]["color"]
     else:
-        raise ValueError(f"Unknown optiSLang state: {problem_setup_step.project_state}.")
+        raise ValueError(f"Unknown optiSLang state: {monitoring_step.project_state}.")
 
     alerts.append(
         html.Div(
