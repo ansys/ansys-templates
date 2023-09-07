@@ -327,8 +327,7 @@ def update_ui_placeholders(value, id, pathname):
     else:
         ui_data.update({name: value})
     problem_setup_step.ui_placeholders = ui_data
-    update_state = problem_setup_step.get_method_state("update_osl_placeholders_with_ui_values").status
-    while update_state == MethodStatus.Running: # current workaround to avoid raising ConflictError: {"detail":"update_osl_placeholders_with_ui_values is already running"}
+    while problem_setup_step.get_method_state("update_osl_placeholders_with_ui_values").status == MethodStatus.Running: # current workaround to avoid raising ConflictError: {"detail":"update_osl_placeholders_with_ui_values is already running"}
         time.sleep(0.1)
     problem_setup_step.update_osl_placeholders_with_ui_values()
 
@@ -430,8 +429,7 @@ def update_start_designs_table(n_clicks_add, n_clicks_del, disabled_states, row_
         ui_data.update({"StartDesigns": new_designs})
 
         problem_setup_step.ui_placeholders = ui_data
-        update_state = problem_setup_step.get_method_state("update_osl_placeholders_with_ui_values").status
-        while update_state == MethodStatus.Running: # current workaround to avoid raising ConflictError: {"detail":"update_osl_placeholders_with_ui_values is already running"}
+        while problem_setup_step.get_method_state("update_osl_placeholders_with_ui_values").status == MethodStatus.Running: # current workaround to avoid raising ConflictError: {"detail":"update_osl_placeholders_with_ui_values is already running"}
             time.sleep(0.1)
         problem_setup_step.update_osl_placeholders_with_ui_values()
 
