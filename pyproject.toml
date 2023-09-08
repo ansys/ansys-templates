@@ -9,9 +9,9 @@ version = "0.1.dev0"
 description = "A python wrapper for ansys product library"
 license = "MIT"
 authors = ["ANSYS, Inc. <pyansys.core@ansys.com>"]
-maintainers = ["PyAnsys developers <pyansys.maintainers@ansys.com>"]
+maintainers = ["PyAnsys developers <pyansys.core@ansys.com>"]
 readme = "README.rst"
-repository = "https://github.com/pyansys/pyproduct-library"
+repository = "https://github.com/ansys/pyproduct-library"
 classifiers = [
     "Development Status :: 4 - Beta",
     "Programming Language :: Python :: 3",
@@ -23,7 +23,7 @@ packages = [
 ]
 
 [tool.poetry.dependencies]
-python = ">=3.7,<4.0"
+python = ">=3.8,<4.0"
 importlib-metadata = {version = "^4.0", python = "<3.8"}
 
 # Optional documentation dependencies
