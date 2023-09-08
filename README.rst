@@ -31,7 +31,7 @@ need to follow these steps:
 
    .. code:: bash
 
-      git clone https://github.com/pyansys/pyproduct-library
+      git clone https://github.com/ansys/pyproduct-library
 
 #. Create a fresh-clean Python environment and activate it. Refer to the
    official `venv`_ documentation if you require further information:
