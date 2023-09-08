@@ -9,9 +9,6 @@ trigger:
 pool:
   vmImage: ubuntu-latest
 strategy:
-    Python37:
-      python.version: '3.7'
-      tox.env: 'py37'
     Python38:
       python.version: '3.8'
       tox.env: 'py38'
