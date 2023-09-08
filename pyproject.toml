@@ -8,13 +8,13 @@ name = "ansys-product-library"
 version = "0.1.dev0"
 description = "A python wrapper for ansys product library"
 readme = "README.rst"
-requires-python = ">=3.7"
+requires-python = ">=3.8"
 license = {file = "LICENSE"}
 authors = [
     {name = "ANSYS, Inc.", email = "pyansys.support@ansys.com"},
 ]
 maintainers = [
-    {name = "PyAnsys developers", email = "pyansys.maintainers@ansys.com"},
+    {name = "PyAnsys developers", email = "pyansys.core@ansys.com"},
 ]
 
 classifiers = [
@@ -44,9 +44,9 @@ doc = [
 name = "ansys.product.library"
 
 [project.urls]
-Source = "https://github.com/pyansys/pyproduct-library"
-Tracker = "https://github.com/pyansys/pyproduct-library/issues"
-Homepage = "https://github.com/pyansys/pyproduct-library"
+Source = "https://github.com/ansys/pyproduct-library"
+Tracker = "https://github.com/ansys/pyproduct-library/issues"
+Homepage = "https://github.com/ansys/pyproduct-library"
 
 
 [tool.black]
