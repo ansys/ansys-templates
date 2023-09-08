@@ -48,6 +48,9 @@ PYTHON_TEMPLATES_PYANSYS_PATH = PYTHON_TEMPLATES_PATH / "pyansys"
 PYTHON_TEMPLATES_PYANSYS_ADVANCED_PATH = PYTHON_TEMPLATES_PATH / "pyansys_advanced"
 """Path to the advanced PyAnsys Python Package template."""
 
+PYTHON_TEMPLATES_ANSYS_API_PATH = PYTHON_TEMPLATES_PATH / "ansys_api"
+"""Path to the Ansys API Python Package template."""
+
 PYTHON_TEMPLATES_PYANSYS_OPENAPI_CLIENT_PATH = PYTHON_TEMPLATES_PATH / "pyansys_openapi_client"
 """Path to the PyAnsys OpenAPI Client Package template."""
 
@@ -79,6 +82,7 @@ TEMPLATE_PATH_FINDER = {
     "pybasic": PYTHON_TEMPLATES_PYBASIC_PATH,
     "pyansys": PYTHON_TEMPLATES_PYANSYS_PATH,
     "pyansys-advanced": PYTHON_TEMPLATES_PYANSYS_ADVANCED_PATH,
+    "ansys-api": PYTHON_TEMPLATES_ANSYS_API_PATH,
     "pyansys-openapi-client": PYTHON_TEMPLATES_PYANSYS_OPENAPI_CLIENT_PATH,
     "pyace": PYTHON_TEMPLATES_PYACE_PATH,
     "pyace-grpc": PYTHON_TEMPLATES_PYACE_GRPC_PATH,
