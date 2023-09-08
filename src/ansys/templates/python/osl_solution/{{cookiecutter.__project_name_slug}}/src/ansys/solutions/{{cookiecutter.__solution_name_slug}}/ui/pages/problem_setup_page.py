@@ -15,10 +15,11 @@ from ansys.solutions.optislang.frontend_components.load_sections import to_dash_
 
 from ansys.solutions.{{ cookiecutter.__solution_name_slug }}.solution.definition import {{ cookiecutter.__solution_definition_name }}
 from ansys.solutions.{{ cookiecutter.__solution_name_slug }}.solution.problem_setup_step import ProblemSetupStep
+from ansys.solutions.{{ cookiecutter.__solution_name_slug }}.solution.monitoring_step import MonitoringStep
 from ansys.solutions.{{ cookiecutter.__solution_name_slug }}.utilities.common_functions import check_empty_strings, update_alerts
 
 
-def layout(problem_setup_step: ProblemSetupStep) -> html.Div:
+def layout(problem_setup_step: ProblemSetupStep, monitoring_step: MonitoringStep) -> html.Div:
     """Layout of the problem setup step."""
 
     project_properties_sections = to_dash_sections(
@@ -56,7 +57,7 @@ def layout(problem_setup_step: ProblemSetupStep) -> html.Div:
                     dbc.Col(
                         [
                             dbc.Stack(
-                                update_alerts(problem_setup_step),
+                                update_alerts(problem_setup_step, monitoring_step),
                                 id="alert_messages",
                                 direction="horizontal",
                                 gap=3,
@@ -152,10 +153,11 @@ for alert in ["optislang_version", "optislang_solve"]:
     prevent_initial_call=True,
 )
 def start_analysis(n_clicks, pathname):
-    """Start optiSLang and run the simulation. Wait for the process to complete."""
+    """Start optiSLang and run the project."""
 
     project = DashClient[{{ cookiecutter.__solution_definition_name }}].get_project(pathname)
     problem_setup_step = project.steps.problem_setup_step
+    monitoring_step = project.steps.monitoring_step
 
     if n_clicks:
         ui_data = problem_setup_step.ui_placeholders
@@ -164,6 +166,8 @@ def start_analysis(n_clicks, pathname):
         # Check if Ansys products are available
         project.steps.problem_setup_step.check_ansys_ecosystem()
         if problem_setup_step.ansys_ecosystem_ready:
+            # Read project tree and update treeview
+            problem_setup_step.get_project_tree()
             # Update project properties file prior to the solve
             problem_setup_step.write_updated_properties_file()
             # Start analysis
@@ -171,13 +175,15 @@ def start_analysis(n_clicks, pathname):
             # Lock start analysis and ui data
             problem_setup_step.analysis_locked = True
             problem_setup_step.project_locked = True
+            # Start monitoring
+            monitoring_step.upload_project_data()
             # Wait until the analysis effectively starts
-            while problem_setup_step.project_state == "NOT STARTED":
+            while monitoring_step.project_state == "NOT STARTED":
                 time.sleep(1)
             return (
                 True,
                 problem_setup_step.treeview_items,
-                update_alerts(problem_setup_step),
+                update_alerts(problem_setup_step, monitoring_step),
                 True,
                 True,
                 to_dash_sections(
@@ -189,7 +195,7 @@ def start_analysis(n_clicks, pathname):
             return (
                 True,
                 problem_setup_step.treeview_items,
-                update_alerts(problem_setup_step),
+                update_alerts(problem_setup_step, monitoring_step),
                 True,
                 False,
                 to_dash_sections(
@@ -212,9 +218,10 @@ def update_alert_messages(n_intervals, n_clicks, pathname):
 
     project = DashClient[{{ cookiecutter.__solution_definition_name }}].get_project(pathname)
     problem_setup_step = project.steps.problem_setup_step
+    monitoring_step = project.steps.monitoring_step
 
     if problem_setup_step.ansys_ecosystem_ready:
-        return update_alerts(problem_setup_step)
+        return update_alerts(problem_setup_step, monitoring_step)
     else:
         raise PreventUpdate
 
@@ -320,8 +327,7 @@ def update_ui_placeholders(value, id, pathname):
     else:
         ui_data.update({name: value})
     problem_setup_step.ui_placeholders = ui_data
-    update_state = problem_setup_step.get_method_state("update_osl_placeholders_with_ui_values").status
-    while update_state == MethodStatus.Running: # current workaround to avoid raising ConflictError: {"detail":"update_osl_placeholders_with_ui_values is already running"}
+    while problem_setup_step.get_method_state("update_osl_placeholders_with_ui_values").status == MethodStatus.Running: # current workaround to avoid raising ConflictError: {"detail":"update_osl_placeholders_with_ui_values is already running"}
         time.sleep(0.1)
     problem_setup_step.update_osl_placeholders_with_ui_values()
 
@@ -423,8 +429,7 @@ def update_start_designs_table(n_clicks_add, n_clicks_del, disabled_states, row_
         ui_data.update({"StartDesigns": new_designs})
 
         problem_setup_step.ui_placeholders = ui_data
-        update_state = problem_setup_step.get_method_state("update_osl_placeholders_with_ui_values").status
-        while update_state == MethodStatus.Running: # current workaround to avoid raising ConflictError: {"detail":"update_osl_placeholders_with_ui_values is already running"}
+        while problem_setup_step.get_method_state("update_osl_placeholders_with_ui_values").status == MethodStatus.Running: # current workaround to avoid raising ConflictError: {"detail":"update_osl_placeholders_with_ui_values is already running"}
             time.sleep(0.1)
         problem_setup_step.update_osl_placeholders_with_ui_values()
 

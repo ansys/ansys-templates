@@ -4,10 +4,10 @@
 
 from dash_extensions.enrich import html
 
-from ansys.solutions.{{ cookiecutter.__solution_name_slug }}.solution.problem_setup_step import ProblemSetupStep
+from ansys.solutions.{{ cookiecutter.__solution_name_slug }}.solution.monitoring_step import MonitoringStep
 
 
-def layout(problem_setup_step: ProblemSetupStep) -> html.Div:
+def layout(monitoring_step: MonitoringStep) -> html.Div:
     """Layout of the result files view."""
 
     return html.Div([])

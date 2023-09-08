@@ -6,7 +6,7 @@ import uuid
 from dash_extensions.enrich import html, dcc
 
 from ansys.solutions.{{ cookiecutter.__solution_name_slug }}.solution.definition import {{ cookiecutter.__solution_definition_name }}
-from ansys.solutions.{{ cookiecutter.__solution_name_slug }}.solution.problem_setup_step import ProblemSetupStep
+from ansys.solutions.{{ cookiecutter.__solution_name_slug }}.solution.monitoring_step import MonitoringStep
 from ansys.solutions.{{ cookiecutter.__solution_name_slug }}.utilities.common_functions import (
     remove_key_from_dictionaries,
     sort_dict_by_ordered_keys,
@@ -39,11 +39,11 @@ class SystemFilesAIO(html.Div):
 
     ids = ids
 
-    def __init__(self, problem_setup_step: ProblemSetupStep, aio_id: str = None):
+    def __init__(self, monitoring_step: MonitoringStep, aio_id: str = None):
         """SystemFilesAIO is an All-in-One component that is composed
         of a parent `html.Div` with a `dcc.Interval` and a `dash_table.DataTable` as children.
 
-        - `problem_setup_step` - The StepModel object of the problem setup step.
+        - `monitoring_step` - The StepModel object of the monitoring step.
         - `datatable_props` - A dictionary of properties passed into the dash_table.DataTable component.
         - `interval_props` - A dictionary of properties passed into the dcc.Interval component.
         - `aio_id` - The All-in-One component ID used to generate the table components's dictionary IDs.
