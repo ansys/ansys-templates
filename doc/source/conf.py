@@ -50,7 +50,7 @@ html_context = {
 
 # specify the location of your github repo
 html_theme_options = {
-    "github_url": "https://github.com/ansys/ansys-template",
+    "github_url": "https://github.com/ansys/ansys-templates",
     "use_edit_page_button": True,
     "show_prev_next": False,
     "switcher": {
