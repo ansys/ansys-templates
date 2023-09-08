@@ -7,7 +7,7 @@ setup(
     author="ANSYS, Inc.",
     author_email="pyansys.support@ansys.com",
     maintainer="PyAnsys developers",
-    maintainer_email="pyansys.maintainers@ansys.com",
+    maintainer_email="pyansys.core@ansys.com",
     classifiers=[
         "Development Status :: 4 - Beta",
         "Programming Language :: Python :: 3",

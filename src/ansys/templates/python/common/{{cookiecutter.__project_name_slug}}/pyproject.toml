@@ -23,7 +23,7 @@ authors = [
     {name = "ANSYS, Inc.", email = "pyansys.support@ansys.com"},
 ]
 maintainers = [
-    {name = "PyAnsys developers", email = "pyansys.maintainers@ansys.com"},
+    {name = "PyAnsys developers", email = "pyansys.core@ansys.com"},
 ]
 
 classifiers = [
@@ -65,7 +65,7 @@ version = "{{ cookiecutter.__version }}"
 description = "{{ cookiecutter.__short_description }}"
 license = "MIT"
 authors = ["ANSYS, Inc. <pyansys.core@ansys.com>"]
-maintainers = ["PyAnsys developers <pyansys.maintainers@ansys.com>"]
+maintainers = ["PyAnsys developers <pyansys.core@ansys.com>"]
 readme = "README.rst"
 repository = "{{ cookiecutter.__repository_url }}"
 classifiers = [
