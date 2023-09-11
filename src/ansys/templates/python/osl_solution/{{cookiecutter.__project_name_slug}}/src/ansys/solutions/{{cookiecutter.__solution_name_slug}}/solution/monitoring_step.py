@@ -24,6 +24,7 @@ class MonitoringStep(StepModel):
     selected_actor_from_treeview: Optional[str] = None
     selected_command: Optional[str] = None
     selected_actor_from_command: Optional[str] = None
+    selected_actor_from_treeview_states_ids: list = []
     commands_locked: bool = False
     auto_update_frequency: float = 2000
     auto_update_activated: bool = True
@@ -261,10 +262,10 @@ class MonitoringStep(StepModel):
     def control_node_state(self, problem_setup_step: ProblemSetupStep) -> None:
         """Update the state of root or actor node based on the selected command in the UI."""
         osl = Optislang(
-                host=problem_setup_step.tcp_server_host,
-                port=problem_setup_step.tcp_server_port,
-                shutdown_on_finished=False
-            )
+            host=problem_setup_step.tcp_server_host,
+            port=problem_setup_step.tcp_server_port,
+            shutdown_on_finished=False
+        )
         if not self.selected_actor_from_command == "shutdown":
             if self.selected_actor_from_command == osl.project.root_system.uid:
                 node = osl.project.root_system
@@ -279,5 +280,37 @@ class MonitoringStep(StepModel):
 
         if not status:
             raise Exception(f"{self.selected_command.replace('_', ' ').title()} command against node {node.get_name()} failed.")
+
+        osl.dispose()
+
+    @transaction(
+        problem_setup_step=StepSpec(
+            download=[
+                "tcp_server_host",
+                "tcp_server_port",
+            ]
+        ),
+        self=StepSpec(
+            download=[
+                "selected_actor_from_treeview",
+            ],
+            upload=["selected_actor_from_treeview_states_ids"],
+        )
+    )
+    def get_states_ids(self, problem_setup_step: ProblemSetupStep) -> None:
+        """Returns the states ids of a node."""
+
+        osl = Optislang(
+            host=problem_setup_step.tcp_server_host,
+            port=problem_setup_step.tcp_server_port,
+            shutdown_on_finished=False
+        )
+
+        if self.selected_actor_from_treeview == osl.project.root_system.uid:
+            node = osl.project.root_system
+        else:
+            node = osl.project.root_system.find_node_by_uid(self.selected_actor_from_command, search_depth=-1)
+
+        self.selected_actor_from_treeview_states_ids = node.get_states_ids()
 
         osl.dispose()

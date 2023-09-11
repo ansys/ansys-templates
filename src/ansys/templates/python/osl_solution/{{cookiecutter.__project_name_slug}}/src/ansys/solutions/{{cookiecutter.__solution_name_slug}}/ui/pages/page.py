@@ -120,6 +120,7 @@ def display_page_layout(pathname, trigger_layout_display):
     """Display page layout."""
     project = DashClient[{{ cookiecutter.__solution_definition_name }}].get_project(pathname)
     problem_setup_step = project.steps.problem_setup_step
+    monitoring_step = project.steps.monitoring_step
 
     if problem_setup_step.project_initialized:
         return (
@@ -170,15 +171,25 @@ def display_page_layout(pathname, trigger_layout_display):
                 dbc.Row(
                     [
                         dbc.Col(
-                            AnsysDashTreeview(
-                                id="navigation_tree",
-                                items=problem_setup_step.treeview_items,
-                                children=[
-                                    DashIconify(icon="bi:caret-right-square-fill"),
-                                    DashIconify(icon="bi:caret-down-square-fill"),
-                                ],
-                                style={"showButtons": True, "focusColor": "#ffb71b", "itemHeight": "32"},  # Ansys gold
-                            ),
+                            [
+                                AnsysDashTreeview(
+                                    id="navigation_tree",
+                                    items=problem_setup_step.treeview_items,
+                                    children=[
+                                        DashIconify(icon="bi:caret-right-square-fill"),
+                                        DashIconify(icon="bi:caret-down-square-fill"),
+                                    ],
+                                    style={"showButtons": True, "focusColor": "#ffb71b", "itemHeight": "32"},  # Ansys gold
+                                ),
+                                html.Div(
+                                    dbc.DropdownMenu(
+                                        id="selected_state_dropdown",
+                                        label="small dropdown",
+                                        size="sm", 
+                                        children=monitoring_step.selected_actor_from_treeview_states_ids
+                                    ) if problem_setup_step.analysis_locked and monitoring_step.selected_actor_from_treeview else []
+                                ) 
+                            ],
                             width=2,
                             style={"background-color": "rgba(242, 242, 242, 0.6)"},  # Ansys grey
                         ),

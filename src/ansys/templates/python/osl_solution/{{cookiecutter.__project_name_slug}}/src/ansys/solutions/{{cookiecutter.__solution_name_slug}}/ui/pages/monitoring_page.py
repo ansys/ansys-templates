@@ -104,3 +104,21 @@ def activate_auto_update(on, pathname):
     monitoring_step.auto_update_activated = on
 
     raise PreventUpdate
+
+
+@callback(
+    Output("selected_state_dropdown", "children"),
+    Input("selected_state_dropdown", "n_clicks"),
+    State("url", "pathname"),
+    prevent_initial_call=True,
+)
+def get_states_ids(n_clicks, pathname):
+
+    project = DashClient[{{ cookiecutter.__solution_definition_name }}].get_project(pathname)
+    monitoring_step = project.steps.monitoring_step
+
+    if n_clicks:
+        monitoring_step.get_states_ids()
+        return monitoring_step.selected_actor_from_treeview_states_ids
+    else:
+        raise PreventUpdate
