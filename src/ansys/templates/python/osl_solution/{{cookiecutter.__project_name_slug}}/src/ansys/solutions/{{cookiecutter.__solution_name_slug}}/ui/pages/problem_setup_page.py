@@ -255,17 +255,18 @@ def initialize_dictionary_of_ui_placeholders(n_clicks, data, ids, input_file_ids
                     designs[rowId].update({key: value})
                 else:
                     designs[rowId] = {key: value}
-            elif "ParameterManager" in ids[index]["placeholder"]:
-                split_values = ids[index]["placeholder"].split("#")
-                pm_name = split_values[0]
-                key = split_values[1]
+            elif ids[index]["placeholder"].startswith("ParameterManager"):
+                split_values = ids[index]["placeholder"].split("##")
+                values = split_values[1:]
+                placeholder_name = values[0].split("#")[0]
+                key = values[0].split("#")[1]
                 if isinstance(data[index], list) and True in data[index]:
                     parameters[key] = True
                 elif isinstance(data[index], list) and False in data[index]:
                     parameters[key] = False
                 else:
                     parameters[key] = data[index]
-                ui_data.update({pm_name: parameters})
+                ui_data.update({placeholder_name: parameters})
             elif "Bool" in ids[index]["placeholder"] and type(data[index]) == list:
                 value = data[index]
                 if True in value:
@@ -309,10 +310,11 @@ def update_ui_placeholders(value, id, pathname):
         rowId = values[0].split("#")[1]
         key = values[1].split("#")[1]
         ui_data["StartDesigns"][rowId][key] = value
-    elif "ParameterManager" in name:
-        split_values = id["placeholder"].split("#")
-        pm_name = split_values[0]
-        key = split_values[1]
+    elif name.startswith("ParameterManager"):
+        split_values = id["placeholder"].split("##")
+        values=split_values[1:]
+        pm_name = values[0].split("#")[0]
+        key = values[0].split("#")[1]
         if isinstance(value, list) and True in value:
             value = True
         elif isinstance(value, list) and False in value:
