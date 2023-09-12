@@ -181,14 +181,6 @@ def display_page_layout(pathname, trigger_layout_display):
                                         DashIconify(icon="bi:caret-down-square-fill"),
                                     ],
                                     style={"showButtons": True, "focusColor": "#ffb71b", "itemHeight": "32"},  # Ansys gold
-                                ),
-                                html.Div(
-                                    dbc.DropdownMenu(
-                                        id="selected_state_dropdown",
-                                        label="small dropdown",
-                                        size="sm",
-                                        children=monitoring_step.selected_actor_from_treeview_states_ids
-                                    ) if problem_setup_step.analysis_locked and monitoring_step.selected_actor_from_treeview else []
                                 )
                             ],
                             width=2,
