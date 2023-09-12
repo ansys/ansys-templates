@@ -57,7 +57,40 @@ def layout(problem_setup_step: ProblemSetupStep, monitoring_step: MonitoringStep
             ),
             html.Div(
                 id="monitoring_page_content",
-            )
+            ),
+            # html.Br(),
+            # dbc.ButtonGroup(
+            #     [
+            #         dbc.DropdownMenu(
+            #             id="selected_state_dropdown",
+            #             label=f"Selected state: {monitoring_step.selected_actor_from_treeview_states_ids[0]}",
+            #             size="sm", 
+            #             menu_variant="dark",
+            #             children=[dbc.DropdownMenuItem(state_id) for state_id in monitoring_step.selected_actor_from_treeview_states_ids],
+            #             style={"background-color": "rgba(242, 242, 242, 0.6)", "borderColor": "rgba(242, 242, 242, 0.6)", "color": "rgba(0, 0, 0, 1)"},
+            #         ),
+            #         dbc.Button(
+            #             "optiSLang logs",
+            #             id="optislang_logs_button",
+            #             n_clicks=0,
+            #             style={"background-color": "rgba(242, 242, 242, 0.6)", "borderColor": "rgba(242, 242, 242, 0.6)", "color": "rgba(0, 0, 0, 1)"},
+            #             size="sm",
+            #         ),
+            #         dbc.Button(
+            #             "Open in browser",
+            #             id="open_in_browser",
+            #             style={"background-color": "rgba(242, 242, 242, 0.6)", "borderColor": "rgba(242, 242, 242, 0.6)", "color": "rgba(0, 0, 0, 1)"},
+            #             n_clicks=0,
+            #             size="sm"
+            #         )
+            #     ],
+            #     size="md",
+            #     className="me-1",
+            # ),
+            # dbc.Collapse(
+            #     id="optislang_logs_collapse",
+            #     is_open=False,
+            # ),
         ]
     )
 
@@ -97,28 +130,10 @@ def update_page_content(active_tab, pathname):
     prevent_initial_call=True,
 )
 def activate_auto_update(on, pathname):
-
+    """Enable/Disable auto update of monitoring tabs."""
     project = DashClient[{{ cookiecutter.__solution_definition_name }}].get_project(pathname)
     monitoring_step = project.steps.monitoring_step
 
     monitoring_step.auto_update_activated = on
 
     raise PreventUpdate
-
-
-@callback(
-    Output("selected_state_dropdown", "children"),
-    Input("selected_state_dropdown", "n_clicks"),
-    State("url", "pathname"),
-    prevent_initial_call=True,
-)
-def get_states_ids(n_clicks, pathname):
-
-    project = DashClient[{{ cookiecutter.__solution_definition_name }}].get_project(pathname)
-    monitoring_step = project.steps.monitoring_step
-
-    if n_clicks:
-        monitoring_step.get_states_ids()
-        return monitoring_step.selected_actor_from_treeview_states_ids
-    else:
-        raise PreventUpdate
