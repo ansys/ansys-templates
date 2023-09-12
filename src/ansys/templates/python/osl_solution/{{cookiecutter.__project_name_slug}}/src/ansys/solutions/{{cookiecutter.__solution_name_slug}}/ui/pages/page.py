@@ -186,10 +186,10 @@ def display_page_layout(pathname, trigger_layout_display):
                                     dbc.DropdownMenu(
                                         id="selected_state_dropdown",
                                         label="small dropdown",
-                                        size="sm", 
+                                        size="sm",
                                         children=monitoring_step.selected_actor_from_treeview_states_ids
                                     ) if problem_setup_step.analysis_locked and monitoring_step.selected_actor_from_treeview else []
-                                ) 
+                                )
                             ],
                             width=2,
                             style={"background-color": "rgba(242, 242, 242, 0.6)"},  # Ansys grey
@@ -266,11 +266,11 @@ def display_body_content(value, pathname, trigger_body_display):
                 page_layout = monitoring_page.layout(problem_setup_step, monitoring_step)
                 actors_states_ids = json.loads(monitoring_step.actors_states_ids_file.read_text())
                 footer_buttons.insert(
-                    0, 
+                    0,
                         dbc.DropdownMenu(
                         id="selected_state_dropdown",
                         label=f"Selected state: {actors_states_ids[monitoring_step.selected_actor_from_treeview][0]}",
-                        size="sm", 
+                        size="sm",
                         menu_variant="dark",
                         children=[dbc.DropdownMenuItem(state_id) for state_id in actors_states_ids[monitoring_step.selected_actor_from_treeview]],
                         style={"background-color": "rgba(242, 242, 242, 0.6)", "borderColor": "rgba(242, 242, 242, 0.6)", "color": "rgba(0, 0, 0, 1)"},
