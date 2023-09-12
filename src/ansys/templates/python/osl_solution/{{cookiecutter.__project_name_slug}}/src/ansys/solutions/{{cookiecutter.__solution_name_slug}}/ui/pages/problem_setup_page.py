@@ -14,9 +14,10 @@ from ansys.saf.glow.core.method_status import MethodStatus
 from ansys.solutions.optislang.frontend_components.load_sections import to_dash_sections, update_designs_to_dash_section
 
 from ansys.solutions.{{ cookiecutter.__solution_name_slug }}.solution.definition import {{ cookiecutter.__solution_definition_name }}
-from ansys.solutions.{{ cookiecutter.__solution_name_slug }}.solution.problem_setup_step import ProblemSetupStep
 from ansys.solutions.{{ cookiecutter.__solution_name_slug }}.solution.monitoring_step import MonitoringStep
-from ansys.solutions.{{ cookiecutter.__solution_name_slug }}.utilities.common_functions import check_empty_strings, update_alerts
+from ansys.solutions.{{ cookiecutter.__solution_name_slug }}.solution.problem_setup_step import ProblemSetupStep
+from ansys.solutions.{{ cookiecutter.__solution_name_slug }}.utilities.common_functions import check_empty_strings
+from ansys.solutions.{{ cookiecutter.__solution_name_slug }}.ui.components.alerts import AlertsAIO
 
 
 def layout(problem_setup_step: ProblemSetupStep, monitoring_step: MonitoringStep) -> html.Div:
@@ -54,17 +55,8 @@ def layout(problem_setup_step: ProblemSetupStep, monitoring_step: MonitoringStep
             ),
             dbc.Row(
                 [
-                    dbc.Col(
-                        [
-                            dbc.Stack(
-                                update_alerts(problem_setup_step, monitoring_step),
-                                id="alert_messages",
-                                direction="horizontal",
-                                gap=3,
-                            ),
-                        ],
-                        width=12,
-                    )
+                    # dbc.Col(html.Div(AlertsAIO(problem_setup_step), id="alerts"), width=12),
+                    dbc.Col(html.Div(id="alerts"), width=12),
                 ]
             ),
             html.Br(),
@@ -123,31 +115,20 @@ def layout(problem_setup_step: ProblemSetupStep, monitoring_step: MonitoringStep
                     ),
                 ]
             ),
+            dcc.Store(id="analysis_locked", storage_type='local', data=True),
         ]
     )
-
-
-for alert in ["optislang_version", "optislang_solve"]:
-
-    @callback(
-        Output(f"popover_{alert}", "is_open"),
-        [Input(f"popover_{alert}_target", "n_clicks")],
-        [State(f"popover_{alert}", "is_open")],
-    )
-    def toggle_popover(n_clicks, is_open):
-        if n_clicks:
-            return not is_open
-        return is_open
 
 
 @callback(
     Output("trigger_treeview_display", "data"),
     Output("navigation_tree", "items"),
-    Output("alert_messages", "children"),
+    Output("alerts", "children"),
     Output("wait_start_analysis", "children"),
     Output("start_analysis", "disabled"),
     Output("osl-dash-sections", "children"),
     Output("project-locked-alert", "style"),
+    Output("analysis_locked", "data"),
     Input("start_analysis", "n_clicks"),
     State("url", "pathname"),
     prevent_initial_call=True,
@@ -183,47 +164,52 @@ def start_analysis(n_clicks, pathname):
             return (
                 True,
                 problem_setup_step.treeview_items,
-                update_alerts(problem_setup_step, monitoring_step),
+                AlertsAIO(problem_setup_step),
                 True,
                 True,
                 to_dash_sections(
                     problem_setup_step.placeholders, problem_setup_step.registered_files, problem_setup_step.project_locked
                 ),
                 {"display": "block"},
+                False
             )
         else:
             return (
                 True,
                 problem_setup_step.treeview_items,
-                update_alerts(problem_setup_step, monitoring_step),
+                AlertsAIO(problem_setup_step),
                 True,
                 False,
                 to_dash_sections(
                     problem_setup_step.placeholders, problem_setup_step.registered_files, problem_setup_step.project_locked
                 ),
                 {"display": "block"},
+                False
             )
     else:
         raise PreventUpdate
 
 
 @callback(
-    Output("alert_messages", "children"),
+    Output("analysis_locked", "data"),
+    Output("alerts", "children"),
     Input("solve_interval_component", "n_intervals"),
-    Input("start_analysis", "n_clicks"),
+    State("analysis_locked", "data"),
     State("url", "pathname"),
 )
-def update_alert_messages(n_intervals, n_clicks, pathname):
+def update_alert_messages(n_intervals, analysis_locked, pathname):
     """Display status badges."""
+    if not analysis_locked:
+        project = DashClient[{{ cookiecutter.__solution_definition_name }}].get_project(pathname)
+        problem_setup_step = project.steps.problem_setup_step
+        monitoring_step = project.steps.monitoring_step
+        if problem_setup_step.ansys_ecosystem_ready:
+            return (
+                True if monitoring_step.project_state != "PROCESSING" else False,
+                AlertsAIO(problem_setup_step)
+            )
 
-    project = DashClient[{{ cookiecutter.__solution_definition_name }}].get_project(pathname)
-    problem_setup_step = project.steps.problem_setup_step
-    monitoring_step = project.steps.monitoring_step
-
-    if problem_setup_step.ansys_ecosystem_ready:
-        return update_alerts(problem_setup_step, monitoring_step)
-    else:
-        raise PreventUpdate
+    raise PreventUpdate
 
 
 @callback(
