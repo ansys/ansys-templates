@@ -5,7 +5,6 @@
 import dash_bootstrap_components as dbc
 import re
 
-from dash_extensions.enrich import html
 from pathlib import Path
 from typing import Any, Iterable, Union
 
@@ -240,65 +239,3 @@ def update_placeholders(ui_values: list, placeholders: dict) -> dict:
         if parameter_name in placeholder_values:
             updated_dict[parameter_name] = input_value
     return updated_dict
-
-
-def update_alerts(problem_setup_step, monitoring_step) -> list:
-    """Update all Alerts."""
-
-    alerts = []
-
-    # Product version alerts
-    for product_name, product_data in problem_setup_step.ansys_ecosystem.items():
-        alerts.append(
-            html.Div(
-                [
-                    dbc.Button(
-                        f"{product_data['alias']} Version",
-                        id=f"popover_{product_name}_version_target",
-                        disabled=False,
-                        color=product_data["alert_color"],
-                        n_clicks=0,
-                    ),
-                    dbc.Popover(
-                        [
-                            dbc.PopoverBody(product_data["alert_message"]),
-                        ],
-                        id=f"popover_{product_name}_version",
-                        target=f"popover_{product_name}_version_target",
-                        placement="top",
-                        is_open=False,
-                    ),
-                ]
-            ),
-        )
-
-    # optiSLang solve alert
-    if monitoring_step.project_state in PROJECT_STATES.keys():
-        solve_message, solve_color = PROJECT_STATES[monitoring_step.project_state]["alert"], PROJECT_STATES[monitoring_step.project_state]["color"]
-    else:
-        raise ValueError(f"Unknown optiSLang state: {monitoring_step.project_state}.")
-
-    alerts.append(
-        html.Div(
-            [
-                dbc.Button(
-                    "optiSLang Solve",
-                    id="popover_optislang_solve_target",
-                    disabled=False,
-                    color=solve_color,
-                    n_clicks=0,
-                ),
-                dbc.Popover(
-                    [
-                        dbc.PopoverBody(solve_message),
-                    ],
-                    id="popover_optislang_solve",
-                    target="popover_optislang_solve_target",
-                    placement="top",
-                    is_open=False,
-                ),
-            ]
-        ),
-    )
-
-    return alerts

@@ -16,7 +16,7 @@ from ansys.solutions.optislang.frontend_components.load_sections import to_dash_
 from ansys.solutions.{{ cookiecutter.__solution_name_slug }}.solution.definition import {{ cookiecutter.__solution_definition_name }}
 from ansys.solutions.{{ cookiecutter.__solution_name_slug }}.solution.problem_setup_step import ProblemSetupStep
 from ansys.solutions.{{ cookiecutter.__solution_name_slug }}.solution.monitoring_step import MonitoringStep
-from ansys.solutions.{{ cookiecutter.__solution_name_slug }}.utilities.common_functions import check_empty_strings, update_alerts
+from ansys.solutions.{{ cookiecutter.__solution_name_slug }}.utilities.common_functions import check_empty_strings
 
 
 def layout(problem_setup_step: ProblemSetupStep, monitoring_step: MonitoringStep) -> html.Div:
@@ -51,21 +51,6 @@ def layout(problem_setup_step: ProblemSetupStep, monitoring_step: MonitoringStep
                     )
                 ],
                 style={"display": "block"} if problem_setup_step.project_locked else {"display": "none"},
-            ),
-            dbc.Row(
-                [
-                    dbc.Col(
-                        [
-                            dbc.Stack(
-                                update_alerts(problem_setup_step, monitoring_step),
-                                id="alert_messages",
-                                direction="horizontal",
-                                gap=3,
-                            ),
-                        ],
-                        width=12,
-                    )
-                ]
             ),
             html.Br(),
             # Input form
@@ -127,23 +112,9 @@ def layout(problem_setup_step: ProblemSetupStep, monitoring_step: MonitoringStep
     )
 
 
-for alert in ["optislang_version", "optislang_solve"]:
-
-    @callback(
-        Output(f"popover_{alert}", "is_open"),
-        [Input(f"popover_{alert}_target", "n_clicks")],
-        [State(f"popover_{alert}", "is_open")],
-    )
-    def toggle_popover(n_clicks, is_open):
-        if n_clicks:
-            return not is_open
-        return is_open
-
-
 @callback(
     Output("trigger_treeview_display", "data"),
     Output("navigation_tree", "items"),
-    Output("alert_messages", "children"),
     Output("wait_start_analysis", "children"),
     Output("start_analysis", "disabled"),
     Output("osl-dash-sections", "children"),
@@ -183,7 +154,6 @@ def start_analysis(n_clicks, pathname):
             return (
                 True,
                 problem_setup_step.treeview_items,
-                update_alerts(problem_setup_step, monitoring_step),
                 True,
                 True,
                 to_dash_sections(
@@ -195,7 +165,6 @@ def start_analysis(n_clicks, pathname):
             return (
                 True,
                 problem_setup_step.treeview_items,
-                update_alerts(problem_setup_step, monitoring_step),
                 True,
                 False,
                 to_dash_sections(
@@ -203,25 +172,6 @@ def start_analysis(n_clicks, pathname):
                 ),
                 {"display": "block"},
             )
-    else:
-        raise PreventUpdate
-
-
-@callback(
-    Output("alert_messages", "children"),
-    Input("solve_interval_component", "n_intervals"),
-    Input("start_analysis", "n_clicks"),
-    State("url", "pathname"),
-)
-def update_alert_messages(n_intervals, n_clicks, pathname):
-    """Display status badges."""
-
-    project = DashClient[{{ cookiecutter.__solution_definition_name }}].get_project(pathname)
-    problem_setup_step = project.steps.problem_setup_step
-    monitoring_step = project.steps.monitoring_step
-
-    if problem_setup_step.ansys_ecosystem_ready:
-        return update_alerts(problem_setup_step, monitoring_step)
     else:
         raise PreventUpdate
 
