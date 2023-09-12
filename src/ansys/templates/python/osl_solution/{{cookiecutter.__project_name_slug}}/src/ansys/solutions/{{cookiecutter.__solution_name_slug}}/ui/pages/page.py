@@ -3,6 +3,7 @@
 """Initialization of the frontend layout across all the steps."""
 
 import dash_bootstrap_components as dbc
+import json
 import webbrowser
 
 from ansys_dash_treeview import AnsysDashTreeview
@@ -120,6 +121,7 @@ def display_page_layout(pathname, trigger_layout_display):
     """Display page layout."""
     project = DashClient[{{ cookiecutter.__solution_definition_name }}].get_project(pathname)
     problem_setup_step = project.steps.problem_setup_step
+    monitoring_step = project.steps.monitoring_step
 
     if problem_setup_step.project_initialized:
         return (
@@ -170,15 +172,17 @@ def display_page_layout(pathname, trigger_layout_display):
                 dbc.Row(
                     [
                         dbc.Col(
-                            AnsysDashTreeview(
-                                id="navigation_tree",
-                                items=problem_setup_step.treeview_items,
-                                children=[
-                                    DashIconify(icon="bi:caret-right-square-fill"),
-                                    DashIconify(icon="bi:caret-down-square-fill"),
-                                ],
-                                style={"showButtons": True, "focusColor": "#ffb71b", "itemHeight": "32"},  # Ansys gold
-                            ),
+                            [
+                                AnsysDashTreeview(
+                                    id="navigation_tree",
+                                    items=problem_setup_step.treeview_items,
+                                    children=[
+                                        DashIconify(icon="bi:caret-right-square-fill"),
+                                        DashIconify(icon="bi:caret-down-square-fill"),
+                                    ],
+                                    style={"showButtons": True, "focusColor": "#ffb71b", "itemHeight": "32"},  # Ansys gold
+                                )
+                            ],
                             width=2,
                             style={"background-color": "rgba(242, 242, 242, 0.6)"},  # Ansys grey
                         ),
@@ -187,47 +191,16 @@ def display_page_layout(pathname, trigger_layout_display):
                                 dbc.Row(
                                     html.Div(
                                         id="body_content",
-                                        style={"padding-right": "1%"}
+                                        style={"padding-right": "2%"}
                                     ),
                                 ),
                                 html.Br(),
                                 dbc.Row(
-                                    [
-                                        dbc.Col(
-                                            html.Div(
-                                                dbc.Button(
-                                                    "Open in browser",
-                                                    id="open_in_browser",
-                                                    style={"background-color": "rgba(242, 242, 242, 0.6)", "borderColor": "rgba(242, 242, 242, 0.6)", "color": "rgba(0, 0, 0, 1)"},
-                                                    n_clicks=0,
-                                                    size="sm"
-                                                ),
-                                                style={'position': 'absolute','right': '4px'}
-                                            ),
-                                        ),
-                                    ],
+                                    html.Div(
+                                        id="bottom_button_group",
+                                        style={"padding-right": "2%"}
+                                    ),
                                 ),
-                                dbc.Row(
-                                    [
-                                        dbc.Col(
-                                            html.Div(
-                                                [
-                                                    dbc.Button(
-                                                        "optiSLang logs",
-                                                        id="optislang_logs_button",
-                                                        n_clicks=0,
-                                                        style={"background-color": "rgba(242, 242, 242, 0.6)", "borderColor": "rgba(242, 242, 242, 0.6)", "color": "rgba(0, 0, 0, 1)"},
-                                                        size="sm"
-                                                    ),
-                                                    dbc.Collapse(
-                                                        id="optislang_logs_collapse",
-                                                        is_open=False,
-                                                    ),
-                                                ],
-                                            ),
-                                        ),
-                                    ],
-                                )
                             ],
                             width=10
                         ),
@@ -241,6 +214,7 @@ def display_page_layout(pathname, trigger_layout_display):
 
 @callback(
     Output("body_content", "children"),
+    Output("bottom_button_group", "children"),
     Input("navigation_tree", "focus"),
     Input("url", "pathname"),
     Input("trigger_body_display", "data"),
@@ -253,8 +227,27 @@ def display_body_content(value, pathname, trigger_body_display):
 
     if problem_setup_step.project_initialized:
         triggered_id = callback_context.triggered[0]["prop_id"].split(".")[0]
+        footer_buttons = [
+            dbc.Button(
+                "optiSLang logs",
+                id="optislang_logs_button",
+                n_clicks=0,
+                style={"background-color": "rgba(242, 242, 242, 0.6)", "borderColor": "rgba(242, 242, 242, 0.6)", "color": "rgba(0, 0, 0, 1)"},
+                size="sm",
+            ),
+        ]
+        if DashClient.get_portal_ui_url():
+            footer_buttons.append(
+                dbc.Button(
+                    "Open in browser",
+                    id="open_in_browser",
+                    style={"background-color": "rgba(242, 242, 242, 0.6)", "borderColor": "rgba(242, 242, 242, 0.6)", "color": "rgba(0, 0, 0, 1)"},
+                    n_clicks=0,
+                    size="sm"
+                )
+            )
         if triggered_id == "url" or triggered_id == "trigger_body_display" or trigger_body_display and len(triggered_id) == 0:
-            return problem_setup_page.layout(problem_setup_step, monitoring_step)
+            page_layout = problem_setup_page.layout(problem_setup_step, monitoring_step)
         if triggered_id == "navigation_tree":
             if value is None:
                 page_layout = html.H1("Welcome!")
@@ -263,7 +256,33 @@ def display_body_content(value, pathname, trigger_body_display):
             else:
                 monitoring_step.selected_actor_from_treeview = extract_dict_by_key(problem_setup_step.treeview_items, "key", value, expect_unique=True, return_index=False)["uid"]
                 page_layout = monitoring_page.layout(problem_setup_step, monitoring_step)
-            return page_layout
+                actors_states_ids = json.loads(monitoring_step.actors_states_ids_file.read_text())
+                footer_buttons.insert(
+                    0,
+                        dbc.DropdownMenu(
+                        id="selected_state_dropdown",
+                        label=f"Selected state: {actors_states_ids[monitoring_step.selected_actor_from_treeview][0]}",
+                        size="sm",
+                        menu_variant="dark",
+                        children=[dbc.DropdownMenuItem(state_id) for state_id in actors_states_ids[monitoring_step.selected_actor_from_treeview]],
+                        style={"background-color": "rgba(242, 242, 242, 0.6)", "borderColor": "rgba(242, 242, 242, 0.6)", "color": "rgba(0, 0, 0, 1)"},
+                    ),
+                )
+        footer = [
+            dbc.ButtonGroup(
+                footer_buttons,
+                size="md",
+                className="me-1",
+            ),
+            dbc.Collapse(
+                id="optislang_logs_collapse",
+                is_open=False,
+            )
+        ]
+        return (
+            page_layout,
+            footer
+        )
     else:
         raise PreventUpdate
 

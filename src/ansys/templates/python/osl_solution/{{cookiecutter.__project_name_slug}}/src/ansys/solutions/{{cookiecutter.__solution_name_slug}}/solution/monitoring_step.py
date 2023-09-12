@@ -24,6 +24,7 @@ class MonitoringStep(StepModel):
     selected_actor_from_treeview: Optional[str] = None
     selected_command: Optional[str] = None
     selected_actor_from_command: Optional[str] = None
+    selected_actor_from_treeview_states_ids: list = []
     commands_locked: bool = False
     auto_update_frequency: float = 2000
     auto_update_activated: bool = True
@@ -156,6 +157,7 @@ class MonitoringStep(StepModel):
     project_status_info_file: FileReference = FileReference("Problem_Setup/project_status_info.json")
     actors_info_file: FileReference = FileReference("Problem_Setup/actors_info.json")
     actors_status_info_file: FileReference = FileReference("Problem_Setup/actors_status_info.json")
+    actors_states_ids_file: FileReference = FileReference("Problem_Setup/actors_states_ids.json")
 
     # Methods ---------------------------------------------------------------------------------------------------------
 
@@ -174,6 +176,7 @@ class MonitoringStep(StepModel):
                 "project_status_info_file",
                 "actors_info_file",
                 "actors_status_info_file",
+                "actors_states_ids_file",
                 "optislang_logs",
                 "optislang_log_file",
                 "results_files",
@@ -213,13 +216,14 @@ class MonitoringStep(StepModel):
             # Read pyoptislang logs
             self.optislang_logs = read_log_file(self.optislang_log_file.path)
             # Get actor status info
-            actors_info, actors_status_info = {}, {}
+            actors_info, actors_status_info, actors_states_ids = {}, {}, {}
             for node_info in problem_setup_step.project_tree:
                 if node_info["uid"] == osl.project.root_system.uid:
                     node = osl.project.root_system
                 else:
                     node = osl.project.root_system.find_node_by_uid(node_info["uid"], search_depth=-1)
                 actors_info[node.uid] = osl.get_osl_server().get_actor_info(node.uid)
+                actors_states_ids[node.uid] = node.get_states_ids()
                 if node.get_states_ids():
                     actors_status_info[node.uid] = []
                     for hid in node.get_states_ids():
@@ -228,12 +232,14 @@ class MonitoringStep(StepModel):
                         )
             with open(self.actors_info_file.path, "w") as json_file: json.dump(actors_info, json_file)
             with open(self.actors_status_info_file.path, "w") as json_file: json.dump(actors_status_info, json_file)
+            with open(self.actors_states_ids_file.path, "w") as json_file: json.dump(actors_states_ids, json_file)
             # Upload fields
             self.transaction.upload(["project_state"])
             self.transaction.upload(["project_status_info_file"])
             self.transaction.upload(["actors_info_file"])
             self.transaction.upload(["actors_status_info_file"])
             self.transaction.upload(["optislang_logs"])
+            self.transaction.upload(["actors_states_ids_file"])
             if self.project_state == "FINISHED":
                 break
             time.sleep(3) # Waiting 3 sec before pulling new data. The frequency might be adjusted in the future.
@@ -261,10 +267,10 @@ class MonitoringStep(StepModel):
     def control_node_state(self, problem_setup_step: ProblemSetupStep) -> None:
         """Update the state of root or actor node based on the selected command in the UI."""
         osl = Optislang(
-                host=problem_setup_step.tcp_server_host,
-                port=problem_setup_step.tcp_server_port,
-                shutdown_on_finished=False
-            )
+            host=problem_setup_step.tcp_server_host,
+            port=problem_setup_step.tcp_server_port,
+            shutdown_on_finished=False
+        )
         if not self.selected_actor_from_command == "shutdown":
             if self.selected_actor_from_command == osl.project.root_system.uid:
                 node = osl.project.root_system
