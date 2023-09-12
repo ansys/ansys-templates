@@ -97,7 +97,7 @@ def update_page_content(active_tab, pathname):
     prevent_initial_call=True,
 )
 def activate_auto_update(on, pathname):
-
+    """Enable/Disable auto update of monitoring tabs."""
     project = DashClient[{{ cookiecutter.__solution_definition_name }}].get_project(pathname)
     monitoring_step = project.steps.monitoring_step
 
