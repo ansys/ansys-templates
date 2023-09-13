@@ -21,7 +21,7 @@ html_short_title = html_title = "project"
 
 # specify the location of your github repo
 html_theme_options = {
-    "github_url": "https://github.com/ansys/project",
+    "github_url": "https://github.com/pyansys/project",
     "show_prev_next": False,
     "show_breadcrumbs": True,
     "additional_breadcrumbs": [
