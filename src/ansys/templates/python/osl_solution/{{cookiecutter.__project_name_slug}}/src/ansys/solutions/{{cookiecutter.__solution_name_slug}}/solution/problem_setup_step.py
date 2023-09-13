@@ -11,9 +11,10 @@ from pathlib import Path
 from typing import List, Optional
 
 from ansys.optislang.core import Optislang, utils
-from ansys.saf.glow.solution import FileReference, FileGroupReference, StepModel, StepSpec, long_running, transaction
+from ansys.saf.glow.solution import FileReference, FileGroupReference, StepModel, StepSpec, long_running, transaction, create_instance
 from ansys.solutions.optislang.frontend_components.project_properties import ProjectProperties, write_properties_file, apply_placeholders_to_properties_file
 
+from ansys.solutions.{{ cookiecutter.__solution_name_slug }}.solution.optislang_manager import OptislangManager
 from ansys.solutions.{{ cookiecutter.__solution_name_slug }}.utilities.common_functions import get_treeview_items_from_project_tree
 
 
@@ -261,27 +262,13 @@ class ProblemSetupStep(StepModel):
             ],
         )
     )
-    def start(self) -> None:
+    @create_instance("osl", OptislangManager)
+    def start(self, osl: OptislangManager) -> None:
         """Start optiSLang and run the project."""
         # Start optiSLang instance.
-        osl = Optislang(
+        osl.initialize(
             project_path=self.project_file.path,
-            reset=True,
-            loglevel=self.optislang_log_level,
-            shutdown_on_finished=False,
-            import_project_properties_file=self.working_properties_file.path,
-            ini_timeout=300,  # might need to be adjusted depending on the hardware
+            project_properties_file=self.working_properties_file.path
         )
-
-        # Get server host
-        self.tcp_server_host = osl.get_osl_server().get_host()
-
-        # Get server port
-        server_info = osl.get_osl_server().get_server_info()
-        self.tcp_server_port = server_info["server"]["server_port"]
-
         # Start optiSLang project
-        osl.start(wait_for_started=True, wait_for_finished=False)
-
-        # Close connection with optiSLang server
-        osl.dispose()
+        osl.instance.start(wait_for_started=True, wait_for_finished=False)
