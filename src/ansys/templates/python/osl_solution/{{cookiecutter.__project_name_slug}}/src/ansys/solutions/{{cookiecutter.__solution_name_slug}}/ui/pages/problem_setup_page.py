@@ -292,48 +292,65 @@ def initialize_dictionary_of_ui_placeholders(n_clicks, data, ids, input_file_ids
 
 
 @callback(
-    Output({"container": "placeholders", "placeholder": MATCH}, "id"),
+    Output({"container": "placeholders", "placeholder": MATCH}, "value"),
     Input({"container": "placeholders", "placeholder": MATCH}, "value"),
     State({"container": "placeholders", "placeholder": MATCH}, "id"),
     State("url", "pathname"),
     prevent_initial_call=True,
 )
 def update_ui_placeholders(value, id, pathname):
-    """This updates the dictionary of ui placeholders each time the ui data changes in the Placeholders section"""
+    """This updates the dictionary of ui placeholders each time the ui data changes in the Placeholders section. If the value entered is None, "", or invalid, the last value entered in the component is returned."""
     project = DashClient[{{ cookiecutter.__solution_definition_name }}].get_project(pathname)
     problem_setup_step = project.steps.problem_setup_step
     name = id["placeholder"]
     ui_data = problem_setup_step.ui_placeholders
-    if name.startswith("StartDesigns"):
-        split_values = id["placeholder"].split("##")
-        values = split_values[1:]
-        rowId = values[0].split("#")[1]
-        key = values[1].split("#")[1]
-        ui_data["StartDesigns"][rowId][key] = value
-    elif name.startswith("ParameterManager"):
-        split_values = id["placeholder"].split("##")
-        values=split_values[1:]
-        pm_name = values[0].split("#")[0]
-        key = values[0].split("#")[1]
-        if isinstance(value, list) and True in value:
-            value = True
-        elif isinstance(value, list) and False in value:
-            value = False
-        ui_data[pm_name][key] = value
-    elif "Bool" in name and type(value) == list:
-        if True in value:
-            value = True
+    if value is None or value == "":
+        if name.startswith("StartDesigns"):
+            split_values = id["placeholder"].split("##")
+            values = split_values[1:]
+            rowId = values[0].split("#")[1]
+            key = values[1].split("#")[1]
+            last_value = ui_data["StartDesigns"][rowId][key]
+        elif name.startswith("ParameterManager"):
+            split_values = id["placeholder"].split("##")
+            values=split_values[1:]
+            pm_name = values[0].split("#")[0]
+            key = values[0].split("#")[1]
+            last_value = ui_data[pm_name][key]
         else:
-            value = False
-        ui_data.update({name: value})
+            last_value = ui_data[name]
+        return last_value
     else:
-        ui_data.update({name: value})
-    problem_setup_step.ui_placeholders = ui_data
-    while problem_setup_step.get_method_state("update_osl_placeholders_with_ui_values").status == MethodStatus.Running: # current workaround to avoid raising ConflictError: {"detail":"update_osl_placeholders_with_ui_values is already running"}
-        time.sleep(0.1)
-    problem_setup_step.update_osl_placeholders_with_ui_values()
 
-    return no_update
+        if name.startswith("StartDesigns"):
+            split_values = id["placeholder"].split("##")
+            values = split_values[1:]
+            rowId = values[0].split("#")[1]
+            key = values[1].split("#")[1]
+            ui_data["StartDesigns"][rowId][key] = value
+        elif name.startswith("ParameterManager"):
+            split_values = id["placeholder"].split("##")
+            values=split_values[1:]
+            pm_name = values[0].split("#")[0]
+            key = values[0].split("#")[1]
+            if isinstance(value, list) and True in value:
+                value = True
+            elif isinstance(value, list) and False in value:
+                value = False
+            ui_data[pm_name][key] = value
+        elif "Bool" in name and type(value) == list:
+            if True in value:
+                value = True
+            else:
+                value = False
+            ui_data.update({name: value})
+        else:
+            ui_data.update({name: value})
+        problem_setup_step.ui_placeholders = ui_data
+        while problem_setup_step.get_method_state("update_osl_placeholders_with_ui_values").status == MethodStatus.Running: # current workaround to avoid raising ConflictError: {"detail":"update_osl_placeholders_with_ui_values is already running"}
+            time.sleep(0.1)
+        problem_setup_step.update_osl_placeholders_with_ui_values()
+        return no_update
 
 
 @callback(
