@@ -4,18 +4,30 @@
 
 import json
 import os
+from pathlib import Path
 import platform
 import tempfile
-
-from pathlib import Path
 from typing import List, Optional
 
 from ansys.optislang.core import Optislang, utils
-from ansys.saf.glow.solution import FileReference, FileGroupReference, StepModel, StepSpec, long_running, transaction, create_instance
-from ansys.solutions.optislang.frontend_components.project_properties import ProjectProperties, write_properties_file, apply_placeholders_to_properties_file
-
-from ansys.solutions.{{ cookiecutter.__solution_name_slug }}.solution.optislang_manager import OptislangManager
-from ansys.solutions.{{ cookiecutter.__solution_name_slug }}.utilities.common_functions import get_treeview_items_from_project_tree
+from ansys.saf.glow.solution import (
+    FileGroupReference,
+    FileReference,
+    StepModel,
+    StepSpec,
+    create_instance,
+    long_running,
+    transaction,
+)
+from ansys.solutions.optislang.frontend_components.project_properties import (
+    ProjectProperties,
+    apply_placeholders_to_properties_file,
+    write_properties_file,
+)
+from ansys.solutions.{{cookiecutter.__solution_name_slug}}.solution.optislang_manager import OptislangManager
+from ansys.solutions.{{cookiecutter.__solution_name_slug}}.utilities.common_functions import (
+    get_treeview_items_from_project_tree,
+)
 
 
 class ProblemSetupStep(StepModel):
@@ -30,8 +42,8 @@ class ProblemSetupStep(StepModel):
     project_locked: bool = False
 
     # Backend data model
-    tcp_server_host: Optional[str] = None
-    tcp_server_port: Optional[int] = None
+    osl_server_host: Optional[str] = None
+    osl_server_port: Optional[int] = None
     ansys_ecosystem: dict = {
         "optislang": {
             "authorized_versions": [],
@@ -257,8 +269,8 @@ class ProblemSetupStep(StepModel):
                 "optislang_log_level"
             ],
             upload=[
-                "tcp_server_host",
-                "tcp_server_port",
+                "osl_server_host",
+                "osl_server_port",
             ],
         )
     )
@@ -270,5 +282,10 @@ class ProblemSetupStep(StepModel):
             project_path=self.project_file.path,
             project_properties_file=self.working_properties_file.path
         )
+        # Get server host
+        self.osl_server_host = osl.instance.get_osl_server().get_host()
+        # Get server port
+        server_info = osl.instance.get_osl_server().get_server_info()
+        self.osl_server_port = server_info["server"]["server_port"]
         # Start optiSLang project
         osl.instance.start(wait_for_started=True, wait_for_finished=False)

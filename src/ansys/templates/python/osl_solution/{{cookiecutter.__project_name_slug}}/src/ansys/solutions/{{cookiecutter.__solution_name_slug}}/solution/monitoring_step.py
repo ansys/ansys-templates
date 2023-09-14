@@ -3,17 +3,15 @@
 """Backend of the problem setup step."""
 
 import json
-import time
-
 from pathlib import Path
+import time
 from typing import List, Optional
 
 from ansys.optislang.core import Optislang, logging
-from ansys.saf.glow.solution import StepModel, StepSpec, long_running, transaction, instance, FileReference
-
-from ansys.solutions.{{ cookiecutter.__solution_name_slug }}.solution.problem_setup_step import ProblemSetupStep
-from ansys.solutions.{{ cookiecutter.__solution_name_slug }}.solution.optislang_manager import OptislangManager
-from ansys.solutions.{{ cookiecutter.__solution_name_slug }}.utilities.common_functions import read_log_file
+from ansys.saf.glow.solution import FileReference, StepModel, StepSpec, instance, long_running, transaction
+from ansys.solutions.{{cookiecutter.__solution_name_slug}}.solution.optislang_manager import OptislangManager
+from ansys.solutions.{{cookiecutter.__solution_name_slug}}.solution.problem_setup_step import ProblemSetupStep
+from ansys.solutions.{{cookiecutter.__solution_name_slug}}.utilities.common_functions import read_log_file
 
 
 class MonitoringStep(StepModel):
@@ -165,8 +163,8 @@ class MonitoringStep(StepModel):
     @transaction(
         problem_setup_step=StepSpec(
             download=[
-                "tcp_server_host",
-                "tcp_server_port",
+                "osl_server_host",
+                "osl_server_port",
                 "project_tree",
                 "optislang_log_level",
             ]
@@ -242,8 +240,8 @@ class MonitoringStep(StepModel):
     @transaction(
         problem_setup_step=StepSpec(
             download=[
-                "tcp_server_host",
-                "tcp_server_port",
+                "osl_server_host",
+                "osl_server_port",
                 "project_tree",
             ]
         ),

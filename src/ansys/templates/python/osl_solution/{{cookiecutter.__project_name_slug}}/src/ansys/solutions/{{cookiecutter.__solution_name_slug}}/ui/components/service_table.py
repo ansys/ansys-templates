@@ -1,12 +1,11 @@
 # ©2023, ANSYS Inc. Unauthorized use, distribution or duplication is prohibited.
 
-import dash_bootstrap_components as dbc
-import pandas as pd
 import uuid
 
-from dash_extensions.enrich import html, dash_table
-
-from ansys.solutions.{{ cookiecutter.__solution_name_slug }}.solution.problem_setup_step import ProblemSetupStep
+from ansys.solutions.{{cookiecutter.__solution_name_slug}}.solution.problem_setup_step import ProblemSetupStep
+import dash_bootstrap_components as dbc
+from dash_extensions.enrich import dash_table, html
+import pandas as pd
 
 
 class ServiceTableAIO(html.Div):
@@ -86,8 +85,8 @@ class ServiceTableAIO(html.Div):
         }
 
         data["column_b"] = [
-            problem_setup_step.tcp_server_host,
-            problem_setup_step.tcp_server_port,
+            problem_setup_step.osl_server_host,
+            problem_setup_step.osl_server_port,
         ]
 
         return pd.DataFrame(data)

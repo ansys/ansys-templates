@@ -45,7 +45,7 @@ priority = "primary"
 [tool.poetry.dependencies]
 python = ">=3.8, <3.11"
 ansys-dash-treeview = {version = "0.0.1.dev0", source = "solutions-private-pypi"}
-ansys-optislang-core = {git = "https://github.com/ansys/pyoptislang.git", rev = "dd780ae"} # Temporarily pointing to the GitHub repo until next release is available.
+ansys-optislang-core = "0.4" # Temporarily pointing to the GitHub repo until next release is available.
 ansys-saf-glow = {version = "0.4.0", source = "solutions-private-pypi"}
 ansys-saf-pim-light-server = {version = "^0.2.0", source = "solutions-private-pypi"}
 ansys-saf-portal = {version = "0.5.dev0", source = "solutions-private-pypi"}
