@@ -3,6 +3,10 @@
 from ansys.optislang.core import Optislang
 from fastapi import Body, FastAPI
 
+
+OSL_SERVER_PORT = None
+
+
 app = FastAPI()
 
 
@@ -12,6 +16,7 @@ async def start_instance(project_path: str = Body(...), project_properties_file:
     osl = Optislang(
         project_path=project_path,
         reset=True,
+        auto_relocate=True,
         shutdown_on_finished=False,
         import_project_properties_file=project_properties_file,
         ini_timeout=300

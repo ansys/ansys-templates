@@ -62,4 +62,3 @@ class OptislangManager(InstanceManager[Optislang]):
     def shutdown_implement(self, protected_state_directory_path: str) -> None:
         """Gracefully terminates the product instance process."""
         self.save_state_implement(protected_state_directory_path)
-        self.shutdown()
