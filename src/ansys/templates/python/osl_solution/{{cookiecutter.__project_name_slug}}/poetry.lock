@@ -314,6 +314,27 @@ Sphinx = ">=4.2.0,<6"
 doc = ["Sphinx (==5.3.0)", "numpydoc (==1.5.0)", "sphinx-copybutton (==0.5.1)", "sphinx-notfound-page (==0.8.3)"]
 
 [[package]]
+name = "ansys-web-components-dash"
+version = "0.0.dev2"
+description = "Ansys Web Components Dash"
+optional = false
+python-versions = ">=3.8,<=3.11"
+files = [
+    {file = "ansys_web_components_dash-0.0.dev2-py3-none-any.whl", hash = "sha256:d3029ee304cd925c7cfe85afc1646933df5cd4ace1920c1ad716584174c51b45"},
+    {file = "ansys_web_components_dash-0.0.dev2.tar.gz", hash = "sha256:ec5a25020982721330211220f8e10289c8a447b27738423ef4e66c491e4be661"},
+]
+
+[package.dependencies]
+dash = {version = ">2.0.0", extras = ["dev"]}
+dash_bootstrap_components = ">=1.2,<2.0"
+dash-extensions = ">=0.1,<0.2"
+
+[package.source]
+type = "legacy"
+url = "https://pkgs.dev.azure.com/pyansys/_packaging/ansys-solutions/pypi/simple"
+reference = "solutions-private-pypi"
+
+[[package]]
 name = "anyio"
 version = "4.0.0"
 description = "High level compatibility layer for multiple asynchronous event loop implementations"
@@ -697,6 +718,23 @@ files = [
 ]
 
 [[package]]
+name = "coloredlogs"
+version = "15.0.1"
+description = "Colored terminal output for Python's logging module"
+optional = false
+python-versions = ">=2.7, !=3.0.*, !=3.1.*, !=3.2.*, !=3.3.*, !=3.4.*"
+files = [
+    {file = "coloredlogs-15.0.1-py2.py3-none-any.whl", hash = "sha256:612ee75c546f53e92e70049c9dbfcc18c935a2b9a53b66085ce9ef6a6e5c0934"},
+    {file = "coloredlogs-15.0.1.tar.gz", hash = "sha256:7c991aa71a4577af2f82600d8f8f3a89f936baeaf9b50a9c197da014e5bf16b0"},
+]
+
+[package.dependencies]
+humanfriendly = ">=9.1"
+
+[package.extras]
+cron = ["capturer (>=2.4)"]
+
+[[package]]
 name = "coverage"
 version = "6.5.0"
 description = "Code coverage measurement for Python"
@@ -819,12 +857,15 @@ files = [
 
 [package.dependencies]
 ansi2html = "*"
+coloredlogs = {version = ">=15.0.1", optional = true, markers = "extra == \"dev\""}
 dash-core-components = "2.0.0"
 dash-html-components = "2.0.0"
 dash-table = "5.0.0"
+fire = {version = ">=0.4.0", optional = true, markers = "extra == \"dev\""}
 Flask = ">=1.0.4,<2.3.0"
 nest-asyncio = "*"
 plotly = ">=5.0.0"
+PyYAML = {version = ">=5.4.1", optional = true, markers = "extra == \"dev\""}
 requests = "*"
 retrying = "*"
 setuptools = "*"
@@ -909,17 +950,6 @@ python-versions = "*"
 files = [
     {file = "dash_html_components-2.0.0-py3-none-any.whl", hash = "sha256:b42cc903713c9706af03b3f2548bda4be7307a7cf89b7d6eae3da872717d1b63"},
     {file = "dash_html_components-2.0.0.tar.gz", hash = "sha256:8703a601080f02619a6390998e0b3da4a5daabe97a1fd7a9cebc09d015f26e50"},
-]
-
-[[package]]
-name = "dash-iconify"
-version = "0.1.2"
-description = "Iconify for Plotly Dash"
-optional = false
-python-versions = "*"
-files = [
-    {file = "dash_iconify-0.1.2-py3-none-any.whl", hash = "sha256:9ab0eda19bb4514e177bf1f8f36947bb9e5b44aba6ce947f22a1cf0f1a45fc14"},
-    {file = "dash_iconify-0.1.2.tar.gz", hash = "sha256:564774be6b11b0ac3a8999b7137c3d17a1d351d69b673aa313c7228eacc9d143"},
 ]
 
 [[package]]
@@ -1088,6 +1118,20 @@ files = [
 docs = ["furo (>=2023.7.26)", "sphinx (>=7.1.2)", "sphinx-autodoc-typehints (>=1.24)"]
 testing = ["covdefaults (>=2.3)", "coverage (>=7.3)", "diff-cover (>=7.7)", "pytest (>=7.4)", "pytest-cov (>=4.1)", "pytest-mock (>=3.11.1)", "pytest-timeout (>=2.1)"]
 typing = ["typing-extensions (>=4.7.1)"]
+
+[[package]]
+name = "fire"
+version = "0.5.0"
+description = "A library for automatically generating command line interfaces."
+optional = false
+python-versions = "*"
+files = [
+    {file = "fire-0.5.0.tar.gz", hash = "sha256:a6b0d49e98c8963910021f92bba66f65ab440da2982b78eb1bbf95a0a34aacc6"},
+]
+
+[package.dependencies]
+six = "*"
+termcolor = "*"
 
 [[package]]
 name = "flask"
@@ -1346,6 +1390,20 @@ brotli = ["brotli", "brotlicffi"]
 cli = ["click (==8.*)", "pygments (==2.*)", "rich (>=10,<13)"]
 http2 = ["h2 (>=3,<5)"]
 socks = ["socksio (==1.*)"]
+
+[[package]]
+name = "humanfriendly"
+version = "10.0"
+description = "Human friendly output for text interfaces using Python"
+optional = false
+python-versions = ">=2.7, !=3.0.*, !=3.1.*, !=3.2.*, !=3.3.*, !=3.4.*"
+files = [
+    {file = "humanfriendly-10.0-py2.py3-none-any.whl", hash = "sha256:1697e1a8a8f550fd43c2865cd84542fc175a61dcb779b6fee18cf6b6ccba1477"},
+    {file = "humanfriendly-10.0.tar.gz", hash = "sha256:6b0b831ce8f15f7300721aa49829fc4e83921a9a301cc7f606be6686a2288ddc"},
+]
+
+[package.dependencies]
+pyreadline3 = {version = "*", markers = "sys_platform == \"win32\" and python_version >= \"3.8\""}
 
 [[package]]
 name = "idna"
@@ -2652,6 +2710,17 @@ docs = ["furo (>=2023.8.19)", "sphinx (<7.2)", "sphinx-autodoc-typehints (>=1.24
 testing = ["covdefaults (>=2.3)", "pytest (>=7.4)", "pytest-cov (>=4.1)", "pytest-mock (>=3.11.1)", "setuptools (>=68.1.2)", "wheel (>=0.41.2)"]
 
 [[package]]
+name = "pyreadline3"
+version = "3.4.1"
+description = "A python implementation of GNU readline."
+optional = false
+python-versions = "*"
+files = [
+    {file = "pyreadline3-3.4.1-py3-none-any.whl", hash = "sha256:b0efb6516fd4fb07b45949053826a62fa4cb353db5be2bbb4a7aa1fdd1e345fb"},
+    {file = "pyreadline3-3.4.1.tar.gz", hash = "sha256:6f3d1f7b8a31ba32b73917cefc1f28cc660562f39aea8646d30bd6eff21f7bae"},
+]
+
+[[package]]
 name = "pyshortcuts"
 version = "1.9.0"
 description = "Create desktop and Start Menu shortcuts for python scripts"
@@ -3551,6 +3620,20 @@ files = [
 doc = ["reno", "sphinx", "tornado (>=4.5)"]
 
 [[package]]
+name = "termcolor"
+version = "2.3.0"
+description = "ANSI color formatting for output in terminal"
+optional = false
+python-versions = ">=3.7"
+files = [
+    {file = "termcolor-2.3.0-py3-none-any.whl", hash = "sha256:3afb05607b89aed0ffe25202399ee0867ad4d3cb4180d98aaf8eefa6a5f7d475"},
+    {file = "termcolor-2.3.0.tar.gz", hash = "sha256:b5b08f68937f138fe92f6c089b99f1e2da0ae56c52b78bf7075fd95420fd9a5a"},
+]
+
+[package.extras]
+tests = ["pytest", "pytest-cov"]
+
+[[package]]
 name = "toml"
 version = "0.10.2"
 description = "Python Library for Tom's Obvious, Minimal Language"
@@ -3832,4 +3915,4 @@ testing = ["big-O", "jaraco.functools", "jaraco.itertools", "more-itertools", "p
 [metadata]
 lock-version = "2.0"
 python-versions = ">=3.8, <3.11"
-content-hash = "1fa117d334a240191d6584b0816866a1060ab84b1d21973213891299515a8f57"
+content-hash = "20433409e8dccde654b89286f84528e683f6a91dd389b9df592620d4c21aaefd"

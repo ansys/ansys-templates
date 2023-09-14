@@ -17,7 +17,7 @@ from ansys.solutions.{{ cookiecutter.__solution_name_slug }}.ui.components.logs_
 from ansys.solutions.{{ cookiecutter.__solution_name_slug }}.ui.pages import monitoring_page, problem_setup_page
 from ansys.solutions.{{ cookiecutter.__solution_name_slug }}.utilities.common_functions import extract_dict_by_key
 
-from ansys_web_components_dash import DwcTree
+from ansys_web_components_dash import AwcDashTree
 
 
 layout = html.Div(
@@ -173,7 +173,7 @@ def display_page_layout(pathname, trigger_layout_display):
                     [
                         dbc.Col(
                             [
-                                DwcTree(
+                                AwcDashTree(
                                     id="navigation_tree",
                                     multi=False,
                                     height=950,

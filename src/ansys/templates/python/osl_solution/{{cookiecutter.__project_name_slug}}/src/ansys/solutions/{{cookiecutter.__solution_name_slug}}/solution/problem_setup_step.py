@@ -65,10 +65,10 @@ class ProblemSetupStep(StepModel):
     project_tree: list = []
     treeview_items: list = [
         {
-            "key": "problem_setup_step",
+            "id": "problem_setup_step",
             "text": "Problem Setup",
-            "depth": 0,
-            "uid": None
+            "expanded": True,
+            "level": 0
         },
     ]
     optislang_log_level: str = "INFO"
