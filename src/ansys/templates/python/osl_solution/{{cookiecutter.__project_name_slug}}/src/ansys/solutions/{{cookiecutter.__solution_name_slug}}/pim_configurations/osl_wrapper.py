@@ -26,7 +26,7 @@ async def start_instance(project_path: str = Body(...), project_properties_file:
 
 
 @app.get("/")
-async def connect_to_instance():
+async def get_port():
     return {"port": OSL_SERVER_PORT}
 
 

@@ -1,16 +1,12 @@
 # ©2023, ANSYS Inc. Unauthorized use, distribution or duplication is prohibited.
 
-import httpx
-
-from ansys.optislang.core import Optislang
-from pathlib import Path
 from typing import Optional, Union
 
+from ansys.optislang.core import Optislang
 from ansys.saf.glow.core.instance_manager import AbstractInstanceIdentificationClient
-from ansys.saf.glow.solution import FileReference
-from ansys.saf.glow.solution import InstanceManager
+from ansys.saf.glow.solution import FileReference, InstanceManager
 from ansys.saf.glow.storage.base import AbstractStoragePath
-
+import httpx
 
 PRODUCT_NAME = "optislang"
 SERVICE_NAME = "http"
@@ -33,13 +29,6 @@ class OptislangManager(InstanceManager[Optislang]):
         """Initialize and start the optiSLang server."""
         self.initialize_service(SERVICE_NAME, version)
 
-        if project_path:
-            self._upload_file(
-                project_path,
-                str(Path(self.protected_instance_state_directory_name) / "project.opf"),
-                protected=False
-            )
-
         response = httpx.post(
             f"{self._service.uri}/start",
             json={
@@ -60,7 +49,7 @@ class OptislangManager(InstanceManager[Optislang]):
         return Optislang(host=hostname, port=response["port"], shutdown_on_finished=False)
 
     def _get_project_file_path(self, protected_state_directory_path: str) -> str:
-        return str(Path(protected_state_directory_path) / "project.opf")
+        pass
 
     def save_state_implement(self, protected_state_directory_path: str) -> None:
         """Save the state of the product instance to the given directory."""
