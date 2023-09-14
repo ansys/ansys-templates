@@ -53,7 +53,10 @@ class OptislangManager(InstanceManager[Optislang]):
 
     def save_state_implement(self, protected_state_directory_path: str) -> None:
         """Save the state of the product instance to the given directory."""
-        pass
+        try:
+            self.instance.dispose()
+        except Exception:
+            pass
 
     def load_state_implement(self, protected_state_directory_path: str) -> None:
         """Loads the state of the product instance from the given directory."""
@@ -61,4 +64,5 @@ class OptislangManager(InstanceManager[Optislang]):
 
     def shutdown_implement(self, protected_state_directory_path: str) -> None:
         """Gracefully terminates the product instance process."""
-        self.save_state_implement(protected_state_directory_path)
+        self.instance.shutdown()
+        self.instance.dispose()
