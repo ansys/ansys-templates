@@ -3,16 +3,15 @@
 """Backend of the problem setup step."""
 
 import json
-import time
-
 from pathlib import Path
+import time
 from typing import List, Optional
 
 from ansys.optislang.core import Optislang, logging
-from ansys.saf.glow.solution import StepModel, StepSpec, long_running, transaction, FileReference
-
-from ansys.solutions.{{ cookiecutter.__solution_name_slug }}.solution.problem_setup_step import ProblemSetupStep
-from ansys.solutions.{{ cookiecutter.__solution_name_slug }}.utilities.common_functions import read_log_file
+from ansys.saf.glow.solution import FileReference, StepModel, StepSpec, instance, long_running, transaction
+from ansys.solutions.{{cookiecutter.__solution_name_slug}}.solution.optislang_manager import OptislangManager
+from ansys.solutions.{{cookiecutter.__solution_name_slug}}.solution.problem_setup_step import ProblemSetupStep
+from ansys.solutions.{{cookiecutter.__solution_name_slug}}.utilities.common_functions import read_log_file
 
 
 class MonitoringStep(StepModel):
@@ -164,8 +163,8 @@ class MonitoringStep(StepModel):
     @transaction(
         problem_setup_step=StepSpec(
             download=[
-                "tcp_server_host",
-                "tcp_server_port",
+                "osl_server_host",
+                "osl_server_port",
                 "project_tree",
                 "optislang_log_level",
             ]
@@ -183,19 +182,12 @@ class MonitoringStep(StepModel):
             ],
         )
     )
+    @instance("problem_setup_step.osl", identifier="osl")
     @long_running
-    def upload_project_data(self, problem_setup_step: ProblemSetupStep) -> None:
+    def upload_project_data(self, problem_setup_step: ProblemSetupStep, osl: OptislangManager) -> None:
         """Monitor the progress of the optiSLang project and continuously upload project data."""
         # Creat monitoring directory
         Path(self.optislang_log_file.path).parent.mkdir(parents=True, exist_ok=True)
-
-        # Connect to optiSLang instance.
-        osl = Optislang(
-            host=problem_setup_step.tcp_server_host,
-            port=problem_setup_step.tcp_server_port,
-            loglevel=problem_setup_step.optislang_log_level,
-            shutdown_on_finished=True
-        )
 
         # Configure logging.
         osl_logger = logging.OslLogger(
@@ -204,31 +196,31 @@ class MonitoringStep(StepModel):
             logfile_name=self.optislang_log_file.path,
             log_to_stdout=True,
         )
-        osl.__logger = osl_logger.add_instance_logger(osl.name, osl, problem_setup_step.optislang_log_level)
+        osl.instance.__logger = osl_logger.add_instance_logger(osl.instance.name, osl.instance, problem_setup_step.optislang_log_level)
 
         # Monitor project state and upload data.
         while True:
             # Get project state
-            self.project_state = osl.project.get_status()
-            osl.log.info(f"Analysis status: {self.project_state}")
+            self.project_state = osl.instance.project.get_status()
+            osl.instance.log.info(f"Analysis status: {self.project_state}")
             # Get project status info
-            with open(self.project_status_info_file.path, "w") as json_file: json.dump(osl.get_osl_server().get_full_project_status_info(), json_file)
+            with open(self.project_status_info_file.path, "w") as json_file: json.dump(osl.instance.get_osl_server().get_full_project_status_info(), json_file)
             # Read pyoptislang logs
             self.optislang_logs = read_log_file(self.optislang_log_file.path)
             # Get actor status info
             actors_info, actors_status_info, actors_states_ids = {}, {}, {}
             for node_info in problem_setup_step.project_tree:
-                if node_info["uid"] == osl.project.root_system.uid:
-                    node = osl.project.root_system
+                if node_info["uid"] == osl.instance.project.root_system.uid:
+                    node = osl.instance.project.root_system
                 else:
-                    node = osl.project.root_system.find_node_by_uid(node_info["uid"], search_depth=-1)
-                actors_info[node.uid] = osl.get_osl_server().get_actor_info(node.uid)
+                    node = osl.instance.project.root_system.find_node_by_uid(node_info["uid"], search_depth=-1)
+                actors_info[node.uid] = osl.instance.get_osl_server().get_actor_info(node.uid)
                 actors_states_ids[node.uid] = node.get_states_ids()
                 if node.get_states_ids():
                     actors_status_info[node.uid] = []
                     for hid in node.get_states_ids():
                         actors_status_info[node.uid].append(
-                            osl.get_osl_server().get_actor_status_info(node.uid, hid)
+                            osl.instance.get_osl_server().get_actor_status_info(node.uid, hid)
                         )
             with open(self.actors_info_file.path, "w") as json_file: json.dump(actors_info, json_file)
             with open(self.actors_status_info_file.path, "w") as json_file: json.dump(actors_status_info, json_file)
@@ -244,14 +236,12 @@ class MonitoringStep(StepModel):
                 break
             time.sleep(3) # Waiting 3 sec before pulling new data. The frequency might be adjusted in the future.
 
-        # Close connection with optiSLang server.
-        osl.dispose()
 
     @transaction(
         problem_setup_step=StepSpec(
             download=[
-                "tcp_server_host",
-                "tcp_server_port",
+                "osl_server_host",
+                "osl_server_port",
                 "project_tree",
             ]
         ),
@@ -264,26 +254,20 @@ class MonitoringStep(StepModel):
             upload=["actor_uid"],
         )
     )
-    def control_node_state(self, problem_setup_step: ProblemSetupStep) -> None:
+    @instance("problem_setup_step.osl", identifier="osl")
+    def control_node_state(self, problem_setup_step: ProblemSetupStep, osl: OptislangManager) -> None:
         """Update the state of root or actor node based on the selected command in the UI."""
-        osl = Optislang(
-            host=problem_setup_step.tcp_server_host,
-            port=problem_setup_step.tcp_server_port,
-            shutdown_on_finished=False
-        )
         if not self.selected_actor_from_command == "shutdown":
-            if self.selected_actor_from_command == osl.project.root_system.uid:
-                node = osl.project.root_system
+            if self.selected_actor_from_command == osl.instance.project.root_system.uid:
+                node = osl.instance.project.root_system
                 self.actor_uid = None
             else:
-                node = osl.project.root_system.find_node_by_uid(self.selected_actor_from_command, search_depth=-1)
+                node = osl.instance.project.root_system.find_node_by_uid(self.selected_actor_from_command, search_depth=-1)
                 self.actor_uid = node
         else:
-            node = osl.project.root_system
+            node = osl.instance.project.root_system
 
         status = node.control(self.selected_command, wait_for_completion=True, timeout=self.command_timeout)
 
         if not status:
             raise Exception(f"{self.selected_command.replace('_', ' ').title()} command against node {node.get_name()} failed.")
-
-        osl.dispose()
