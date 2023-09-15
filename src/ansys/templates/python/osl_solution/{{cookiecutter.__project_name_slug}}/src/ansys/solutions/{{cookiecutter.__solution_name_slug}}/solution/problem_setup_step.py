@@ -13,6 +13,7 @@ from ansys.optislang.core import Optislang, utils
 from ansys.saf.glow.solution import (
     FileGroupReference,
     FileReference,
+    AssetFileReference,
     StepModel,
     StepSpec,
     create_instance,
@@ -90,26 +91,15 @@ class ProblemSetupStep(StepModel):
 
     @transaction(
         self=StepSpec(
-            upload=[
-                "project_file",
-                "properties_file",
-                "metadata_file",
-            ]
+            download=["metadata_file"],
+            upload=["app_metadata"]
         )
     )
     @long_running
-    def upload_bulk_files_to_project_directory(self) -> None:
-        """Upload bulk files to project directory."""
-        original_project_file = Path(__file__).parent.absolute().parent / "model" / "assets" / "{{ cookiecutter.__optiSLang_application_archive_stem }}.opf"
-        self.project_file.write_bytes(original_project_file.read_bytes())
-
-        original_properties_file = (
-            Path(__file__).parent.absolute().parent / "model" / "assets" / "{{ cookiecutter.__optiSLang_application_archive_stem }}.json"
-        )
-        self.properties_file.write_bytes(original_properties_file.read_bytes())
-
-        original_metadata_file = Path(__file__).parent.absolute().parent / "model" / "assets" / "metadata.json"
-        self.metadata_file.write_bytes(original_metadata_file.read_bytes())
+    def get_app_metadata(self) -> None:
+        """Read OWA metadata file."""
+        with open(self.metadata_file.path) as f:
+            self.app_metadata = json.load(f)
 
     @transaction(
         self=StepSpec(
@@ -143,6 +133,7 @@ class ProblemSetupStep(StepModel):
     )
     def write_updated_properties_file(self) -> None:
         """Write updated optiSLang project properties file."""
+        Path(self.working_properties_file.path).parent.mkdir(parents=True, exist_ok=True)
         properties = apply_placeholders_to_properties_file(self.ui_placeholders, self.properties_file.path)
         self.placeholders = properties["placeholders"]
         self.registered_files = properties["registered_files"]
@@ -219,18 +210,6 @@ class ProblemSetupStep(StepModel):
                 alert_color = "success"
             self.ansys_ecosystem[product_name]["alert_message"] = alert_message
             self.ansys_ecosystem[product_name]["alert_color"] = alert_color
-
-    @transaction(
-        self=StepSpec(
-            download=["metadata_file"],
-            upload=["app_metadata"]
-        )
-    )
-    @long_running
-    def get_app_metadata(self) -> None:
-        """Read OWA metadata file."""
-        with open(self.metadata_file.path) as f:
-            self.app_metadata = json.load(f)
 
     @transaction(
         self=StepSpec(

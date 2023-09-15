@@ -52,8 +52,6 @@ def initialization(pathname):
     project = DashClient[{{ cookiecutter.__solution_definition_name }}].get_project(pathname)
 
     if not project.steps.problem_setup_step.project_initialized:
-        long_running = project.steps.problem_setup_step.upload_bulk_files_to_project_directory() # to be replaced by AssetFileReference
-        long_running.wait()
         long_running = project.steps.problem_setup_step.get_app_metadata()
         long_running.wait()
         long_running = project.steps.problem_setup_step.get_default_placeholder_values()

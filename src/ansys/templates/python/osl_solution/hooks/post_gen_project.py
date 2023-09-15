@@ -91,7 +91,7 @@ DESIRED_STRUCTURE = [
 ]
 """A list holding all desired files to be included in the project."""
 
-ASSETS_DIRCTORY = Path(f"src/ansys/solutions/{{ cookiecutter.__solution_name_slug }}/model/assets/").absolute()
+ASSETS_DIRCTORY = Path(f"src/ansys/solutions/{{ cookiecutter.__solution_name_slug }}/solution/method_assets/Problem_Setup").absolute()
 
 
 def unzip_archive(archive_path: Path, extract_path: Path) -> None:
