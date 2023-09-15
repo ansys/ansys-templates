@@ -77,9 +77,9 @@ class ProblemSetupStep(StepModel):
     # File storage ----------------------------------------------------------------------------------------------------
 
     # Inputs
-    project_file: FileReference = FileReference("Problem_Setup/{{ cookiecutter.__optiSLang_application_archive_stem }}.opf")
-    properties_file: FileReference = FileReference("Problem_Setup/{{ cookiecutter.__optiSLang_application_archive_stem }}.json")
-    metadata_file: FileReference = FileReference("Problem_Setup/metadata.json")
+    project_file: AssetFileReference = AssetFileReference(relative_path="Problem_Setup/{{ cookiecutter.__optiSLang_application_archive_stem }}.opf", encrypted=False)
+    properties_file: AssetFileReference = AssetFileReference(relative_path="Problem_Setup/{{ cookiecutter.__optiSLang_application_archive_stem }}.json", encrypted=False)
+    metadata_file: AssetFileReference = AssetFileReference(relative_path="Problem_Setup/metadata.json", encrypted=False)
     input_files: FileGroupReference = FileGroupReference("Problem_Setup/Input_Files/*.*")
     # If folder doesn't exist, it will be created later
     upload_directory: str = os.path.join(tempfile.gettempdir(), "GLOW")
