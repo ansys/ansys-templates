@@ -78,7 +78,7 @@ def update_progress_bar(n_intervals, pathname):
 
         completion_rate = 0
         message = None
-        methods = ["upload_bulk_files_to_project_directory", "get_app_metadata", "get_default_placeholder_values"]
+        methods = ["get_app_metadata", "get_default_placeholder_values"]
 
         for method in methods:
             status = problem_setup_step.get_long_running_method_state(method).status

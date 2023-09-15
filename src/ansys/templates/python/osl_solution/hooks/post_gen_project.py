@@ -140,15 +140,15 @@ def main():
         if not archive_path.exists():
             raise Exception(f"File not found: {archive_path}")
 
-        unzip_archive(archive_path, ASSETS_DIRCTORY / "{{ cookiecutter.__optiSLang_application_archive_stem }}")
+        unzip_archive(archive_path, ASSETS_DIRECTORY / "{{ cookiecutter.__optiSLang_application_archive_stem }}")
 
         for file in ["metadata.json", "doc.md"]:
             copy_file_to_assets_folder(
-                str(ASSETS_DIRCTORY / "{{ cookiecutter.__optiSLang_application_archive_stem }}" / file),
-                str(ASSETS_DIRCTORY / file)
+                str(ASSETS_DIRECTORY / "{{ cookiecutter.__optiSLang_application_archive_stem }}" / file),
+                str(ASSETS_DIRECTORY / file)
             )
         for extension in [".json", ".opf"]:
-            candidates = collect_files_with_extension(str(ASSETS_DIRCTORY / "{{ cookiecutter.__optiSLang_application_archive_stem }}" / "custom_data"), extension)
+            candidates = collect_files_with_extension(str(ASSETS_DIRECTORY / "{{ cookiecutter.__optiSLang_application_archive_stem }}" / "custom_data"), extension)
             if len(candidates) == 0:
                 raise Exception("The optiSLang application archive contains no project file (opf).")
             elif len(candidates) > 1:
@@ -156,10 +156,10 @@ def main():
             else:
                 candidate = "{{ cookiecutter.__optiSLang_application_archive_stem }}" + extension
                 copy_file_to_assets_folder(
-                    str(ASSETS_DIRCTORY / "{{ cookiecutter.__optiSLang_application_archive_stem }}" / "custom_data" / candidates[0]),
-                    str(ASSETS_DIRCTORY / candidate)
+                    str(ASSETS_DIRECTORY / "{{ cookiecutter.__optiSLang_application_archive_stem }}" / "custom_data" / candidates[0]),
+                    str(ASSETS_DIRECTORY / candidate)
                 )
-        shutil.rmtree(str(ASSETS_DIRCTORY / "{{ cookiecutter.__optiSLang_application_archive_stem }}"))
+        shutil.rmtree(str(ASSETS_DIRECTORY / "{{ cookiecutter.__optiSLang_application_archive_stem }}"))
 
 
 if __name__ == "__main__":
