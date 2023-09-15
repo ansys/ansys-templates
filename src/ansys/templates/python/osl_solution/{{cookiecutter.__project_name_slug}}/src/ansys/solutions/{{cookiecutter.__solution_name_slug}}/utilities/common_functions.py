@@ -70,35 +70,86 @@ PROJECT_STATES = {
 }
 
 
+def find_dicts_by_key_recursively(structure, target_level, current_path=[]):
+    results = []
+
+    if isinstance(structure, list):
+        for i, item in enumerate(structure):
+            path = current_path + [i]
+            results.extend(find_dicts_by_key_recursively(item, target_level, path))
+    elif isinstance(structure, dict):
+        if "level" in structure and structure["level"] == target_level:
+            results.append(current_path)
+        for key, value in structure.items():
+            path = current_path + [key]
+            results.extend(find_dicts_by_key_recursively(value, target_level, path))
+
+    return results
+
+
+def get_dict_from_indexes_sequence(nested_structure, mixed_keys):
+    """
+    Retrieve a dictionary from a complex nested structure of dictionaries and lists
+    using a mixed list of keys and indexes.
+
+    Args:
+        nested_structure (dict or list): The complex nested structure.
+        mixed_keys (list): List of keys and indexes to follow, in mixed order.
+
+    Returns:
+        dict: The retrieved dictionary, or None if not found.
+    """
+    for key_or_index in mixed_keys:
+        if isinstance(nested_structure, dict) and isinstance(key_or_index, str) and key_or_index in nested_structure:
+            nested_structure = nested_structure[key_or_index]
+        elif isinstance(nested_structure, list) and isinstance(key_or_index, int) and 0 <= key_or_index < len(nested_structure):
+            nested_structure = nested_structure[key_or_index]
+        else:
+            return None  # Key or index not found in the current level
+
+    if isinstance(nested_structure, dict):
+        return nested_structure
+    else:
+        return None  # If the final element is not a dictionary
+
+
 def get_treeview_items_from_project_tree(project_tree: list) -> list:
 
     treeview_items = [
         {
-            "key": "problem_setup_step",
+            "id": "problem_setup_step",
             "text": "Problem Setup",
-            "depth": 0,
-            "uid": None,
+            "expanded": True,
+            "level": 0
         },
     ]
 
-    for node in project_tree:
-        if node["kind"] == "system":
+    for i, node in enumerate(project_tree):
+        if node["is_root"]:
             treeview_items.append(
                 {
-                    "key": f'{node["name"].lower()}_{node["uid"]}_toggle',
+                    "id": node["uid"],
                     "text": node["name"],
-                    "depth": node["level"],
-                    "uid": node["uid"],
+                    "expanded": True,
+                    "level": 0,
+                    "children": []
                 }
             )
-        treeview_items.append(
-            {
-                "key": f'{node["name"].lower()}_{node["uid"]}',
-                "text": node["name"],
-                "depth": node["level"] + 1 if node["kind"] == "system" else node["level"],
-                "uid": node["uid"],
-            }
-        )
+        else:
+            # Find parent node
+            matching_indexes = find_dicts_by_key_recursively(treeview_items, (node["level"] - 1))
+            if len(matching_indexes) == 0:
+                raise Exception("Unable to find parent node.")
+            parent_node = get_dict_from_indexes_sequence(treeview_items, matching_indexes[-1])
+            parent_node["children"].append(
+                {
+                    "id": node["uid"],
+                    "text": node["name"],
+                    "expanded": True,
+                    "level": node["level"],
+                    "children": []
+                },
+            )
 
     return treeview_items
 

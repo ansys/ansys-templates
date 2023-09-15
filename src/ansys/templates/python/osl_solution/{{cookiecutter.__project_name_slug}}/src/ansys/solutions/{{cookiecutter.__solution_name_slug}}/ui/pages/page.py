@@ -6,10 +6,8 @@ import dash_bootstrap_components as dbc
 import json
 import webbrowser
 
-from ansys_dash_treeview import AnsysDashTreeview
 from dash.exceptions import PreventUpdate
 from dash_extensions.enrich import Input, Output, State, callback_context, dcc, html
-from dash_iconify import DashIconify
 
 from ansys.saf.glow.client.dashclient import DashClient, callback
 from ansys.saf.glow.core.method_status import MethodStatus
@@ -18,6 +16,8 @@ from ansys.solutions.{{ cookiecutter.__solution_name_slug }}.solution.definition
 from ansys.solutions.{{ cookiecutter.__solution_name_slug }}.ui.components.logs_table import LogsTable
 from ansys.solutions.{{ cookiecutter.__solution_name_slug }}.ui.pages import monitoring_page, problem_setup_page
 from ansys.solutions.{{ cookiecutter.__solution_name_slug }}.utilities.common_functions import extract_dict_by_key
+
+from ansys_web_components_dash import AwcDashTree
 
 
 layout = html.Div(
@@ -173,15 +173,14 @@ def display_page_layout(pathname, trigger_layout_display):
                     [
                         dbc.Col(
                             [
-                                AnsysDashTreeview(
+                                AwcDashTree(
                                     id="navigation_tree",
+                                    multi=False,
+                                    height=950,
                                     items=problem_setup_step.treeview_items,
-                                    children=[
-                                        DashIconify(icon="bi:caret-right-square-fill"),
-                                        DashIconify(icon="bi:caret-down-square-fill"),
-                                    ],
-                                    style={"showButtons": True, "focusColor": "#ffb71b", "itemHeight": "32"},  # Ansys gold
-                                )
+                                    selectedItemIds=["problem_setup"]
+                                ),
+
                             ],
                             width=2,
                             style={"background-color": "rgba(242, 242, 242, 0.6)"},  # Ansys grey
@@ -215,7 +214,8 @@ def display_page_layout(pathname, trigger_layout_display):
 @callback(
     Output("body_content", "children"),
     Output("bottom_button_group", "children"),
-    Input("navigation_tree", "focus"),
+    Output("navigation_tree", "focusRequested"),
+    Input("navigation_tree", "treeItemClicked"),
     Input("url", "pathname"),
     Input("trigger_body_display", "data"),
 )
@@ -248,13 +248,15 @@ def display_body_content(value, pathname, trigger_body_display):
             )
         if triggered_id == "url" or triggered_id == "trigger_body_display" or trigger_body_display and len(triggered_id) == 0:
             page_layout = problem_setup_page.layout(problem_setup_step, monitoring_step)
+            focusRequested = ""
         if triggered_id == "navigation_tree":
-            if value is None:
+            focusRequested = value["id"]
+            if value["id"] is None:
                 page_layout = html.H1("Welcome!")
-            elif value == "problem_setup_step":
+            elif value["id"] == "problem_setup_step":
                 page_layout = problem_setup_page.layout(problem_setup_step, monitoring_step)
             else:
-                monitoring_step.selected_actor_from_treeview = extract_dict_by_key(problem_setup_step.treeview_items, "key", value, expect_unique=True, return_index=False)["uid"]
+                monitoring_step.selected_actor_from_treeview = extract_dict_by_key(problem_setup_step.project_tree, "uid", value["id"], expect_unique=True, return_index=False)["uid"]
                 page_layout = monitoring_page.layout(problem_setup_step, monitoring_step)
                 actors_states_ids = json.loads(monitoring_step.actors_states_ids_file.read_text())
                 footer_buttons.insert(
@@ -281,7 +283,8 @@ def display_body_content(value, pathname, trigger_body_display):
         ]
         return (
             page_layout,
-            footer
+            footer,
+            focusRequested
         )
     else:
         raise PreventUpdate
