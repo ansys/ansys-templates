@@ -100,21 +100,6 @@ grpcio = ">=1.17,<2.0"
 protobuf = ">=3.19,<5"
 
 [[package]]
-name = "ansys-dash-treeview"
-version = "0.0.1.dev0"
-description = "A Dash component for the tree view"
-optional = false
-python-versions = "*"
-files = [
-    {file = "ansys_dash_treeview-0.0.1.dev0-py3-none-any.whl", hash = "sha256:38c6c0921c7e01dddb309eea5ec0c5167dd9130ce11d33ae9f08277a9295484b"},
-]
-
-[package.source]
-type = "legacy"
-url = "https://pkgs.dev.azure.com/pyansys/_packaging/ansys-solutions/pypi/simple"
-reference = "solutions-private-pypi"
-
-[[package]]
 name = "ansys-optislang-core"
 version = "0.4.0"
 description = "A Python wrapper for Ansys optiSLang application."
@@ -3915,4 +3900,4 @@ testing = ["big-O", "jaraco.functools", "jaraco.itertools", "more-itertools", "p
 [metadata]
 lock-version = "2.0"
 python-versions = ">=3.8, <3.11"
-content-hash = "20433409e8dccde654b89286f84528e683f6a91dd389b9df592620d4c21aaefd"
+content-hash = "bffbede710c4acef51d03ecd0a73f3630bc8305c824aac0faf0407dd31e74a1e"
