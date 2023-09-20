@@ -366,7 +366,7 @@ OSL_SOLUTION_STRUCTURE = [
     "doc/make.bat",
     "doc/Makefile",
     "examples/README.md",
-    f"src/ansys/solutions/{OSL_SOLUTION_VARS['__solution_name_slug']}/model/assets/README.md",
+    f"src/ansys/solutions/{OSL_SOLUTION_VARS['__solution_name_slug']}/datamodel/datamodel.py",
     f"src/ansys/solutions/{OSL_SOLUTION_VARS['__solution_name_slug']}/pim_configurations/osl_wrapper.py",
     f"src/ansys/solutions/{OSL_SOLUTION_VARS['__solution_name_slug']}/pim_configurations/pim_osl_configuration.py",
     f"src/ansys/solutions/{OSL_SOLUTION_VARS['__solution_name_slug']}/solution/method_assets/README.md",
