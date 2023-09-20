@@ -1,7 +1,6 @@
 # ©2023, ANSYS Inc. Unauthorized use, distribution or duplication is prohibited.
 
 import dash_bootstrap_components as dbc
-# from plotly.express import pie
 import uuid
 
 from dash_extensions.enrich import html, dcc
