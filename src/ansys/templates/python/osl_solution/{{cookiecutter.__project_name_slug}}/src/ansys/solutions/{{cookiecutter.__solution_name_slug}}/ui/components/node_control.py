@@ -4,7 +4,7 @@ import json
 import dash_bootstrap_components as dbc
 import uuid
 
-from dash_extensions.enrich import Output, Input, State, html, dcc, callback, MATCH, callback_context, ALL
+from dash_extensions.enrich import Output, Input, State, html, callback, MATCH, callback_context, ALL
 from dash.exceptions import PreventUpdate
 
 from ansys.saf.glow.client.dashclient import DashClient
