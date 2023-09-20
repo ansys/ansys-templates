@@ -3,8 +3,9 @@
 """Frontend of the design table view."""
 
 import dash_bootstrap_components as dbc
-from dash_extensions.enrich import html, Input, Output, State, dcc
+import pandas as pd
 
+from dash_extensions.enrich import html, Input, Output, State, dcc
 from ansys.saf.glow.client.dashclient import DashClient, callback
 
 from ansys.solutions.{{ cookiecutter.__solution_name_slug }}.solution.definition import {{ cookiecutter.__solution_definition_name }}
@@ -20,7 +21,13 @@ def layout(monitoring_step: MonitoringStep) -> html.Div:
             html.Br(),
             dbc.Row(
                 [
-                    dbc.Col(html.Div(DesignTableAIO(monitoring_step), id="design_table"), width=12),
+                    dbc.Col(
+                        DesignTableAIO(
+                            monitoring_step.design_tables[monitoring_step.selected_actor_from_treeview][monitoring_step.selected_state_id],
+                            aio_id="design_table"
+                        ),
+                        width=12
+                    ),
                 ]
             ),
             dcc.Interval(
@@ -45,7 +52,7 @@ def activate_auto_update(on, pathname):
 
 
 @callback(
-    Output("design_table", "children"),
+    Output(DesignTableAIO.ids.datatable("design_table"), "data"),
     Input("design_table_auto_update", "n_intervals"),
     State("url", "pathname"),
     prevent_initial_call=True,
@@ -55,4 +62,4 @@ def update_view(n_intervals, pathname):
     project = DashClient[{{ cookiecutter.__solution_definition_name }}].get_project(pathname)
     monitoring_step = project.steps.monitoring_step
 
-    return DesignTableAIO(monitoring_step)
+    return pd.DataFrame(monitoring_step.design_tables[monitoring_step.selected_actor_from_treeview][monitoring_step.selected_state_id])

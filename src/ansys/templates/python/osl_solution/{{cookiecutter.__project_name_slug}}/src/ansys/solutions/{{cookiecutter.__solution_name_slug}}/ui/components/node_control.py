@@ -42,11 +42,12 @@ class NodeControlAIO(html.Div):
             aio_id = str(uuid.uuid4())
 
         super().__init__([
+            html.H5("Commands", className="card-title"),
+            html.Hr(className="my-2"),
             dbc.Card(
                 [
                     dbc.CardBody(
                         [
-                            html.H4("Project commands", className="card-title"),
                             dbc.Row(
                                 [
                                     dbc.Col(
@@ -73,12 +74,11 @@ class NodeControlAIO(html.Div):
                                     html.Div(id="action-requested", style={"display": "none"}, children=False),
                                 ],
                             ),
-
-                        ]
+                        ],
+                        className="border-0 bg-transparent"
                     ),
                 ],
-                color="warning",
-                outline=True,
+                className="border-0 bg-transparent"
             )
         ])
 

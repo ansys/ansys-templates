@@ -5,13 +5,6 @@ import uuid
 
 from dash_extensions.enrich import html, dcc
 
-from ansys.solutions.{{ cookiecutter.__solution_name_slug }}.solution.definition import {{ cookiecutter.__solution_definition_name }}
-from ansys.solutions.{{ cookiecutter.__solution_name_slug }}.solution.monitoring_step import MonitoringStep
-from ansys.solutions.{{ cookiecutter.__solution_name_slug }}.utilities.common_functions import (
-    remove_key_from_dictionaries,
-    sort_dict_by_ordered_keys,
-)
-
 
 class SystemFilesAIO(html.Div):
 
@@ -39,13 +32,11 @@ class SystemFilesAIO(html.Div):
 
     ids = ids
 
-    def __init__(self, monitoring_step: MonitoringStep, aio_id: str = None):
+    def __init__(self, data: dict, aio_id: str = None):
         """SystemFilesAIO is an All-in-One component that is composed
-        of a parent `html.Div` with a `dcc.Interval` and a `dash_table.DataTable` as children.
+        of multiple components which are not exposed but only configured internally.
 
-        - `monitoring_step` - The StepModel object of the monitoring step.
-        - `datatable_props` - A dictionary of properties passed into the dash_table.DataTable component.
-        - `interval_props` - A dictionary of properties passed into the dcc.Interval component.
+        - `data` - Data to be displayed.
         - `aio_id` - The All-in-One component ID used to generate the table components's dictionary IDs.
         """
 
@@ -56,11 +47,12 @@ class SystemFilesAIO(html.Div):
         download_props = {}
 
         super().__init__([
+            html.H5("System Files", className="card-title"),
+            html.Hr(className="my-2"),
             dbc.Card(
                 [
                     dbc.CardBody(
                         [
-                            html.H4("System Files", className="card-title"),
                             dbc.Stack(
                                 [
                                     html.Div(
@@ -90,7 +82,6 @@ class SystemFilesAIO(html.Div):
                         ]
                     )
                 ],
-                color="warning",
-                outline=True,
+                className="border-0 bg-transparent"
             )
         ])

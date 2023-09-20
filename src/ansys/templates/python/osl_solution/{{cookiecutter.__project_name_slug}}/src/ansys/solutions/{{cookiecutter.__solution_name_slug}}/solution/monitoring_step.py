@@ -7,10 +7,12 @@ from pathlib import Path
 import time
 from typing import List, Optional
 
-from ansys.optislang.core import Optislang, logging
+from ansys.optislang.core import logging
 from ansys.saf.glow.solution import FileReference, StepModel, StepSpec, instance, long_running, transaction
-from ansys.solutions.{{cookiecutter.__solution_name_slug}}.solution.optislang_manager import OptislangManager
+
+from ansys.solutions.{{cookiecutter.__solution_name_slug}}.datamodel import datamodel
 from ansys.solutions.{{cookiecutter.__solution_name_slug}}.solution.problem_setup_step import ProblemSetupStep
+from ansys.solutions.{{cookiecutter.__solution_name_slug}}.solution.optislang_manager import OptislangManager
 from ansys.solutions.{{cookiecutter.__solution_name_slug}}.utilities.common_functions import read_log_file
 
 
@@ -23,7 +25,7 @@ class MonitoringStep(StepModel):
     selected_actor_from_treeview: Optional[str] = None
     selected_command: Optional[str] = None
     selected_actor_from_command: Optional[str] = None
-    selected_actor_from_treeview_states_ids: list = []
+    selected_state_id: Optional[str] = None
     commands_locked: bool = False
     auto_update_frequency: float = 2000
     auto_update_activated: bool = True
@@ -120,8 +122,6 @@ class MonitoringStep(StepModel):
                         ]
 
     # Backend data model
-    results_files: dict = {}
-    project_state: str = "NOT STARTED"
     osl_project_states: List = [
         "IDLE",
         "PROCESSING",
@@ -146,17 +146,23 @@ class MonitoringStep(StepModel):
         "Stopped",
         "Gently stopped"
     ]
-    optislang_logs: List = []
     command_timeout: int = 30
+
+    project_state: str = "NOT STARTED"
+    project_information: dict = {}
+    actors_info: dict = {}
+    actors_states_ids: dict = {}
+    actors_information: dict = {}
+    actors_log: dict = {}
+    actors_statistics: dict = {}
+    design_tables: dict = {}
+    optislang_logs: List = []
 
     # File storage ----------------------------------------------------------------------------------------------------
 
     # Output
     optislang_log_file: FileReference = FileReference("Problem_Setup/pyoptislang.log")
-    project_status_info_file: FileReference = FileReference("Problem_Setup/project_status_info.json")
-    actors_info_file: FileReference = FileReference("Problem_Setup/actors_info.json")
-    actors_status_info_file: FileReference = FileReference("Problem_Setup/actors_status_info.json")
-    actors_states_ids_file: FileReference = FileReference("Problem_Setup/actors_states_ids.json")
+    full_project_status_info_file: FileReference = FileReference("Problem_Setup/full_project_status_info.json")
 
     # Methods ---------------------------------------------------------------------------------------------------------
 
@@ -172,13 +178,16 @@ class MonitoringStep(StepModel):
         self=StepSpec(
             upload=[
                 "project_state",
-                "project_status_info_file",
-                "actors_info_file",
-                "actors_status_info_file",
-                "actors_states_ids_file",
+                "full_project_status_info_file",
+                "project_information",
+                "actors_info",
+                "actors_states_ids",
+                "actors_information",
+                "actors_log",
+                "actors_statistics",
+                "design_tables",
                 "optislang_logs",
                 "optislang_log_file",
-                "results_files",
             ],
         )
     )
@@ -203,35 +212,53 @@ class MonitoringStep(StepModel):
             # Get project state
             self.project_state = osl.instance.project.get_status()
             osl.instance.log.info(f"Analysis status: {self.project_state}")
-            # Get project status info
-            with open(self.project_status_info_file.path, "w") as json_file: json.dump(osl.instance.get_osl_server().get_full_project_status_info(), json_file)
+            # Get full project status info
+            full_project_status_info = osl.instance.get_osl_server().get_full_project_status_info()
+            with open(self.full_project_status_info_file.path, "w") as json_file: json.dump(full_project_status_info, json_file)
+            # Get project information
+            self.project_information = datamodel.extract_project_status_info(full_project_status_info)
             # Read pyoptislang logs
             self.optislang_logs = read_log_file(self.optislang_log_file.path)
-            # Get actor status info
-            actors_info, actors_status_info, actors_states_ids = {}, {}, {}
+            # Get actor specific data
             for node_info in problem_setup_step.project_tree:
+                # Get node
                 if node_info["uid"] == osl.instance.project.root_system.uid:
                     node = osl.instance.project.root_system
                 else:
                     node = osl.instance.project.root_system.find_node_by_uid(node_info["uid"], search_depth=-1)
-                actors_info[node.uid] = osl.instance.get_osl_server().get_actor_info(node.uid)
-                actors_states_ids[node.uid] = node.get_states_ids()
+                # Get actor info
+                actor_info = osl.instance.get_osl_server().get_actor_info(node.uid)
+                self.actors_info[node.uid] = actor_info
+                # Get state ids
+                self.actors_states_ids[node.uid] = node.get_states_ids()
+                # Get design specific data
+                self.actors_information[node.uid] = {}
+                self.design_tables[node.uid] = {}
                 if node.get_states_ids():
-                    actors_status_info[node.uid] = []
                     for hid in node.get_states_ids():
-                        actors_status_info[node.uid].append(
-                            osl.instance.get_osl_server().get_actor_status_info(node.uid, hid)
-                        )
-            with open(self.actors_info_file.path, "w") as json_file: json.dump(actors_info, json_file)
-            with open(self.actors_status_info_file.path, "w") as json_file: json.dump(actors_status_info, json_file)
-            with open(self.actors_states_ids_file.path, "w") as json_file: json.dump(actors_states_ids, json_file)
+                        # Get actor information data
+                        actor_status_info = osl.instance.get_osl_server().get_actor_status_info(node.uid, hid)
+                        self.actors_information[node.uid][hid] = datamodel.extract_actor_information_data(actor_status_info, node.get_kind())
+                        # Get design table data
+                        if node.get_kind() == "system":
+                            self.design_tables[node.uid][hid] = datamodel.extract_design_table_data(actor_status_info)
+                # Get actor log data
+                self.actors_log[node.uid] = datamodel.extract_actor_log_data(actor_info)
+                # Get actor statistics data
+                self.actors_statistics[node.uid] = datamodel.extract_actor_statistics_data(actor_info)
+
             # Upload fields
             self.transaction.upload(["project_state"])
-            self.transaction.upload(["project_status_info_file"])
-            self.transaction.upload(["actors_info_file"])
-            self.transaction.upload(["actors_status_info_file"])
+            self.transaction.upload(["full_project_status_info_file"])
+            self.transaction.upload(["project_information"])
+            self.transaction.upload(["actors_info"])
+            self.transaction.upload(["actors_states_ids"])
+            self.transaction.upload(["actors_information"])
+            self.transaction.upload(["actors_log"])
+            self.transaction.upload(["actors_statistics"])
+            self.transaction.upload(["design_tables"])
             self.transaction.upload(["optislang_logs"])
-            self.transaction.upload(["actors_states_ids_file"])
+
             if self.project_state == "FINISHED":
                 break
             time.sleep(3) # Waiting 3 sec before pulling new data. The frequency might be adjusted in the future.
