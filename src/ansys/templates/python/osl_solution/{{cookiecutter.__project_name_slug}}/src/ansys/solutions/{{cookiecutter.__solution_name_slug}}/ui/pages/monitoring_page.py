@@ -65,28 +65,31 @@ def layout(problem_setup_step: ProblemSetupStep, monitoring_step: MonitoringStep
 @callback(
     Output("monitoring_page_content", "children"),
     Input("monitoring_tabs", "active_tab"),
-    Input("url", "pathname"),
+    Input("selected_state_dropdown", "value"),
+    State("url", "pathname"),
 )
-def update_page_content(active_tab, pathname):
+def update_page_content(selected_tab, selected_state_id, pathname):
     """Update the page content according to the selected tab."""
 
     project = DashClient[{{ cookiecutter.__solution_definition_name }}].get_project(pathname)
     problem_setup_step = project.steps.problem_setup_step
     monitoring_step = project.steps.monitoring_step
 
-    if active_tab == "project_summary_tab":
+    monitoring_step.selected_state_id = selected_state_id
+
+    if selected_tab == "project_summary_tab":
         return project_summary_view.layout(problem_setup_step, monitoring_step)
-    elif active_tab == "summary_tab":
+    elif selected_tab == "summary_tab":
         return summary_view.layout(problem_setup_step, monitoring_step)
-    elif active_tab == "result_files_tab":
+    elif selected_tab == "result_files_tab":
         return result_files_view.layout(monitoring_step)
-    elif active_tab == "scenery_tab":
+    elif selected_tab == "scenery_tab":
         return scenery_view.layout(monitoring_step)
-    elif active_tab == "design_table_tab":
+    elif selected_tab == "design_table_tab":
         return design_table_view.layout(monitoring_step)
-    elif active_tab == "visualization_tab":
+    elif selected_tab == "visualization_tab":
         return visualization_view.layout(monitoring_step)
-    elif active_tab == "status_overview_tab":
+    elif selected_tab == "status_overview_tab":
         return status_overview_view.layout(monitoring_step)
 
 

@@ -8,6 +8,7 @@ import time
 from typing import List, Optional
 
 from ansys.optislang.core import logging
+from ansys.optislang.core.nodes import System, ParametricSystem, RootSystem
 from ansys.saf.glow.solution import FileReference, StepModel, StepSpec, instance, long_running, transaction
 
 from ansys.solutions.{{cookiecutter.__solution_name_slug}}.datamodel import datamodel
@@ -226,6 +227,11 @@ class MonitoringStep(StepModel):
                     node = osl.instance.project.root_system
                 else:
                     node = osl.instance.project.root_system.find_node_by_uid(node_info["uid"], search_depth=-1)
+                # Get node kind
+                if isinstance(node, RootSystem) or isinstance(node, ParametricSystem) or isinstance(node, System):
+                    kind = "system"
+                else:
+                    kind = "actor"
                 # Get actor info
                 actor_info = osl.instance.get_osl_server().get_actor_info(node.uid)
                 self.actors_info[node.uid] = actor_info
@@ -238,9 +244,9 @@ class MonitoringStep(StepModel):
                     for hid in node.get_states_ids():
                         # Get actor information data
                         actor_status_info = osl.instance.get_osl_server().get_actor_status_info(node.uid, hid)
-                        self.actors_information[node.uid][hid] = datamodel.extract_actor_information_data(actor_status_info, node.get_kind())
+                        self.actors_information[node.uid][hid] = datamodel.extract_actor_information_data(actor_status_info, kind)
                         # Get design table data
-                        if node.get_kind() == "system":
+                        if kind == "system":
                             self.design_tables[node.uid][hid] = datamodel.extract_design_table_data(actor_status_info)
                 # Get actor log data
                 self.actors_log[node.uid] = datamodel.extract_actor_log_data(actor_info)

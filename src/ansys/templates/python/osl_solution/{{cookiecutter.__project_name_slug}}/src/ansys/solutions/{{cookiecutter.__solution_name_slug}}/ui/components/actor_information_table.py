@@ -1,7 +1,7 @@
 # ©2023, ANSYS Inc. Unauthorized use, distribution or duplication is prohibited.
 
 import dash_bootstrap_components as dbc
-import plotly.express as px
+# from plotly.express import pie
 import uuid
 
 from dash_extensions.enrich import html, dcc
@@ -42,22 +42,42 @@ class ActorInformationTableAIO(html.Div):
 
         if pie_chart_data:
             pie_chart_props = {
-                "figure": px.pie(
-                    pie_chart_data,
-                    values='Count',
-                    names='Category',
-                    color='Category',
-                    color_discrete_map={
-                        'Success': 'rgba(173, 191, 11, 1)',
-                        'Failure': 'rgba(248, 105, 80, 1)',
-                        'Pending': 'rgba(251, 201, 93, 1)'
-                    },
-                ).update_traces(textinfo='none', hole=0.8, showlegend=True),
-                "style": {
-                    "width": "300px",
-                    "height": "300px",
-                    "display": "inline-block",
-                },
+                "figure": {
+                    "data": [
+                        {
+                            "type": "pie",
+                            "labels": pie_chart_data["Category"],
+                            "values": pie_chart_data["Count"],
+                            "hole": 0.8,
+                            "textinfo": None,
+                            "showlegend": True,
+                            "marker": {
+                                "colors": [
+                                    'rgba(173, 191, 11, 1)',
+                                    'rgba(248, 105, 80, 1)',
+                                    'rgba(251, 201, 93, 1)'
+                                ]
+                            }
+                        }
+                    ],
+                    "layout": {
+                        "autosize": False,
+                        "width": 270,
+                        "height": 270,
+                        "plot_bgcolor": 'rgba(0,0,0,0)',
+                        "paper_bgcolor": 'rgba(0,0,0,0)',
+                        "margin": {
+                            "l": 0,
+                            "r": 0,
+                            "b": 0,
+                            "t": 0,
+                        },
+                        "legend": {
+                            "orientation": "h"
+                        }
+                    }
+                }
+
             }
 
         super().__init__([
@@ -75,7 +95,7 @@ class ActorInformationTableAIO(html.Div):
                             ],
                             className="border-0 bg-transparent"
                         ),
-                        width=8
+                        width=7
                     ),
                     dbc.Col(
                         dbc.Card(
@@ -87,7 +107,7 @@ class ActorInformationTableAIO(html.Div):
                             ],
                             className="border-0 bg-transparent"
                         ),
-                        width=4
+                        width=5
                     ),
 
                 ]

@@ -59,7 +59,7 @@ class ActorStatisticsTableAIO(html.Div):
                         key if key != "Header" else "",
                         style = self._style
                     ),
-                    width=4
+                    width=2
                 ),
             ]
             for value in values:
@@ -69,7 +69,7 @@ class ActorStatisticsTableAIO(html.Div):
                             value,
                             style = self._style
                         ),
-                        width=4
+                        width=2
                     ),
                 )
 
