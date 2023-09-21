@@ -32,6 +32,12 @@ def layout(problem_setup_step: ProblemSetupStep, monitoring_step: MonitoringStep
     }
     button_group = ButtonGroup(options=monitoring_step.actor_btn_group_options, disabled=monitoring_step.commands_locked).buttons
 
+   # Collect node-specific data
+    actor_information = {}
+    if monitoring_step.selected_state_id:
+        actor_information = monitoring_step.actors_information[monitoring_step.selected_actor_from_treeview][monitoring_step.selected_state_id]
+    actor_log = monitoring_step.actors_log[monitoring_step.selected_actor_from_treeview]
+    actor_statistics = monitoring_step.actors_statistics[monitoring_step.selected_actor_from_treeview]
 
     content = [
         html.Br(),
@@ -40,7 +46,7 @@ def layout(problem_setup_step: ProblemSetupStep, monitoring_step: MonitoringStep
                 dbc.Col(
                     html.Div(
                         ActorInformationTableAIO(
-                            monitoring_step.actors_information[monitoring_step.selected_actor_from_treeview][monitoring_step.selected_state_id],
+                            actor_information,
                         ),
                         id="actor_information_table"
                     ),
@@ -86,7 +92,7 @@ def layout(problem_setup_step: ProblemSetupStep, monitoring_step: MonitoringStep
                 [
                     dbc.Col(
                         ActorLogsTableAIO(
-                            monitoring_step.actors_log[monitoring_step.selected_actor_from_treeview],
+                            actor_log,
                             aio_id = "actor_logs_table"
                         ),
                         width=12
@@ -98,7 +104,7 @@ def layout(problem_setup_step: ProblemSetupStep, monitoring_step: MonitoringStep
                     dbc.Col(
                         html.Div(
                             ActorStatisticsTableAIO(
-                                monitoring_step.actors_statistics[monitoring_step.selected_actor_from_treeview],
+                                actor_statistics,
                             ),
                             id = "actor_statistics_table"
                         ),
@@ -142,8 +148,12 @@ def update_view(n_intervals, pathname):
     project = DashClient[{{ cookiecutter.__solution_definition_name }}].get_project(pathname)
     monitoring_step = project.steps.monitoring_step
 
+    actor_information = {}
+    if monitoring_step.selected_state_id:
+        actor_information = monitoring_step.actors_information[monitoring_step.selected_actor_from_treeview][monitoring_step.selected_state_id]
+
     return (
-        ActorInformationTableAIO(monitoring_step.actors_information[monitoring_step.selected_actor_from_treeview][monitoring_step.selected_state_id]),
+        ActorInformationTableAIO(actor_information),
         pd.DataFrame(monitoring_step.actors_log[monitoring_step.selected_actor_from_treeview]).to_dict('records'),
         ActorStatisticsTableAIO(monitoring_step.actors_statistics[monitoring_step.selected_actor_from_treeview])
     )

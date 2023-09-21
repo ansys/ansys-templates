@@ -41,25 +41,6 @@ class ActorLogsTableAIO(html.Div):
                 "font_family": "Roboto",
                 "font_size": "15px",
             },
-            "style_cell_conditional": [
-                {"if": {"column_id": "Time"}, "minWidth": "60px", "maxWidth": "60px", "width": "60px"},
-                {
-                    "if": {"column_id": "Level"},
-                    "minWidth": "30px",
-                    "maxWidth": "30px",
-                    "width": "30px",
-                    "textAlign": "center",
-                },
-                {"if": {"column_id": "Message"}, "minWidth": "200px", "maxWidth": "200px", "width": "200px"},
-            ],
-            "style_data_conditional": [
-                {
-                    "if": {"column_id": "Level", "filter_query": '{Level} eq "INFO"'},
-                    "backgroundColor": "rgb(227, 245, 252)",
-                    "color": "rgb(0, 0, 0)",
-                    "textAlign": "center",
-                }
-            ],
             "style_as_list_view": True,
         }
 
