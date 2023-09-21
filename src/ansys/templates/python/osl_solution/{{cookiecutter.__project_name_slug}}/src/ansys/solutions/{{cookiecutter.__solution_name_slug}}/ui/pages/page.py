@@ -255,17 +255,24 @@ def display_body_content(value, pathname, trigger_body_display):
                 page_layout = problem_setup_page.layout(problem_setup_step, monitoring_step)
             else:
                 monitoring_step.selected_actor_from_treeview = extract_dict_by_key(problem_setup_step.project_tree, "uid", value["id"], expect_unique=True, return_index=False)["uid"]
+                if len(monitoring_step.actors_states_ids[monitoring_step.selected_actor_from_treeview]):
+                    monitoring_step.selected_state_id = monitoring_step.actors_states_ids[monitoring_step.selected_actor_from_treeview][0]
+                else:
+                    monitoring_step.selected_state_id = None
                 page_layout = monitoring_page.layout(problem_setup_step, monitoring_step)
-                actors_states_ids = json.loads(monitoring_step.actors_states_ids_file.read_text())
                 footer_buttons.insert(
                     0,
-                        dbc.DropdownMenu(
+                    dcc.Dropdown(
+                        options=[state_id for state_id in monitoring_step.actors_states_ids[monitoring_step.selected_actor_from_treeview]],
+                        value=monitoring_step.selected_state_id,
                         id="selected_state_dropdown",
-                        label=f"Selected state: {actors_states_ids[monitoring_step.selected_actor_from_treeview][0]}",
-                        size="sm",
-                        menu_variant="dark",
-                        children=[dbc.DropdownMenuItem(state_id) for state_id in actors_states_ids[monitoring_step.selected_actor_from_treeview]],
-                        style={"background-color": "rgba(242, 242, 242, 0.6)", "borderColor": "rgba(242, 242, 242, 0.6)", "color": "rgba(0, 0, 0, 1)"},
+                        disabled=False,
+                        clearable=False,
+                        searchable=True,
+                        style={
+                            "textAlign": "left",
+                            "width": "30%"
+                        },
                     ),
                 )
         footer = [
