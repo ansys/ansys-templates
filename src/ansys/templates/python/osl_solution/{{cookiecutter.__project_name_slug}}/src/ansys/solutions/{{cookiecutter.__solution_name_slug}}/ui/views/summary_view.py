@@ -15,7 +15,6 @@ from ansys.solutions.{{ cookiecutter.__solution_name_slug }}.solution.monitoring
 from ansys.solutions.{{ cookiecutter.__solution_name_slug }}.ui.components.actor_information_table import ActorInformationTableAIO
 from ansys.solutions.{{ cookiecutter.__solution_name_slug }}.ui.components.button_group import ButtonGroup
 from ansys.solutions.{{ cookiecutter.__solution_name_slug }}.ui.components.node_control import NodeControlAIO
-from ansys.solutions.{{ cookiecutter.__solution_name_slug }}.ui.components.system_files import SystemFilesAIO
 from ansys.solutions.{{ cookiecutter.__solution_name_slug }}.ui.components.actor_logs_table import ActorLogsTableAIO
 from ansys.solutions.{{ cookiecutter.__solution_name_slug }}.ui.components.actor_statistics_table import ActorStatisticsTableAIO
 from ansys.solutions.{{ cookiecutter.__solution_name_slug }}.utilities.common_functions import extract_dict_by_key
@@ -69,60 +68,37 @@ def layout(problem_setup_step: ProblemSetupStep, monitoring_step: MonitoringStep
                 ),
             ]
         ),
+        dbc.Row(
+            [
+                dbc.Col(
+                    ActorLogsTableAIO(
+                        actor_log,
+                        aio_id = "actor_logs_table"
+                    ),
+                    width=12
+                ),
+            ]
+        ),
+        dbc.Row(
+            [
+                dbc.Col(
+                    html.Div(
+                        ActorStatisticsTableAIO(
+                            actor_statistics,
+                        ),
+                        id = "actor_statistics_table"
+                    ),
+                    width=12
+                ),
+            ]
+        ),
+        dcc.Interval(
+            id="summary_auto_update",
+            interval=monitoring_step.auto_update_frequency,  # in milliseconds
+            n_intervals=0,
+            disabled=False if monitoring_step.auto_update_activated else True
+        ),
     ]
-
-    if actor_info:
-        if actor_info["kind"] == "system":
-            content.extend(
-                [
-                    dbc.Row(
-                        [
-                            dbc.Col(
-                                SystemFilesAIO(
-                                    monitoring_step,
-                                    aio_id="system_files"
-                                ),
-                                width=12
-                            ),
-                        ]
-                    ),
-                ]
-            )
-
-    content.extend(
-        [
-            dbc.Row(
-                [
-                    dbc.Col(
-                        ActorLogsTableAIO(
-                            actor_log,
-                            aio_id = "actor_logs_table"
-                        ),
-                        width=12
-                    ),
-                ]
-            ),
-            dbc.Row(
-                [
-                    dbc.Col(
-                        html.Div(
-                            ActorStatisticsTableAIO(
-                                actor_statistics,
-                            ),
-                            id = "actor_statistics_table"
-                        ),
-                        width=12
-                    ),
-                ]
-            ),
-            dcc.Interval(
-                id="summary_auto_update",
-                interval=monitoring_step.auto_update_frequency,  # in milliseconds
-                n_intervals=0,
-                disabled=False if monitoring_step.auto_update_activated else True
-            ),
-        ]
-    )
 
     # Build layout
     return html.Div(content)

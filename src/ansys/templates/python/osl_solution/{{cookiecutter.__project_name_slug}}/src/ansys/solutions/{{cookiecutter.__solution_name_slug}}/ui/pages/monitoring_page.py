@@ -16,7 +16,6 @@ from ansys.solutions.{{ cookiecutter.__solution_name_slug }}.solution.monitoring
 from ansys.solutions.{{ cookiecutter.__solution_name_slug }}.ui.views import (
     design_table_view,
     project_summary_view,
-    result_files_view,
     scenery_view,
     status_overview_view,
     summary_view,
@@ -81,8 +80,6 @@ def update_page_content(selected_tab, selected_state_id, pathname):
         return project_summary_view.layout(problem_setup_step, monitoring_step)
     elif selected_tab == "summary_tab":
         return summary_view.layout(problem_setup_step, monitoring_step)
-    elif selected_tab == "result_files_tab":
-        return result_files_view.layout(monitoring_step)
     elif selected_tab == "scenery_tab":
         return scenery_view.layout(monitoring_step)
     elif selected_tab == "design_table_tab":
