@@ -96,14 +96,16 @@ class DesignTableAIO(html.Div):
 
         data = pd.DataFrame(data)
 
-        # OptiSLang returns the designs in an unsorted way.
-        # The following method organizes the rows in ascending order.
-        data = data.loc[self.sort_designs(data["Design"].to_list())]
+        if len(data["Design"]):
 
-        for col, dtype in data.dtypes.items():
-            if dtype == "bool":
-                data[col] = data[col].astype("str")
+            # OptiSLang returns the designs in an unsorted way.
+            # The following method organizes the rows in ascending order.
+            data = data.loc[self.sort_designs(data["Design"].to_list())]
 
-        data = data.round(6)
+            for col, dtype in data.dtypes.items():
+                if dtype == "bool":
+                    data[col] = data[col].astype("str")
+
+            data = data.round(6)
 
         return data

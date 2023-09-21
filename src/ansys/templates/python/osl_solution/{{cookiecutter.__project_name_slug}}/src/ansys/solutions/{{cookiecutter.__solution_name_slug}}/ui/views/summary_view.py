@@ -8,6 +8,7 @@ import pandas as pd
 from dash_extensions.enrich import html, Input, Output, State, dcc
 from ansys.saf.glow.client.dashclient import DashClient, callback
 
+from ansys.solutions.{{ cookiecutter.__solution_name_slug }}.datamodel import datamodel
 from ansys.solutions.{{ cookiecutter.__solution_name_slug }}.solution.definition import {{ cookiecutter.__solution_definition_name }}
 from ansys.solutions.{{ cookiecutter.__solution_name_slug }}.solution.problem_setup_step import ProblemSetupStep
 from ansys.solutions.{{ cookiecutter.__solution_name_slug }}.solution.monitoring_step import MonitoringStep
@@ -32,13 +33,15 @@ def layout(problem_setup_step: ProblemSetupStep, monitoring_step: MonitoringStep
     }
     button_group = ButtonGroup(options=monitoring_step.actor_btn_group_options, disabled=monitoring_step.commands_locked).buttons
 
-   # Collect node-specific data
-    actor_information = {}
+    # Collect node-specific data
     if monitoring_step.selected_state_id:
         actor_information = monitoring_step.actors_information[monitoring_step.selected_actor_from_treeview][monitoring_step.selected_state_id]
+    else:
+        actor_information = datamodel.extract_actor_information_data({}, actor_info["kind"])
     actor_log = monitoring_step.actors_log[monitoring_step.selected_actor_from_treeview]
     actor_statistics = monitoring_step.actors_statistics[monitoring_step.selected_actor_from_treeview]
 
+    # Assemble UI components
     content = [
         html.Br(),
         dbc.Row(
@@ -121,6 +124,7 @@ def layout(problem_setup_step: ProblemSetupStep, monitoring_step: MonitoringStep
         ]
     )
 
+    # Build layout
     return html.Div(content)
 
 
@@ -146,11 +150,15 @@ def activate_auto_update(on, pathname):
 def update_view(n_intervals, pathname):
 
     project = DashClient[{{ cookiecutter.__solution_definition_name }}].get_project(pathname)
+    problem_setup_step = project.steps.problem_setup_step
     monitoring_step = project.steps.monitoring_step
 
-    actor_information = {}
+    actor_info = extract_dict_by_key(problem_setup_step.project_tree, "uid", monitoring_step.selected_actor_from_treeview, expect_unique=True, return_index=False)
+
     if monitoring_step.selected_state_id:
         actor_information = monitoring_step.actors_information[monitoring_step.selected_actor_from_treeview][monitoring_step.selected_state_id]
+    else:
+        actor_information = datamodel.extract_actor_information_data({}, actor_info["kind"])
 
     return (
         ActorInformationTableAIO(actor_information),
