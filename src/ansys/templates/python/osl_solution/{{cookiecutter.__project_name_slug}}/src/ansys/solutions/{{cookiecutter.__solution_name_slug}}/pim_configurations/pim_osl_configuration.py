@@ -2,7 +2,6 @@
 
 import sys
 
-from pathlib import Path
 from typing import List
 
 from ansys.saf.glow.desktop.orchestration.pim_configurations import PimProductConfigurationBuilder
@@ -15,7 +14,7 @@ class OptislangConfigBuilder(PimProductConfigurationBuilder):
             PimProductConfiguration(
                 "optislang",
                 str(sys.executable),
-                arguments=["m", "ansys.solutions.{{ cookiecutter.__solution_name_slug }}.pim_configurations.osl_wrapper:app", "--port", "${AENEID_PORT_HTTP}"],
+                arguments=["-m", "ansys.solutions.{{ cookiecutter.__solution_name_slug }}.pim_configurations.osl_wrapper:app", "--port", "${AENEID_PORT_HTTP}"],
                 service_name="http",
                 service_type="http",
             )
