@@ -269,7 +269,7 @@ def display_body_content(value, pathname, trigger_body_display):
                 footer_buttons.insert(
                     0,
                     dcc.Dropdown(
-                        options=[state_id for state_id in monitoring_step.actors_states_ids[monitoring_step.selected_actor_from_treeview]],
+                        options=[state_id for state_id in project_data["actors"][monitoring_step.selected_actor_from_treeview]["states_ids"]],
                         value=monitoring_step.selected_state_id,
                         id="selected_state_dropdown",
                         disabled=False,

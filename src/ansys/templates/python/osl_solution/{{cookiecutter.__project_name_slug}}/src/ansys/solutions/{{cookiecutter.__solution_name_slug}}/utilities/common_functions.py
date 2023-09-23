@@ -119,6 +119,9 @@ def get_treeview_items_from_project_tree(project_tree: list) -> list:
             "id": "problem_setup_step",
             "text": "Problem Setup",
             "expanded": True,
+            "prefixIcon": {
+                "src": "https://s2.svgbox.net/hero-solid.svg?ic=adjustments"
+            },
             "level": 0
         },
     ]
@@ -130,6 +133,9 @@ def get_treeview_items_from_project_tree(project_tree: list) -> list:
                     "id": node["uid"],
                     "text": node["name"],
                     "expanded": True,
+                    "prefixIcon": {
+                        "src": "https://s2.svgbox.net/materialui.svg?ic=account_tree"
+                    },
                     "level": 0,
                     "children": []
                 }
@@ -140,11 +146,20 @@ def get_treeview_items_from_project_tree(project_tree: list) -> list:
             if len(matching_indexes) == 0:
                 raise Exception("Unable to find parent node.")
             parent_node = get_dict_from_indexes_sequence(treeview_items, matching_indexes[-1])
+            if node["kind"] == "system":
+                icon = "https://s2.svgbox.net/materialui.svg?ic=workspaces_filled"
+            elif node["kind"] == "actor":
+                icon = "https://s2.svgbox.net/materialui.svg?ic=workspaces_outline"
+            else:
+                raise ValueError(f"Unknown actor kind {node['kind']}.")
             parent_node["children"].append(
                 {
                     "id": node["uid"],
                     "text": node["name"],
                     "expanded": True,
+                    "prefixIcon": {
+                        "src": icon
+                    },
                     "level": node["level"],
                     "children": []
                 },

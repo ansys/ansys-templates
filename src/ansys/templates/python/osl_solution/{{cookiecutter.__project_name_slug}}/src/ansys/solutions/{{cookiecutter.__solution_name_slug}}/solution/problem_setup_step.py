@@ -69,6 +69,9 @@ class ProblemSetupStep(StepModel):
             "id": "problem_setup_step",
             "text": "Problem Setup",
             "expanded": True,
+            "prefixIcon": {
+                "src": "https://s2.svgbox.net/hero-solid.svg?ic=adjustments"
+            },
             "level": 0
         },
     ]
