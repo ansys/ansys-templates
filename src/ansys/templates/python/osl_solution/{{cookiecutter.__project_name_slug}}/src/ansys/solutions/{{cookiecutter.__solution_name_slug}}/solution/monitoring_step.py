@@ -252,7 +252,7 @@ class MonitoringStep(StepModel):
 
             if self.project_state == "FINISHED":
                 break
-            time.sleep(10) # Waiting 3 sec before pulling new data. The frequency might be adjusted in the future.
+            time.sleep(4) # Waiting 4 sec before pulling new data. The frequency might be adjusted in the future.
 
 
     @transaction(
