@@ -1,6 +1,6 @@
 # ©2023, ANSYS Inc. Unauthorized use, distribution or duplication is prohibited.
 
-from ansys.optislang.core import Optislang
+from ansys.optislang.core import Optislang, utils
 from fastapi import Body, FastAPI
 
 
@@ -11,10 +11,11 @@ app = FastAPI()
 
 
 @app.post("/start")
-async def start_instance(project_path: str = Body(...), project_properties_file: str = Body(...)):
+async def start_instance(project_path: str = Body(...), project_properties_file: str = Body(...), osl_version: int = Body(...)):
     global OSL_SERVER_PORT
     osl = Optislang(
         project_path=project_path,
+        executable=utils.get_osl_exec(osl_version)[1],
         reset=True,
         auto_relocate=True,
         shutdown_on_finished=False,

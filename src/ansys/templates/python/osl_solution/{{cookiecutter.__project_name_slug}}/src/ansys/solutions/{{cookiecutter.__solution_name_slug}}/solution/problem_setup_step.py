@@ -218,6 +218,7 @@ class ProblemSetupStep(StepModel):
         self=StepSpec(
             download=[
                 "project_file",
+                "ansys_ecosystem"
             ],
             upload=[
                 "project_tree",
@@ -231,6 +232,7 @@ class ProblemSetupStep(StepModel):
         # Start optiSLang instance.
         osl = Optislang(
             project_path=self.project_file.path,
+            executable=utils.get_osl_exec(self.ansys_ecosystem["optislang"]["selected_version"])[1],
             reset=True,
             shutdown_on_finished=True,
             ini_timeout=300,
@@ -248,7 +250,8 @@ class ProblemSetupStep(StepModel):
                 "input_files",
                 "project_file",
                 "working_properties_file",
-                "optislang_log_level"
+                "optislang_log_level",
+                "ansys_ecosystem"
             ],
             upload=[
                 "osl_server_host",
@@ -262,7 +265,8 @@ class ProblemSetupStep(StepModel):
         # Start optiSLang instance.
         osl.initialize(
             project_path=self.project_file.path,
-            project_properties_file=self.working_properties_file.path
+            project_properties_file=self.working_properties_file.path,
+            osl_version=self.ansys_ecosystem["optislang"]["selected_version"]
         )
         # Get server host
         self.osl_server_host = osl.instance.get_osl_server().get_host()
