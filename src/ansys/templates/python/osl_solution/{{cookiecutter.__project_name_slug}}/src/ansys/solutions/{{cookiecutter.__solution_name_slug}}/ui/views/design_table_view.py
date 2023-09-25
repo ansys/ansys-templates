@@ -85,7 +85,7 @@ def update_view(n_intervals, pathname):
     actor_hid = monitoring_step.selected_state_id
     # Collect design table data
     if monitoring_step.selected_state_id:
-        design_table_data = project_data["actor"][actor_uid]["design_table"][actor_hid]
+        design_table_data = project_data["actors"][actor_uid]["design_table"][actor_hid]
     else:
         design_table_data = datamodel.extract_design_table_data({})
     return pd.DataFrame(design_table_data).to_dict('records')
