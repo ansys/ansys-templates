@@ -1,77 +1,119 @@
 # ©2023, ANSYS Inc. Unauthorized use, distribution or duplication is prohibited.
 
 import dash_bootstrap_components as dbc
+import json
+import pandas as pd
 import uuid
 
-from dash_extensions.enrich import html
+from dash_extensions.enrich import html, dash_table
+
+from ansys.solutions.{{ cookiecutter.__solution_name_slug }}.solution.definition import {{ cookiecutter.__solution_definition_name }}
+from ansys.solutions.{{ cookiecutter.__solution_name_slug }}.solution.monitoring_step import MonitoringStep
 
 
 class ProjectInformationTableAIO(html.Div):
 
     class ids:
-        pass
+        datatable = lambda aio_id: {
+            'component': 'ProjectInformationTableAIO',
+            'subcomponent': 'datatable',
+            'aio_id': aio_id
+        }
 
     ids = ids
 
-    def __init__(self, data: dict, aio_id: str = None):
+    def __init__(self, monitoring_step: MonitoringStep, datatable_props: dict = None, interval_props: dict = None, aio_id: str = None):
         """ProjectInformationTableAIO is an All-in-One component that is composed
-        of multiple components which are not exposed but only configured internally.
+        of a parent `html.Div` with a `dcc.Interval` and a `dash_table.DataTable` as children.
 
-        - `data` - Data to be displayed in the table and pie chart components.
+        - `monitoring_step` - The StepModel object of the monitoring step.
+        - `datatable_props` - A dictionary of properties passed into the dash_table.DataTable component.
+        - `interval_props` - A dictionary of properties passed into the dcc.Interval component.
         - `aio_id` - The All-in-One component ID used to generate the table components's dictionary IDs.
         """
 
         if aio_id is None:
             aio_id = str(uuid.uuid4())
 
-        self._style: dict = {
-            "textAlign": "left",
-            "fontSize": 12,
-            "fontFamily": "Roboto",
-            "color": "rgba(0, 0, 0, 1)",
-            "backgroundColor": "rgba(255, 255, 255, 0)"
+        data = self.get_data(monitoring_step)
+
+        datatable_props = {
+            "data": data.to_dict('records'),
+            "columns": [{"name": i, "id": i, "type": "text"} for i in data.columns],
+            "fixed_rows": {"headers": True},
+            "style_header": {
+                "textAlign": "left",
+                "font_family": "Roboto",
+                "font_size": "15px",
+                "fontWeight": "bold",
+                "border": "none",
+                "display": "none",
+            },
+            "style_cell": {
+                "textAlign": "left",
+                "font_family": "Roboto",
+                "font_size": "15px",
+                "border": "none"
+            },
+            "style_as_list_view": True,
+            "style_table": {"border": "none"}, # Hide table borders
         }
 
-        table_data = self.to_dash(data)
-
         super().__init__([
-            html.H5("Project information", className="card-title"),
-            html.Hr(className="my-2"),
             dbc.Card(
                 [
                     dbc.CardBody(
-                        table_data,
-                        className="border-0 bg-transparent"
+                        [
+                            html.H4("Project information", className="card-title"),
+                            dash_table.DataTable(id=self.ids.datatable(aio_id), **datatable_props),
+                        ]
                     ),
                 ],
-                className="border-0 bg-transparent"
+                color="warning",
+                outline=True,
             )
         ])
 
-    def to_dash(self, data: dict) -> list:
+    def get_data(self, monitoring_step: MonitoringStep) -> pd.DataFrame:
 
-        table_data = []
+        project_status_info = json.loads(monitoring_step.project_status_info_file.read_text())
 
-        for key, value in data.items():
-            table_data.append(
-                dbc.Row(
-                    [
-                        dbc.Col(
-                            html.Label(
-                                key,
-                                style = self._style
-                            ),
-                            width=1
-                        ),
-                        dbc.Col(
-                            html.Label(
-                                value,
-                                style = self._style
-                            ),
-                            width=11
-                        ),
-                    ]
-                )
-            )
+        project_summary_data = {
+            "column_a": [
+                "State",
+                "Id",
+                "Name",
+                "Machine",
+                "Location",
+                "Project directory",
+                "Owner",
+                "Registered",
+                "Lock info",
+            ],
+            "column_b": [
+                None,
+                None,
+                None,
+                None,
+                None,
+                None,
+                None,
+                None,
+                None,
+            ],
+        }
 
-        return table_data
+        if project_status_info:
+            project_summary_data["column_b"] = [
+                project_status_info["projects"][0]["state"],
+                project_status_info["projects"][0]["project_id"],
+                project_status_info["projects"][0]["name"],
+                project_status_info["projects"][0]["machine"],
+                project_status_info["projects"][0]["location"],
+                project_status_info["projects"][0]["working_dir"],
+                project_status_info["projects"][0]["user"],
+                "",
+                "",
+            ]
+
+        return pd.DataFrame(project_summary_data)
