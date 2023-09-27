@@ -3,6 +3,7 @@
 """Frontend of the design table view."""
 
 import dash_bootstrap_components as dbc
+import json
 import pandas as pd
 
 from dash_extensions.enrich import html, Input, Output, State, dcc
@@ -17,12 +18,17 @@ from ansys.solutions.{{ cookiecutter.__solution_name_slug }}.ui.components.desig
 def layout(monitoring_step: MonitoringStep) -> html.Div:
     """Layout of the design table view."""
 
+    # Get project data
+    project_data = json.loads(monitoring_step.project_data_dump.read_text())
+    # Get actor uid
+    actor_uid = monitoring_step.selected_actor_from_treeview
+    # Get actor hid
+    actor_hid = monitoring_step.selected_state_id
     # Collect design table data
     if monitoring_step.selected_state_id:
-        design_table = monitoring_step.design_tables[monitoring_step.selected_actor_from_treeview][monitoring_step.selected_state_id]
+        design_table_data = project_data["actors"][actor_uid]["design_table"][actor_hid]
     else:
-        design_table = datamodel.extract_design_table_data({})
-
+        design_table_data = datamodel.extract_design_table_data({})
     # Build layout
     return html.Div(
         [
@@ -31,7 +37,7 @@ def layout(monitoring_step: MonitoringStep) -> html.Div:
                 [
                     dbc.Col(
                         DesignTableAIO(
-                            design_table,
+                            design_table_data,
                             aio_id="design_table"
                         ),
                         width=12
@@ -55,7 +61,7 @@ def layout(monitoring_step: MonitoringStep) -> html.Div:
     prevent_initial_call=True,
 )
 def activate_auto_update(on, pathname):
-
+    """Enable/Disable auto update."""
     return not on
 
 
@@ -66,14 +72,20 @@ def activate_auto_update(on, pathname):
     prevent_initial_call=True,
 )
 def update_view(n_intervals, pathname):
-
+    """Update design table."""
+    # Get project
     project = DashClient[{{ cookiecutter.__solution_definition_name }}].get_project(pathname)
+    # Get monitoring step
     monitoring_step = project.steps.monitoring_step
-
+    # Get project data
+    project_data = json.loads(monitoring_step.project_data_dump.read_text())
+    # Get actor uid
+    actor_uid = monitoring_step.selected_actor_from_treeview
+    # Get actor hid
+    actor_hid = monitoring_step.selected_state_id
     # Collect design table data
     if monitoring_step.selected_state_id:
-        design_table = monitoring_step.design_tables[monitoring_step.selected_actor_from_treeview][monitoring_step.selected_state_id]
+        design_table_data = project_data["actors"][actor_uid]["design_table"][actor_hid]
     else:
-        design_table = datamodel.extract_design_table_data({})
-
-    return pd.DataFrame(design_table).to_dict('records')
+        design_table_data = datamodel.extract_design_table_data({})
+    return pd.DataFrame(design_table_data).to_dict('records')

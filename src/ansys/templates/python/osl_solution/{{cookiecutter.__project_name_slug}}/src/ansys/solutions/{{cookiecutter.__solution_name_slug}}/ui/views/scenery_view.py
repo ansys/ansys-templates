@@ -13,7 +13,7 @@ from ansys.solutions.{{ cookiecutter.__solution_name_slug }}.solution.monitoring
 def layout(monitoring_step: MonitoringStep) -> html.Div:
     """Layout of the scenery view."""
 
-    full_project_status_info = json.loads(monitoring_step.full_project_status_info_file.read_text())
+    full_project_status_info = json.loads(monitoring_step.full_project_status_info_dump.read_text())
 
     if full_project_status_info:
         return html.Div(

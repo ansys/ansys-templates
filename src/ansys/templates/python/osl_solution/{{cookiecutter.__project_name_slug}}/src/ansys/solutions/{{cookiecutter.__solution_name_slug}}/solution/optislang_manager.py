@@ -24,7 +24,8 @@ class OptislangManager(InstanceManager[Optislang]):
         self,
         version: Optional[str] = None,
         project_path: Optional[Union[FileReference, str]] = None,
-        project_properties_file: Optional[Union[FileReference, str]] = None
+        project_properties_file: Optional[Union[FileReference, str]] = None,
+        osl_version: Optional[int] = None
     ):
         """Initialize and start the optiSLang server."""
         self.initialize_service(SERVICE_NAME, version)
@@ -33,7 +34,8 @@ class OptislangManager(InstanceManager[Optislang]):
             f"{self._service.uri}/start",
             json={
                 "project_path": project_path,
-                "project_properties_file": project_properties_file
+                "project_properties_file": project_properties_file,
+                "osl_version": osl_version
             },
             timeout=300
         ).json()

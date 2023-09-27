@@ -254,16 +254,22 @@ def display_body_content(value, pathname, trigger_body_display):
             elif value["id"] == "problem_setup_step":
                 page_layout = problem_setup_page.layout(problem_setup_step, monitoring_step)
             else:
+                # Get project data
+                project_data = json.loads(monitoring_step.project_data_dump.read_text())
+                # Record uid of actor selected from treeview
                 monitoring_step.selected_actor_from_treeview = extract_dict_by_key(problem_setup_step.project_tree, "uid", value["id"], expect_unique=True, return_index=False)["uid"]
-                if len(monitoring_step.actors_states_ids[monitoring_step.selected_actor_from_treeview]):
-                    monitoring_step.selected_state_id = monitoring_step.actors_states_ids[monitoring_step.selected_actor_from_treeview][0]
+                # Record hid of actor selected from treeview
+                if len(project_data["actors"][monitoring_step.selected_actor_from_treeview]["states_ids"]):
+                    monitoring_step.selected_state_id = project_data["actors"][monitoring_step.selected_actor_from_treeview]["states_ids"][0]
                 else:
                     monitoring_step.selected_state_id = None
+                # Get page layout
                 page_layout = monitoring_page.layout(problem_setup_step, monitoring_step)
+                # Update footer buttons
                 footer_buttons.insert(
                     0,
                     dcc.Dropdown(
-                        options=[state_id for state_id in monitoring_step.actors_states_ids[monitoring_step.selected_actor_from_treeview]],
+                        options=[state_id for state_id in project_data["actors"][monitoring_step.selected_actor_from_treeview]["states_ids"]],
                         value=monitoring_step.selected_state_id,
                         id="selected_state_dropdown",
                         disabled=False,

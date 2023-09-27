@@ -77,7 +77,7 @@ def update_page_content(selected_tab, selected_state_id, pathname):
     monitoring_step.selected_state_id = selected_state_id
 
     if selected_tab == "project_summary_tab":
-        return project_summary_view.layout(problem_setup_step, monitoring_step)
+        return project_summary_view.layout(monitoring_step)
     elif selected_tab == "summary_tab":
         return summary_view.layout(problem_setup_step, monitoring_step)
     elif selected_tab == "scenery_tab":

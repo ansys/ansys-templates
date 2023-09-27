@@ -150,20 +150,14 @@ class MonitoringStep(StepModel):
     command_timeout: int = 30
 
     project_state: str = "NOT STARTED"
-    project_information: dict = {}
-    actors_info: dict = {}
-    actors_states_ids: dict = {}
-    actors_information: dict = {}
-    actors_log: dict = {}
-    actors_statistics: dict = {}
-    design_tables: dict = {}
     optislang_logs: List = []
 
     # File storage ----------------------------------------------------------------------------------------------------
 
     # Output
-    optislang_log_file: FileReference = FileReference("Problem_Setup/pyoptislang.log")
-    full_project_status_info_file: FileReference = FileReference("Problem_Setup/full_project_status_info.json")
+    full_project_status_info_dump: FileReference = FileReference("Monitoring/full_project_status_info.json")
+    project_data_dump: FileReference = FileReference("Monitoring/project_data.json")
+    optislang_log_file: FileReference = FileReference("Monitoring/pyoptislang.log")
 
     # Methods ---------------------------------------------------------------------------------------------------------
 
@@ -179,16 +173,10 @@ class MonitoringStep(StepModel):
         self=StepSpec(
             upload=[
                 "project_state",
-                "full_project_status_info_file",
-                "project_information",
-                "actors_info",
-                "actors_states_ids",
-                "actors_information",
-                "actors_log",
-                "actors_statistics",
-                "design_tables",
+                "project_data_dump",
+                "full_project_status_info_dump",
                 "optislang_logs",
-                "optislang_log_file",
+                "optislang_log_file"
             ],
         )
     )
@@ -208,6 +196,8 @@ class MonitoringStep(StepModel):
         )
         osl.instance.__logger = osl_logger.add_instance_logger(osl.instance.name, osl.instance, problem_setup_step.optislang_log_level)
 
+        project_data = {"project": {"information": {}}, "actors": {}}
+
         # Monitor project state and upload data.
         while True:
             # Get project state
@@ -215,9 +205,9 @@ class MonitoringStep(StepModel):
             osl.instance.log.info(f"Analysis status: {self.project_state}")
             # Get full project status info
             full_project_status_info = osl.instance.get_osl_server().get_full_project_status_info()
-            with open(self.full_project_status_info_file.path, "w") as json_file: json.dump(full_project_status_info, json_file)
+            with open(self.full_project_status_info_dump.path, "w") as json_file: json.dump(full_project_status_info, json_file)
             # Get project information
-            self.project_information = datamodel.extract_project_status_info(full_project_status_info)
+            project_data["project"]["information"] = datamodel.extract_project_status_info(full_project_status_info)
             # Read pyoptislang logs
             self.optislang_logs = read_log_file(self.optislang_log_file.path)
             # Get actor specific data
@@ -227,6 +217,8 @@ class MonitoringStep(StepModel):
                     node = osl.instance.project.root_system
                 else:
                     node = osl.instance.project.root_system.find_node_by_uid(node_info["uid"], search_depth=-1)
+                # Initialize dictionary
+                project_data["actors"][node.uid] = {"states_ids": {}, "information": {}, "log": {}, "statistics": {}, "design_table": {}}
                 # Get node kind
                 if isinstance(node, RootSystem) or isinstance(node, ParametricSystem) or isinstance(node, System):
                     kind = "system"
@@ -234,40 +226,33 @@ class MonitoringStep(StepModel):
                     kind = "actor"
                 # Get actor info
                 actor_info = osl.instance.get_osl_server().get_actor_info(node.uid)
-                self.actors_info[node.uid] = actor_info
                 # Get state ids
-                self.actors_states_ids[node.uid] = node.get_states_ids()
+                state_ids = node.get_states_ids()
+                project_data["actors"][node.uid]["states_ids"] = state_ids
                 # Get design specific data
-                self.actors_information[node.uid] = {}
-                self.design_tables[node.uid] = {}
-                if node.get_states_ids():
-                    for hid in node.get_states_ids():
+                if len(state_ids):
+                    for hid in state_ids:
                         # Get actor information data
                         actor_status_info = osl.instance.get_osl_server().get_actor_status_info(node.uid, hid)
-                        self.actors_information[node.uid][hid] = datamodel.extract_actor_information_data(actor_status_info, kind)
                         # Get design table data
                         if kind == "system":
-                            self.design_tables[node.uid][hid] = datamodel.extract_design_table_data(actor_status_info)
+                            project_data["actors"][node.uid]["design_table"][hid] = datamodel.extract_design_table_data(actor_status_info)
+                        project_data["actors"][node.uid]["information"][hid] = datamodel.extract_actor_information_data(actor_status_info, kind)
                 # Get actor log data
-                self.actors_log[node.uid] = datamodel.extract_actor_log_data(actor_info)
+                project_data["actors"][node.uid]["log"] = datamodel.extract_actor_log_data(actor_info)
                 # Get actor statistics data
-                self.actors_statistics[node.uid] = datamodel.extract_actor_statistics_data(actor_info)
-
+                project_data["actors"][node.uid]["statistics"] = datamodel.extract_actor_statistics_data(actor_info)
+            # Dump project data
+            with open(self.project_data_dump.path, "w") as json_file: json.dump(project_data, json_file, allow_nan=True)
             # Upload fields
             self.transaction.upload(["project_state"])
-            self.transaction.upload(["full_project_status_info_file"])
-            self.transaction.upload(["project_information"])
-            self.transaction.upload(["actors_info"])
-            self.transaction.upload(["actors_states_ids"])
-            self.transaction.upload(["actors_information"])
-            self.transaction.upload(["actors_log"])
-            self.transaction.upload(["actors_statistics"])
-            self.transaction.upload(["design_tables"])
+            self.transaction.upload(["full_project_status_info_dump"])
+            self.transaction.upload(["project_data_dump"])
             self.transaction.upload(["optislang_logs"])
 
             if self.project_state == "FINISHED":
                 break
-            time.sleep(3) # Waiting 3 sec before pulling new data. The frequency might be adjusted in the future.
+            time.sleep(4) # Waiting 4 sec before pulling new data. The frequency might be adjusted in the future.
 
 
     @transaction(
