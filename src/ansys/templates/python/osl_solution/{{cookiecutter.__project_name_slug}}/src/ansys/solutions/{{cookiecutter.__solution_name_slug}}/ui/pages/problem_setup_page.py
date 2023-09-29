@@ -15,13 +15,13 @@ from ansys.solutions.optislang.frontend_components.load_sections import to_dash_
 
 from ansys.solutions.{{ cookiecutter.__solution_name_slug }}.solution.definition import {{ cookiecutter.__solution_definition_name }}
 from ansys.solutions.{{ cookiecutter.__solution_name_slug }}.solution.problem_setup_step import ProblemSetupStep
-from ansys.solutions.{{ cookiecutter.__solution_name_slug }}.solution.monitoring_step import MonitoringStep
 from ansys.solutions.{{ cookiecutter.__solution_name_slug }}.utilities.common_functions import check_empty_strings
 
 
-def layout(problem_setup_step: ProblemSetupStep, monitoring_step: MonitoringStep) -> html.Div:
+def layout(problem_setup_step: ProblemSetupStep) -> html.Div:
     """Layout of the problem setup step."""
-
+    if problem_setup_step.ui_placeholders and not problem_setup_step.project_locked:
+        problem_setup_step.update_osl_placeholders_with_ui_values()
     project_properties_sections = to_dash_sections(
             problem_setup_step.placeholders, problem_setup_step.registered_files, problem_setup_step.project_locked
         )
@@ -236,6 +236,7 @@ def initialize_dictionary_of_ui_placeholders(n_clicks, data, ids, input_file_ids
             ui_data.update({input_file_ids[index]["placeholder"]: ""})
 
         problem_setup_step.ui_placeholders = ui_data
+        problem_setup_step.update_osl_placeholders_with_ui_values()
         return problem_setup_step.analysis_locked
     else:
         return no_update
@@ -297,9 +298,6 @@ def update_ui_placeholders(value, id, pathname):
         else:
             ui_data.update({name: value})
         problem_setup_step.ui_placeholders = ui_data
-        while problem_setup_step.get_method_state("update_osl_placeholders_with_ui_values").status == MethodStatus.Running: # current workaround to avoid raising ConflictError: {"detail":"update_osl_placeholders_with_ui_values is already running"}
-            time.sleep(0.1)
-        problem_setup_step.update_osl_placeholders_with_ui_values()
         return no_update
 
 
