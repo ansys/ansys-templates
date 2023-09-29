@@ -245,14 +245,14 @@ def display_body_content(value, pathname, trigger_body_display):
                 )
             )
         if triggered_id == "url" or triggered_id == "trigger_body_display" or trigger_body_display and len(triggered_id) == 0:
-            page_layout = problem_setup_page.layout(problem_setup_step, monitoring_step)
+            page_layout = problem_setup_page.layout(problem_setup_step)
             focusRequested = ""
         if triggered_id == "navigation_tree":
             focusRequested = value["id"]
             if value["id"] is None:
                 page_layout = html.H1("Welcome!")
             elif value["id"] == "problem_setup_step":
-                page_layout = problem_setup_page.layout(problem_setup_step, monitoring_step)
+                page_layout = problem_setup_page.layout(problem_setup_step)
             else:
                 # Get project data
                 project_data = json.loads(monitoring_step.project_data_dump.read_text())
