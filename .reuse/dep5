@@ -40,6 +40,10 @@ Files: .gitignore
 Copyright: 2023 ANSYS, Inc. and/or its affiliates.
 License: MIT
 
+Files: .prettierignore
+Copyright: 2023 ANSYS, Inc. and/or its affiliates.
+License: MIT
+
 Files: .pre-commit-config.yaml
 Copyright: 2023 ANSYS, Inc. and/or its affiliates.
 License: MIT
