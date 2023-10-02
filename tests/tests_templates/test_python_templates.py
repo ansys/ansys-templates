@@ -284,7 +284,7 @@ DOC_PROJECT_STRUCTURE = [
 
 # Structure for solution projects
 SOLUTION_STRUCTURE = [
-    ".github/workflows/ci.yml",
+    ".github/workflows/build-release.yml",
     ".vscode/launch.json",
     "doc/source/_static/ansys-solutions-logo-black-background.png",
     "doc/source/_static/README.md",
@@ -352,7 +352,7 @@ SOLUTION_STRUCTURE = [
 ]
 
 OSL_SOLUTION_STRUCTURE = [
-    ".github/workflows/ci.yml",
+    ".github/workflows/build-release.yml",
     ".vscode/launch.json",
     "doc/source/_static/ansys-solutions-logo-black-background.png",
     "doc/source/_static/README.md",
