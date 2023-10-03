@@ -101,7 +101,7 @@ class ProblemSetupStep(StepModel):
     )
     def clean_method_assets_directory(self) -> None:
         """Clean-up method assets working directory."""
-        
+
         method_assets_directory = Path(self.project_file.path).parent
         osl_project_name = "{{ cookiecutter.__optiSLang_application_archive_stem }}"
 

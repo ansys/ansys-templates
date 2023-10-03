@@ -29,7 +29,7 @@ class MonitoringStep(StepModel):
     selected_actor_from_command: Optional[str] = None # uid of the actor from which a control command has been requested.
     selected_state_id: Optional[str] = None
     commands_locked: bool = False
-    
+
     auto_update_activated: bool = True
     actor_uid: Optional[str] = None
     project_command_execution_status: dict = {"alert-message": "", "alert-color": "info"}
@@ -207,7 +207,7 @@ class MonitoringStep(StepModel):
         # Initialize new instance
         osl = osl_manager.instance
 
-        # Set timout
+        # Set timeout
         osl.set_timeout(25)
 
         # Get optiSLang server
@@ -234,7 +234,7 @@ class MonitoringStep(StepModel):
             # Check optiSLang server health
             self.osl_server_healthy = check_optislang_server(osl_server)
             osl_logs.write(f"Server health check: {self.osl_server_healthy}\n")
-            
+
             # Get project state
             self.osl_project_state = osl.project.get_status()
             osl_logs.write(f"Project state: {self.osl_project_state}\n")
@@ -243,14 +243,14 @@ class MonitoringStep(StepModel):
             full_project_status_info = osl_server.get_full_project_status_info()
             with open(self.full_project_status_info_file.path, "w") as json_file: json.dump(full_project_status_info, json_file)
             osl_logs.write("Get full project status info\n")
-            
+
             # Collect project information
             project_data["project"]["information"] = datamodel.extract_project_status_info(full_project_status_info)
-            
+
             # Walk through project tree
             osl_logs.write("Walk through project tree\n")
             for node_props in problem_setup_step.osl_project_tree:
-                
+
                 # Get node
                 if node_props["uid"] == osl.project.root_system.uid:
                     node = osl.project.root_system
@@ -290,11 +290,11 @@ class MonitoringStep(StepModel):
                         # Collect design table data
                         if node_props["kind"] == "system":
                             project_data["actors"][node.uid]["design_table"][hid] = datamodel.extract_design_table_data(actor_status_info)
-          
+
             # Dump project data
             osl_logs.write(f"Dump project data\n")
             with open(self.project_data_file.path, "w") as json_file: json.dump(project_data, json_file, allow_nan=True)
-            
+
             # Upload fields
             osl_logs.write(f"Upload fields\n")
             self.transaction.upload(["osl_server_healthy"])
@@ -306,7 +306,7 @@ class MonitoringStep(StepModel):
             osl_logs.write(f"--------------------------------------------------\n")
 
             # Wait
-            time.sleep(5) 
+            time.sleep(5)
 
         osl_logs.close()
 
@@ -368,12 +368,12 @@ class MonitoringStep(StepModel):
                 elif request_name == "get_actor_status_info":
                     response = request(actor_uid, hid)
                 success = True
-            except OslCommunicationError: 
+            except OslCommunicationError:
                 pass
             if success:
                 break
         if not success:
             request_name_splitted = request_name.replace("_", " ").capitalize()
             raise Exception(f"{request_name_splitted} method failed after {attempts} attempts.")
-        
+
         return response

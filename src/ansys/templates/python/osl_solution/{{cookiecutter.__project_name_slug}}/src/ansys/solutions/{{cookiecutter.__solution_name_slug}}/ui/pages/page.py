@@ -341,7 +341,7 @@ def display_optislang_logs(n_clicks, pathname, is_open):
         osl_logs = monitoring_step.osl_log_file.read_text().split('\n')
         table = LogsTable(osl_logs)
         return table.render(), not is_open
-    
+
     raise PreventUpdate
 
 
