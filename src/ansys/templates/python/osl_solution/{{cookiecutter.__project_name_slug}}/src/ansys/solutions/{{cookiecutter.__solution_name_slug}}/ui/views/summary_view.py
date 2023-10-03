@@ -26,7 +26,7 @@ def layout(problem_setup_step: ProblemSetupStep, monitoring_step: MonitoringStep
     # Get project data
     project_data = json.loads(monitoring_step.project_data_file.read_text())
     # Get actor info
-    actor_info = extract_dict_by_key(problem_setup_step.project_tree, "uid", monitoring_step.selected_actor_from_treeview, expect_unique=True, return_index=False)
+    actor_info = extract_dict_by_key(problem_setup_step.osl_project_tree, "uid", monitoring_step.selected_actor_from_treeview, expect_unique=True, return_index=False)
     # Get actor uid
     actor_uid = monitoring_step.selected_actor_from_treeview
     # Get actor hid
@@ -143,7 +143,7 @@ def update_view(n_intervals, pathname):
     # Get project data
     project_data = json.loads(monitoring_step.project_data_file.read_text())
     # Get actor info
-    actor_info = extract_dict_by_key(problem_setup_step.project_tree, "uid", monitoring_step.selected_actor_from_treeview, expect_unique=True, return_index=False)
+    actor_info = extract_dict_by_key(problem_setup_step.osl_project_tree, "uid", monitoring_step.selected_actor_from_treeview, expect_unique=True, return_index=False)
     # Get actor uid
     actor_uid = monitoring_step.selected_actor_from_treeview
     # Get actor hid

@@ -114,7 +114,7 @@ def get_dict_from_indexes_sequence(nested_structure, mixed_keys):
         return None  # If the final element is not a dictionary
 
 
-def get_treeview_items_from_project_tree(project_tree: list) -> list:
+def get_treeview_items_from_project_tree(osl_project_tree: list) -> list:
 
     treeview_items = [
         {
@@ -128,7 +128,7 @@ def get_treeview_items_from_project_tree(project_tree: list) -> list:
         },
     ]
 
-    for i, node in enumerate(project_tree):
+    for i, node in enumerate(osl_project_tree):
         if node["is_root"]:
             treeview_items.append(
                 {

@@ -41,7 +41,7 @@ class ProblemSetupStep(StepModel):
     # Frontend persistence
     ansys_ecosystem_ready: bool = False
     project_initialized: bool = False
-    analysis_locked: bool = True
+    analysis_locked: bool = False
     project_locked: bool = False
 
     # Backend data model
@@ -103,7 +103,7 @@ class ProblemSetupStep(StepModel):
         """Clean-up method assets working directory."""
         
         method_assets_directory = Path(self.project_file.path).parent
-        osl_project_name = {{ cookiecutter.__optiSLang_application_archive_stem }}
+        osl_project_name = "{{ cookiecutter.__optiSLang_application_archive_stem }}"
 
         for item in os.listdir(method_assets_directory):
             if item not in [f"{osl_project_name}.opf", f"{osl_project_name}.json", "metadata.json", "doc.md"]:
@@ -257,7 +257,7 @@ class ProblemSetupStep(StepModel):
             executable=utils.get_osl_exec(self.ansys_ecosystem["optislang"]["selected_version"])[1],
             reset=True,
             shutdown_on_finished=True,
-            loglevel=self.osl_loglevel
+            loglevel=self.osl_loglevel,
             ini_timeout=300,
         )
 

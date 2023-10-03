@@ -172,7 +172,8 @@ class MonitoringStep(StepModel):
     @instance("problem_setup_step.osl_manager", identifier="osl_manager")
     def check_optislang_server(self, osl_manager: OptislangManager) -> None:
         """optiSLang server health check."""
-        self.osl_server_healthy = check_optislang_server(osl_manager.instance)
+        osl = osl_manager.instance
+        self.osl_server_healthy = check_optislang_server(osl.get_osl_server())
 
     @transaction(
         problem_setup_step=StepSpec(
@@ -181,10 +182,12 @@ class MonitoringStep(StepModel):
                 "osl_server_port",
                 "osl_project_tree",
                 "osl_loglevel",
-                "osl_max_server_request_attempts"
             ]
         ),
         self=StepSpec(
+            download=[
+                "osl_max_server_request_attempts"
+            ],
             upload=[
                 "osl_server_healthy",
                 "osl_project_state",
@@ -199,7 +202,7 @@ class MonitoringStep(StepModel):
     def upload_project_data(self, problem_setup_step: ProblemSetupStep, osl_manager: OptislangManager) -> None:
         """Monitor the progress of the optiSLang project and continuously upload project data."""
         # Creat monitoring directory
-        Path(self.optislang_log_file.path).parent.mkdir(parents=True, exist_ok=True)
+        Path(self.osl_log_file.path).parent.mkdir(parents=True, exist_ok=True)
 
         # Initialize new instance
         osl = osl_manager.instance
@@ -236,13 +239,15 @@ class MonitoringStep(StepModel):
 
             # Check optiSLang server health
             self.osl_server_healthy = check_optislang_server(osl_server)
+            osl.log.info(f"Server health check: {self.osl_server_healthy}")
             
             # Get project state
             self.osl_project_state = osl.project.get_status()
+            osl.log.info(f"Project state: {self.osl_project_state}")
 
             # Get full project status info
             full_project_status_info = osl_server.get_full_project_status_info()
-            with open(self.full_project_status_info_dump.path, "w") as json_file: json.dump(full_project_status_info, json_file)
+            with open(self.full_project_status_info_file.path, "w") as json_file: json.dump(full_project_status_info, json_file)
             
             # Collect project information
             project_data["project"]["information"] = datamodel.extract_project_status_info(full_project_status_info)
@@ -315,18 +320,19 @@ class MonitoringStep(StepModel):
             upload=["actor_uid"],
         )
     )
-    @instance("problem_setup_step.osl", identifier="osl")
-    def control_node_state(self, problem_setup_step: ProblemSetupStep, osl: OptislangManager) -> None:
+    @instance("problem_setup_step.osl_manager", identifier="osl_manager")
+    def control_node_state(self, problem_setup_step: ProblemSetupStep, osl_manager: OptislangManager) -> None:
         """Update the state of root or actor node based on the selected command in the UI."""
+        osl = osl_manager.instance
         if not self.selected_actor_from_command == "shutdown":
-            if self.selected_actor_from_command == osl.instance.project.root_system.uid:
-                node = osl.instance.project.root_system
+            if self.selected_actor_from_command == osl.project.root_system.uid:
+                node = osl.project.root_system
                 self.actor_uid = None
             else:
-                node = osl.instance.project.root_system.find_node_by_uid(self.selected_actor_from_command, search_depth=-1)
+                node = osl.project.root_system.find_node_by_uid(self.selected_actor_from_command, search_depth=-1)
                 self.actor_uid = node
         else:
-            node = osl.instance.project.root_system
+            node = osl.project.root_system
 
         status = node.control(self.selected_command, wait_for_completion=True, timeout=self.command_timeout)
 

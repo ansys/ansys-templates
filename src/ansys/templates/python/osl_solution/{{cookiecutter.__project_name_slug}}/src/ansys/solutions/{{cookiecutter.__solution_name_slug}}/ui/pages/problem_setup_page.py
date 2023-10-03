@@ -158,16 +158,15 @@ def start_analysis(n_clicks, pathname):
             monitoring_step.upload_project_data()
             # Wait until the analysis effectively starts
             time_on = time.time()
-            monitoring_step.project_state = "PROCESSING"
             while True:
-                if monitoring_step.project_state != "NOT STARTED":
+                if monitoring_step.osl_project_state != "NOT STARTED":
                     trigger_treeview_display = True
                     tree_items = problem_setup_step.treeview_items
                     disable_start_analysis = True
                     osl_dash_section = to_dash_sections(problem_setup_step.placeholders, problem_setup_step.registered_files, problem_setup_step.project_locked)
                     project_locked_alert = {"display": "block"}
                     break
-                elif not monitoring_step.osl_server_healthy:
+                elif monitoring_step.osl_server_healthy is False:
                     trigger_treeview_display = False
                     tree_items = {
                         "id": "problem_setup_step",
