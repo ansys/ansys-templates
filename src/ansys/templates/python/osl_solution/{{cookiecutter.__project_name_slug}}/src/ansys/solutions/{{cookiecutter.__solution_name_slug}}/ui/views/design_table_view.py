@@ -33,16 +33,11 @@ def layout(monitoring_step: MonitoringStep) -> html.Div:
     return html.Div(
         [
             html.Br(),
-            dbc.Row(
-                [
-                    dbc.Col(
-                        DesignTableAIO(
-                            design_table_data,
-                            aio_id="design_table"
-                        ),
-                        width=12
-                    ),
-                ]
+            html.Div(
+                id="design_table",
+                children=DesignTableAIO(
+                    design_table_data,
+                )
             ),
             dcc.Interval(
                 id="design_table_auto_update",
@@ -66,7 +61,7 @@ def activate_auto_update(on, pathname):
 
 
 @callback(
-    Output(DesignTableAIO.ids.datatable("design_table"), "data"),
+    Output("design_table", "children"),
     Output("selected_state_dropdown", "options"),
     Output("selected_state_dropdown", "value"),
     Input("design_table_auto_update", "n_intervals"),
@@ -95,7 +90,7 @@ def update_view(n_intervals, pathname):
         if len(project_data["actors"][monitoring_step.selected_actor_from_treeview]["states_ids"]):
             monitoring_step.selected_state_id = project_data["actors"][monitoring_step.selected_actor_from_treeview]["states_ids"][0]
     return (
-        pd.DataFrame(design_table_data).to_dict('records'),
+        DesignTableAIO(design_table_data),
         project_data["actors"][monitoring_step.selected_actor_from_treeview]["states_ids"],
         monitoring_step.selected_state_id
     )
