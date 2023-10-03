@@ -6,7 +6,9 @@ import dash_bootstrap_components as dbc
 import re
 
 from pathlib import Path
-from typing import Any, Iterable, Union
+from typing import Any, Iterable, Union, Tuple
+
+from ansys.optislang.core.osl_server import OslServer
 
 
 MONITORING_TABS = [
@@ -306,7 +308,7 @@ def update_placeholders(ui_values: list, placeholders: dict) -> dict:
     return updated_dict
 
 
-def check_optislang_server(osl_server) -> None:
+def check_optislang_server(osl_server: OslServer) -> None:
     """optiSLang server health check."""
 
     try:
@@ -315,3 +317,10 @@ def check_optislang_server(osl_server) -> None:
         return False
 
     return server_is_alive
+
+
+def get_states_ids_from_states(actor_states: dict) -> Tuple[str]:
+    """Get available actor states ids from actor states response."""
+    if not actor_states.get("states", None):
+        return tuple([])
+    return tuple([state["hid"] for state in actor_states["states"]])

@@ -51,6 +51,8 @@ def initialization(pathname):
     """Run methods to initialize the solution."""
     project = DashClient[{{ cookiecutter.__solution_definition_name }}].get_project(pathname)
 
+    project.steps.problem_setup_step.clean_method_assets_directory()
+
     if not project.steps.problem_setup_step.project_initialized:
         long_running = project.steps.problem_setup_step.get_app_metadata()
         long_running.wait()
