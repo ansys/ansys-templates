@@ -25,7 +25,7 @@ def layout(monitoring_step: MonitoringStep) -> html.Div:
     button_group = ButtonGroup(options=monitoring_step.project_btn_group_options, disabled=monitoring_step.commands_locked).buttons
 
     # Get project data
-    project_data = json.loads(monitoring_step.project_data_dump.read_text())
+    project_data = json.loads(monitoring_step.project_data_file.read_text())
 
     return html.Div(
         [
@@ -72,6 +72,8 @@ def activate_auto_update(on, pathname):
 
 @callback(
     Output("project_information_table", "children"),
+    Output("selected_state_dropdown", "options"),
+    Output("selected_state_dropdown", "value"),
     Input("project_summary_auto_update", "n_intervals"),
     State("url", "pathname"),
     prevent_initial_call=True,
@@ -83,5 +85,13 @@ def update_view(n_intervals, pathname):
     # Get monitoring step
     monitoring_step = project.steps.monitoring_step
     # Get project data
-    project_data = json.loads(monitoring_step.project_data_dump.read_text())
-    return ProjectInformationTableAIO(project_data["project"]["information"])
+    project_data = json.loads(monitoring_step.project_data_file.read_text())
+    # Collect states ids
+    if not monitoring_step.selected_state_id:
+        if len(project_data["actors"][monitoring_step.selected_actor_from_treeview]["states_ids"]):
+            monitoring_step.selected_state_id = project_data["actors"][monitoring_step.selected_actor_from_treeview]["states_ids"][0]
+    return (
+        ProjectInformationTableAIO(project_data["project"]["information"]),
+        project_data["actors"][monitoring_step.selected_actor_from_treeview]["states_ids"],
+        monitoring_step.selected_state_id
+    )

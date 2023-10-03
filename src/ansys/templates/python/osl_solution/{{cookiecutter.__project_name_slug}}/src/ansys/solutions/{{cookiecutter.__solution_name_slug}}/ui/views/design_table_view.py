@@ -19,7 +19,7 @@ def layout(monitoring_step: MonitoringStep) -> html.Div:
     """Layout of the design table view."""
 
     # Get project data
-    project_data = json.loads(monitoring_step.project_data_dump.read_text())
+    project_data = json.loads(monitoring_step.project_data_file.read_text())
     # Get actor uid
     actor_uid = monitoring_step.selected_actor_from_treeview
     # Get actor hid
@@ -67,6 +67,8 @@ def activate_auto_update(on, pathname):
 
 @callback(
     Output(DesignTableAIO.ids.datatable("design_table"), "data"),
+    Output("selected_state_dropdown", "options"),
+    Output("selected_state_dropdown", "value"),
     Input("design_table_auto_update", "n_intervals"),
     State("url", "pathname"),
     prevent_initial_call=True,
@@ -78,7 +80,7 @@ def update_view(n_intervals, pathname):
     # Get monitoring step
     monitoring_step = project.steps.monitoring_step
     # Get project data
-    project_data = json.loads(monitoring_step.project_data_dump.read_text())
+    project_data = json.loads(monitoring_step.project_data_file.read_text())
     # Get actor uid
     actor_uid = monitoring_step.selected_actor_from_treeview
     # Get actor hid
@@ -88,4 +90,12 @@ def update_view(n_intervals, pathname):
         design_table_data = project_data["actors"][actor_uid]["design_table"][actor_hid]
     else:
         design_table_data = datamodel.extract_design_table_data({})
-    return pd.DataFrame(design_table_data).to_dict('records')
+    # Collect states ids
+    if not monitoring_step.selected_state_id:
+        if len(project_data["actors"][monitoring_step.selected_actor_from_treeview]["states_ids"]):
+            monitoring_step.selected_state_id = project_data["actors"][monitoring_step.selected_actor_from_treeview]["states_ids"][0]
+    return (
+        pd.DataFrame(design_table_data).to_dict('records'),
+        project_data["actors"][monitoring_step.selected_actor_from_treeview]["states_ids"],
+        monitoring_step.selected_state_id
+    )
