@@ -11,11 +11,12 @@ app = FastAPI()
 
 
 @app.post("/start")
-async def start_instance(project_path: str = Body(...), project_properties_file: str = Body(...), osl_version: int = Body(...)):
+async def start_instance(project_path: str = Body(...), project_properties_file: str = Body(...), osl_version: int = Body(...), loglevel: str = Body(...)):
     global OSL_SERVER_PORT
     osl = Optislang(
         project_path=project_path,
         executable=utils.get_osl_exec(osl_version)[1],
+        loglevel=loglevel,
         reset=True,
         auto_relocate=True,
         shutdown_on_finished=False,
