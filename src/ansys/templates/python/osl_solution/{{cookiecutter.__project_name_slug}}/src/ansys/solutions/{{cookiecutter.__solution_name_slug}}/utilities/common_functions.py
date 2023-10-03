@@ -304,3 +304,14 @@ def update_placeholders(ui_values: list, placeholders: dict) -> dict:
         if parameter_name in placeholder_values:
             updated_dict[parameter_name] = input_value
     return updated_dict
+
+
+def check_optislang_server(osl_server) -> None:
+    """optiSLang server health check."""
+
+    try:
+        server_is_alive = osl_server.get_server_is_alive()
+    except Exception as e:
+        return False
+
+    return server_is_alive
