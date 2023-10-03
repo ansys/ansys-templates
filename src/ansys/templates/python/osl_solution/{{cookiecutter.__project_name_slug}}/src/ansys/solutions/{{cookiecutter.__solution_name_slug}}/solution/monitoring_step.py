@@ -213,14 +213,9 @@ class MonitoringStep(StepModel):
         # Get optiSLang server
         osl_server = osl.get_osl_server()
 
-        # Configure logging.
-        osl_logger = logging.OslLogger(
-            loglevel=problem_setup_step.osl_loglevel,
-            log_to_file=True,
-            logfile_name=self.osl_log_file.path,
-            log_to_stdout=True,
-        )
-        osl.__logger = osl_logger.add_instance_logger(osl.name, osl, problem_setup_step.osl_loglevel)
+        # Create log file
+        osl_logs = open(self.osl_log_file.path, 'w')
+        osl_logs.write("Start monitoring.\n\n")
 
         # Initialize project data structure
         project_data = {"project": {"information": {}}, "actors": {}}
@@ -233,26 +228,27 @@ class MonitoringStep(StepModel):
             # Initialize dictionary
             project_data["actors"][node.uid] = {"states_ids": {}, "information": {}, "log": {}, "statistics": {}, "design_table": {}}
 
-
         # Monitor project state and upload data.
         while self.osl_project_state not in ["FINISHED", "ABORTED"]:
 
             # Check optiSLang server health
             self.osl_server_healthy = check_optislang_server(osl_server)
-            osl.log.info(f"Server health check: {self.osl_server_healthy}")
+            osl_logs.write(f"Server health check: {self.osl_server_healthy}\n")
             
             # Get project state
             self.osl_project_state = osl.project.get_status()
-            osl.log.info(f"Project state: {self.osl_project_state}")
+            osl_logs.write(f"Project state: {self.osl_project_state}\n")
 
             # Get full project status info
             full_project_status_info = osl_server.get_full_project_status_info()
             with open(self.full_project_status_info_file.path, "w") as json_file: json.dump(full_project_status_info, json_file)
+            osl_logs.write("Get full project status info\n")
             
             # Collect project information
             project_data["project"]["information"] = datamodel.extract_project_status_info(full_project_status_info)
             
             # Walk through project tree
+            osl_logs.write("Walk through project tree\n")
             for node_props in problem_setup_step.osl_project_tree:
                 
                 # Get node
@@ -260,8 +256,10 @@ class MonitoringStep(StepModel):
                     node = osl.project.root_system
                 else:
                     node = osl.project.root_system.find_node_by_uid(node_props["uid"], search_depth=-1)
-                
+                osl_logs.write(f"   Current node: {node.uid}\n")
+
                 # Get actor info (TCP REQUEST)
+                osl_logs.write(f"       Get actor info\n")
                 actor_info = self._make_osl_server_request(osl_server, "get_actor_info", node.uid)
 
                 # Collect actor log data
@@ -271,15 +269,19 @@ class MonitoringStep(StepModel):
                 project_data["actors"][node.uid]["statistics"] = datamodel.extract_actor_statistics_data(actor_info)
 
                 # Get states ids (TCP REQUEST)
+                osl_logs.write(f"       Get states ids\n")
                 actor_states = self._make_osl_server_request(osl_server, "get_actor_states", node.uid)
                 actor_states_ids = get_states_ids_from_states(actor_states)
                 project_data["actors"][node.uid]["states_ids"] = actor_states_ids
 
                 # Walk through states ids
                 if len(actor_states_ids):
+                    osl_logs.write("       Walk through states ids\n")
                     for hid in actor_states_ids:
+                        osl_logs.write(f"        Current hid: {hid}\n")
 
-                        # Get actor status info
+                        # Get actor status info (TCP REQUEST)
+                        osl_logs.write(f"        Get actor status info\n")
                         actor_status_info = self._make_osl_server_request(osl_server, "get_actor_status_info", node.uid, hid)
 
                         # Collect actor information data
@@ -290,18 +292,23 @@ class MonitoringStep(StepModel):
                             project_data["actors"][node.uid]["design_table"][hid] = datamodel.extract_design_table_data(actor_status_info)
           
             # Dump project data
+            osl_logs.write(f"Dump project data\n")
             with open(self.project_data_file.path, "w") as json_file: json.dump(project_data, json_file, allow_nan=True)
             
             # Upload fields
+            osl_logs.write(f"Upload fields\n")
             self.transaction.upload(["osl_server_healthy"])
             self.transaction.upload(["osl_project_state"])
             self.transaction.upload(["full_project_status_info_file"])
             self.transaction.upload(["project_data_file"])
             self.transaction.upload(["osl_log_file"])
 
+            osl_logs.write(f"--------------------------------------------------\n")
+
             # Wait
             time.sleep(5) 
 
+        osl_logs.close()
 
     @transaction(
         problem_setup_step=StepSpec(
@@ -338,8 +345,6 @@ class MonitoringStep(StepModel):
 
         if not status:
             raise Exception(f"{self.selected_command.replace('_', ' ').title()} command against node {node.get_name()} failed.")
-
-
 
     def _make_osl_server_request(self, osl_server: OslServer, request_name: str, actor_uid: str, hid: str = None) -> Union[list, dict]:
         """Make a server request and try multiple times if a communication error is raised."""

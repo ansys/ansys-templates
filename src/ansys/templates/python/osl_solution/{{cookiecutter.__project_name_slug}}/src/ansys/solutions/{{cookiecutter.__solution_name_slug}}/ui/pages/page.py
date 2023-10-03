@@ -338,7 +338,7 @@ def display_optislang_logs(n_clicks, pathname, is_open):
         return None, False
 
     if problem_setup_step.project_locked:
-        osl_logs = read_log_file(monitoring_step.osl_log_file.read_text())
+        osl_logs = monitoring_step.osl_log_file.read_text().split('\n')
         table = LogsTable(osl_logs)
         return table.render(), not is_open
     
