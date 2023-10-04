@@ -282,6 +282,7 @@ class ProblemSetupStep(StepModel):
             ],
         )
     )
+    @long_running
     @create_instance("osl_manager", OptislangManager)
     def start(self, osl_manager: OptislangManager) -> None:
         """Start optiSLang and run the project."""

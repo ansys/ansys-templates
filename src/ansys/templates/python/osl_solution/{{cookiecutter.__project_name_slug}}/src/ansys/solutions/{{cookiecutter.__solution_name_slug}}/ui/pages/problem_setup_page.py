@@ -53,7 +53,7 @@ def layout(problem_setup_step: ProblemSetupStep) -> html.Div:
                 style={"display": "block"} if problem_setup_step.project_locked else {"display": "none"},
             ),
             html.Div(
-                id="osl_install_alert"
+                id="alert_container"
             ),
             html.Br(),
             # Input form
@@ -122,7 +122,7 @@ def layout(problem_setup_step: ProblemSetupStep) -> html.Div:
     Output("start_analysis", "disabled"),
     Output("osl-dash-sections", "children"),
     Output("project-locked-alert", "style"),
-    Output("osl_install_alert", "children"),
+    Output("alert_container", "children"),
     Input("start_analysis", "n_clicks"),
     State("url", "pathname"),
     prevent_initial_call=True,
@@ -138,71 +138,62 @@ def start_analysis(n_clicks, pathname):
         ui_data.update({"start_analysis_requested": True})
         problem_setup_step.ui_placeholders = ui_data
 
+        trigger_treeview_display = False
+        disable_start_analysis = False
+        osl_dash_section = []
+        project_locked_alert = {"display": "none"}
+        alert_container = []
+        tree_items = {
+            "id": "problem_setup_step",
+            "text": "Problem Setup",
+            "expanded": True,
+            "prefixIcon": {
+                "src": "https://s2.svgbox.net/hero-solid.svg?ic=adjustments"
+            },
+            "level": 0
+        }
+
         # Check Ansys ecosystem
         problem_setup_step.check_ansys_ecosystem()
         if problem_setup_step.ansys_ecosystem_ready:
-            # Set optiSLang install alert
-            optislang_install_alert = []
             # Read project tree and update treeview
             problem_setup_step.get_project_tree()
             # Update project properties file prior to the solve
             problem_setup_step.write_updated_properties_file()
             # Start analysis
             problem_setup_step.start()
-            # Lock start analysis and ui data
-            problem_setup_step.analysis_locked = True
-            problem_setup_step.project_locked = True
-            # Check optiSLang sever health
-            monitoring_step.check_optislang_server()
-            # Start monitoring
-            monitoring_step.upload_project_data()
-            # Wait until the analysis effectively starts
-            time_on = time.time()
             while True:
-                if monitoring_step.osl_project_state != "NOT STARTED":
-                    trigger_treeview_display = True
-                    tree_items = problem_setup_step.treeview_items
-                    disable_start_analysis = True
-                    osl_dash_section = to_dash_sections(problem_setup_step.placeholders, problem_setup_step.registered_files, problem_setup_step.project_locked)
-                    project_locked_alert = {"display": "block"}
+                status = problem_setup_step.get_long_running_method_state("start").status
+                if status == MethodStatus.Completed or status == MethodStatus.Failed:
                     break
-                elif monitoring_step.osl_server_healthy is False:
-                    trigger_treeview_display = False
-                    tree_items = {
-                        "id": "problem_setup_step",
-                        "text": "Problem Setup",
-                        "expanded": True,
-                        "prefixIcon": {
-                            "src": "https://s2.svgbox.net/hero-solid.svg?ic=adjustments"
-                        },
-                        "level": 0
-                    },
-                    disable_start_analysis = False
-                    osl_dash_section = []
-                    project_locked_alert = {"display": "none"}
-                    break
-                elif (time.time() - time_on) > monitoring_step.osl_start_timeout:
-                    trigger_treeview_display = False
-                    tree_items = {
-                        "id": "problem_setup_step",
-                        "text": "Problem Setup",
-                        "expanded": True,
-                        "prefixIcon": {
-                            "src": "https://s2.svgbox.net/hero-solid.svg?ic=adjustments"
-                        },
-                        "level": 0
-                    },
-                    disable_start_analysis = False
-                    osl_dash_section = []
-                    project_locked_alert = {"display": "none"}
-                    break
+            if status == MethodStatus.Failed:
+                alert_container = dbc.Alert("optiSLang instance initialization failed.", color="danger")
+            else:
+                # Lock start analysis and ui data
+                problem_setup_step.analysis_locked = True
+                problem_setup_step.project_locked = True
+                # Check optiSLang sever health
+                monitoring_step.check_optislang_server()
+                # Start monitoring
+                monitoring_step.upload_project_data()
+                # Wait until the analysis effectively starts
+                time_on = time.time()
+                while True:
+                    if monitoring_step.osl_project_state != "NOT STARTED":
+                        trigger_treeview_display = True
+                        tree_items = problem_setup_step.treeview_items
+                        disable_start_analysis = True
+                        osl_dash_section = to_dash_sections(problem_setup_step.placeholders, problem_setup_step.registered_files, problem_setup_step.project_locked)
+                        project_locked_alert = {"display": "block"}
+                        break
+                    elif monitoring_step.osl_server_healthy is False:
+                        alert_container = dbc.Alert("optiSLang server health check failed.", color="danger")
+                        break
+                    elif (time.time() - time_on) > monitoring_step.osl_start_timeout:
+                        alert_container = dbc.Alert("Timeout error. The analysis has not started.", color="danger")
+                        break
         else:
-            optislang_install_alert = dbc.Alert("Error: No optiSLang install detected.", color="danger")
-            trigger_treeview_display = False
-            tree_items = problem_setup_step.treeview_items
-            disable_start_analysis = False
-            osl_dash_section = []
-            project_locked_alert = {"display": "none"}
+            alert_container = dbc.Alert("Error: No optiSLang install detected.", color="danger")
 
         return (
             trigger_treeview_display,
@@ -211,7 +202,7 @@ def start_analysis(n_clicks, pathname):
             disable_start_analysis,
             osl_dash_section,
             project_locked_alert,
-            optislang_install_alert
+            alert_container
         )
     else:
         raise PreventUpdate
