@@ -221,6 +221,7 @@ class MonitoringStep(StepModel):
             log_to_stdout=True,
         )
         osl.__logger = osl_logger.add_instance_logger(osl.name, osl, problem_setup_step.osl_loglevel)
+        osl.log.info("Start monitoring")
 
         # Initialize project data structure
         project_data = {"project": {"information": {}}, "actors": {}}
@@ -238,11 +239,11 @@ class MonitoringStep(StepModel):
 
             # Check optiSLang server health
             self.osl_server_healthy = check_optislang_server(osl_server)
-            osl.log.info(f"Server health check: {self.osl_server_healthy}\n")
+            osl.log.info(f"Server health check: {self.osl_server_healthy}")
 
             # Get project state
             self.osl_project_state = osl.project.get_status()
-            osl.log.info(f"Project state: {self.osl_project_state}\n")
+            osl.log.info(f"Project state: {self.osl_project_state}")
 
             # Get full project status info
             full_project_status_info = osl_server.get_full_project_status_info()

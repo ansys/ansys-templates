@@ -11,7 +11,7 @@ import tempfile
 from pathlib import Path
 from typing import List, Optional
 
-from ansys.optislang.core import Optislang, utils
+from ansys.optislang.core import Optislang, utils, logging
 from ansys.saf.glow.solution import (
     FileGroupReference,
     FileReference,
@@ -91,6 +91,7 @@ class ProblemSetupStep(StepModel):
 
     # Outputs
     working_properties_file: FileReference = FileReference("Problem_Setup/working_properties_file.json")
+    osl_log_file: FileReference = FileReference("Problem_Setup/optiSLang.log")
 
     # Methods ---------------------------------------------------------------------------------------------------------
 
@@ -279,6 +280,7 @@ class ProblemSetupStep(StepModel):
             upload=[
                 "osl_server_host",
                 "osl_server_port",
+                "osl_log_file",
             ],
         )
     )
@@ -302,5 +304,14 @@ class ProblemSetupStep(StepModel):
         # Get server port
         server_info = osl_server.get_server_info()
         self.osl_server_port = server_info["server"]["server_port"]
+        # Configure logging.
+        osl_logger = logging.OslLogger(
+            loglevel=self.osl_loglevel,
+            log_to_file=True,
+            logfile_name=self.osl_log_file.path,
+            log_to_stdout=True,
+        )
+        osl.__logger = osl_logger.add_instance_logger(osl.name, osl, self.osl_loglevel)
         # Start optiSLang project
+        osl.log.info("Start analysis")
         osl.start(wait_for_started=True, wait_for_finished=False)

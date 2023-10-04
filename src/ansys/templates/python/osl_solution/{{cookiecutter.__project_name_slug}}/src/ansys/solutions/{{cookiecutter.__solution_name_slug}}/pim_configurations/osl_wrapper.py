@@ -1,6 +1,7 @@
 # ©2023, ANSYS Inc. Unauthorized use, distribution or duplication is prohibited.
 
-from ansys.optislang.core import Optislang, utils
+from ansys.optislang.core import Optislang, utils, logging
+from pathlib import Path
 from fastapi import Body, FastAPI
 
 
@@ -23,6 +24,15 @@ async def start_instance(project_path: str = Body(...), project_properties_file:
         import_project_properties_file=project_properties_file,
         ini_timeout=300
     )
+    # Configure logging.
+    osl_logger = logging.OslLogger(
+        loglevel=loglevel,
+        log_to_file=True,
+        logfile_name=Path(project_path).parent / "optiSLang.log",
+        log_to_stdout=True,
+    )
+    osl.__logger = osl_logger.add_instance_logger(osl.name, osl, loglevel)
+    osl.log.info("Start instance")
     # Get server host
     osl_server_host = osl.get_osl_server().get_host()
     # Get server port
