@@ -26,7 +26,7 @@ from ansys.solutions.{{ cookiecutter.__solution_name_slug }}.utilities.common_fu
 
 def layout(problem_setup_step: ProblemSetupStep, monitoring_step: MonitoringStep) -> html.Div:
 
-    actor_info = extract_dict_by_key(problem_setup_step.project_tree, "uid", monitoring_step.selected_actor_from_treeview, expect_unique=True, return_index=False)
+    actor_info = extract_dict_by_key(problem_setup_step.osl_project_tree, "uid", monitoring_step.selected_actor_from_treeview, expect_unique=True, return_index=False)
     list_of_tabs = update_list_of_tabs(actor_info)
 
     return html.Div(
@@ -81,13 +81,13 @@ def update_page_content(selected_tab, selected_state_id, pathname):
     elif selected_tab == "summary_tab":
         return summary_view.layout(problem_setup_step, monitoring_step)
     elif selected_tab == "scenery_tab":
-        return scenery_view.layout(monitoring_step)
+        return scenery_view.layout(problem_setup_step)
     elif selected_tab == "design_table_tab":
-        return design_table_view.layout(monitoring_step)
+        return design_table_view.layout(problem_setup_step, monitoring_step)
     elif selected_tab == "visualization_tab":
-        return visualization_view.layout(monitoring_step)
+        return visualization_view.layout(problem_setup_step, monitoring_step)
     elif selected_tab == "status_overview_tab":
-        return status_overview_view.layout(monitoring_step)
+        return status_overview_view.layout(problem_setup_step)
 
 
 @callback(

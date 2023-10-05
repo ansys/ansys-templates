@@ -3,6 +3,7 @@
 """Frontend of the project summary step."""
 
 import dash_bootstrap_components as dbc
+import json
 
 from dash_extensions.enrich import html, Input, Output, State, dcc
 from ansys.saf.glow.client.dashclient import DashClient, callback
@@ -24,6 +25,9 @@ def layout(problem_setup_step: ProblemSetupStep, monitoring_step: MonitoringStep
     }
     button_group = ButtonGroup(options=monitoring_step.project_btn_group_options, disabled=monitoring_step.commands_locked).buttons
 
+    # Get project data
+    project_data = json.loads(problem_setup_step.project_data_file.read_text())
+
     return html.Div(
         [
             html.Br(),
@@ -32,7 +36,7 @@ def layout(problem_setup_step: ProblemSetupStep, monitoring_step: MonitoringStep
                     dbc.Col(
                         html.Div(
                             ProjectInformationTableAIO(
-                                monitoring_step.project_information,
+                                project_data["project"]["information"],
                             ),
                             id="project_information_table"
                         ),
@@ -63,19 +67,34 @@ def layout(problem_setup_step: ProblemSetupStep, monitoring_step: MonitoringStep
     prevent_initial_call=True,
 )
 def activate_auto_update(on, pathname):
-
+    """Enable/Disable auto update."""
     return not on
 
 
 @callback(
     Output("project_information_table", "children"),
+    Output("selected_state_dropdown", "options"),
+    Output("selected_state_dropdown", "value"),
     Input("project_summary_auto_update", "n_intervals"),
     State("url", "pathname"),
     prevent_initial_call=True,
 )
 def update_view(n_intervals, pathname):
-
+    """Update design table."""
+    # Get project
     project = DashClient[{{ cookiecutter.__solution_definition_name }}].get_project(pathname)
+    # Get problem setup step
+    problem_setup_step = project.steps.problem_setup_step
+    # Get monitoring step
     monitoring_step = project.steps.monitoring_step
-
-    return ProjectInformationTableAIO(monitoring_step.project_information)
+    # Get project data
+    project_data = json.loads(problem_setup_step.project_data_file.read_text())
+    # Collect states ids
+    if not monitoring_step.selected_state_id:
+        if len(project_data["actors"][monitoring_step.selected_actor_from_treeview]["states_ids"]):
+            monitoring_step.selected_state_id = project_data["actors"][monitoring_step.selected_actor_from_treeview]["states_ids"][0]
+    return (
+        ProjectInformationTableAIO(project_data["project"]["information"]),
+        project_data["actors"][monitoring_step.selected_actor_from_treeview]["states_ids"],
+        monitoring_step.selected_state_id
+    )

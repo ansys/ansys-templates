@@ -3,6 +3,7 @@
 """Frontend of the summary view."""
 
 import dash_bootstrap_components as dbc
+import json
 import pandas as pd
 
 from dash_extensions.enrich import html, Input, Output, State, dcc
@@ -22,6 +23,14 @@ from ansys.solutions.{{ cookiecutter.__solution_name_slug }}.utilities.common_fu
 
 def layout(problem_setup_step: ProblemSetupStep, monitoring_step: MonitoringStep) -> html.Div:
     """Layout of the summary view."""
+    # Get project data
+    project_data = json.loads(problem_setup_step.project_data_file.read_text())
+    # Get actor info
+    actor_info = extract_dict_by_key(problem_setup_step.osl_project_tree, "uid", monitoring_step.selected_actor_from_treeview, expect_unique=True, return_index=False)
+    # Get actor uid
+    actor_uid = monitoring_step.selected_actor_from_treeview
+    # Get actor hid
+    actor_hid = monitoring_step.selected_state_id
 
     actor_info = extract_dict_by_key(problem_setup_step.project_tree, "uid", monitoring_step.selected_actor_from_treeview, expect_unique=True, return_index=False)
 
@@ -34,11 +43,11 @@ def layout(problem_setup_step: ProblemSetupStep, monitoring_step: MonitoringStep
 
     # Collect node-specific data
     if monitoring_step.selected_state_id:
-        actor_information = monitoring_step.actors_information[monitoring_step.selected_actor_from_treeview][monitoring_step.selected_state_id]
+        actor_information_data = project_data["actors"][actor_uid]["information"][actor_hid]
     else:
-        actor_information = datamodel.extract_actor_information_data({}, actor_info["kind"])
-    actor_log = monitoring_step.actors_log[monitoring_step.selected_actor_from_treeview]
-    actor_statistics = monitoring_step.actors_statistics[monitoring_step.selected_actor_from_treeview]
+        actor_information_data = datamodel.extract_actor_information_data({}, actor_info["kind"])
+    actor_log_data = project_data["actors"][actor_uid]["log"]
+    actor_statistics_data = project_data["actors"][actor_uid]["statistics"]
 
     # Assemble UI components
     content = [
@@ -48,7 +57,7 @@ def layout(problem_setup_step: ProblemSetupStep, monitoring_step: MonitoringStep
                 dbc.Col(
                     html.Div(
                         ActorInformationTableAIO(
-                            actor_information,
+                            actor_information_data,
                         ),
                         id="actor_information_table"
                     ),
@@ -72,7 +81,7 @@ def layout(problem_setup_step: ProblemSetupStep, monitoring_step: MonitoringStep
             [
                 dbc.Col(
                     ActorLogsTableAIO(
-                        actor_log,
+                        actor_log_data,
                         aio_id = "actor_logs_table"
                     ),
                     width=12
@@ -84,7 +93,7 @@ def layout(problem_setup_step: ProblemSetupStep, monitoring_step: MonitoringStep
                 dbc.Col(
                     html.Div(
                         ActorStatisticsTableAIO(
-                            actor_statistics,
+                            actor_statistics_data,
                         ),
                         id = "actor_statistics_table"
                     ),
@@ -111,7 +120,7 @@ def layout(problem_setup_step: ProblemSetupStep, monitoring_step: MonitoringStep
     prevent_initial_call=True,
 )
 def activate_auto_update(on, pathname):
-
+    """Enable/Disable auto update."""
     return not on
 
 
@@ -119,25 +128,45 @@ def activate_auto_update(on, pathname):
     Output("actor_information_table", "children"),
     Output(ActorLogsTableAIO.ids.datatable("actor_logs_table"), "data"),
     Output("actor_statistics_table", "children"),
+    Output("selected_state_dropdown", "options"),
+    Output("selected_state_dropdown", "value"),
     Input("summary_auto_update", "n_intervals"),
     State("url", "pathname"),
     prevent_initial_call=True,
 )
 def update_view(n_intervals, pathname):
-
+    """Update design table."""
+    # Get project
     project = DashClient[{{ cookiecutter.__solution_definition_name }}].get_project(pathname)
+    # Get problem setup step
     problem_setup_step = project.steps.problem_setup_step
+    # Get monitoring step
     monitoring_step = project.steps.monitoring_step
-
-    actor_info = extract_dict_by_key(problem_setup_step.project_tree, "uid", monitoring_step.selected_actor_from_treeview, expect_unique=True, return_index=False)
-
+    # Get project data
+    project_data = json.loads(problem_setup_step.project_data_file.read_text())
+    # Get actor info
+    actor_info = extract_dict_by_key(problem_setup_step.osl_project_tree, "uid", monitoring_step.selected_actor_from_treeview, expect_unique=True, return_index=False)
+    # Get actor uid
+    actor_uid = monitoring_step.selected_actor_from_treeview
+    # Get actor hid
+    actor_hid = monitoring_step.selected_state_id
+    # Collect actor information data
     if monitoring_step.selected_state_id:
-        actor_information = monitoring_step.actors_information[monitoring_step.selected_actor_from_treeview][monitoring_step.selected_state_id]
+        actor_information_data = project_data["actors"][actor_uid]["information"][actor_hid]
     else:
-        actor_information = datamodel.extract_actor_information_data({}, actor_info["kind"])
-
+        actor_information_data = datamodel.extract_actor_information_data({}, actor_info["kind"])
+    # Collect actor log data
+    actor_log_data = project_data["actors"][actor_uid]["log"]
+    # Collect actor statistics data
+    actor_statistics_data = project_data["actors"][actor_uid]["statistics"]
+    # Collect states ids
+    if not monitoring_step.selected_state_id:
+        if len(project_data["actors"][monitoring_step.selected_actor_from_treeview]["states_ids"]):
+            monitoring_step.selected_state_id = project_data["actors"][monitoring_step.selected_actor_from_treeview]["states_ids"][0]
     return (
-        ActorInformationTableAIO(actor_information),
-        pd.DataFrame(monitoring_step.actors_log[monitoring_step.selected_actor_from_treeview]).to_dict('records'),
-        ActorStatisticsTableAIO(monitoring_step.actors_statistics[monitoring_step.selected_actor_from_treeview])
+        ActorInformationTableAIO(actor_information_data),
+        pd.DataFrame(actor_log_data).to_dict('records'),
+        ActorStatisticsTableAIO(actor_statistics_data),
+        project_data["actors"][monitoring_step.selected_actor_from_treeview]["states_ids"],
+        monitoring_step.selected_state_id
     )

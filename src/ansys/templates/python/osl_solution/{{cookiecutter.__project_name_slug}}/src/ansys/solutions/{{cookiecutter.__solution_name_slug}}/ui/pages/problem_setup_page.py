@@ -8,20 +8,18 @@ import time
 
 from dash.exceptions import PreventUpdate
 from dash_extensions.enrich import Input, Output, State, dcc, html, ALL, MATCH, no_update, callback_context
-
 from ansys.saf.glow.client.dashclient import DashClient, callback
 from ansys.saf.glow.core.method_status import MethodStatus
 from ansys.solutions.optislang.frontend_components.load_sections import to_dash_sections, update_designs_to_dash_section
-
 from ansys.solutions.{{ cookiecutter.__solution_name_slug }}.solution.definition import {{ cookiecutter.__solution_definition_name }}
 from ansys.solutions.{{ cookiecutter.__solution_name_slug }}.solution.problem_setup_step import ProblemSetupStep
-from ansys.solutions.{{ cookiecutter.__solution_name_slug }}.solution.monitoring_step import MonitoringStep
 from ansys.solutions.{{ cookiecutter.__solution_name_slug }}.utilities.common_functions import check_empty_strings
 
 
-def layout(problem_setup_step: ProblemSetupStep, monitoring_step: MonitoringStep) -> html.Div:
+def layout(problem_setup_step: ProblemSetupStep) -> html.Div:
     """Layout of the problem setup step."""
-
+    if problem_setup_step.ui_placeholders and not problem_setup_step.project_locked:
+        problem_setup_step.update_osl_placeholders_with_ui_values()
     project_properties_sections = to_dash_sections(
             problem_setup_step.placeholders, problem_setup_step.registered_files, problem_setup_step.project_locked
         )
@@ -51,6 +49,9 @@ def layout(problem_setup_step: ProblemSetupStep, monitoring_step: MonitoringStep
                     )
                 ],
                 style={"display": "block"} if problem_setup_step.project_locked else {"display": "none"},
+            ),
+            html.Div(
+                id="alert_container"
             ),
             html.Br(),
             # Input form
@@ -119,59 +120,71 @@ def layout(problem_setup_step: ProblemSetupStep, monitoring_step: MonitoringStep
     Output("start_analysis", "disabled"),
     Output("osl-dash-sections", "children"),
     Output("project-locked-alert", "style"),
+    Output("alert_container", "children"),
     Input("start_analysis", "n_clicks"),
     State("url", "pathname"),
     prevent_initial_call=True,
 )
 def start_analysis(n_clicks, pathname):
-    """Start optiSLang and run the project."""
-
-    project = DashClient[{{ cookiecutter.__solution_definition_name }}].get_project(pathname)
-    problem_setup_step = project.steps.problem_setup_step
-    monitoring_step = project.steps.monitoring_step
-
+    """Start optiSLang project."""
     if n_clicks:
+        project = DashClient[{{ cookiecutter.__solution_definition_name }}].get_project(pathname)
+        problem_setup_step = project.steps.problem_setup_step
+
         ui_data = problem_setup_step.ui_placeholders
         ui_data.update({"start_analysis_requested": True})
         problem_setup_step.ui_placeholders = ui_data
-        # Check if Ansys products are available
-        project.steps.problem_setup_step.check_ansys_ecosystem()
+
+        trigger_treeview_display = False
+        disable_start_analysis = False
+        osl_dash_section = []
+        project_locked_alert = {"display": "none"}
+        alert_container = []
+
+        # Check Ansys ecosystem
+        problem_setup_step.check_ansys_ecosystem()
         if problem_setup_step.ansys_ecosystem_ready:
             # Read project tree and update treeview
             problem_setup_step.get_project_tree()
             # Update project properties file prior to the solve
             problem_setup_step.write_updated_properties_file()
             # Start analysis
-            problem_setup_step.start()
-            # Lock start analysis and ui data
-            problem_setup_step.analysis_locked = True
-            problem_setup_step.project_locked = True
-            # Start monitoring
-            monitoring_step.upload_project_data()
-            # Wait until the analysis effectively starts
-            while monitoring_step.project_state == "NOT STARTED":
-                time.sleep(1)
-            return (
-                True,
-                problem_setup_step.treeview_items,
-                True,
-                True,
-                to_dash_sections(
-                    problem_setup_step.placeholders, problem_setup_step.registered_files, problem_setup_step.project_locked
-                ),
-                {"display": "block"},
-            )
+            problem_setup_step.start_and_monitor_osl_project()
+            # Check instance start
+            time_on = time.time()
+            while not problem_setup_step.osl_instance_started:
+                if (time.time() - time_on) > problem_setup_step.osl_start_timeout:
+                    alert_container = dbc.Alert("Timeout error. The optiSLang instance has not started.", color="danger")
+                    break
+            # Continue if no error
+            if len(alert_container) == 0:
+                # Lock start analysis and ui data
+                problem_setup_step.analysis_locked = True
+                problem_setup_step.project_locked = True
+                # Wait until the analysis effectively starts
+                time_on = time.time()
+                while True:
+                    if problem_setup_step.osl_project_state != "NOT STARTED":
+                        trigger_treeview_display = True
+                        disable_start_analysis = True
+                        osl_dash_section = to_dash_sections(problem_setup_step.placeholders, problem_setup_step.registered_files, problem_setup_step.project_locked)
+                        project_locked_alert = {"display": "block"}
+                        break
+                    elif problem_setup_step.osl_server_healthy is False:
+                        alert_container = dbc.Alert("optiSLang server health check failed.", color="danger")
+                        break
         else:
-            return (
-                True,
-                problem_setup_step.treeview_items,
-                True,
-                False,
-                to_dash_sections(
-                    problem_setup_step.placeholders, problem_setup_step.registered_files, problem_setup_step.project_locked
-                ),
-                {"display": "block"},
-            )
+            alert_container = dbc.Alert("Error: No optiSLang install detected.", color="danger")
+
+        return (
+            trigger_treeview_display,
+            problem_setup_step.treeview_items,
+            True,
+            disable_start_analysis,
+            osl_dash_section,
+            project_locked_alert,
+            alert_container
+        )
     else:
         raise PreventUpdate
 
@@ -217,7 +230,7 @@ def initialize_dictionary_of_ui_placeholders(n_clicks, data, ids, input_file_ids
                 else:
                     parameters[key] = data[index]
                 ui_data.update({placeholder_name: parameters})
-            elif "Bool" in ids[index]["placeholder"] and type(data[index]) == list:
+            elif isinstance(data[index], list) == list and isinstance(data[index][0], bool):
                 value = data[index]
                 if True in value:
                     new_value = True
@@ -236,6 +249,7 @@ def initialize_dictionary_of_ui_placeholders(n_clicks, data, ids, input_file_ids
             ui_data.update({input_file_ids[index]["placeholder"]: ""})
 
         problem_setup_step.ui_placeholders = ui_data
+        problem_setup_step.update_osl_placeholders_with_ui_values()
         return problem_setup_step.analysis_locked
     else:
         return no_update
@@ -288,7 +302,7 @@ def update_ui_placeholders(value, id, pathname):
             elif isinstance(value, list) and False in value:
                 value = False
             ui_data[pm_name][key] = value
-        elif "Bool" in name and type(value) == list:
+        elif isinstance(value, list) and isinstance(value[0], bool):
             if True in value:
                 value = True
             else:
@@ -297,9 +311,6 @@ def update_ui_placeholders(value, id, pathname):
         else:
             ui_data.update({name: value})
         problem_setup_step.ui_placeholders = ui_data
-        while problem_setup_step.get_method_state("update_osl_placeholders_with_ui_values").status == MethodStatus.Running: # current workaround to avoid raising ConflictError: {"detail":"update_osl_placeholders_with_ui_values is already running"}
-            time.sleep(0.1)
-        problem_setup_step.update_osl_placeholders_with_ui_values()
         return no_update
 
 

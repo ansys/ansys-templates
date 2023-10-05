@@ -21,6 +21,8 @@ DESIRED_STRUCTURE = [
     "doc/Makefile",
     "examples/README.md",
     f"src/ansys/solutions/{{ cookiecutter.__solution_name_slug }}/datamodel/datamodel.py",
+    f"src/ansys/solutions/{{ cookiecutter.__solution_name_slug }}/logic/README.md",
+    f"src/ansys/solutions/{{ cookiecutter.__solution_name_slug }}/logic/assets/README.md",
     f"src/ansys/solutions/{{ cookiecutter.__solution_name_slug }}/pim_configurations/osl_wrapper.py",
     f"src/ansys/solutions/{{ cookiecutter.__solution_name_slug }}/pim_configurations/pim_osl_configuration.py",
     f"src/ansys/solutions/{{ cookiecutter.__solution_name_slug }}/solution/method_assets/README.md",
@@ -88,8 +90,8 @@ DESIRED_STRUCTURE = [
 ]
 """A list holding all desired files to be included in the project."""
 
-ASSETS_DIRECTORY = Path(f"src/ansys/solutions/{{ cookiecutter.__solution_name_slug }}/solution/method_assets/Problem_Setup").absolute()
-
+LOGIC_ASSETS_DIRECTORY = Path(f"src/ansys/solutions/{{ cookiecutter.__solution_name_slug }}/logic/assets").absolute()
+METHOD_ASSETS_DIRECTORY = Path(f"src/ansys/solutions/{{ cookiecutter.__solution_name_slug }}/solution/method_assets/Problem_Setup").absolute()
 
 def unzip_archive(archive_path: Path, extract_path: Path) -> None:
     """Unzip an archive."""
@@ -137,26 +139,30 @@ def main():
         if not archive_path.exists():
             raise Exception(f"File not found: {archive_path}")
 
-        unzip_archive(archive_path, ASSETS_DIRECTORY / "{{ cookiecutter.__optiSLang_application_archive_stem }}")
+        unzip_archive(archive_path, METHOD_ASSETS_DIRECTORY / "{{ cookiecutter.__optiSLang_application_archive_stem }}")
 
         for file in ["metadata.json", "doc.md"]:
             copy_file_to_assets_folder(
-                str(ASSETS_DIRECTORY / "{{ cookiecutter.__optiSLang_application_archive_stem }}" / file),
-                str(ASSETS_DIRECTORY / file)
+                str(METHOD_ASSETS_DIRECTORY / "{{ cookiecutter.__optiSLang_application_archive_stem }}" / file),
+                str(METHOD_ASSETS_DIRECTORY / file)
             )
         for extension in [".json", ".opf"]:
-            candidates = collect_files_with_extension(str(ASSETS_DIRECTORY / "{{ cookiecutter.__optiSLang_application_archive_stem }}" / "custom_data"), extension)
+            candidates = collect_files_with_extension(str(METHOD_ASSETS_DIRECTORY / "{{ cookiecutter.__optiSLang_application_archive_stem }}" / "custom_data"), extension)
             if len(candidates) == 0:
                 raise Exception("The optiSLang application archive contains no project file (opf).")
             elif len(candidates) > 1:
                 raise Exception("The optiSLang application archive contains multiple project files (opf).")
             else:
                 candidate = "{{ cookiecutter.__optiSLang_application_archive_stem }}" + extension
+                if extension == ".json":
+                    destination_folder = METHOD_ASSETS_DIRECTORY
+                if extension == ".opf":
+                    destination_folder = LOGIC_ASSETS_DIRECTORY
                 copy_file_to_assets_folder(
-                    str(ASSETS_DIRECTORY / "{{ cookiecutter.__optiSLang_application_archive_stem }}" / "custom_data" / candidates[0]),
-                    str(ASSETS_DIRECTORY / candidate)
+                    str(METHOD_ASSETS_DIRECTORY / "{{ cookiecutter.__optiSLang_application_archive_stem }}" / "custom_data" / candidates[0]),
+                    str(destination_folder / candidate)
                 )
-        shutil.rmtree(str(ASSETS_DIRECTORY / "{{ cookiecutter.__optiSLang_application_archive_stem }}"))
+        shutil.rmtree(str(METHOD_ASSETS_DIRECTORY / "{{ cookiecutter.__optiSLang_application_archive_stem }}"))
 
 
 if __name__ == "__main__":
