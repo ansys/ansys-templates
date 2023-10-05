@@ -4,12 +4,14 @@
 
 import json
 import os
-from pathlib import Path
 import platform
+import shutil
 import tempfile
+
+from pathlib import Path
 from typing import List, Optional
 
-from ansys.optislang.core import Optislang, utils
+from ansys.optislang.core import Optislang, utils, logging
 from ansys.saf.glow.solution import (
     FileGroupReference,
     FileReference,
@@ -39,12 +41,10 @@ class ProblemSetupStep(StepModel):
     # Frontend persistence
     ansys_ecosystem_ready: bool = False
     project_initialized: bool = False
-    analysis_locked: bool = True
+    analysis_locked: bool = False
     project_locked: bool = False
 
     # Backend data model
-    osl_server_host: Optional[str] = None
-    osl_server_port: Optional[int] = None
     ansys_ecosystem: dict = {
         "optislang": {
             "authorized_versions": [],
@@ -56,6 +56,10 @@ class ProblemSetupStep(StepModel):
             "alias": "optiSLang",
         }
     }
+    osl_server_host: Optional[str] = None
+    osl_server_port: Optional[int] = None
+    osl_loglevel: str = "INFO"
+    osl_project_tree: list = [] # former project_tree
     placeholders: dict = {}
     registered_files: List = []
     settings: dict = {}
@@ -63,7 +67,6 @@ class ProblemSetupStep(StepModel):
     criteria: dict = {}
     ui_placeholders: dict = {}
     app_metadata: dict = {}
-    project_tree: list = []
     treeview_items: list = [
         {
             "id": "problem_setup_step",
@@ -75,7 +78,6 @@ class ProblemSetupStep(StepModel):
             "level": 0
         },
     ]
-    optislang_log_level: str = "INFO"
 
     # File storage ----------------------------------------------------------------------------------------------------
 
@@ -89,8 +91,28 @@ class ProblemSetupStep(StepModel):
 
     # Outputs
     working_properties_file: FileReference = FileReference("Problem_Setup/working_properties_file.json")
+    osl_log_file: FileReference = FileReference("Problem_Setup/optiSLang.log")
 
     # Methods ---------------------------------------------------------------------------------------------------------
+
+    @transaction(
+        self=StepSpec(
+            download=["project_file"],
+        )
+    )
+    def clean_method_assets_directory(self) -> None:
+        """Clean-up method assets working directory."""
+
+        method_assets_directory = Path(self.project_file.path).parent
+        osl_project_name = "{{ cookiecutter.__optiSLang_application_archive_stem }}"
+
+        for item in os.listdir(method_assets_directory):
+            if item not in [f"{osl_project_name}.opf", f"{osl_project_name}.json", "metadata.json", "doc.md"]:
+                item = method_assets_directory / item
+                if item.is_dir():
+                    shutil.rmtree(item)
+                if item.is_file():
+                    os.remove(item)
 
     @transaction(
         self=StepSpec(
@@ -218,10 +240,11 @@ class ProblemSetupStep(StepModel):
         self=StepSpec(
             download=[
                 "project_file",
-                "ansys_ecosystem"
+                "ansys_ecosystem",
+                "osl_loglevel",
             ],
             upload=[
-                "project_tree",
+                "osl_project_tree",
                 "treeview_items"
             ],
         )
@@ -235,14 +258,15 @@ class ProblemSetupStep(StepModel):
             executable=utils.get_osl_exec(self.ansys_ecosystem["optislang"]["selected_version"])[1],
             reset=True,
             shutdown_on_finished=True,
+            loglevel=self.osl_loglevel,
             ini_timeout=300,
         )
 
         # Get project tree
-        self.project_tree = osl.project._get_project_tree()
+        self.osl_project_tree = osl.project._get_project_tree()
 
         # Update treeview items
-        self.treeview_items = get_treeview_items_from_project_tree(self.project_tree)
+        self.treeview_items = get_treeview_items_from_project_tree(self.osl_project_tree)
 
     @transaction(
         self=StepSpec(
@@ -250,28 +274,44 @@ class ProblemSetupStep(StepModel):
                 "input_files",
                 "project_file",
                 "working_properties_file",
-                "optislang_log_level",
+                "osl_loglevel",
                 "ansys_ecosystem"
             ],
             upload=[
                 "osl_server_host",
                 "osl_server_port",
+                "osl_log_file",
             ],
         )
     )
-    @create_instance("osl", OptislangManager)
-    def start(self, osl: OptislangManager) -> None:
+    @long_running
+    @create_instance("osl_manager", OptislangManager)
+    def start(self, osl_manager: OptislangManager) -> None:
         """Start optiSLang and run the project."""
-        # Start optiSLang instance.
-        osl.initialize(
+        # Start optiSLang instance using instance manager.
+        osl_manager.initialize(
             project_path=self.project_file.path,
             project_properties_file=self.working_properties_file.path,
-            osl_version=self.ansys_ecosystem["optislang"]["selected_version"]
+            osl_version=self.ansys_ecosystem["optislang"]["selected_version"],
+            loglevel=self.osl_loglevel
         )
+        # Get optiSLang instance
+        osl = osl_manager.instance
+        # Get optiSLang server
+        osl_server =  osl.get_osl_server()
         # Get server host
-        self.osl_server_host = osl.instance.get_osl_server().get_host()
+        self.osl_server_host = osl_server.get_host()
         # Get server port
-        server_info = osl.instance.get_osl_server().get_server_info()
+        server_info = osl_server.get_server_info()
         self.osl_server_port = server_info["server"]["server_port"]
+        # Configure logging.
+        osl_logger = logging.OslLogger(
+            loglevel=self.osl_loglevel,
+            log_to_file=True,
+            logfile_name=self.osl_log_file.path,
+            log_to_stdout=True,
+        )
+        osl.__logger = osl_logger.add_instance_logger(osl.name, osl, self.osl_loglevel)
         # Start optiSLang project
-        osl.instance.start(wait_for_started=True, wait_for_finished=False)
+        osl.log.info("Start analysis")
+        osl.start(wait_for_started=True, wait_for_finished=False)
