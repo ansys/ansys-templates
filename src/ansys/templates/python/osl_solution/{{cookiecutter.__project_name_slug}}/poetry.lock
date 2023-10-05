@@ -262,13 +262,13 @@ reference = "solutions-private-pypi"
 
 [[package]]
 name = "ansys-solutions-optislang-frontend-components"
-version = "0.1.dev11"
+version = "0.1.0"
 description = ""
 optional = false
 python-versions = ">=3.8,<3.11"
 files = [
-    {file = "ansys_solutions_optislang_frontend_components-0.1.dev11-py3-none-any.whl", hash = "sha256:6cdfe917b9acf73247c61b5f9390cf576bc2767e5eae4a349d376f2afef38855"},
-    {file = "ansys_solutions_optislang_frontend_components-0.1.dev11.tar.gz", hash = "sha256:797901f46a74bac85610ed9471d8fe20cc0d67ee1c6c7676354398d899c1e667"},
+    {file = "ansys_solutions_optislang_frontend_components-0.1.0-py3-none-any.whl", hash = "sha256:a9048a33ab9204be9e7661b55d54713bf5cf45822e93f5478d51cef636282d23"},
+    {file = "ansys_solutions_optislang_frontend_components-0.1.0.tar.gz", hash = "sha256:5e099a6f38a14edb3022ce2a45e982be28f27d675115f8a71ebb2cfed2d69ee6"},
 ]
 
 [package.dependencies]
@@ -3900,4 +3900,4 @@ testing = ["big-O", "jaraco.functools", "jaraco.itertools", "more-itertools", "p
 [metadata]
 lock-version = "2.0"
 python-versions = ">=3.8, <3.11"
-content-hash = "bffbede710c4acef51d03ecd0a73f3630bc8305c824aac0faf0407dd31e74a1e"
+content-hash = "9a4d0c36c5c381cb3ec041759b7365109df1ac1a08fb602eb75b27a1e3cba86b"
