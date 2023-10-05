@@ -88,7 +88,10 @@ def extract_actor_information_data(actor_status_info: dict, kind: str) -> dict:
             pending_designs = actor_status_info["pending_designs"]
             total_designs = actor_status_info["total_designs"]
             processed_designs = total_designs - pending_designs
-            status = int(processed_designs / total_designs * 100)
+            try:
+                status = int(processed_designs / total_designs * 100)
+            except ZeroDivisionError:
+                status = 0
             # Update data
             data["Processed"] = f"{processed_designs} / {total_designs}"
             data["Status"] = f"{status}%"
