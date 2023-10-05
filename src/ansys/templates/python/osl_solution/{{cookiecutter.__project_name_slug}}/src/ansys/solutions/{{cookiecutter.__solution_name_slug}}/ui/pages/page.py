@@ -331,14 +331,13 @@ def display_optislang_logs(n_clicks, pathname, is_open):
     """Display optiSLang logs."""
     project = DashClient[{{ cookiecutter.__solution_definition_name }}].get_project(pathname)
     problem_setup_step = project.steps.problem_setup_step
-    monitoring_step = project.steps.monitoring_step
 
     if not n_clicks:
         # Button has never been clicked
         return None, False
 
     if problem_setup_step.project_locked:
-        osl_logs = monitoring_step.osl_log_file.read_text().split('\n')
+        osl_logs = problem_setup_step.osl_log_file.read_text().split('\n')
         table = LogsTable(osl_logs)
         return table.render(), not is_open
 
