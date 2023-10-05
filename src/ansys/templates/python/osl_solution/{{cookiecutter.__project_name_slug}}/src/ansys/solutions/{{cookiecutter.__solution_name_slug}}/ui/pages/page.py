@@ -52,6 +52,8 @@ def initialization(pathname):
     project = DashClient[{{ cookiecutter.__solution_definition_name }}].get_project(pathname)
 
     if not project.steps.problem_setup_step.project_initialized:
+        long_running = project.steps.problem_setup_step.upload_bulk_files_to_project_directory()
+        long_running.wait()
         long_running = project.steps.problem_setup_step.get_app_metadata()
         long_running.wait()
         long_running = project.steps.problem_setup_step.get_default_placeholder_values()
@@ -78,7 +80,7 @@ def update_progress_bar(n_intervals, pathname):
 
         completion_rate = 0
         message = None
-        methods = ["get_app_metadata", "get_default_placeholder_values"]
+        methods = ["upload_bulk_files_to_project_directory", "get_app_metadata", "get_default_placeholder_values"]
 
         for method in methods:
             status = problem_setup_step.get_long_running_method_state(method).status

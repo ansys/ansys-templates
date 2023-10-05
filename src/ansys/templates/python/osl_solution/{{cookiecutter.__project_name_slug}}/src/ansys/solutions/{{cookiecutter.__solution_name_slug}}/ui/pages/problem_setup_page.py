@@ -162,12 +162,18 @@ def start_analysis(n_clicks, pathname):
             problem_setup_step.write_updated_properties_file()
             # Start analysis
             problem_setup_step.start()
-            while True:
-                status = problem_setup_step.get_long_running_method_state("start").status
-                if status == MethodStatus.Completed or status == MethodStatus.Failed:
+            # Check instance start
+            time_on = time.time()
+            while not problem_setup_step.osl_instance_started:
+                if (time.time() - time_on) > problem_setup_step.osl_start_timeout:
+                    alert_container = dbc.Alert("Timeout error. The optiSLang instance has not started.", color="danger")
                     break
-            if status == MethodStatus.Failed:
-                alert_container = dbc.Alert("optiSLang instance initialization failed.", color="danger")
+            # Check analysis start
+            time_on = time.time()
+            while not problem_setup_step.analysis_started:
+                if (time.time() - time_on) > problem_setup_step.osl_start_timeout:
+                    alert_container = dbc.Alert("Timeout error. The optiSLang project has not started.", color="danger")
+                    break
             else:
                 # Lock start analysis and ui data
                 problem_setup_step.analysis_locked = True
@@ -188,9 +194,6 @@ def start_analysis(n_clicks, pathname):
                         break
                     elif monitoring_step.osl_server_healthy is False:
                         alert_container = dbc.Alert("optiSLang server health check failed.", color="danger")
-                        break
-                    elif (time.time() - time_on) > monitoring_step.osl_start_timeout:
-                        alert_container = dbc.Alert("Timeout error. The analysis has not started.", color="danger")
                         break
         else:
             alert_container = dbc.Alert("Error: No optiSLang install detected.", color="danger")

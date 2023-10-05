@@ -29,7 +29,7 @@ from ansys.solutions.optislang.frontend_components.project_properties import (
 )
 from ansys.solutions.{{cookiecutter.__solution_name_slug}}.solution.optislang_manager import OptislangManager
 from ansys.solutions.{{cookiecutter.__solution_name_slug}}.utilities.common_functions import (
-    get_treeview_items_from_project_tree,
+    get_treeview_items_from_project_tree, check_optislang_server
 )
 
 
@@ -43,6 +43,8 @@ class ProblemSetupStep(StepModel):
     project_initialized: bool = False
     analysis_locked: bool = False
     project_locked: bool = False
+    analysis_started: bool = False
+    osl_instance_started: bool = False
 
     # Backend data model
     ansys_ecosystem: dict = {
@@ -60,6 +62,7 @@ class ProblemSetupStep(StepModel):
     osl_server_port: Optional[int] = None
     osl_loglevel: str = "INFO"
     osl_project_tree: list = [] # former project_tree
+    osl_start_timeout: int = 100
     placeholders: dict = {}
     registered_files: List = []
     settings: dict = {}
@@ -82,7 +85,7 @@ class ProblemSetupStep(StepModel):
     # File storage ----------------------------------------------------------------------------------------------------
 
     # Inputs
-    project_file: AssetFileReference = AssetFileReference(relative_path="Problem_Setup/{{ cookiecutter.__optiSLang_application_archive_stem }}.opf", encrypted=False)
+    project_file: FileReference = FileReference("Problem_Setup/{{ cookiecutter.__optiSLang_application_archive_stem }}.opf")
     properties_file: AssetFileReference = AssetFileReference(relative_path="Problem_Setup/{{ cookiecutter.__optiSLang_application_archive_stem }}.json", encrypted=False)
     metadata_file: AssetFileReference = AssetFileReference(relative_path="Problem_Setup/metadata.json", encrypted=False)
     input_files: FileGroupReference = FileGroupReference("Problem_Setup/Input_Files/*.*")
@@ -97,22 +100,17 @@ class ProblemSetupStep(StepModel):
 
     @transaction(
         self=StepSpec(
-            download=["project_file"],
+            upload=[
+                "project_file",
+            ]
         )
     )
-    def clean_method_assets_directory(self) -> None:
-        """Clean-up method assets working directory."""
+    @long_running
+    def upload_bulk_files_to_project_directory(self) -> None:
+        """Upload bulk files to project directory."""
 
-        method_assets_directory = Path(self.project_file.path).parent
-        osl_project_name = "{{ cookiecutter.__optiSLang_application_archive_stem }}"
-
-        for item in os.listdir(method_assets_directory):
-            if item not in [f"{osl_project_name}.opf", f"{osl_project_name}.json", "metadata.json", "doc.md"]:
-                item = method_assets_directory / item
-                if item.is_dir():
-                    shutil.rmtree(item)
-                if item.is_file():
-                    os.remove(item)
+        original_project_file = Path(__file__).absolute().parent.parent / "logic" / "assets" / "{{ cookiecutter.__optiSLang_application_archive_stem }}.opf"
+        self.project_file.write_bytes(original_project_file.read_bytes())
 
     @transaction(
         self=StepSpec(
@@ -281,6 +279,8 @@ class ProblemSetupStep(StepModel):
                 "osl_server_host",
                 "osl_server_port",
                 "osl_log_file",
+                "osl_instance_started",
+                "analysis_started"
             ],
         )
     )
@@ -295,6 +295,8 @@ class ProblemSetupStep(StepModel):
             osl_version=self.ansys_ecosystem["optislang"]["selected_version"],
             loglevel=self.osl_loglevel
         )
+        self.osl_instance_started = True
+        self.transaction.upload(["osl_instance_started"])
         # Get optiSLang instance
         osl = osl_manager.instance
         # Get optiSLang server
@@ -315,3 +317,18 @@ class ProblemSetupStep(StepModel):
         # Start optiSLang project
         osl.log.info("Start analysis")
         osl.start(wait_for_started=True, wait_for_finished=False)
+        # Get project state
+        osl_project_state = osl.project.get_status()
+        # Monitor project state
+        while osl_project_state not in ["FINISHED", "ABORTED"]:
+            # Check optiSLang server health
+            osl_server_healthy = check_optislang_server(osl_server)
+            osl.log.info(f"Server health check: {self.osl_server_healthy}")
+            # Get project state
+            osl_project_state = osl.project.get_status()
+            osl.log.info(f"Project state: {self.osl_project_state}")
+            # Upload analysis started
+            if not self.analysis_started:
+                if osl_project_state != "NOT STARTED":
+                    self.analysis_started = True
+                    self.transaction.upload(["analysis_started"])
