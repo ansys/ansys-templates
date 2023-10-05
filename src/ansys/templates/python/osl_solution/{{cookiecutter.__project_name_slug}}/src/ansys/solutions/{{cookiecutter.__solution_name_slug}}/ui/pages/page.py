@@ -114,12 +114,12 @@ def update_progress_bar(n_intervals, pathname):
     Output("page_layout", "children"),
     Input("url", "pathname"),
     Input("trigger_layout_display", "data"),
+    prevent_initial_call=True,
 )
 def display_page_layout(pathname, trigger_layout_display):
     """Display page layout."""
     project = DashClient[{{ cookiecutter.__solution_definition_name }}].get_project(pathname)
     problem_setup_step = project.steps.problem_setup_step
-    monitoring_step = project.steps.monitoring_step
 
     if problem_setup_step.project_initialized:
         return (
@@ -216,6 +216,7 @@ def display_page_layout(pathname, trigger_layout_display):
     Input("navigation_tree", "treeItemClicked"),
     Input("url", "pathname"),
     Input("trigger_body_display", "data"),
+    prevent_initial_call=True,
 )
 def display_body_content(value, pathname, trigger_body_display):
     """Display body content."""
@@ -305,6 +306,7 @@ def display_body_content(value, pathname, trigger_body_display):
     Output("navigation_tree", "items"),
     Input("url", "pathname"),
     Input("trigger_treeview_display", "data"),
+    prevent_initial_call=True,
 )
 def display_tree_view(pathname, trigger_treeview_display):
     """Display treeview with all project nodes."""

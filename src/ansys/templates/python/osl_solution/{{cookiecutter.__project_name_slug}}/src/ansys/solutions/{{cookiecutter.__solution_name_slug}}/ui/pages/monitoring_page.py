@@ -87,7 +87,7 @@ def update_page_content(selected_tab, selected_state_id, pathname):
     elif selected_tab == "visualization_tab":
         return visualization_view.layout(problem_setup_step, monitoring_step)
     elif selected_tab == "status_overview_tab":
-        return status_overview_view.layout(problem_setup_step, monitoring_step)
+        return status_overview_view.layout(problem_setup_step)
 
 
 @callback(

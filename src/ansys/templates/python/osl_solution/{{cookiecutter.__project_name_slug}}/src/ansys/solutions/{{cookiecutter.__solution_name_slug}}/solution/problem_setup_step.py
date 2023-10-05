@@ -30,7 +30,7 @@ from ansys.solutions.optislang.frontend_components.project_properties import (
     apply_placeholders_to_properties_file,
     write_properties_file,
 )
-from ansys.solutions.hook_optimization.datamodel import datamodel
+from ansys.solutions.{{cookiecutter.__solution_name_slug}}.datamodel import datamodel
 from ansys.solutions.{{cookiecutter.__solution_name_slug}}.solution.optislang_manager import OptislangManager
 from ansys.solutions.{{cookiecutter.__solution_name_slug}}.utilities.common_functions import (
     get_treeview_items_from_project_tree, check_optislang_server, get_states_ids_from_states
@@ -305,13 +305,17 @@ class ProblemSetupStep(StepModel):
         # Create monitoring directory
         Path(self.project_data_file.path).parent.mkdir(parents=True, exist_ok=True)
         # Start optiSLang instance using instance manager.
-        osl_manager.initialize(
-            project_path=self.project_file.path,
-            project_properties_file=self.working_properties_file.path,
-            osl_version=self.ansys_ecosystem["optislang"]["selected_version"],
-            loglevel=self.osl_loglevel
-        )
-        self.osl_instance_started = True
+        try:
+            osl_manager.initialize(
+                project_path=self.project_file.path,
+                project_properties_file=self.working_properties_file.path,
+                osl_version=self.ansys_ecosystem["optislang"]["selected_version"],
+                loglevel=self.osl_loglevel
+            )
+            self.osl_instance_started = True
+        except ConnectionRefusedError:
+            self.osl_instance_started = False
+            return
         self.transaction.upload(["osl_instance_started"])
         # Get optiSLang instance
         osl = osl_manager.instance
