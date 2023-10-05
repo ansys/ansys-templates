@@ -24,7 +24,7 @@ from ansys.solutions.{{ cookiecutter.__solution_name_slug }}.utilities.common_fu
 def layout(problem_setup_step: ProblemSetupStep, monitoring_step: MonitoringStep) -> html.Div:
     """Layout of the summary view."""
     # Get project data
-    project_data = json.loads(monitoring_step.project_data_file.read_text())
+    project_data = json.loads(problem_setup_step.project_data_file.read_text())
     # Get actor info
     actor_info = extract_dict_by_key(problem_setup_step.osl_project_tree, "uid", monitoring_step.selected_actor_from_treeview, expect_unique=True, return_index=False)
     # Get actor uid
@@ -141,7 +141,7 @@ def update_view(n_intervals, pathname):
     # Get monitoring step
     monitoring_step = project.steps.monitoring_step
     # Get project data
-    project_data = json.loads(monitoring_step.project_data_file.read_text())
+    project_data = json.loads(problem_setup_step.project_data_file.read_text())
     # Get actor info
     actor_info = extract_dict_by_key(problem_setup_step.osl_project_tree, "uid", monitoring_step.selected_actor_from_treeview, expect_unique=True, return_index=False)
     # Get actor uid

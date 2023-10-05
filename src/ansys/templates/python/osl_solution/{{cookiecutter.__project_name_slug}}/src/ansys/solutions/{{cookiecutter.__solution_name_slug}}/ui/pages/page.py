@@ -11,12 +11,10 @@ from dash_extensions.enrich import Input, Output, State, callback_context, dcc, 
 
 from ansys.saf.glow.client.dashclient import DashClient, callback
 from ansys.saf.glow.core.method_status import MethodStatus
-
 from ansys.solutions.{{ cookiecutter.__solution_name_slug }}.solution.definition import {{ cookiecutter.__solution_definition_name }}
 from ansys.solutions.{{ cookiecutter.__solution_name_slug }}.ui.components.logs_table import LogsTable
 from ansys.solutions.{{ cookiecutter.__solution_name_slug }}.ui.pages import monitoring_page, problem_setup_page
-from ansys.solutions.{{ cookiecutter.__solution_name_slug }}.utilities.common_functions import extract_dict_by_key, read_log_file
-
+from ansys.solutions.{{ cookiecutter.__solution_name_slug }}.utilities.common_functions import extract_dict_by_key
 from ansys_web_components_dash import AwcDashTree
 
 
@@ -52,10 +50,9 @@ def initialization(pathname):
     project = DashClient[{{ cookiecutter.__solution_definition_name }}].get_project(pathname)
 
     if not project.steps.problem_setup_step.project_initialized:
-        long_running = project.steps.problem_setup_step.get_app_metadata()
-        long_running.wait()
-        long_running = project.steps.problem_setup_step.get_default_placeholder_values()
-        long_running.wait()
+        project.steps.problem_setup_step.upload_bulk_files_to_project_directory()
+        project.steps.problem_setup_step.get_app_metadata()
+        project.steps.problem_setup_step.get_default_placeholder_values()
         project.steps.problem_setup_step.project_initialized = True
 
     raise PreventUpdate
@@ -78,10 +75,10 @@ def update_progress_bar(n_intervals, pathname):
 
         completion_rate = 0
         message = None
-        methods = ["get_app_metadata", "get_default_placeholder_values"]
+        methods = ["upload_bulk_files_to_project_directory", "get_app_metadata", "get_default_placeholder_values"]
 
         for method in methods:
-            status = problem_setup_step.get_long_running_method_state(method).status
+            status = problem_setup_step.get_method_state(method).status
             if status == MethodStatus.Completed:
                 completion_rate += 1
             elif status == MethodStatus.Running:
@@ -114,12 +111,12 @@ def update_progress_bar(n_intervals, pathname):
     Output("page_layout", "children"),
     Input("url", "pathname"),
     Input("trigger_layout_display", "data"),
+    prevent_initial_call=True,
 )
 def display_page_layout(pathname, trigger_layout_display):
     """Display page layout."""
     project = DashClient[{{ cookiecutter.__solution_definition_name }}].get_project(pathname)
     problem_setup_step = project.steps.problem_setup_step
-    monitoring_step = project.steps.monitoring_step
 
     if problem_setup_step.project_initialized:
         return (
@@ -216,6 +213,7 @@ def display_page_layout(pathname, trigger_layout_display):
     Input("navigation_tree", "treeItemClicked"),
     Input("url", "pathname"),
     Input("trigger_body_display", "data"),
+    prevent_initial_call=True,
 )
 def display_body_content(value, pathname, trigger_body_display):
     """Display body content."""
@@ -255,7 +253,7 @@ def display_body_content(value, pathname, trigger_body_display):
                 page_layout = problem_setup_page.layout(problem_setup_step)
             else:
                 # Get project data
-                project_data = json.loads(monitoring_step.project_data_file.read_text())
+                project_data = json.loads(problem_setup_step.project_data_file.read_text())
                 # Record uid of actor selected from treeview
                 monitoring_step.selected_actor_from_treeview = extract_dict_by_key(problem_setup_step.osl_project_tree, "uid", value["id"], expect_unique=True, return_index=False)["uid"]
                 # Record hid of actor selected from treeview
@@ -305,6 +303,7 @@ def display_body_content(value, pathname, trigger_body_display):
     Output("navigation_tree", "items"),
     Input("url", "pathname"),
     Input("trigger_treeview_display", "data"),
+    prevent_initial_call=True,
 )
 def display_tree_view(pathname, trigger_treeview_display):
     """Display treeview with all project nodes."""
@@ -329,14 +328,13 @@ def display_optislang_logs(n_clicks, pathname, is_open):
     """Display optiSLang logs."""
     project = DashClient[{{ cookiecutter.__solution_definition_name }}].get_project(pathname)
     problem_setup_step = project.steps.problem_setup_step
-    monitoring_step = project.steps.monitoring_step
 
     if not n_clicks:
         # Button has never been clicked
         return None, False
 
     if problem_setup_step.project_locked:
-        osl_logs = monitoring_step.osl_log_file.read_text().split('\n')
+        osl_logs = problem_setup_step.osl_log_file.read_text().split('\n')
         table = LogsTable(osl_logs)
         return table.render(), not is_open
 
