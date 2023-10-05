@@ -7,10 +7,10 @@ import optislang_dash_lib
 
 from dash_extensions.enrich import html
 
-from ansys.solutions.{{ cookiecutter.__solution_name_slug }}.solution.monitoring_step import MonitoringStep
+from ansys.solutions.{{ cookiecutter.__solution_name_slug }}.solution.problem_setup_step import ProblemSetupStep
 
 
-def layout(monitoring_step: MonitoringStep) -> html.Div:
+def layout(problem_setup_step: ProblemSetupStep) -> html.Div:
     """Layout of the status overview view."""
 
     project_status_info = json.loads(monitoring_step.project_status_info_file.read_text())

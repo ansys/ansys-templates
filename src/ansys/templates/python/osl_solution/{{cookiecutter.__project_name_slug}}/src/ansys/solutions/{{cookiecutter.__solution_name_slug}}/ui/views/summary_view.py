@@ -92,7 +92,7 @@ def layout(problem_setup_step: ProblemSetupStep, monitoring_step: MonitoringStep
     prevent_initial_call=True,
 )
 def activate_auto_update(on, pathname):
-
+    """Enable/Disable auto update."""
     return not on
 
 
@@ -100,12 +100,15 @@ def activate_auto_update(on, pathname):
     Output("actor_information_table", "children"),
     Output("actor_logs_table", "children"),
     Output("actor_statistics_table", "children"),
+    Output("selected_state_dropdown", "options"),
+    Output("selected_state_dropdown", "value"),
     Input("summary_auto_update", "n_intervals"),
     State("url", "pathname"),
     prevent_initial_call=True,
 )
 def update_view(n_intervals, pathname):
-
+    """Update design table."""
+    # Get project
     project = DashClient[{{ cookiecutter.__solution_definition_name }}].get_project(pathname)
     monitoring_step = project.steps.monitoring_step
 

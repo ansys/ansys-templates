@@ -3,6 +3,7 @@
 """Frontend of the project summary step."""
 
 import dash_bootstrap_components as dbc
+import json
 
 from dash_extensions.enrich import html, Input, Output, State, dcc
 
@@ -25,6 +26,9 @@ def layout(problem_setup_step: ProblemSetupStep, monitoring_step: MonitoringStep
         "is_open": bool(monitoring_step.project_command_execution_status["alert-message"]),
     }
     button_group = ButtonGroup(options=monitoring_step.project_btn_group_options, disabled=monitoring_step.commands_locked).buttons
+
+    # Get project data
+    project_data = json.loads(problem_setup_step.project_data_file.read_text())
 
     return html.Div(
         [
@@ -58,19 +62,25 @@ def layout(problem_setup_step: ProblemSetupStep, monitoring_step: MonitoringStep
     prevent_initial_call=True,
 )
 def activate_auto_update(on, pathname):
-
+    """Enable/Disable auto update."""
     return not on
 
 
 @callback(
     Output("project_information_table", "children"),
+    Output("selected_state_dropdown", "options"),
+    Output("selected_state_dropdown", "value"),
     Input("project_summary_auto_update", "n_intervals"),
     State("url", "pathname"),
     prevent_initial_call=True,
 )
 def update_view(n_intervals, pathname):
-
+    """Update design table."""
+    # Get project
     project = DashClient[{{ cookiecutter.__solution_definition_name }}].get_project(pathname)
+    # Get problem setup step
+    problem_setup_step = project.steps.problem_setup_step
+    # Get monitoring step
     monitoring_step = project.steps.monitoring_step
 
     return ProjectInformationTableAIO(monitoring_step)

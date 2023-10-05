@@ -5,7 +5,7 @@
 import json
 from pathlib import Path
 import time
-from typing import List, Optional
+from typing import List, Union, Optional
 
 from ansys.optislang.core import Optislang, logging
 from ansys.saf.glow.solution import FileReference, StepModel, StepSpec, instance, long_running, transaction
@@ -20,12 +20,11 @@ class MonitoringStep(StepModel):
     # Parameters ------------------------------------------------------------------------------------------------------
 
     # Frontend persistence
-    selected_actor_from_treeview: Optional[str] = None
+    selected_actor_from_treeview: Optional[str] = None # uid of the actor selected from the treeview.
     selected_command: Optional[str] = None
     selected_actor_from_command: Optional[str] = None
     selected_actor_from_treeview_states_ids: list = []
     commands_locked: bool = False
-    auto_update_frequency: float = 2000
     auto_update_activated: bool = True
     actor_uid: Optional[str] = None
     project_command_execution_status: dict = {"alert-message": "", "alert-color": "info"}
@@ -254,18 +253,19 @@ class MonitoringStep(StepModel):
             upload=["actor_uid"],
         )
     )
-    @instance("problem_setup_step.osl", identifier="osl")
-    def control_node_state(self, problem_setup_step: ProblemSetupStep, osl: OptislangManager) -> None:
+    @instance("problem_setup_step.osl_manager", identifier="osl_manager")
+    def control_node_state(self, osl_manager: OptislangManager) -> None:
         """Update the state of root or actor node based on the selected command in the UI."""
+        osl = osl_manager.instance
         if not self.selected_actor_from_command == "shutdown":
-            if self.selected_actor_from_command == osl.instance.project.root_system.uid:
-                node = osl.instance.project.root_system
+            if self.selected_actor_from_command == osl.project.root_system.uid:
+                node = osl.project.root_system
                 self.actor_uid = None
             else:
-                node = osl.instance.project.root_system.find_node_by_uid(self.selected_actor_from_command, search_depth=-1)
+                node = osl.project.root_system.find_node_by_uid(self.selected_actor_from_command, search_depth=-1)
                 self.actor_uid = node
         else:
-            node = osl.instance.project.root_system
+            node = osl.project.root_system
 
         status = node.control(self.selected_command, wait_for_completion=True, timeout=self.command_timeout)
 
