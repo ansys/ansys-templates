@@ -114,7 +114,6 @@ class ProblemSetupStep(StepModel):
             ]
         )
     )
-    @long_running
     def upload_bulk_files_to_project_directory(self) -> None:
         """Upload bulk files to project directory."""
 
@@ -127,7 +126,6 @@ class ProblemSetupStep(StepModel):
             upload=["app_metadata"]
         )
     )
-    @long_running
     def get_app_metadata(self) -> None:
         """Read OWA metadata file."""
         with open(self.metadata_file.path) as f:
@@ -139,7 +137,6 @@ class ProblemSetupStep(StepModel):
             upload=["placeholders", "registered_files", "settings", "parameter_manager", "criteria"]
         )
     )
-    @long_running
     def get_default_placeholder_values(self):
         """Get placeholder values and definitions using the ProjectProperties class."""
         pp = ProjectProperties()
