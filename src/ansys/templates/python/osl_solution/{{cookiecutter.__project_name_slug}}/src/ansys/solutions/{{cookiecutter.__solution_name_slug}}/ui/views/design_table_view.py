@@ -2,24 +2,23 @@
 
 """Frontend of the design table view."""
 
-import dash_bootstrap_components as dbc
 import json
-import pandas as pd
 
 from dash_extensions.enrich import html, Input, Output, State, dcc
 from ansys.saf.glow.client.dashclient import DashClient, callback
 
 from ansys.solutions.{{ cookiecutter.__solution_name_slug }}.datamodel import datamodel
 from ansys.solutions.{{ cookiecutter.__solution_name_slug }}.solution.definition import {{ cookiecutter.__solution_definition_name }}
+from ansys.solutions.{{ cookiecutter.__solution_name_slug }}.solution.problem_setup_step import ProblemSetupStep
 from ansys.solutions.{{ cookiecutter.__solution_name_slug }}.solution.monitoring_step import MonitoringStep
 from ansys.solutions.{{ cookiecutter.__solution_name_slug }}.ui.components.design_table import DesignTableAIO
 
 
-def layout(monitoring_step: MonitoringStep) -> html.Div:
+def layout(problem_setup_step: ProblemSetupStep, monitoring_step: MonitoringStep) -> html.Div:
     """Layout of the design table view."""
 
     # Get project data
-    project_data = json.loads(monitoring_step.project_data_file.read_text())
+    project_data = json.loads(problem_setup_step.project_data_file.read_text())
     # Get actor uid
     actor_uid = monitoring_step.selected_actor_from_treeview
     # Get actor hid
@@ -72,10 +71,12 @@ def update_view(n_intervals, pathname):
     """Update design table."""
     # Get project
     project = DashClient[{{ cookiecutter.__solution_definition_name }}].get_project(pathname)
+    # Get problem setup step
+    problem_setup_step = project.steps.problem_setup_step
     # Get monitoring step
     monitoring_step = project.steps.monitoring_step
     # Get project data
-    project_data = json.loads(monitoring_step.project_data_file.read_text())
+    project_data = json.loads(problem_setup_step.project_data_file.read_text())
     # Get actor uid
     actor_uid = monitoring_step.selected_actor_from_treeview
     # Get actor hid

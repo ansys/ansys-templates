@@ -1,1 +1,1 @@
-# Add here your script files to use the AssetFileReference feature
+# Add here your files to use the AssetFileReference feature

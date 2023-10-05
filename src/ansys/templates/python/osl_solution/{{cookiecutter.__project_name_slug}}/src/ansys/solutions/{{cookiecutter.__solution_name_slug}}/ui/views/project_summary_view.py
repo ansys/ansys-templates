@@ -9,13 +9,14 @@ from dash_extensions.enrich import html, Input, Output, State, dcc
 from ansys.saf.glow.client.dashclient import DashClient, callback
 
 from ansys.solutions.{{ cookiecutter.__solution_name_slug }}.solution.definition import {{ cookiecutter.__solution_definition_name }}
+from ansys.solutions.{{ cookiecutter.__solution_name_slug }}.solution.problem_setup_step import ProblemSetupStep
 from ansys.solutions.{{ cookiecutter.__solution_name_slug }}.solution.monitoring_step import MonitoringStep
 from ansys.solutions.{{ cookiecutter.__solution_name_slug }}.ui.components.node_control import NodeControlAIO
 from ansys.solutions.{{ cookiecutter.__solution_name_slug }}.ui.components.project_information_table import ProjectInformationTableAIO
 from ansys.solutions.{{ cookiecutter.__solution_name_slug }}.ui.components.button_group import ButtonGroup
 
 
-def layout(monitoring_step: MonitoringStep) -> html.Div:
+def layout(problem_setup_step: ProblemSetupStep, monitoring_step: MonitoringStep) -> html.Div:
     """Layout of the project summary view."""
     alert_props = {
         "children":monitoring_step.project_command_execution_status["alert-message"],
@@ -25,7 +26,7 @@ def layout(monitoring_step: MonitoringStep) -> html.Div:
     button_group = ButtonGroup(options=monitoring_step.project_btn_group_options, disabled=monitoring_step.commands_locked).buttons
 
     # Get project data
-    project_data = json.loads(monitoring_step.project_data_file.read_text())
+    project_data = json.loads(problem_setup_step.project_data_file.read_text())
 
     return html.Div(
         [
@@ -82,10 +83,12 @@ def update_view(n_intervals, pathname):
     """Update design table."""
     # Get project
     project = DashClient[{{ cookiecutter.__solution_definition_name }}].get_project(pathname)
+    # Get problem setup step
+    problem_setup_step = project.steps.problem_setup_step
     # Get monitoring step
     monitoring_step = project.steps.monitoring_step
     # Get project data
-    project_data = json.loads(monitoring_step.project_data_file.read_text())
+    project_data = json.loads(problem_setup_step.project_data_file.read_text())
     # Collect states ids
     if not monitoring_step.selected_state_id:
         if len(project_data["actors"][monitoring_step.selected_actor_from_treeview]["states_ids"]):

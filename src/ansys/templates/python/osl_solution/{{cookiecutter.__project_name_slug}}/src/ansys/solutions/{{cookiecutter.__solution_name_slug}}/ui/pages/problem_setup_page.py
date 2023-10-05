@@ -8,11 +8,9 @@ import time
 
 from dash.exceptions import PreventUpdate
 from dash_extensions.enrich import Input, Output, State, dcc, html, ALL, MATCH, no_update, callback_context
-
 from ansys.saf.glow.client.dashclient import DashClient, callback
 from ansys.saf.glow.core.method_status import MethodStatus
 from ansys.solutions.optislang.frontend_components.load_sections import to_dash_sections, update_designs_to_dash_section
-
 from ansys.solutions.{{ cookiecutter.__solution_name_slug }}.solution.definition import {{ cookiecutter.__solution_definition_name }}
 from ansys.solutions.{{ cookiecutter.__solution_name_slug }}.solution.problem_setup_step import ProblemSetupStep
 from ansys.solutions.{{ cookiecutter.__solution_name_slug }}.utilities.common_functions import check_empty_strings
@@ -132,7 +130,6 @@ def start_analysis(n_clicks, pathname):
     if n_clicks:
         project = DashClient[{{ cookiecutter.__solution_definition_name }}].get_project(pathname)
         problem_setup_step = project.steps.problem_setup_step
-        monitoring_step = project.steps.monitoring_step
 
         ui_data = problem_setup_step.ui_placeholders
         ui_data.update({"start_analysis_requested": True})
@@ -143,15 +140,6 @@ def start_analysis(n_clicks, pathname):
         osl_dash_section = []
         project_locked_alert = {"display": "none"}
         alert_container = []
-        tree_items = {
-            "id": "problem_setup_step",
-            "text": "Problem Setup",
-            "expanded": True,
-            "prefixIcon": {
-                "src": "https://s2.svgbox.net/hero-solid.svg?ic=adjustments"
-            },
-            "level": 0
-        }
 
         # Check Ansys ecosystem
         problem_setup_step.check_ansys_ecosystem()
@@ -161,38 +149,28 @@ def start_analysis(n_clicks, pathname):
             # Update project properties file prior to the solve
             problem_setup_step.write_updated_properties_file()
             # Start analysis
-            problem_setup_step.start()
+            problem_setup_step.start_and_monitor_osl_project()
             # Check instance start
             time_on = time.time()
             while not problem_setup_step.osl_instance_started:
                 if (time.time() - time_on) > problem_setup_step.osl_start_timeout:
                     alert_container = dbc.Alert("Timeout error. The optiSLang instance has not started.", color="danger")
                     break
-            # Check analysis start
-            time_on = time.time()
-            while not problem_setup_step.analysis_started:
-                if (time.time() - time_on) > problem_setup_step.osl_start_timeout:
-                    alert_container = dbc.Alert("Timeout error. The optiSLang project has not started.", color="danger")
-                    break
-            else:
+            # Continue if no error
+            if len(alert_container) == 0:
                 # Lock start analysis and ui data
                 problem_setup_step.analysis_locked = True
                 problem_setup_step.project_locked = True
-                # Check optiSLang sever health
-                monitoring_step.check_optislang_server()
-                # Start monitoring
-                monitoring_step.upload_project_data()
                 # Wait until the analysis effectively starts
                 time_on = time.time()
                 while True:
-                    if monitoring_step.osl_project_state != "NOT STARTED":
+                    if problem_setup_step.osl_project_state != "NOT STARTED":
                         trigger_treeview_display = True
-                        tree_items = problem_setup_step.treeview_items
                         disable_start_analysis = True
                         osl_dash_section = to_dash_sections(problem_setup_step.placeholders, problem_setup_step.registered_files, problem_setup_step.project_locked)
                         project_locked_alert = {"display": "block"}
                         break
-                    elif monitoring_step.osl_server_healthy is False:
+                    elif problem_setup_step.osl_server_healthy is False:
                         alert_container = dbc.Alert("optiSLang server health check failed.", color="danger")
                         break
         else:
@@ -200,7 +178,7 @@ def start_analysis(n_clicks, pathname):
 
         return (
             trigger_treeview_display,
-            tree_items,
+            problem_setup_step.treeview_items,
             True,
             disable_start_analysis,
             osl_dash_section,

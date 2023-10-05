@@ -11,12 +11,10 @@ from dash_extensions.enrich import Input, Output, State, callback_context, dcc, 
 
 from ansys.saf.glow.client.dashclient import DashClient, callback
 from ansys.saf.glow.core.method_status import MethodStatus
-
 from ansys.solutions.{{ cookiecutter.__solution_name_slug }}.solution.definition import {{ cookiecutter.__solution_definition_name }}
 from ansys.solutions.{{ cookiecutter.__solution_name_slug }}.ui.components.logs_table import LogsTable
 from ansys.solutions.{{ cookiecutter.__solution_name_slug }}.ui.pages import monitoring_page, problem_setup_page
-from ansys.solutions.{{ cookiecutter.__solution_name_slug }}.utilities.common_functions import extract_dict_by_key, read_log_file
-
+from ansys.solutions.{{ cookiecutter.__solution_name_slug }}.utilities.common_functions import extract_dict_by_key
 from ansys_web_components_dash import AwcDashTree
 
 
@@ -257,7 +255,7 @@ def display_body_content(value, pathname, trigger_body_display):
                 page_layout = problem_setup_page.layout(problem_setup_step)
             else:
                 # Get project data
-                project_data = json.loads(monitoring_step.project_data_file.read_text())
+                project_data = json.loads(problem_setup_step.project_data_file.read_text())
                 # Record uid of actor selected from treeview
                 monitoring_step.selected_actor_from_treeview = extract_dict_by_key(problem_setup_step.osl_project_tree, "uid", value["id"], expect_unique=True, return_index=False)["uid"]
                 # Record hid of actor selected from treeview
