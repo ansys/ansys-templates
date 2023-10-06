@@ -28,12 +28,12 @@ def layout(problem_setup_step: ProblemSetupStep) -> html.Div:
         [
             # Header
             html.H1(
-                problem_setup_step.app_metadata["title"].strip().title(),
+                problem_setup_step.app_metadata["title"],
                 className="display-3",
                 style={"font-size": "45px"},
             ),
             html.P(
-                problem_setup_step.app_metadata["description"].strip(),
+                problem_setup_step.app_metadata["description"],
                 className="lead",
                 style={"font-size": "25px"},
             ),

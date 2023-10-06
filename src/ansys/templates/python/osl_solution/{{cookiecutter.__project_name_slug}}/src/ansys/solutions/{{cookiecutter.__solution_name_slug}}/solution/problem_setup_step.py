@@ -351,38 +351,33 @@ class ProblemSetupStep(StepModel):
             # Get project state
             self.osl_project_state = osl.project.get_status()
             osl.log.info(f"Project state: {self.osl_project_state}")
-            # Get full project status info
-            full_project_status_info = osl_server.get_full_project_status_info()
+            # Get full project status info (TCP REQUEST)
+            full_project_status_info = self._make_osl_server_request(osl_server, "get_full_project_status_info")
             with open(self.full_project_status_info_file.path, "w") as json_file: json.dump(full_project_status_info, json_file)
             # Collect project information
             project_data["project"]["information"] = datamodel.extract_project_status_info(full_project_status_info)
             # Walk through project tree
             for node_props in self.osl_project_tree:
-                # Get node
-                if node_props["uid"] == osl.project.root_system.uid:
-                    node = osl.project.root_system
-                else:
-                    node = osl.project.root_system.find_node_by_uid(node_props["uid"], search_depth=-1)
                 # Get actor info (TCP REQUEST)
-                actor_info = self._make_osl_server_request(osl_server, "get_actor_info", node.uid)
+                actor_info = self._make_osl_server_request(osl_server, "get_actor_info", actor_uid=node_props["uid"])
                 # Collect actor log data
-                project_data["actors"][node.uid]["log"] = datamodel.extract_actor_log_data(actor_info)
+                project_data["actors"][node_props["uid"]]["log"] = datamodel.extract_actor_log_data(actor_info)
                 # Collect actor statistics data
-                project_data["actors"][node.uid]["statistics"] = datamodel.extract_actor_statistics_data(actor_info)
+                project_data["actors"][node_props["uid"]]["statistics"] = datamodel.extract_actor_statistics_data(actor_info)
                 # Get states ids (TCP REQUEST)
-                actor_states = self._make_osl_server_request(osl_server, "get_actor_states", node.uid)
+                actor_states = self._make_osl_server_request(osl_server, "get_actor_states", actor_uid=node_props["uid"])
                 actor_states_ids = get_states_ids_from_states(actor_states)
-                project_data["actors"][node.uid]["states_ids"] = actor_states_ids
+                project_data["actors"][node_props["uid"]]["states_ids"] = actor_states_ids
                 # Walk through states ids
                 if len(actor_states_ids):
                     for hid in actor_states_ids:
                         # Get actor status info (TCP REQUEST)
-                        actor_status_info = self._make_osl_server_request(osl_server, "get_actor_status_info", node.uid, hid)
+                        actor_status_info = self._make_osl_server_request(osl_server, "get_actor_status_info", actor_uid=node_props["uid"], hid=hid)
                         # Collect actor information data
-                        project_data["actors"][node.uid]["information"][hid] = datamodel.extract_actor_information_data(actor_status_info, node_props["kind"])
+                        project_data["actors"][node_props["uid"]]["information"][hid] = datamodel.extract_actor_information_data(actor_status_info, node_props["kind"])
                         # Collect design table data
                         if node_props["kind"] == "system":
-                            project_data["actors"][node.uid]["design_table"][hid] = datamodel.extract_design_table_data(actor_status_info)
+                            project_data["actors"][node_props["uid"]]["design_table"][hid] = datamodel.extract_design_table_data(actor_status_info)
             # Dump project data
             with open(self.project_data_file.path, "w") as json_file: json.dump(project_data, json_file, allow_nan=True)
             # Upload fields
@@ -404,11 +399,13 @@ class ProblemSetupStep(StepModel):
         osl = osl_manager.instance
         self.osl_server_healthy = check_optislang_server(osl.get_osl_server())
 
-    def _make_osl_server_request(self, osl_server: OslServer, request_name: str, actor_uid: str, hid: str = None) -> Union[list, dict]:
+    def _make_osl_server_request(self, osl_server: OslServer, request_name: str, actor_uid: str = None, hid: str = None) -> Union[list, dict]:
         """Make a server request and try multiple times if a communication error is raised."""
         # Check inputs
-        if request_name not in ["get_actor_info", "get_actor_states", "get_actor_status_info"]:
+        if request_name not in ["get_actor_info", "get_actor_states", "get_actor_status_info", "get_full_project_status_info"]:
             raise ValueError(f"Unknown request {request_name}.")
+        if request_name in ["get_actor_info", "get_actor_states"] and not actor_uid:
+            raise Exception(f"An actor uid is needed to run the {request_name} request.")
         if request_name == "get_actor_status_info" and not hid:
             raise Exception("A state id is needed to run the get_actor_status_info request.")
         # Get method from optiSLanf server
@@ -419,7 +416,9 @@ class ProblemSetupStep(StepModel):
         while attempts <= self.osl_max_server_request_attempts:
             attempts += 1
             try:
-                if request_name == "get_actor_info":
+                if request_name == "get_full_project_status_info":
+                    response = request()
+                elif request_name == "get_actor_info":
                     response = request(actor_uid)
                 elif request_name == "get_actor_states":
                     response = request(actor_uid)
