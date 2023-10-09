@@ -12,7 +12,7 @@ from dash_extensions.enrich import Input, Output, State, callback_context, dcc, 
 from ansys.saf.glow.client.dashclient import DashClient, callback
 from ansys.saf.glow.core.method_status import MethodStatus
 from ansys.solutions.{{ cookiecutter.__solution_name_slug }}.solution.definition import {{ cookiecutter.__solution_definition_name }}
-from ansys.solutions.{{ cookiecutter.__solution_name_slug }}.ui.components.logs_table import LogsTable
+from ansys.solutions.{{ cookiecutter.__solution_name_slug }}.ui.components.aio_collapsible_table import CollapsibleTableAIO
 from ansys.solutions.{{ cookiecutter.__solution_name_slug }}.ui.pages import monitoring_page, problem_setup_page
 from ansys.solutions.{{ cookiecutter.__solution_name_slug }}.utilities.common_functions import extract_dict_by_key
 from ansys_web_components_dash import AwcDashTree
@@ -29,7 +29,7 @@ layout = html.Div(
         ),
         dcc.Interval(
             id="progress_bar_update",
-            interval=1000,
+            interval=900,
             n_intervals=0,
             disabled=False
         ),
@@ -49,11 +49,12 @@ def initialization(pathname):
     """Run methods to initialize the solution."""
     project = DashClient[{{ cookiecutter.__solution_definition_name }}].get_project(pathname)
 
+    project.steps.problem_setup_step.check_ansys_ecosystem()
+
     if not project.steps.problem_setup_step.project_initialized:
         project.steps.problem_setup_step.upload_bulk_files_to_project_directory()
         project.steps.problem_setup_step.get_app_metadata()
         project.steps.problem_setup_step.get_default_placeholder_values()
-        project.steps.problem_setup_step.project_initialized = True
 
     raise PreventUpdate
 
@@ -72,38 +73,61 @@ def update_progress_bar(n_intervals, pathname):
     problem_setup_step = project.steps.problem_setup_step
 
     if not problem_setup_step.project_initialized:
-
-        completion_rate = 0
-        message = None
-        methods = ["upload_bulk_files_to_project_directory", "get_app_metadata", "get_default_placeholder_values"]
-
-        for method in methods:
-            status = problem_setup_step.get_method_state(method).status
+        # Compute completion rate
+        completion_rate = 0; method_states = []
+        for method in problem_setup_step.initialization_methods:
+            status = problem_setup_step.get_long_running_method_state(method["name"]).status
             if status == MethodStatus.Completed:
                 completion_rate += 1
+                components = [
+                    html.I(className="fa-solid fa-check", style={"color": "rgba(112,173,71,1)"}),
+                    dcc.Markdown(method["description"])
+                ]
+            elif status == MethodStatus.Failed:
+                components = [
+                    html.I(className="fa-solid fa-xmark", style={"color": "rgba(255,0,0,1)"}),
+                    dcc.Markdown(method["description"])
+                ]
+            elif status == MethodStatus.RunRequired:
+                components = [
+                    html.I(className="fa-solid fa-stop", style={"color": "rgba(255,182,35,1)"}),
+                    dcc.Markdown(method["description"])
+                ]
             elif status == MethodStatus.Running:
-                message = method.replace("_", " ").capitalize()
-                break
-
-        completion_rate = round(completion_rate / len(methods) * 100)
-
+                components = [
+                    html.I(className="fa-solid fa-hourglass", style={"color": "rgba(255,182,35,1)"}),
+                    dcc.Markdown(method["description"])
+                ]
+            # print(method["name"], status)
+            method_states.append(
+                dbc.Stack(
+                    components,
+                    direction="horizontal",
+                    gap=1,
+                )
+            )
+        completion_rate = round(completion_rate / len(problem_setup_step.initialization_methods) * 100)
+        # Build progress bars
+        progress_container = [
+            dbc.Progress(
+                value=completion_rate,
+                label=f"{completion_rate} %",
+                color="rgba(255,182,35,1)",
+                style={"width": "600px", "height": "30px"},
+            ),
+            html.Div(method_states)
+        ]
+        # Trigger layout display
+        if completion_rate == 100:
+            problem_setup_step.project_initialized = True
         return (
-            True,
-            [
-                dbc.Progress(
-                    value=completion_rate,
-                    label=f"{completion_rate} %",
-                    color="rgba(255,182,35,1)",
-                    style={"width": "600px", "height": "30px"},
-                ),
-                dbc.Label(message),
-            ],
+            problem_setup_step.project_initialized,
+            progress_container,
             {'margin-left': '35%', 'margin-top': '25%'},
             False
         )
-
     else:
-        return True, [], {"display": "none"}, True
+        return problem_setup_step.project_initialized, [], {"display": "none"}, True
 
 
 @callback(
@@ -224,12 +248,19 @@ def display_body_content(value, pathname, trigger_body_display):
     if problem_setup_step.project_initialized:
         triggered_id = callback_context.triggered[0]["prop_id"].split(".")[0]
         footer_buttons = [
-            dbc.Button(
-                "optiSLang logs",
-                id="osl_logs_button",
-                n_clicks=0,
-                style={"background-color": "rgba(242, 242, 242, 0.6)", "borderColor": "rgba(242, 242, 242, 0.6)", "color": "rgba(0, 0, 0, 1)"},
-                size="sm",
+            CollapsibleTableAIO(
+                data=problem_setup_step.osl_log_file.read_text().split('\n') if problem_setup_step.osl_project_state != "NOT STARTED" else [],
+                button_props={
+                    "children": "optiSLang logs",
+                    "style": {
+                        "background-color": "rgba(242, 242, 242, 0.6)",
+                        "borderColor": "rgba(242, 242, 242, 0.6)",
+                        "color": "rgba(0, 0, 0, 1)",
+                        "width": "50%"
+                    },
+                    "size": "sm"
+                },
+                aio_id="osl_logs"
             ),
         ]
         if DashClient.get_portal_ui_url():
@@ -284,10 +315,6 @@ def display_body_content(value, pathname, trigger_body_display):
                 footer_buttons,
                 size="md",
                 className="me-1",
-            ),
-            dbc.Collapse(
-                id="osl_logs_collapse",
-                is_open=False,
             )
         ]
         return (
@@ -317,26 +344,19 @@ def display_tree_view(pathname, trigger_treeview_display):
 
 
 @callback(
-    Output("osl_logs_collapse", "children"),
-    Output("osl_logs_collapse", "is_open"),
-    Input("osl_logs_button", "n_clicks"),
+    Output(CollapsibleTableAIO.ids.table("osl_logs"), "data"),
+    Input(CollapsibleTableAIO.ids.button("osl_logs"), "n_clicks"),
     Input("url", "pathname"),
-    State("osl_logs_collapse", "is_open"),
     prevent_initial_call=True,
 )
 def display_optislang_logs(n_clicks, pathname, is_open):
     """Display optiSLang logs."""
-    project = DashClient[{{ cookiecutter.__solution_definition_name }}].get_project(pathname)
-    problem_setup_step = project.steps.problem_setup_step
-
-    if not n_clicks:
-        # Button has never been clicked
-        return None, False
-
-    if problem_setup_step.project_locked:
-        osl_logs = problem_setup_step.osl_log_file.read_text().split('\n')
-        table = LogsTable(osl_logs)
-        return table.render(), not is_open
+    if n_clicks:
+        project = DashClient[{{ cookiecutter.__solution_definition_name }}].get_project(pathname)
+        problem_setup_step = project.steps.problem_setup_step
+        if problem_setup_step.project_locked:
+            osl_logs = problem_setup_step.osl_log_file.read_text().split('\n')
+            return osl_logs
 
     raise PreventUpdate
 

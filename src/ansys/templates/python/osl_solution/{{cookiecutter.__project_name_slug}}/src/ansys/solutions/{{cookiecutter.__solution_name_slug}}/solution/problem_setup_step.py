@@ -14,6 +14,7 @@ from typing import List, Optional, Union
 from ansys.optislang.core import Optislang, utils, logging
 from ansys.optislang.core.errors import OslCommunicationError
 from ansys.optislang.core.osl_server import OslServer
+from ansys.saf.glow.core.method_status import MethodStatus
 from ansys.saf.glow.solution import (
     FileGroupReference,
     FileReference,
@@ -56,11 +57,31 @@ class ProblemSetupStep(StepModel):
             "installed_versions": [],
             "compatible_versions": [],
             "selected_version": None,
-            "alert_message": "optiSLang install not checked.",
-            "alert_color": "warning",
             "alias": "optiSLang",
         }
     }
+    initialization_methods: list = [
+        {
+            "name": "check_ansys_ecosystem",
+            "description": "Ansys ecosystem check.",
+            "status": MethodStatus.RunRequired,
+        },
+        {
+            "name": "upload_bulk_files_to_project_directory",
+            "description": "Bulk files upload.",
+            "status": MethodStatus.RunRequired
+        },
+        {
+            "name": "get_app_metadata",
+            "description": "metadata.json loading.",
+            "status": MethodStatus.RunRequired
+        },
+        {
+            "name": "get_default_placeholder_values",
+            "description": "Project properties loading.",
+            "status": MethodStatus.RunRequired
+        }
+    ]
     osl_server_host: Optional[str] = None
     osl_server_port: Optional[int] = None
     osl_loglevel: str = "INFO"
@@ -114,6 +135,7 @@ class ProblemSetupStep(StepModel):
             ]
         )
     )
+    @long_running
     def upload_bulk_files_to_project_directory(self) -> None:
         """Upload bulk files to project directory."""
 
@@ -126,6 +148,7 @@ class ProblemSetupStep(StepModel):
             upload=["app_metadata"]
         )
     )
+    @long_running
     def get_app_metadata(self) -> None:
         """Read OWA metadata file."""
         with open(self.metadata_file.path) as f:
@@ -137,6 +160,7 @@ class ProblemSetupStep(StepModel):
             upload=["placeholders", "registered_files", "settings", "parameter_manager", "criteria"]
         )
     )
+    @long_running
     def get_default_placeholder_values(self):
         """Get placeholder values and definitions using the ProjectProperties class."""
         pp = ProjectProperties()
@@ -188,11 +212,17 @@ class ProblemSetupStep(StepModel):
 
     @transaction(
         self=StepSpec(
-            upload=["ansys_ecosystem", "ansys_ecosystem_ready"],
+            upload=[
+                "ansys_ecosystem",
+                "ansys_ecosystem_ready",
+                "alerts"
+            ],
         )
     )
+    @long_running
     def check_ansys_ecosystem(self) -> None:
         """Check if Ansys Products are installed and if the appropriate versions are available."""
+        # Assume check successful
         self.ansys_ecosystem_ready = True
 
         # Collect optiSLang installations
@@ -209,36 +239,34 @@ class ProblemSetupStep(StepModel):
         # Check ecosystem
         for product_name in self.ansys_ecosystem.keys():
             if len(self.ansys_ecosystem[product_name]["installed_versions"]) == 0:
-                alert_message = f"No installation of {product_name.title()} found in the machine {platform.node()}."
-                alert_color = "danger"
+                self.alerts.append(
+                    {
+                        "level": "ERROR",
+                        "message":  f"No installation of {product_name.title()} found in the machine {platform.node()}."
+                    }
+                )
                 self.ansys_ecosystem_ready = False
             elif len(self.ansys_ecosystem[product_name]["compatible_versions"]) == 0:
-                alert_message = (
+                message = (
                     f"None of the authorized versions of {product_name.title()} "
                     f"is installed in the machine {platform.node()}.\n"
                 )
-                alert_message += "At least one of these versions is required:"
+                message += "At least one of these versions is required:"
                 for authorized_version in self.ansys_ecosystem[product_name]["authorized_versions"]:
-                    self.ansys_ecosystem[product_name][
-                        "alert_message"
-                    ] += f" {authorized_version}"
-                alert_message += "."
-                alert_color = "danger"
+                    message += f" {authorized_version}"
+                self.alerts.append(
+                    {
+                        "level": "ERROR",
+                        "message":  message
+                    }
+                )
                 self.ansys_ecosystem_ready = False
             else:
                 self.ansys_ecosystem[product_name]["selected_version"] = self.ansys_ecosystem[product_name][
                     "compatible_versions"
                 ][
                     -1
-                ]  # Latest
-                alert_message = f"{product_name.title()} install detected. Compatible versions are:"
-                for compatible_version in self.ansys_ecosystem[product_name]["compatible_versions"]:
-                    alert_message += f" {compatible_version}"
-                alert_message += ".\n"
-                alert_message += "Selected version is %s." % (self.ansys_ecosystem[product_name]["selected_version"])
-                alert_color = "success"
-            self.ansys_ecosystem[product_name]["alert_message"] = alert_message
-            self.ansys_ecosystem[product_name]["alert_color"] = alert_color
+                ]  # Pick latest available version
 
     @transaction(
         self=StepSpec(
