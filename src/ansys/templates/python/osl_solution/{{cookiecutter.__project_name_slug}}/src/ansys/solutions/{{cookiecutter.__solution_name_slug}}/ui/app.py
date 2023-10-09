@@ -7,7 +7,7 @@ import dash_uploader as du
 import os
 import tempfile
 
-from dash_extensions.enrich import DashProxy, MultiplexerTransform, NoOutputTransform, TriggerTransform
+from dash_extensions.enrich import DashProxy, MultiplexerTransform, NoOutputTransform, TriggerTransform, BlockingCallbackTransform
 
 
 class Dash(DashProxy):
@@ -26,7 +26,7 @@ app = Dash(
     __name__,
     external_stylesheets=[dbc.themes.BOOTSTRAP, dbc.icons.FONT_AWESOME],
     suppress_callback_exceptions=True,
-    transforms=[NoOutputTransform(), TriggerTransform(), MultiplexerTransform()],
+    transforms=[NoOutputTransform(), TriggerTransform(), MultiplexerTransform(), BlockingCallbackTransform(timeout=10)],
 )
 
 # If folder doesn't exist, it will be created later

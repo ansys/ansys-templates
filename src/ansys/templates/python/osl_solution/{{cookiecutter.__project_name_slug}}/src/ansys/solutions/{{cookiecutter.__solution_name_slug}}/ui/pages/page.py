@@ -29,7 +29,7 @@ layout = html.Div(
         ),
         dcc.Interval(
             id="progress_bar_update",
-            interval=900,
+            interval=0.7 * 1000,
             n_intervals=0,
             disabled=False
         ),
@@ -66,6 +66,7 @@ def initialization(pathname):
     Output("progress_bar_update", "disabled"),
     Input("progress_bar_update", "n_intervals"),
     State("url", "pathname"),
+    blocking=True
 )
 def update_progress_bar(n_intervals, pathname):
     """Track status of solution initialization."""
@@ -98,7 +99,6 @@ def update_progress_bar(n_intervals, pathname):
                     html.I(className="fa-solid fa-hourglass", style={"color": "rgba(255,182,35,1)"}),
                     dcc.Markdown(method["description"])
                 ]
-            # print(method["name"], status)
             method_states.append(
                 dbc.Stack(
                     components,

@@ -49,6 +49,7 @@ class ProblemSetupStep(StepModel):
     analysis_locked: bool = False
     project_locked: bool = False
     analysis_started: bool = False
+    alerts: list = []
 
     # Backend data model
     ansys_ecosystem: dict = {
