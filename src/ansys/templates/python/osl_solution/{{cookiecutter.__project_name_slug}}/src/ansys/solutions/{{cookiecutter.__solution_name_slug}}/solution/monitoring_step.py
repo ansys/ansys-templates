@@ -2,20 +2,12 @@
 
 """Backend of the problem setup step."""
 
-import json
-from pathlib import Path
-import time
-from typing import List, Union, Optional
 
-from ansys.optislang.core import logging
-from ansys.optislang.core.errors import OslCommunicationError
-from ansys.optislang.core.osl_server import OslServer
-from ansys.saf.glow.solution import FileReference, StepModel, StepSpec, instance, long_running, transaction
+from typing import List, Optional
 
-from ansys.solutions.{{cookiecutter.__solution_name_slug}}.datamodel import datamodel
-from ansys.solutions.{{cookiecutter.__solution_name_slug}}.solution.problem_setup_step import ProblemSetupStep
+from ansys.saf.glow.solution import StepModel, StepSpec, instance, transaction
+
 from ansys.solutions.{{cookiecutter.__solution_name_slug}}.solution.optislang_manager import OptislangManager
-from ansys.solutions.{{cookiecutter.__solution_name_slug}}.utilities.common_functions import read_log_file, check_optislang_server, get_states_ids_from_states
 
 
 class MonitoringStep(StepModel):
