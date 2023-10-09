@@ -91,7 +91,7 @@ class ProblemSetupStep(StepModel):
     osl_instance_started: bool = False
     osl_server_healthy: Optional[bool] = None
     osl_project_state: str = "NOT STARTED"
-    osl_max_server_request_attempts: int = 3
+    osl_max_server_request_attempts: int = 10
     placeholders: dict = {}
     registered_files: List = []
     settings: dict = {}
@@ -346,7 +346,7 @@ class ProblemSetupStep(StepModel):
         # Get optiSLang instance
         osl = osl_manager.instance
         # Set timeout
-        osl.set_timeout(25)
+        osl.set_timeout(250)
         # Get optiSLang server
         osl_server =  osl.get_osl_server()
         # Get server host
