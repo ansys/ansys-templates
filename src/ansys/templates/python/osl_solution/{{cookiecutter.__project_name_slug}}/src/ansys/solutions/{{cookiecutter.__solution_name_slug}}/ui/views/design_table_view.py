@@ -56,6 +56,9 @@ def layout(problem_setup_step: ProblemSetupStep, monitoring_step: MonitoringStep
 )
 def activate_auto_update(on, pathname):
     """Enable/Disable auto update."""
+    project = DashClient[{{ cookiecutter.__solution_definition_name }}].get_project(pathname)
+    monitoring_step = project.steps.monitoring_step
+    monitoring_step.auto_update_activated = on
     return not on
 
 

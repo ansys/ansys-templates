@@ -88,19 +88,3 @@ def update_page_content(selected_tab, selected_state_id, pathname):
         return visualization_view.layout(problem_setup_step, monitoring_step)
     elif selected_tab == "status_overview_tab":
         return status_overview_view.layout(problem_setup_step)
-
-
-@callback(
-    Output("activate_auto_update", "disabled"),
-    Input("activate_auto_update", "on"),
-    State("url", "pathname"),
-    prevent_initial_call=True,
-)
-def activate_auto_update(on, pathname):
-    """Enable/Disable auto update of monitoring tabs."""
-    project = DashClient[{{ cookiecutter.__solution_definition_name }}].get_project(pathname)
-    monitoring_step = project.steps.monitoring_step
-
-    monitoring_step.auto_update_activated = on
-
-    raise PreventUpdate
