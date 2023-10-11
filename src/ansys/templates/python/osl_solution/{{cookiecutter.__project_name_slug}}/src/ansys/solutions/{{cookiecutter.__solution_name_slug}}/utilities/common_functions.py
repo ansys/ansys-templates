@@ -71,6 +71,13 @@ PROJECT_STATES = {
 }
 
 
+LOG_MESSAGE_COLORS = {
+    "info": "primary",
+    "warning": "warning",
+    "error": "danger"
+}
+
+
 def find_dicts_by_key_recursively(structure, target_level, current_path=[]):
     results = []
 
