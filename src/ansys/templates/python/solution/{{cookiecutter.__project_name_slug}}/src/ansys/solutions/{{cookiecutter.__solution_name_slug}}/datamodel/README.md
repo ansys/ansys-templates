@@ -1,1 +1,1 @@
-# Modules to operate on backend data structures and convert thos into frontend data. 
+# Modules to operate on backend data structures and convert those into frontend data.
