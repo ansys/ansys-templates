@@ -53,7 +53,6 @@ def initialization(pathname):
         project.steps.problem_setup_step.upload_bulk_files_to_project_directory()
         project.steps.problem_setup_step.get_app_metadata()
         project.steps.problem_setup_step.get_default_placeholder_values()
-        project.steps.problem_setup_step.project_initialized = True
 
     raise PreventUpdate
 
@@ -72,38 +71,60 @@ def update_progress_bar(n_intervals, pathname):
     problem_setup_step = project.steps.problem_setup_step
 
     if not problem_setup_step.project_initialized:
-
-        completion_rate = 0
-        message = None
-        methods = ["upload_bulk_files_to_project_directory", "get_app_metadata", "get_default_placeholder_values"]
-
-        for method in methods:
-            status = problem_setup_step.get_method_state(method).status
+        # Compute completion rate
+        completion_rate = 0; method_states = []
+        for method in problem_setup_step.initialization_methods:
+            status = problem_setup_step.get_long_running_method_state(method["name"]).status
             if status == MethodStatus.Completed:
                 completion_rate += 1
+                components = [
+                    html.I(className="fa-solid fa-check", style={"color": "rgba(112,173,71,1)"}),
+                    dcc.Markdown(method["description"])
+                ]
+            elif status == MethodStatus.Failed:
+                components = [
+                    html.I(className="fa-solid fa-xmark", style={"color": "rgba(255,0,0,1)"}),
+                    dcc.Markdown(method["description"])
+                ]
+            elif status == MethodStatus.RunRequired:
+                components = [
+                    html.I(className="fa-solid fa-stop", style={"color": "rgba(255,182,35,1)"}),
+                    dcc.Markdown(method["description"])
+                ]
             elif status == MethodStatus.Running:
-                message = method.replace("_", " ").capitalize()
-                break
-
-        completion_rate = round(completion_rate / len(methods) * 100)
-
+                components = [
+                    html.I(className="fa-solid fa-hourglass", style={"color": "rgba(255,182,35,1)"}),
+                    dcc.Markdown(method["description"])
+                ]
+            method_states.append(
+                dbc.Stack(
+                    components,
+                    direction="horizontal",
+                    gap=1,
+                )
+            )
+        completion_rate = round(completion_rate / len(problem_setup_step.initialization_methods) * 100)
+        # Build progress bars
+        progress_container = [
+            dbc.Progress(
+                value=completion_rate,
+                label=f"{completion_rate} %",
+                color="rgba(255,182,35,1)",
+                style={"width": "600px", "height": "30px"},
+            ),
+            html.Div(method_states)
+        ]
+        # Trigger layout display
+        if completion_rate == 100:
+            problem_setup_step.project_initialized = True
         return (
-            True,
-            [
-                dbc.Progress(
-                    value=completion_rate,
-                    label=f"{completion_rate} %",
-                    color="rgba(255,182,35,1)",
-                    style={"width": "600px", "height": "30px"},
-                ),
-                dbc.Label(message),
-            ],
+            problem_setup_step.project_initialized,
+            progress_container,
             {'margin-left': '35%', 'margin-top': '25%'},
             False
         )
-
     else:
-        return True, [], {"display": "none"}, True
+        return problem_setup_step.project_initialized, [], {"display": "none"}, True
 
 
 @callback(

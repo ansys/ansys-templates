@@ -12,6 +12,7 @@ from pathlib import Path
 from typing import List, Optional, Union
 
 from ansys.optislang.core import Optislang, utils, logging
+from ansys.saf.glow.core.method_status import MethodStatus
 from ansys.saf.glow.solution import (
     FileGroupReference,
     FileReference,
@@ -58,6 +59,23 @@ class ProblemSetupStep(StepModel):
             "alias": "optiSLang",
         }
     }
+    initialization_methods: list = [
+        {
+            "name": "upload_bulk_files_to_project_directory",
+            "description": "Bulk files upload.",
+            "status": MethodStatus.RunRequired
+        },
+        {
+            "name": "get_app_metadata",
+            "description": "metadata.json loading.",
+            "status": MethodStatus.RunRequired
+        },
+        {
+            "name": "get_default_placeholder_values",
+            "description": "Project properties loading.",
+            "status": MethodStatus.RunRequired
+        }
+    ]
     osl_server_host: Optional[str] = None
     osl_server_port: Optional[int] = None
     osl_loglevel: str = "INFO"
@@ -111,6 +129,7 @@ class ProblemSetupStep(StepModel):
             ]
         )
     )
+    @long_running
     def upload_bulk_files_to_project_directory(self) -> None:
         """Upload bulk files to project directory."""
 
@@ -123,6 +142,7 @@ class ProblemSetupStep(StepModel):
             upload=["app_metadata"]
         )
     )
+    @long_running
     def get_app_metadata(self) -> None:
         """Read OWA metadata file."""
         with open(self.metadata_file.path) as f:
@@ -134,6 +154,7 @@ class ProblemSetupStep(StepModel):
             upload=["placeholders", "registered_files", "settings", "parameter_manager", "criteria"]
         )
     )
+    @long_running
     def get_default_placeholder_values(self):
         """Get placeholder values and definitions using the ProjectProperties class."""
         pp = ProjectProperties()
