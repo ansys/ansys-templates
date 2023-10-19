@@ -14,12 +14,12 @@ Pyproduct library
    :target: https://pypi.org/project/pyproduct-library
    :alt: PyPI
 
-.. |codecov| image:: https://codecov.io/gh/pyansys/pyproduct-library/branch/main/graph/badge.svg
-   :target: https://codecov.io/gh/pyansys/pyproduct-library
+.. |codecov| image:: https://codecov.io/gh/ansys/pyproduct-library/branch/main/graph/badge.svg
+   :target: https://codecov.io/gh/ansys/pyproduct-library
    :alt: Codecov
 
-.. |GH-CI| image:: https://github.com/pyansys/pyproduct-library/actions/workflows/ci_cd.yml/badge.svg
-   :target: https://github.com/pyansys/pyproduct-library/actions/workflows/ci_cd.yml
+.. |GH-CI| image:: https://github.com/ansys/pyproduct-library/actions/workflows/ci_cd.yml/badge.svg
+   :target: https://github.com/ansys/pyproduct-library/actions/workflows/ci_cd.yml
    :alt: GH-CI
 
 .. |MIT| image:: https://img.shields.io/badge/License-MIT-yellow.svg
