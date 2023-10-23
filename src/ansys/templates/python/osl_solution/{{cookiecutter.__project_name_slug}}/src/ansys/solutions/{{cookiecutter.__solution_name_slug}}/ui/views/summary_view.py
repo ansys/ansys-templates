@@ -86,6 +86,7 @@ def layout(problem_setup_step: ProblemSetupStep, monitoring_step: MonitoringStep
                 dbc.Col(
                     ActorLogsTableAIO(
                         actor_log_data,
+                        monitoring_step.selected_page,
                         aio_id = "actor_logs_table"
                     ),
                     width=12
@@ -111,6 +112,7 @@ def layout(problem_setup_step: ProblemSetupStep, monitoring_step: MonitoringStep
             n_intervals=0,
             disabled=False if monitoring_step.auto_update_activated else True
         ),
+        html.Div(id="dummy-output", style= {'display': 'block'}),
     ]
 
     # Build layout
@@ -162,6 +164,7 @@ def display_alerts(n_intervals, pathname):
 @callback(
     Output("actor_information_table", "children"),
     Output(ActorLogsTableAIO.ids.datatable("actor_logs_table"), "data"),
+    Output(ActorLogsTableAIO.ids.datatable("actor_logs_table"), "store_value"),
     Output("actor_statistics_table", "children"),
     Output("selected_state_dropdown", "options"),
     Output("selected_state_dropdown", "value"),
@@ -204,6 +207,7 @@ def update_view(n_intervals, pathname):
         return (
             ActorInformationTableAIO(actor_information_data),
             pd.DataFrame(actor_log_data).to_dict('records'),
+            monitoring_step.selected_page,
             ActorStatisticsTableAIO(actor_statistics_data),
             project_data["actors"][monitoring_step.selected_actor_from_treeview]["states_ids"],
             monitoring_step.selected_state_id,
@@ -211,3 +215,20 @@ def update_view(n_intervals, pathname):
         )
     else:
         raise PreventUpdate
+
+
+@callback(
+    Output("dummy-output", 'children'),
+    Input(ActorLogsTableAIO.ids.datatable("actor_logs_table"), "page_current"),
+    State("url", "pathname"),
+    prevent_initial_call=True,
+)
+def update_table(page_current, pathname):
+
+    # Get project
+    project = DashClient[Oscillator_CalibrationSolution].get_project(pathname)
+
+    # Get monitoring step
+    monitoring_step = project.steps.monitoring_step
+    monitoring_step.selected_page = page_current
+    return f"Dummy output updated {page_current}"

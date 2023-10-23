@@ -213,7 +213,6 @@ def display_page_layout(pathname, trigger_layout_display):
     Input("navigation_tree", "treeItemClicked"),
     Input("url", "pathname"),
     Input("trigger_body_display", "data"),
-    prevent_initial_call=True,
 )
 def display_body_content(value, pathname, trigger_body_display):
     """Display body content."""
