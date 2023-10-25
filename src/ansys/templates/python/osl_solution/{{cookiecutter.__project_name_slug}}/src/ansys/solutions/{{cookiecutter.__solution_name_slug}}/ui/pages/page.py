@@ -173,7 +173,7 @@ def display_page_layout(pathname, trigger_layout_display):
                                     multi=False,
                                     height=950,
                                     items=problem_setup_step.treeview_items,
-                                    selectedItemIds=["problem_setup"]
+                                    selectedItemIds=["problem_setup_step"]
                                 ),
 
                             ],
