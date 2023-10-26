@@ -27,8 +27,8 @@ jobs:
 
   solutions-e2e-tests:
     needs: [check-solution-templates-changes]
-    if: |
-      needs.check-solution-templates-changes.outputs.changed == 'true'
+    # if: |
+    #   needs.check-solution-templates-changes.outputs.changed == 'true'
     name: Trigger solutions e2e tests
     runs-on: ubuntu-latest
     steps:
