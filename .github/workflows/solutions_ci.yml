@@ -16,7 +16,7 @@ jobs:
       - name: Check for changes
         id: check
         run: |
-          CHANGES=$(git diff --name-only  ${{ github.event.pull_request.base.sha }} ${{ github.event.pull_request.head.sha }} -- 'src/python/solution' 'src/python/osl_solution')
+          CHANGES=$(git diff --name-only  ${{ github.event.pull_request.base.sha }} ${{ github.event.pull_request.head.sha }} --  './src/ansys/templates/python/solution' './src/ansys/templates/python/osl_solution')
           if [ -z "$CHANGES" ]; then
             echo "has_changes=false" >> $GITHUB_OUTPUT
             echo "No changes in the solution templates."
