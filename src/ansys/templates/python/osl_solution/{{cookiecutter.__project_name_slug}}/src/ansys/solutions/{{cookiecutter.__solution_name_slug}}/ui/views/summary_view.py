@@ -3,10 +3,13 @@
 """Frontend of the summary view."""
 
 import dash_bootstrap_components as dbc
+import json
 import pandas as pd
 
+from dash.exceptions import PreventUpdate
 from dash_extensions.enrich import html, Input, Output, State, dcc
 from ansys.saf.glow.client.dashclient import DashClient, callback
+from ansys.saf.glow.core.method_status import MethodStatus
 
 from ansys.solutions.{{ cookiecutter.__solution_name_slug }}.datamodel import datamodel
 from ansys.solutions.{{ cookiecutter.__solution_name_slug }}.solution.definition import {{ cookiecutter.__solution_definition_name }}
@@ -17,13 +20,19 @@ from ansys.solutions.{{ cookiecutter.__solution_name_slug }}.ui.components.butto
 from ansys.solutions.{{ cookiecutter.__solution_name_slug }}.ui.components.node_control import NodeControlAIO
 from ansys.solutions.{{ cookiecutter.__solution_name_slug }}.ui.components.actor_logs_table import ActorLogsTableAIO
 from ansys.solutions.{{ cookiecutter.__solution_name_slug }}.ui.components.actor_statistics_table import ActorStatisticsTableAIO
-from ansys.solutions.{{ cookiecutter.__solution_name_slug }}.utilities.common_functions import extract_dict_by_key
+from ansys.solutions.{{ cookiecutter.__solution_name_slug }}.utilities.common_functions import extract_dict_by_key, LOG_MESSAGE_COLORS
 
 
 def layout(problem_setup_step: ProblemSetupStep, monitoring_step: MonitoringStep) -> html.Div:
     """Layout of the summary view."""
-
-    actor_info = extract_dict_by_key(problem_setup_step.project_tree, "uid", monitoring_step.selected_actor_from_treeview, expect_unique=True, return_index=False)
+    # Get project data
+    project_data = json.loads(problem_setup_step.project_data_file.read_text())
+    # Get actor info
+    actor_info = extract_dict_by_key(problem_setup_step.osl_project_tree, "uid", monitoring_step.selected_actor_from_treeview, expect_unique=True, return_index=False)
+    # Get actor uid
+    actor_uid = monitoring_step.selected_actor_from_treeview
+    # Get actor hid
+    actor_hid = monitoring_step.selected_state_id
 
     alert_props = {
         "children": monitoring_step.actor_command_execution_status["alert-message"],
@@ -34,21 +43,25 @@ def layout(problem_setup_step: ProblemSetupStep, monitoring_step: MonitoringStep
 
     # Collect node-specific data
     if monitoring_step.selected_state_id:
-        actor_information = monitoring_step.actors_information[monitoring_step.selected_actor_from_treeview][monitoring_step.selected_state_id]
+        actor_information_data = project_data["actors"][actor_uid]["information"][actor_hid]
     else:
-        actor_information = datamodel.extract_actor_information_data({}, actor_info["kind"])
-    actor_log = monitoring_step.actors_log[monitoring_step.selected_actor_from_treeview]
-    actor_statistics = monitoring_step.actors_statistics[monitoring_step.selected_actor_from_treeview]
+        actor_information_data = datamodel.extract_actor_information_data({}, actor_info["kind"])
+    actor_log_data = project_data["actors"][actor_uid]["log"]
+    actor_statistics_data = project_data["actors"][actor_uid]["statistics"]
 
     # Assemble UI components
     content = [
         html.Br(),
+        html.Div(
+            id="alerts_container",
+            style={"position": "fixed", "top": 130, "right": 10, "width": 350},
+        ),
         dbc.Row(
             [
                 dbc.Col(
                     html.Div(
                         ActorInformationTableAIO(
-                            actor_information,
+                            actor_information_data,
                         ),
                         id="actor_information_table"
                     ),
@@ -72,7 +85,7 @@ def layout(problem_setup_step: ProblemSetupStep, monitoring_step: MonitoringStep
             [
                 dbc.Col(
                     ActorLogsTableAIO(
-                        actor_log,
+                        actor_log_data,
                         aio_id = "actor_logs_table"
                     ),
                     width=12
@@ -84,7 +97,7 @@ def layout(problem_setup_step: ProblemSetupStep, monitoring_step: MonitoringStep
                 dbc.Col(
                     html.Div(
                         ActorStatisticsTableAIO(
-                            actor_statistics,
+                            actor_statistics_data,
                         ),
                         id = "actor_statistics_table"
                     ),
@@ -105,39 +118,96 @@ def layout(problem_setup_step: ProblemSetupStep, monitoring_step: MonitoringStep
 
 
 @callback(
-    Output("summary_auto_update", "disabled"),
-    Input("activate_auto_update", "on"),
+    Output("alerts_container", "children"),
+    Input("summary_auto_update", "n_intervals"),
     State("url", "pathname"),
     prevent_initial_call=True,
 )
-def activate_auto_update(on, pathname):
+def display_alerts(n_intervals, pathname):
+    # Get project
+    project = DashClient[{{ cookiecutter.__solution_definition_name }}].get_project(pathname)
+    # Get problem setup step
+    problem_setup_step = project.steps.problem_setup_step
 
-    return not on
+    alerts_container = []
+
+    method_state = problem_setup_step.get_long_running_method_state("start_and_monitor_osl_project")
+    if method_state.status == MethodStatus.Failed:
+        alerts_container.append(
+            dbc.Toast(
+                method_state.exception_message,
+                header="Error",
+                is_open=True,
+                dismissable=True,
+                icon="danger",
+            )
+        )
+
+    if len(problem_setup_step.alerts) > 0:
+        if problem_setup_step.alerts:
+            alerts_container.append(
+                dbc.Toast(
+                    problem_setup_step.alerts["message"],
+                    header=problem_setup_step.alerts["level"].capitalize(),
+                    is_open=True,
+                    dismissable=True,
+                    icon=LOG_MESSAGE_COLORS[problem_setup_step.alerts["level"]],
+                )
+            )
+        return alerts_container
+    else:
+        raise PreventUpdate
 
 
 @callback(
     Output("actor_information_table", "children"),
     Output(ActorLogsTableAIO.ids.datatable("actor_logs_table"), "data"),
     Output("actor_statistics_table", "children"),
+    Output("selected_state_dropdown", "options"),
+    Output("selected_state_dropdown", "value"),
+    Output("summary_auto_update", "disabled"),
     Input("summary_auto_update", "n_intervals"),
     State("url", "pathname"),
     prevent_initial_call=True,
 )
 def update_view(n_intervals, pathname):
-
+    """Update design table."""
+    # Get project
     project = DashClient[{{ cookiecutter.__solution_definition_name }}].get_project(pathname)
+    # Get problem setup step
     problem_setup_step = project.steps.problem_setup_step
+    # Get monitoring step
     monitoring_step = project.steps.monitoring_step
 
-    actor_info = extract_dict_by_key(problem_setup_step.project_tree, "uid", monitoring_step.selected_actor_from_treeview, expect_unique=True, return_index=False)
-
-    if monitoring_step.selected_state_id:
-        actor_information = monitoring_step.actors_information[monitoring_step.selected_actor_from_treeview][monitoring_step.selected_state_id]
+    if monitoring_step.auto_update_activated:
+        # Get project data
+        project_data = json.loads(problem_setup_step.project_data_file.read_text())
+        # Get actor info
+        actor_info = extract_dict_by_key(problem_setup_step.osl_project_tree, "uid", monitoring_step.selected_actor_from_treeview, expect_unique=True, return_index=False)
+        # Get actor uid
+        actor_uid = monitoring_step.selected_actor_from_treeview
+        # Get actor hid
+        actor_hid = monitoring_step.selected_state_id
+        # Collect actor information data
+        if monitoring_step.selected_state_id:
+            actor_information_data = project_data["actors"][actor_uid]["information"][actor_hid]
+        else:
+            actor_information_data = datamodel.extract_actor_information_data({}, actor_info["kind"])
+        # Collect actor log data
+        actor_log_data = project_data["actors"][actor_uid]["log"]
+        # Collect actor statistics data
+        actor_statistics_data = project_data["actors"][actor_uid]["statistics"]
+        # Collect states ids
+        if not monitoring_step.selected_state_id:
+            if len(project_data["actors"][monitoring_step.selected_actor_from_treeview]["states_ids"]):
+                monitoring_step.selected_state_id = project_data["actors"][monitoring_step.selected_actor_from_treeview]["states_ids"][0]
+        return (
+            ActorInformationTableAIO(actor_information_data),
+            pd.DataFrame(actor_log_data).to_dict('records'),
+            ActorStatisticsTableAIO(actor_statistics_data),
+            project_data["actors"][monitoring_step.selected_actor_from_treeview]["states_ids"],
+            monitoring_step.selected_state_id,
+            True if problem_setup_step.osl_project_state in ["NOT STARTED", "FINISHED", "ABORTED"] else False
+        )
     else:
-        actor_information = datamodel.extract_actor_information_data({}, actor_info["kind"])
-
-    return (
-        ActorInformationTableAIO(actor_information),
-        pd.DataFrame(monitoring_step.actors_log[monitoring_step.selected_actor_from_treeview]).to_dict('records'),
-        ActorStatisticsTableAIO(monitoring_step.actors_statistics[monitoring_step.selected_actor_from_treeview])
-    )
+        raise PreventUpdate

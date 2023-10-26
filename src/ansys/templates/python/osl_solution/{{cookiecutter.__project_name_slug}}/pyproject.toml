@@ -5,7 +5,7 @@ build-backend = "poetry.core.masonry.api"
 # The following lines were added to enforce the poetry version needed for the project.
 # It will be read by the setup_environment.py script to install this version.
 [build-system-requirements]
-build-system-version = "1.5.1"
+build-system-version = "1.6.1"
 
 [tool.poetry]
 name = "{{cookiecutter.__pkg_name}}"
@@ -45,10 +45,10 @@ priority = "primary"
 [tool.poetry.dependencies]
 python = ">=3.8, <3.11"
 ansys-optislang-core = "0.4"
-ansys-saf-glow = {version = "0.4.0", source = "solutions-private-pypi"}
+ansys-saf-glow = {version = "0.4.1", source = "solutions-private-pypi"}
 ansys-saf-pim-light-server = {version = "^0.2.0", source = "solutions-private-pypi"}
-ansys-saf-portal = {version = "0.5.dev0", source = "solutions-private-pypi"}
-ansys-solutions-optislang-frontend-components = {version = "0.1.dev11", source = "solutions-private-pypi"}
+ansys-saf-portal = {version = "0.5.0", source = "solutions-private-pypi"}
+ansys-solutions-optislang-frontend-components = {version = "0.1.1", source = "solutions-private-pypi"}
 ansys-web-components-dash = {version = "^0.0.dev2", source = "solutions-private-pypi"}
 optislang-dash-lib = {version = "^0.2.1", source = "solutions-private-pypi"}
 dash = "^2.6"
