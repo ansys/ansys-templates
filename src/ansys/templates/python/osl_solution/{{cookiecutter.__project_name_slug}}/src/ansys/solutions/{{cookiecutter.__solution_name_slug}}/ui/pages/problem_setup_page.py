@@ -290,7 +290,7 @@ def initialize_dictionary_of_ui_placeholders(n_clicks, data, ids, input_file_ids
                 else:
                     parameters[key] = data[index]
                 ui_data.update({placeholder_name: parameters})
-            elif isinstance(data[index], list) == list and isinstance(data[index][0], bool):
+            elif isinstance(data[index], list):
                 value = data[index]
                 if True in value:
                     new_value = True
@@ -362,7 +362,7 @@ def update_ui_placeholders(value, id, pathname):
             elif isinstance(value, list) and False in value:
                 value = False
             ui_data[pm_name][key] = value
-        elif isinstance(value, list) and isinstance(value[0], bool):
+        elif isinstance(value, list):
             if True in value:
                 value = True
             else:
