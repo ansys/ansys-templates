@@ -4,7 +4,7 @@
 |python|
 
 .. note::
-  This content needs to be configured according to the project specifics. 
+  This content needs to be configured according to the project specifics.
 
 
 Introduction
