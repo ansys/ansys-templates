@@ -19,5 +19,5 @@ jobs:
           gh workflow run \
           _ansys-templates-remote-ci.yml \
           --repo "https://github.com/Solution-Applications/solution-templates-end-to-end-testing" \
-          --field ansys_templates_sha="${{ github.event.pull_request.head.sha }}"
+          --field ansys_templates_sha="${{ github.event.pull_request.head.sha }}" \
           --ref "refs/heads/main"
