@@ -1,34 +1,13 @@
-name: CI for SAF templates
+name: Trigger end-to-end tests for solution templates
 on:
   pull_request:
+    paths:
+      - 'src/ansys/templates/python/solution/**'
+      - 'src/ansys/templates/python/osl_solution/**'
 
 jobs:
-  check-solution-templates-changes:
-    if: github.event_name == 'pull_request'
-    runs-on: ubuntu-latest
-    outputs:
-      changed: ${{ steps.check.outputs.has_changes}}
-    steps:
-      - name: Checkout repository
-        uses: actions/checkout@v3
-        with:
-          fetch-depth: 0
-      - name: Check for changes
-        id: check
-        run: |
-          CHANGES=$(git diff --name-only  ${{ github.event.pull_request.base.sha }} ${{ github.event.pull_request.head.sha }} --  './src/ansys/templates/python/solution' './src/ansys/templates/python/osl_solution')
-          if [ -z "$CHANGES" ]; then
-            echo "has_changes=false" >> $GITHUB_OUTPUT
-            echo "No changes in the solution templates."
-          else
-            echo "has_changes=true" >> $GITHUB_OUTPUT
-            echo "Found changes in the solution templates."
-          fi
 
   solutions-e2e-tests:
-    needs: [check-solution-templates-changes]
-    if: |
-      needs.check-solution-templates-changes.outputs.changed == 'true'
     name: Trigger solutions e2e tests
     runs-on: ubuntu-latest
     steps:
