@@ -20,7 +20,7 @@
       "request": "attach",
       "connect": {
         "host": "localhost",
-        "port": 6677
+        "port": 5725
       },
       "justMyCode": false
     }
