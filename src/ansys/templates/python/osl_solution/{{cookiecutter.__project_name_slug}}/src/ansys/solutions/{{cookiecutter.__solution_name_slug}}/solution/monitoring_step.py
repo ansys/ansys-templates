@@ -151,11 +151,11 @@ class MonitoringStep(StepModel):
             else:
                 node = osl.project.root_system.find_node_by_uid(self.selected_actor_from_command, search_depth=-1)
                 self.actor_uid = node
-        
+
             status = node.control(self.selected_command, wait_for_completion=True, timeout=self.command_timeout)
 
             if not status:
                 raise Exception(f"{self.selected_command.replace('_', ' ').title()} command against node {node.get_name()} failed.")
         else:
             osl_manager.shutdown()
-            
+
