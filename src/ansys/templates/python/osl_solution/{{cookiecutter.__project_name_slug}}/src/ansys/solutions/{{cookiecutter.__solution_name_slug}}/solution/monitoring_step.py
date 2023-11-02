@@ -158,3 +158,4 @@ class MonitoringStep(StepModel):
                 raise Exception(f"{self.selected_command.replace('_', ' ').title()} command against node {node.get_name()} failed.")
         else:
             osl_manager.shutdown()
+            
