@@ -144,17 +144,17 @@ class MonitoringStep(StepModel):
     def control_node_state(self, osl_manager: OptislangManager) -> None:
         """Update the state of root or actor node based on the selected command in the UI."""
         osl = osl_manager.instance
-        if not self.selected_actor_from_command == "shutdown":
+        if not self.selected_command == "shutdown":
             if self.selected_actor_from_command == osl.project.root_system.uid:
                 node = osl.project.root_system
                 self.actor_uid = None
             else:
                 node = osl.project.root_system.find_node_by_uid(self.selected_actor_from_command, search_depth=-1)
                 self.actor_uid = node
+        
+            status = node.control(self.selected_command, wait_for_completion=True, timeout=self.command_timeout)
+
+            if not status:
+                raise Exception(f"{self.selected_command.replace('_', ' ').title()} command against node {node.get_name()} failed.")
         else:
-            node = osl.project.root_system
-
-        status = node.control(self.selected_command, wait_for_completion=True, timeout=self.command_timeout)
-
-        if not status:
-            raise Exception(f"{self.selected_command.replace('_', ' ').title()} command against node {node.get_name()} failed.")
+            osl_manager.shutdown()
