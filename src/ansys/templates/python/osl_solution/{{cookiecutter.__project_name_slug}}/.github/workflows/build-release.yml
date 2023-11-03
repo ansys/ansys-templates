@@ -8,12 +8,10 @@ on:
     branches:
       - main
     types: [opened, reopened, synchronize, ready_for_review]
-  release:
-    types: [published]
   workflow_dispatch:
 
 env:
-  MAIN_PYTHON_VERSION: "3.8"
+  MAIN_PYTHON_VERSION: "3.10"
   DOCUMENTATION_CNAME: ""
   POETRY_HTTP_BASIC_SOLUTIONS_PRIVATE_PYPI_USERNAME: "PAT"
   POETRY_HTTP_BASIC_SOLUTIONS_PRIVATE_PYPI_PASSWORD: {{ "${{ secrets.SOLUTIONS_PRIVATE_PYPI_PAT }}" }}
@@ -29,7 +27,7 @@ jobs:
     timeout-minutes: 10
     steps:
       - name: Check copyright
-        uses: Solution-Applications/actions/check-copyright@v5
+        uses: Solution-Applications/actions/check-copyright@v6
         with:
           gh-token: {{ "${{ secrets.WORKFLOW_TOKEN }}" }}
 
@@ -39,11 +37,10 @@ jobs:
     timeout-minutes: 10
     steps:
       - name: Check code style
-        uses: Solution-Applications/actions/check-code-style@v5
+        uses: Solution-Applications/actions/check-code-style@v6
         with:
           python-version: {{ "${{ env.MAIN_PYTHON_VERSION }}" }}
           gh-token: {{ "${{ secrets.WORKFLOW_TOKEN }}" }}
-          dependencies-source: "build-system"
           check-poetry-lock: "true"
           check-poetry: "true"
 
@@ -53,7 +50,7 @@ jobs:
     timeout-minutes: 10
     steps:
       - name: Build
-        uses: Solution-Applications/actions/build@v5
+        uses: Solution-Applications/actions/build@v6
         with:
           artifact-name: "wheel"
           python-version: {{ "${{ env.MAIN_PYTHON_VERSION }}" }}
@@ -65,19 +62,4 @@ jobs:
           retention-days: "7"
           modern-installation: "true"
 
-  release:
-    if: |
-      github.event_name == 'release'
-    name: Release
-    needs: [check-copyright, check-code-style, build]
-    runs-on: [ubuntu-latest]
-    timeout-minutes: 10
-    steps:
-      - name: Release
-        uses: Solution-Applications/actions/release@v5
-        with:
-          python-version: {{ "${{ env.MAIN_PYTHON_VERSION }}" }}
-          gh-token: {{ "${{ secrets.WORKFLOW_TOKEN }}" }}
-          solutions-pypi-token:
-            {{ "${{ secrets.SOLUTIONS_PRIVATE_PYPI_ADMIN_TOKEN }}" }}
-          solutions-pypi-repository-url: https://pkgs.dev.azure.com/pyansys/_packaging/ansys-solutions/pypi/upload/
+

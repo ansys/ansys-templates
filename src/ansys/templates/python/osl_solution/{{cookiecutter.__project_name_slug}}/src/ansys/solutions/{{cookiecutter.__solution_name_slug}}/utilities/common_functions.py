@@ -6,7 +6,9 @@ import dash_bootstrap_components as dbc
 import re
 
 from pathlib import Path
-from typing import Any, Iterable, Union
+from typing import Any, Iterable, Union, Tuple
+
+from ansys.optislang.core.osl_server import OslServer
 
 
 MONITORING_TABS = [
@@ -69,6 +71,13 @@ PROJECT_STATES = {
 }
 
 
+LOG_MESSAGE_COLORS = {
+    "info": "primary",
+    "warning": "warning",
+    "error": "danger"
+}
+
+
 def find_dicts_by_key_recursively(structure, target_level, current_path=[]):
     results = []
 
@@ -112,7 +121,7 @@ def get_dict_from_indexes_sequence(nested_structure, mixed_keys):
         return None  # If the final element is not a dictionary
 
 
-def get_treeview_items_from_project_tree(project_tree: list) -> list:
+def get_treeview_items_from_project_tree(osl_project_tree: list) -> list:
 
     treeview_items = [
         {
@@ -126,7 +135,7 @@ def get_treeview_items_from_project_tree(project_tree: list) -> list:
         },
     ]
 
-    for i, node in enumerate(project_tree):
+    for i, node in enumerate(osl_project_tree):
         if node["is_root"]:
             treeview_items.append(
                 {
@@ -304,3 +313,21 @@ def update_placeholders(ui_values: list, placeholders: dict) -> dict:
         if parameter_name in placeholder_values:
             updated_dict[parameter_name] = input_value
     return updated_dict
+
+
+def check_optislang_server(osl_server: OslServer) -> None:
+    """optiSLang server health check."""
+
+    try:
+        server_is_alive = osl_server.get_server_is_alive()
+    except Exception as e:
+        return False
+
+    return server_is_alive
+
+
+def get_states_ids_from_states(actor_states: dict) -> Tuple[str]:
+    """Get available actor states ids from actor states response."""
+    if not actor_states.get("states", None):
+        return tuple([])
+    return tuple([state["hid"] for state in actor_states["states"]])

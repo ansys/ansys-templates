@@ -25,7 +25,8 @@ class OptislangManager(InstanceManager[Optislang]):
         version: Optional[str] = None,
         project_path: Optional[Union[FileReference, str]] = None,
         project_properties_file: Optional[Union[FileReference, str]] = None,
-        osl_version: Optional[int] = None
+        osl_version: Optional[int] = None,
+        loglevel: Optional[str] = None,
     ):
         """Initialize and start the optiSLang server."""
         self.initialize_service(SERVICE_NAME, version)
@@ -35,7 +36,8 @@ class OptislangManager(InstanceManager[Optislang]):
             json={
                 "project_path": project_path,
                 "project_properties_file": project_properties_file,
-                "osl_version": osl_version
+                "osl_version": osl_version,
+                "loglevel": loglevel
             },
             timeout=300
         ).json()
@@ -48,17 +50,14 @@ class OptislangManager(InstanceManager[Optislang]):
     def implement_get_client_object(self, hostname: str, port: int) -> Optislang:
         """Return an instance of the custom product's client given the host and port of the shared product instance."""
         response = httpx.get(f"http://{hostname}:{port}").json()
-        return Optislang(host=hostname, port=response["port"], shutdown_on_finished=False)
+        return Optislang(host=hostname, port=response["port"])
 
     def _get_project_file_path(self, protected_state_directory_path: str) -> str:
         pass
 
     def save_state_implement(self, protected_state_directory_path: str) -> None:
         """Save the state of the product instance to the given directory."""
-        try:
-            self.instance.dispose()
-        except Exception:
-            pass
+        pass
 
     def load_state_implement(self, protected_state_directory_path: str) -> None:
         """Loads the state of the product instance from the given directory."""
