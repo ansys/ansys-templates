@@ -173,7 +173,7 @@ def display_page_layout(pathname, trigger_layout_display):
                                     multi=False,
                                     height=950,
                                     items=problem_setup_step.treeview_items,
-                                    selectedItemIds=["problem_setup"]
+                                    selectedItemIds=["problem_setup_step"]
                                 ),
 
                             ],
@@ -213,7 +213,6 @@ def display_page_layout(pathname, trigger_layout_display):
     Input("navigation_tree", "treeItemClicked"),
     Input("url", "pathname"),
     Input("trigger_body_display", "data"),
-    prevent_initial_call=True,
 )
 def display_body_content(value, pathname, trigger_body_display):
     """Display body content."""
