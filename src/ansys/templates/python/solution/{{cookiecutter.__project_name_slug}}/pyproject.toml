@@ -49,11 +49,11 @@ ansys-saf-desktop = {version = ">=0.4", source = "solutions-private-pypi", allow
 ansys-saf-portal = {version = ">=0.4", source = "solutions-private-pypi", allow-prereleases = true}
 ansys-solutions-dash-lib = {version = "^0.4", source = "solutions-private-pypi"}
 {% if cookiecutter.with_dash_ui == "yes" %}
-dash = "^2.6"
-dash_bootstrap_components = "^1.2"
-dash-extensions = "^0.1"
-dash-iconify = "^0.1"
-dash-uploader = "^0.6"
+dash = {version = "2.6.1"}
+dash_bootstrap_components = {version = "1.4.1"}
+dash-extensions = {version = "0.1.3"}
+dash-iconify = {version = "0.1.2"}
+dash-uploader = {version = "0.6.0"}
 {% endif %}
 
 [tool.poetry.group.doc]
