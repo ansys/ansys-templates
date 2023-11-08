@@ -193,23 +193,22 @@ def update_view(n_intervals, pathname):
         actor_hid = monitoring_step.selected_state_id
         # Collect actor information data
         if monitoring_step.selected_state_id:
-            actor_information_data = project_data["actors"][actor_uid]["information"][actor_hid]
+            actor_information_data = project_data.get("actors").get(actor_uid).get("information").get(actor_hid)
         else:
             actor_information_data = datamodel.extract_actor_information_data({}, actor_info["kind"])
         # Collect actor log data
-        actor_log_data = project_data["actors"][actor_uid]["log"]
+        actor_log_data = project_data.get("actors").get(actor_uid).get("log")
         # Collect actor statistics data
-        actor_statistics_data = project_data["actors"][actor_uid]["statistics"]
+        actor_statistics_data = project_data.get("actors").get(actor_uid).get("statistics")
         # Collect states ids
         if not monitoring_step.selected_state_id:
-            if len(project_data["actors"][monitoring_step.selected_actor_from_treeview]["states_ids"]):
-                monitoring_step.selected_state_id = project_data["actors"][monitoring_step.selected_actor_from_treeview]["states_ids"][0]
+            if len(project_data.get("actors").get(monitoring_step.selected_actor_from_treeview).get("states_ids")):
+                monitoring_step.selected_state_id = project_data.get("actors").get(monitoring_step.selected_actor_from_treeview).get("states_ids")[0]
         return (
             ActorInformationTableAIO(actor_information_data),
             pd.DataFrame(actor_log_data).to_dict('records'),
-            monitoring_step.selected_page,
             ActorStatisticsTableAIO(actor_statistics_data),
-            project_data["actors"][monitoring_step.selected_actor_from_treeview]["states_ids"],
+            project_data.get("actors").get(monitoring_step.selected_actor_from_treeview).get("states_ids"),
             monitoring_step.selected_state_id,
             True if problem_setup_step.osl_project_state in ["NOT STARTED", "FINISHED", "ABORTED"] else False
         )
