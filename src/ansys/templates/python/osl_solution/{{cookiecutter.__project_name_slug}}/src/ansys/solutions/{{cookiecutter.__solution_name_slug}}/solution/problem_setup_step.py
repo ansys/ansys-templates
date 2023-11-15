@@ -333,8 +333,10 @@ class ProblemSetupStep(StepModel):
                     for hid in actor_states_ids:
                         # Get actor status info (TCP REQUEST)
                         actor_status_info = self._make_osl_server_request(osl, "get_actor_status_info", actor_uid=node_props["uid"], hid=hid)
+                        # Get actor info (TCP REQUEST)
+                        actor_info = self._make_osl_server_request(osl, "get_actor_info", actor_uid=node_props["uid"], hid=hid)
                         # Collect actor information data
-                        project_data["actors"][node_props["uid"]]["information"][hid] = datamodel.extract_actor_information_data(actor_status_info, node_props["kind"])
+                        project_data["actors"][node_props["uid"]]["information"][hid] = datamodel.extract_actor_information_data(actor_status_info, actor_info, node_props["kind"])
                         # Collect design table data
                         if node_props["kind"] == "system":
                             project_data["actors"][node_props["uid"]]["design_table"][hid] = datamodel.extract_design_table_data(actor_status_info)
