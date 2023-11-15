@@ -5,7 +5,7 @@
 import dash_bootstrap_components as dbc
 import json
 import pandas as pd
-from json.decoder import JSONDecodeError 
+from json.decoder import JSONDecodeError
 
 from dash.exceptions import PreventUpdate
 from dash_extensions.enrich import html, Input, Output, State, dcc
