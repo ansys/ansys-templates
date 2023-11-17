@@ -4,6 +4,7 @@
 
 import dash_bootstrap_components as dbc
 import json
+from json.decoder import JSONDecodeError
 
 from dash.exceptions import PreventUpdate
 from dash_extensions.enrich import html, Input, Output, State, dcc
@@ -117,26 +118,29 @@ def update_view(n_intervals, pathname):
     monitoring_step = project.steps.monitoring_step
 
     if monitoring_step.auto_update_activated:
-        # Get project data
-        project_data = json.loads(problem_setup_step.project_data_file.read_text())
-        # Get actor uid
-        actor_uid = monitoring_step.selected_actor_from_treeview
-        # Get actor hid
-        actor_hid = monitoring_step.selected_state_id
-        # Collect design table data
-        if monitoring_step.selected_state_id:
-            design_table_data = project_data["actors"][actor_uid]["design_table"][actor_hid]
-        else:
-            design_table_data = datamodel.extract_design_table_data({})
-        # Collect states ids
-        if not monitoring_step.selected_state_id:
-            if len(project_data["actors"][monitoring_step.selected_actor_from_treeview]["states_ids"]):
-                monitoring_step.selected_state_id = project_data["actors"][monitoring_step.selected_actor_from_treeview]["states_ids"][0]
-        return (
-            DesignTableAIO(design_table_data),
-            project_data["actors"][monitoring_step.selected_actor_from_treeview]["states_ids"],
-            monitoring_step.selected_state_id,
-            True if problem_setup_step.osl_project_state in ["NOT STARTED", "FINISHED", "ABORTED"] else False
-        )
+        try:
+            # Get project data
+            project_data = json.loads(problem_setup_step.project_data_file.read_text())
+            # Get actor uid
+            actor_uid = monitoring_step.selected_actor_from_treeview
+            # Get actor hid
+            actor_hid = monitoring_step.selected_state_id
+            # Collect design table data
+            if monitoring_step.selected_state_id:
+                design_table_data = project_data["actors"][actor_uid]["design_table"][actor_hid]
+            else:
+                design_table_data = datamodel.extract_design_table_data({})
+            # Collect states ids
+            if not monitoring_step.selected_state_id:
+                if len(project_data["actors"][monitoring_step.selected_actor_from_treeview]["states_ids"]):
+                    monitoring_step.selected_state_id = project_data["actors"][monitoring_step.selected_actor_from_treeview]["states_ids"][0]
+            return (
+                DesignTableAIO(design_table_data),
+                project_data["actors"][monitoring_step.selected_actor_from_treeview]["states_ids"],
+                monitoring_step.selected_state_id,
+                True if problem_setup_step.osl_project_state in ["NOT STARTED", "FINISHED", "ABORTED"] else False
+            )
+        except JSONDecodeError as e:
+            raise PreventUpdate
     else:
         raise PreventUpdate
