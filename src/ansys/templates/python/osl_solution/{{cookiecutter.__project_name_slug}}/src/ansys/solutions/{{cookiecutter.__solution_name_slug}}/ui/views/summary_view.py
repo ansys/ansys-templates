@@ -166,7 +166,6 @@ def display_alerts(n_intervals, pathname):
 @callback(
     Output("actor_information_table", "children"),
     Output(ActorLogsTableAIO.ids.datatable("actor_logs_table"), "data"),
-    Output(ActorLogsTableAIO.ids.datatable("actor_logs_table"), "store_value"),
     Output("actor_statistics_table", "children"),
     Output("selected_state_dropdown", "options"),
     Output("selected_state_dropdown", "value"),
