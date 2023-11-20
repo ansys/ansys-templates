@@ -6,6 +6,7 @@ import dash_bootstrap_components as dbc
 import json
 import pandas as pd
 from json.decoder import JSONDecodeError
+import logging
 
 from dash.exceptions import PreventUpdate
 from dash_extensions.enrich import html, Input, Output, State, dcc
@@ -214,7 +215,8 @@ def update_view(n_intervals, pathname):
                 monitoring_step.selected_state_id,
                 True if problem_setup_step.osl_project_state in ["NOT STARTED", "FINISHED", "ABORTED"] else False
             )
-        except JSONDecodeError as e:
+        except Exception as e:
+            logging.error(str(e))
             raise PreventUpdate
     else:
         raise PreventUpdate
