@@ -47,7 +47,7 @@ def layout(problem_setup_step: ProblemSetupStep, monitoring_step: MonitoringStep
     if monitoring_step.selected_state_id:
         actor_information_data = project_data["actors"][actor_uid]["information"][actor_hid]
     else:
-        actor_information_data = datamodel.extract_actor_information_data({}, actor_info["kind"])
+        actor_information_data = datamodel.extract_actor_information_data({}, {}, actor_info["kind"])
     actor_log_data = project_data["actors"][actor_uid]["log"]
     actor_statistics_data = project_data["actors"][actor_uid]["statistics"]
 
