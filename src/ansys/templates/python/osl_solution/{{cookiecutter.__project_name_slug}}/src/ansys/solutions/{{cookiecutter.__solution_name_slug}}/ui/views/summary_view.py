@@ -166,6 +166,7 @@ def display_alerts(n_intervals, pathname):
 @callback(
     Output("actor_information_table", "children"),
     Output(ActorLogsTableAIO.ids.datatable("actor_logs_table"), "data"),
+    Output(ActorLogsTableAIO.ids.datatable("actor_logs_table"), "store_value"),
     Output("actor_statistics_table", "children"),
     Output("selected_state_dropdown", "options"),
     Output("selected_state_dropdown", "value"),
@@ -209,6 +210,7 @@ def update_view(n_intervals, pathname):
             return (
                 ActorInformationTableAIO(actor_information_data),
                 pd.DataFrame(actor_log_data).to_dict('records'),
+                monitoring_step.selected_page,
                 ActorStatisticsTableAIO(actor_statistics_data),
                 project_data.get("actors").get(monitoring_step.selected_actor_from_treeview).get("states_ids"),
                 monitoring_step.selected_state_id,
