@@ -3,7 +3,7 @@
 from typing import Optional, Union
 
 from ansys.optislang.core import Optislang
-from ansys.saf.glow.core.instance_manager import AbstractInstanceIdentificationClient
+from ansys.saf.glow.core.instance.identification import AbstractInstanceIdentificationClient
 from ansys.saf.glow.solution import FileReference, InstanceManager
 from ansys.saf.glow.storage.base import AbstractStoragePath
 import httpx

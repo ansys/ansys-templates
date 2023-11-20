@@ -4,8 +4,8 @@ import sys
 
 from typing import List
 
-from ansys.saf.glow.desktop.orchestration.pim_configurations import PimProductConfigurationBuilder
-from ansys.saf.glow.desktop.orchestration.pim_process import PimProductConfiguration
+from ansys.saf.desktop.orchestration.pim_configurations import PimProductConfigurationBuilder
+from ansys.saf.desktop.orchestration.pim_process import PimProductConfiguration
 
 
 class OptislangConfigBuilder(PimProductConfigurationBuilder):
