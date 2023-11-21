@@ -5,6 +5,7 @@
 import dash_bootstrap_components as dbc
 import json
 from json.decoder import JSONDecodeError
+import logging
 
 from dash.exceptions import PreventUpdate
 from dash_extensions.enrich import html, Input, Output, State, dcc
@@ -130,21 +131,20 @@ def update_view(n_intervals, pathname):
 
     if monitoring_step.auto_update_activated:
         try:
-            # Get monitoring step
-            monitoring_step = project.steps.monitoring_step
             # Get project data
             project_data = json.loads(problem_setup_step.project_data_file.read_text())
             # Collect states ids
             if not monitoring_step.selected_state_id:
-                if len(project_data["actors"][monitoring_step.selected_actor_from_treeview]["states_ids"]):
-                    monitoring_step.selected_state_id = project_data["actors"][monitoring_step.selected_actor_from_treeview]["states_ids"][0]
+                if len(project_data.get("actors").get(monitoring_step.selected_actor_from_treeview).get("states_ids")):
+                    monitoring_step.selected_state_id = project_data.get("actors").get(monitoring_step.selected_actor_from_treeview).get("states_ids")[0]
             return (
-                ProjectInformationTableAIO(project_data["project"]["information"]),
-                project_data["actors"][monitoring_step.selected_actor_from_treeview]["states_ids"],
+                ProjectInformationTableAIO(project_data.get("project").get("information")),
+                project_data.get("actors").get(monitoring_step.selected_actor_from_treeview).get("states_ids"),
                 monitoring_step.selected_state_id,
                 True if problem_setup_step.osl_project_state in ["NOT STARTED", "FINISHED", "ABORTED"] else False
             )
-        except JSONDecodeError as e:
+        except Exception as e:
+            logging.error(str(e))
             raise PreventUpdate
     else:
         raise PreventUpdate
