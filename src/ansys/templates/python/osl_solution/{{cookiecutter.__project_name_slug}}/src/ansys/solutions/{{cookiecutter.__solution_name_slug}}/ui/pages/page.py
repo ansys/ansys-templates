@@ -31,7 +31,7 @@ layout = html.Div(
             id="progress_bar_update",
             interval=1000,
             n_intervals=0,
-            disabled=False
+            disabled=True
         ),
         dcc.Store(id='trigger_layout_display'),
         dcc.Store(id='trigger_treeview_display'),
@@ -55,7 +55,7 @@ def initialization(pathname):
         project.steps.problem_setup_step.get_default_placeholder_values()
         project.steps.problem_setup_step.project_initialized = True
 
-    raise PreventUpdate
+    return True
 
 
 @callback(
@@ -88,7 +88,7 @@ def update_progress_bar(n_intervals, pathname):
         completion_rate = round(completion_rate / len(methods) * 100)
 
         return (
-            True,
+            no_update,
             [
                 dbc.Progress(
                     value=completion_rate,
@@ -107,13 +107,13 @@ def update_progress_bar(n_intervals, pathname):
 
 
 @callback(
-    Output("trigger_body_display", "data"),
+    Output("trigger_treeview_display", "data"),
     Output("page_layout", "children"),
-    Input("url", "pathname"),
     Input("trigger_layout_display", "data"),
+    State("url", "pathname"),
     prevent_initial_call=True,
 )
-def display_page_layout(pathname, trigger_layout_display):
+def display_page_layout(trigger_layout_display, pathname):
     """Display page layout."""
     project = DashClient[{{ cookiecutter.__solution_definition_name }}].get_project(pathname)
     problem_setup_step = project.steps.problem_setup_step
@@ -175,7 +175,6 @@ def display_page_layout(pathname, trigger_layout_display):
                                     items=problem_setup_step.treeview_items,
                                     selectedItemIds=["problem_setup_step"]
                                 ),
-
                             ],
                             width=2,
                             style={"background-color": "rgba(242, 242, 242, 0.6)"},  # Ansys grey
@@ -211,11 +210,12 @@ def display_page_layout(pathname, trigger_layout_display):
     Output("bottom_button_group", "children"),
     Output("navigation_tree", "selectedItemIds"),
     Input("navigation_tree", "treeItemClicked"),
-    Input("url", "pathname"),
     Input("trigger_body_display", "data"),
     State("navigation_tree", "selectedItemIds"),
+    State("url", "pathname"),
+    prevent_initial_call=True,
 )
-def display_body_content(value, pathname, trigger_body_display, selectedItemIds):
+def display_body_content(value, trigger_body_display, selectedItemIds, pathname):
     """Display body content."""
     project = DashClient[{{ cookiecutter.__solution_definition_name }}].get_project(pathname)
     problem_setup_step = project.steps.problem_setup_step
@@ -242,9 +242,9 @@ def display_body_content(value, pathname, trigger_body_display, selectedItemIds)
                     size="sm"
                 )
             )
-        if triggered_id == "url" or triggered_id == "trigger_body_display" or trigger_body_display and len(triggered_id) == 0:
+        if triggered_id == "trigger_body_display":
             page_layout = problem_setup_page.layout(problem_setup_step)
-        if triggered_id == "navigation_tree":
+        elif triggered_id == "navigation_tree":
             if value["id"] is None:
                 page_layout = html.H1("Welcome!")
             elif value["id"] == "problem_setup_step":
@@ -252,7 +252,7 @@ def display_body_content(value, pathname, trigger_body_display, selectedItemIds)
                     page_layout = problem_setup_page.layout(problem_setup_step)
                     last_selected_item = ["problem_setup_step"]
                 else:
-                    page_layout = no_update
+                    raise PreventUpdate
             else:
                 # Get project data
                 project_data = json.loads(problem_setup_step.project_data_file.read_text())
@@ -304,17 +304,18 @@ def display_body_content(value, pathname, trigger_body_display, selectedItemIds)
 
 @callback(
     Output("navigation_tree", "items"),
-    Input("url", "pathname"),
+    Output("trigger_body_display", "data"),
     Input("trigger_treeview_display", "data"),
+    State("url", "pathname"),
     prevent_initial_call=True,
 )
-def display_tree_view(pathname, trigger_treeview_display):
+def display_tree_view(trigger_treeview_display, pathname):
     """Display treeview with all project nodes."""
     project = DashClient[{{ cookiecutter.__solution_definition_name }}].get_project(pathname)
     problem_setup_step = project.steps.problem_setup_step
 
     if problem_setup_step.project_initialized:
-        return problem_setup_step.treeview_items
+        return problem_setup_step.treeview_items, True
     else:
         raise PreventUpdate
 
