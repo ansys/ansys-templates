@@ -174,6 +174,7 @@ class ProblemSetupStep(StepModel):
             upload=["placeholders", "registered_files", "settings", "parameter_manager", "criteria"],
         )
     )
+    @long_running
     def update_osl_placeholders_with_ui_values(self) -> None:
         """Update placeholders with values selected by the user in the UI."""
         properties = apply_placeholders_to_properties_file(self.ui_placeholders, self.properties_file.path)

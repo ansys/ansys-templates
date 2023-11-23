@@ -220,7 +220,7 @@ def display_body_content(value, pathname, trigger_body_display, selectedItemIds)
     project = DashClient[{{ cookiecutter.__solution_definition_name }}].get_project(pathname)
     problem_setup_step = project.steps.problem_setup_step
     monitoring_step = project.steps.monitoring_step
-    selected_item=[selectedItemIds[0]]
+    last_selected_item=[selectedItemIds[0]]
     if problem_setup_step.project_initialized:
         triggered_id = callback_context.triggered[0]["prop_id"].split(".")[0]
         footer_buttons = [
@@ -245,42 +245,43 @@ def display_body_content(value, pathname, trigger_body_display, selectedItemIds)
         if triggered_id == "url" or triggered_id == "trigger_body_display" or trigger_body_display and len(triggered_id) == 0:
             page_layout = problem_setup_page.layout(problem_setup_step)
         if triggered_id == "navigation_tree":
-            selected_item = [value["id"]]
-            if selected_item[0] == selectedItemIds[0]:
-                page_layout = no_update
-            else:
-                if value["id"] is None:
-                    page_layout = html.H1("Welcome!")
-                elif value["id"] == "problem_setup_step":
+            if value["id"] is None:
+                page_layout = html.H1("Welcome!")
+            elif value["id"] == "problem_setup_step":
+                if "problem_setup_step" not in last_selected_item:
                     page_layout = problem_setup_page.layout(problem_setup_step)
+                    last_selected_item = ["problem_setup_step"]
                 else:
-                    # Get project data
-                    project_data = json.loads(problem_setup_step.project_data_file.read_text())
-                    # Record uid of actor selected from treeview
-                    monitoring_step.selected_actor_from_treeview = extract_dict_by_key(problem_setup_step.osl_project_tree, "uid", value["id"], expect_unique=True, return_index=False)["uid"]
-                    # Record hid of actor selected from treeview
-                    if len(project_data["actors"][monitoring_step.selected_actor_from_treeview]["states_ids"]):
-                        monitoring_step.selected_state_id = project_data["actors"][monitoring_step.selected_actor_from_treeview]["states_ids"][0]
-                    else:
-                        monitoring_step.selected_state_id = None
-                    # Get page layout
-                    page_layout = monitoring_page.layout(problem_setup_step, monitoring_step)
-                    # Update footer buttons
-                    footer_buttons.insert(
-                        0,
-                        dcc.Dropdown(
-                            options=[state_id for state_id in project_data["actors"][monitoring_step.selected_actor_from_treeview]["states_ids"]],
-                            value=monitoring_step.selected_state_id,
-                            id="selected_state_dropdown",
-                            disabled=False,
-                            clearable=False,
-                            searchable=True,
-                            style={
-                                "textAlign": "left",
-                                "width": "30%"
-                            },
-                        ),
-                    )
+                    page_layout = no_update
+            else:
+                # Get project data
+                project_data = json.loads(problem_setup_step.project_data_file.read_text())
+                # Record uid of actor selected from treeview
+                monitoring_step.selected_actor_from_treeview = extract_dict_by_key(problem_setup_step.osl_project_tree, "uid", value["id"], expect_unique=True, return_index=False)["uid"]
+                # Record hid of actor selected from treeview
+                if len(project_data["actors"][monitoring_step.selected_actor_from_treeview]["states_ids"]):
+                    monitoring_step.selected_state_id = project_data["actors"][monitoring_step.selected_actor_from_treeview]["states_ids"][0]
+                else:
+                    monitoring_step.selected_state_id = None
+                # Get page layout
+                page_layout = monitoring_page.layout(problem_setup_step, monitoring_step)
+                last_selected_item = ["monitoring_step"]
+                # Update footer buttons
+                footer_buttons.insert(
+                    0,
+                    dcc.Dropdown(
+                        options=[state_id for state_id in project_data["actors"][monitoring_step.selected_actor_from_treeview]["states_ids"]],
+                        value=monitoring_step.selected_state_id,
+                        id="selected_state_dropdown",
+                        disabled=False,
+                        clearable=False,
+                        searchable=True,
+                        style={
+                            "textAlign": "left",
+                            "width": "30%"
+                        },
+                    ),
+                )
         footer = [
             dbc.ButtonGroup(
                 footer_buttons,
@@ -295,7 +296,7 @@ def display_body_content(value, pathname, trigger_body_display, selectedItemIds)
         return (
             page_layout,
             footer,
-            selected_item
+            last_selected_item
         )
     else:
         raise PreventUpdate
