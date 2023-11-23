@@ -7,7 +7,7 @@ import json
 import webbrowser
 
 from dash.exceptions import PreventUpdate
-from dash_extensions.enrich import Input, Output, State, callback_context, dcc, html
+from dash_extensions.enrich import Input, Output, State, callback_context, dcc, html, no_update
 
 from ansys.saf.glow.client.dashclient import DashClient, callback
 from ansys.saf.glow.core.method_status import MethodStatus
@@ -209,17 +209,18 @@ def display_page_layout(pathname, trigger_layout_display):
 @callback(
     Output("body_content", "children"),
     Output("bottom_button_group", "children"),
-    Output("navigation_tree", "focusRequested"),
+    Output("navigation_tree", "selectedItemIds"),
     Input("navigation_tree", "treeItemClicked"),
     Input("url", "pathname"),
     Input("trigger_body_display", "data"),
+    State("navigation_tree", "selectedItemIds"),
 )
-def display_body_content(value, pathname, trigger_body_display):
+def display_body_content(value, pathname, trigger_body_display, selectedItemIds):
     """Display body content."""
     project = DashClient[{{ cookiecutter.__solution_definition_name }}].get_project(pathname)
     problem_setup_step = project.steps.problem_setup_step
     monitoring_step = project.steps.monitoring_step
-
+    selected_item=[selectedItemIds[0]]
     if problem_setup_step.project_initialized:
         triggered_id = callback_context.triggered[0]["prop_id"].split(".")[0]
         footer_buttons = [
@@ -243,41 +244,43 @@ def display_body_content(value, pathname, trigger_body_display):
             )
         if triggered_id == "url" or triggered_id == "trigger_body_display" or trigger_body_display and len(triggered_id) == 0:
             page_layout = problem_setup_page.layout(problem_setup_step)
-            focusRequested = ""
         if triggered_id == "navigation_tree":
-            focusRequested = value["id"]
-            if value["id"] is None:
-                page_layout = html.H1("Welcome!")
-            elif value["id"] == "problem_setup_step":
-                page_layout = problem_setup_page.layout(problem_setup_step)
+            selected_item = [value["id"]]
+            if selected_item[0] == selectedItemIds[0]:
+                page_layout = no_update
             else:
-                # Get project data
-                project_data = json.loads(problem_setup_step.project_data_file.read_text())
-                # Record uid of actor selected from treeview
-                monitoring_step.selected_actor_from_treeview = extract_dict_by_key(problem_setup_step.osl_project_tree, "uid", value["id"], expect_unique=True, return_index=False)["uid"]
-                # Record hid of actor selected from treeview
-                if len(project_data["actors"][monitoring_step.selected_actor_from_treeview]["states_ids"]):
-                    monitoring_step.selected_state_id = project_data["actors"][monitoring_step.selected_actor_from_treeview]["states_ids"][0]
+                if value["id"] is None:
+                    page_layout = html.H1("Welcome!")
+                elif value["id"] == "problem_setup_step":
+                    page_layout = problem_setup_page.layout(problem_setup_step)
                 else:
-                    monitoring_step.selected_state_id = None
-                # Get page layout
-                page_layout = monitoring_page.layout(problem_setup_step, monitoring_step)
-                # Update footer buttons
-                footer_buttons.insert(
-                    0,
-                    dcc.Dropdown(
-                        options=[state_id for state_id in project_data["actors"][monitoring_step.selected_actor_from_treeview]["states_ids"]],
-                        value=monitoring_step.selected_state_id,
-                        id="selected_state_dropdown",
-                        disabled=False,
-                        clearable=False,
-                        searchable=True,
-                        style={
-                            "textAlign": "left",
-                            "width": "30%"
-                        },
-                    ),
-                )
+                    # Get project data
+                    project_data = json.loads(problem_setup_step.project_data_file.read_text())
+                    # Record uid of actor selected from treeview
+                    monitoring_step.selected_actor_from_treeview = extract_dict_by_key(problem_setup_step.osl_project_tree, "uid", value["id"], expect_unique=True, return_index=False)["uid"]
+                    # Record hid of actor selected from treeview
+                    if len(project_data["actors"][monitoring_step.selected_actor_from_treeview]["states_ids"]):
+                        monitoring_step.selected_state_id = project_data["actors"][monitoring_step.selected_actor_from_treeview]["states_ids"][0]
+                    else:
+                        monitoring_step.selected_state_id = None
+                    # Get page layout
+                    page_layout = monitoring_page.layout(problem_setup_step, monitoring_step)
+                    # Update footer buttons
+                    footer_buttons.insert(
+                        0,
+                        dcc.Dropdown(
+                            options=[state_id for state_id in project_data["actors"][monitoring_step.selected_actor_from_treeview]["states_ids"]],
+                            value=monitoring_step.selected_state_id,
+                            id="selected_state_dropdown",
+                            disabled=False,
+                            clearable=False,
+                            searchable=True,
+                            style={
+                                "textAlign": "left",
+                                "width": "30%"
+                            },
+                        ),
+                    )
         footer = [
             dbc.ButtonGroup(
                 footer_buttons,
@@ -292,7 +295,7 @@ def display_body_content(value, pathname, trigger_body_display):
         return (
             page_layout,
             footer,
-            focusRequested
+            selected_item
         )
     else:
         raise PreventUpdate
