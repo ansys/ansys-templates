@@ -248,7 +248,7 @@ def display_body_content(value, trigger_body_display, selectedItemIds, pathname)
             if value["id"] is None:
                 page_layout = html.H1("Welcome!")
             elif value["id"] == "problem_setup_step":
-                if "problem_setup_step" not in last_selected_item:
+                if "problem_setup_step" not in last_selected_item: # this is to minimize the number of times the page is reloaded. I noticed issues with the creation of the layout when the page is reloaded too many times closely together
                     page_layout = problem_setup_page.layout(problem_setup_step)
                     last_selected_item = ["problem_setup_step"]
                 else:
