@@ -31,7 +31,7 @@ layout = html.Div(
             id="progress_bar_update",
             interval=1000,
             n_intervals=0,
-            disabled=False
+            disabled=True
         ),
         dcc.Store(id='trigger_layout_display'),
         dcc.Store(id='trigger_treeview_display'),
@@ -55,7 +55,7 @@ def initialization(pathname):
         project.steps.problem_setup_step.get_default_placeholder_values()
         project.steps.problem_setup_step.project_initialized = True
 
-    raise PreventUpdate
+    return True
 
 
 @callback(
@@ -88,7 +88,7 @@ def update_progress_bar(n_intervals, pathname):
         completion_rate = round(completion_rate / len(methods) * 100)
 
         return (
-            True,
+            no_update,
             [
                 dbc.Progress(
                     value=completion_rate,
@@ -107,13 +107,13 @@ def update_progress_bar(n_intervals, pathname):
 
 
 @callback(
-    Output("trigger_body_display", "data"),
+    Output("trigger_treeview_display", "data"),
     Output("page_layout", "children"),
-    Input("url", "pathname"),
     Input("trigger_layout_display", "data"),
+    State("url", "pathname"),
     prevent_initial_call=True,
 )
-def display_page_layout(pathname, trigger_layout_display):
+def display_page_layout(trigger_layout_display, pathname):
     """Display page layout."""
     project = DashClient[{{ cookiecutter.__solution_definition_name }}].get_project(pathname)
     problem_setup_step = project.steps.problem_setup_step
@@ -175,7 +175,6 @@ def display_page_layout(pathname, trigger_layout_display):
                                     items=problem_setup_step.treeview_items,
                                     selectedItemIds=["problem_setup_step"]
                                 ),
-
                             ],
                             width=2,
                             style={"background-color": "rgba(242, 242, 242, 0.6)"},  # Ansys grey
@@ -211,16 +210,17 @@ def display_page_layout(pathname, trigger_layout_display):
     Output("bottom_button_group", "children"),
     Output("navigation_tree", "selectedItemIds"),
     Input("navigation_tree", "treeItemClicked"),
-    Input("url", "pathname"),
     Input("trigger_body_display", "data"),
     State("navigation_tree", "selectedItemIds"),
+    State("url", "pathname"),
+    prevent_initial_call=True,
 )
-def display_body_content(value, pathname, trigger_body_display, selectedItemIds):
+def display_body_content(value, trigger_body_display, selectedItemIds, pathname):
     """Display body content."""
     project = DashClient[{{ cookiecutter.__solution_definition_name }}].get_project(pathname)
     problem_setup_step = project.steps.problem_setup_step
     monitoring_step = project.steps.monitoring_step
-    selected_item=[selectedItemIds[0]]
+    last_selected_item=[selectedItemIds[0]]
     if problem_setup_step.project_initialized:
         triggered_id = callback_context.triggered[0]["prop_id"].split(".")[0]
         footer_buttons = [
@@ -242,45 +242,46 @@ def display_body_content(value, pathname, trigger_body_display, selectedItemIds)
                     size="sm"
                 )
             )
-        if triggered_id == "url" or triggered_id == "trigger_body_display" or trigger_body_display and len(triggered_id) == 0:
+        if triggered_id == "trigger_body_display":
             page_layout = problem_setup_page.layout(problem_setup_step)
-        if triggered_id == "navigation_tree":
-            selected_item = [value["id"]]
-            if selected_item[0] == selectedItemIds[0]:
-                page_layout = no_update
-            else:
-                if value["id"] is None:
-                    page_layout = html.H1("Welcome!")
-                elif value["id"] == "problem_setup_step":
+        elif triggered_id == "navigation_tree":
+            if value["id"] is None:
+                page_layout = html.H1("Welcome!")
+            elif value["id"] == "problem_setup_step":
+                if "problem_setup_step" not in last_selected_item: # this is to minimize the number of times the page is reloaded. I noticed issues with the creation of the layout when the page is reloaded too many times closely together
                     page_layout = problem_setup_page.layout(problem_setup_step)
+                    last_selected_item = ["problem_setup_step"]
                 else:
-                    # Get project data
-                    project_data = json.loads(problem_setup_step.project_data_file.read_text())
-                    # Record uid of actor selected from treeview
-                    monitoring_step.selected_actor_from_treeview = extract_dict_by_key(problem_setup_step.osl_project_tree, "uid", value["id"], expect_unique=True, return_index=False)["uid"]
-                    # Record hid of actor selected from treeview
-                    if len(project_data["actors"][monitoring_step.selected_actor_from_treeview]["states_ids"]):
-                        monitoring_step.selected_state_id = project_data["actors"][monitoring_step.selected_actor_from_treeview]["states_ids"][0]
-                    else:
-                        monitoring_step.selected_state_id = None
-                    # Get page layout
-                    page_layout = monitoring_page.layout(problem_setup_step, monitoring_step)
-                    # Update footer buttons
-                    footer_buttons.insert(
-                        0,
-                        dcc.Dropdown(
-                            options=[state_id for state_id in project_data["actors"][monitoring_step.selected_actor_from_treeview]["states_ids"]],
-                            value=monitoring_step.selected_state_id,
-                            id="selected_state_dropdown",
-                            disabled=False,
-                            clearable=False,
-                            searchable=True,
-                            style={
-                                "textAlign": "left",
-                                "width": "30%"
-                            },
-                        ),
-                    )
+                    raise PreventUpdate
+            else:
+                # Get project data
+                project_data = json.loads(problem_setup_step.project_data_file.read_text())
+                # Record uid of actor selected from treeview
+                monitoring_step.selected_actor_from_treeview = extract_dict_by_key(problem_setup_step.osl_project_tree, "uid", value["id"], expect_unique=True, return_index=False)["uid"]
+                # Record hid of actor selected from treeview
+                if len(project_data["actors"][monitoring_step.selected_actor_from_treeview]["states_ids"]):
+                    monitoring_step.selected_state_id = project_data["actors"][monitoring_step.selected_actor_from_treeview]["states_ids"][0]
+                else:
+                    monitoring_step.selected_state_id = None
+                # Get page layout
+                page_layout = monitoring_page.layout(problem_setup_step, monitoring_step)
+                last_selected_item = ["monitoring_step"]
+                # Update footer buttons
+                footer_buttons.insert(
+                    0,
+                    dcc.Dropdown(
+                        options=[state_id for state_id in project_data["actors"][monitoring_step.selected_actor_from_treeview]["states_ids"]],
+                        value=monitoring_step.selected_state_id,
+                        id="selected_state_dropdown",
+                        disabled=False,
+                        clearable=False,
+                        searchable=True,
+                        style={
+                            "textAlign": "left",
+                            "width": "30%"
+                        },
+                    ),
+                )
         footer = [
             dbc.ButtonGroup(
                 footer_buttons,
@@ -295,7 +296,7 @@ def display_body_content(value, pathname, trigger_body_display, selectedItemIds)
         return (
             page_layout,
             footer,
-            selected_item
+            last_selected_item
         )
     else:
         raise PreventUpdate
@@ -303,17 +304,18 @@ def display_body_content(value, pathname, trigger_body_display, selectedItemIds)
 
 @callback(
     Output("navigation_tree", "items"),
-    Input("url", "pathname"),
+    Output("trigger_body_display", "data"),
     Input("trigger_treeview_display", "data"),
+    State("url", "pathname"),
     prevent_initial_call=True,
 )
-def display_tree_view(pathname, trigger_treeview_display):
+def display_tree_view(trigger_treeview_display, pathname):
     """Display treeview with all project nodes."""
     project = DashClient[{{ cookiecutter.__solution_definition_name }}].get_project(pathname)
     problem_setup_step = project.steps.problem_setup_step
 
     if problem_setup_step.project_initialized:
-        return problem_setup_step.treeview_items
+        return problem_setup_step.treeview_items, True
     else:
         raise PreventUpdate
 
