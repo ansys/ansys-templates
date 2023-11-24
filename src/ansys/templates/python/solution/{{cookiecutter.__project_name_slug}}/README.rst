@@ -68,19 +68,26 @@ Installation
 
     cd {{ cookiecutter.__project_name_slug }}
 
-3. Install ``toml`` and ``packaging`` on your system environment:
+
+Start the solution with a local installation
+============================================
+
+To start the solution using a desktop orchestrator run the following commands in the root of the project:
+
+
+1. Install ``toml`` and ``packaging`` on your system environment:
 
    .. code:: bash
 
      pip install toml packaging
 
-4. Install the production dependencies:
+2. Install the production and desktop dependencies:
 
   .. code:: bash
 
-    python setup_environment.py -d run
+    python setup_environment.py -d run desktop
 
-5. Activate the virtual environment:
+3. Activate the virtual environment:
 
   * For Windows CMD:
 
@@ -94,22 +101,7 @@ Installation
 
       .venv\Scripts\Activate.ps1
 
-From now on, all the commands must be executed within the virtual environment.
-
-
-Start the solution using Desktop orchestrator
-=============================================
-
-To start the solution using a desktop orchestrator run the following commands anywhere in the project:
-
-
-1. Install the desktop dependencies:
-
-  .. code:: bash
-
-    poetry install --with desktop
-
-2. Launch the solution:
+4. Launch the solution:
 
   .. code:: bash
 
@@ -127,8 +119,9 @@ To start the solution using a docker run the following commands in the root of t
   .. code:: bash
 
     docker build -t my_solution_api:latest --target my_solution_api --build-arg SOLUTIONS_PRIVATE_PYPI_PAT=$SOLUTIONS_PRIVATE_PYPI_PAT .
+{% if cookiecutter.with_dash_ui == "yes" %}
     docker build -t my_solution_ui:latest --target my_solution_ui --build-arg SOLUTIONS_PRIVATE_PYPI_PAT=$SOLUTIONS_PRIVATE_PYPI_PAT .
-
+{% endif %}
 2. Launch the solution:
 
   .. code:: bash
