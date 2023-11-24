@@ -55,7 +55,7 @@ def layout(problem_setup_step: ProblemSetupStep, monitoring_step: MonitoringStep
         monitoring_step = project.steps.monitoring_step
     
         if monitoring_step.auto_update_activated:
-            print("Interval call in visualization view")
+
             # Get project data
             full_project_status_info = json.loads(problem_setup_step.full_project_status_info_file.read_text())
             
@@ -84,7 +84,7 @@ def layout(problem_setup_step: ProblemSetupStep, monitoring_step: MonitoringStep
                 visualization_status_view_1_style = {'display': 'none'}
             
     
-            return visualization_status_view_1_child, visualization_status_view_1_style, visualization_status_view_2_child, visualization_status_view_2_style
+            return visualization_status_view_1_child, visualization_status_view_2_child, visualization_status_view_1_style, visualization_status_view_2_style
     
         else:
             raise PreventUpdate
