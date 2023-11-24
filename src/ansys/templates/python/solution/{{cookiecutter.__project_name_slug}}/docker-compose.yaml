@@ -1,0 +1,55 @@
+version: '3'
+
+services:
+
+  postgresql:
+    image: postgres:latest
+    container_name: my-solution-container-postgresql
+    networks:
+      - my-solution-network
+    environment:
+      - POSTGRES_USER=glow
+      - POSTGRES_PASSWORD=glow
+    # don't expose ports, consumed internally by another container
+    volumes:
+      - ./container_data/db:/var/lib/postgresql/data
+
+  my-solution-api:
+    image: my_solution_api:latest
+    container_name: my-solution-container-api
+    networks:
+      - my-solution-network
+    environment:
+      # All are optional
+      - GLOW_PROJECT_FILES_DIRECTORY=/projects
+      - GLOW_METHOD_EXECUTION_DIRECTORY=/transactions
+      - GLOW_API_HOST=0.0.0.0
+      - GLOW_API_PORT=50000
+      - GLOW_DEBUG=1
+      - GLOW_DATABASE_TYPE=postgresql
+      - GLOW_DATABASE_LOCATION=postgresql://glow:glow@my-solution-container-postgresql:5432
+    ports:
+      - 50000:50000
+    volumes:
+      # All are optional
+      - ./container_data/projects:/projects  # Should match GLOW_PROJECT_FILES_DIRECTORY
+      - ./container_data/transactions:/transactions  # Should match GLOW_METHOD_EXECUTION_DIRECTORY
+{% if cookiecutter.with_dash_ui == "yes" %}
+  my-solution-ui:
+    image: my_solution_ui:latest
+    container_name: my-solution-container-ui
+    networks:
+      - my-solution-network
+    environment:
+      # All are optional
+      - GLOW_DEBUG=1
+      - GLOW_UI_HOST=0.0.0.0
+      - GLOW_UI_PORT=50001
+      - GLOW_API_URL=http://my-solution-container-api:50000
+    ports:
+      - 50001:50001
+{% endif %}
+
+networks:
+  my-solution-network:
+    driver: bridge

@@ -52,6 +52,8 @@ DESIRED_STRUCTURE = [
     "CONTRIBUTING.md",
     "CONTRIBUTORS.md",
     "LICENSE.rst",
+    "Dockerfile",
+    "docker-compose.yaml",
     "poetry.lock",
     "pyproject.toml",
     "README.rst",

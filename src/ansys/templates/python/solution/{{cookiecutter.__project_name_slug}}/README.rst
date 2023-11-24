@@ -97,14 +97,43 @@ Installation
 From now on, all the commands must be executed within the virtual environment.
 
 
-Start the solution
-==================
+Start the solution using Desktop orchestrator
+=============================================
 
-To start the solution run the following command anywhere in the project:
+To start the solution using a desktop orchestrator run the following commands anywhere in the project:
+
+
+1. Install the desktop dependencies:
+
+  .. code:: bash
+
+    poetry install --with desktop
+
+2. Launch the solution:
 
   .. code:: bash
 
     saf run
+
+
+Start the solution using Docker
+===============================
+
+To start the solution using a docker run the following commands in the root of the project:
+
+
+1. Build docker images:
+
+  .. code:: bash
+
+    docker build -t my_solution_api:latest --target my_solution_api --build-arg SOLUTIONS_PRIVATE_PYPI_PAT=$SOLUTIONS_PRIVATE_PYPI_PAT .
+    docker build -t my_solution_ui:latest --target my_solution_ui --build-arg SOLUTIONS_PRIVATE_PYPI_PAT=$SOLUTIONS_PRIVATE_PYPI_PAT .
+
+2. Launch the solution:
+
+  .. code:: bash
+
+    docker compose up
 
 
 Documentation
