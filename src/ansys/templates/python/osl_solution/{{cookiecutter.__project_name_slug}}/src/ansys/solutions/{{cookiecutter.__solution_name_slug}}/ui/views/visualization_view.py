@@ -41,11 +41,10 @@ def layout(problem_setup_step: ProblemSetupStep, monitoring_step: MonitoringStep
         Output("visualization-component-div2", "children"),
         Output("visualization-component-div1", "style"),
         Output("visualization-component-div2", "style"),
-        Output("visualization-store", "value"),
         Input("visualization_auto_update", "n_intervals"),
         State("url", "pathname"),
     )
-    def update_view(n_intervals, count, pathname):
+    def update_view(n_intervals, pathname):
         """Update design table."""
     
         # Get project
