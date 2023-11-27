@@ -5,7 +5,7 @@ build-backend = "poetry.core.masonry.api"
 # The following lines were added to enforce the poetry version needed for the project.
 # It will be read by the setup_environment.py script to install this version.
 [build-system-requirements]
-build-system-version = "1.6.1"
+build-system-version = "1.7.0"
 
 [tool.poetry]
 name = "{{cookiecutter.__pkg_name}}"
@@ -15,7 +15,6 @@ license = "Proprietary"
 authors = ["ANSYS, Inc. <solution-applications.maintainers@ansys.com>"]
 maintainers = ["ANSYS, Inc. <solution-applications.maintainers@ansys.com>"]
 readme = "README.rst"
-repository = "{{ cookiecutter.__repository_url }}"
 documentation = "{{ cookiecutter.__repository_url }}"
 keywords = ["Ansys Solutions"]
 classifiers = [
