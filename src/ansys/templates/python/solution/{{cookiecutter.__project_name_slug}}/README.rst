@@ -118,9 +118,9 @@ To start the solution using a docker run the following commands in the root of t
 
   .. code:: bash
 
-    docker build -t my_solution_api:latest --target my_solution_api --build-arg SOLUTIONS_PRIVATE_PYPI_PAT=$SOLUTIONS_PRIVATE_PYPI_PAT .
+    docker build --build-arg SOLUTIONS_PRIVATE_PYPI_PAT=$SOLUTIONS_PRIVATE_PYPI_PAT --target solution_api -t {{cookiecutter.__pkg_name}}-api:{{cookiecutter.__version}} .
 {% if cookiecutter.with_dash_ui == "yes" %}
-    docker build -t my_solution_ui:latest --target my_solution_ui --build-arg SOLUTIONS_PRIVATE_PYPI_PAT=$SOLUTIONS_PRIVATE_PYPI_PAT .
+    docker build --build-arg SOLUTIONS_PRIVATE_PYPI_PAT=$SOLUTIONS_PRIVATE_PYPI_PAT --target solution_ui -t {{cookiecutter.__pkg_name}}-ui:{{cookiecutter.__version}} .
 {% endif %}
 2. Launch the solution:
 

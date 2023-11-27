@@ -4,9 +4,9 @@ services:
 
   postgresql:
     image: postgres:latest
-    container_name: my-solution-container-postgresql
+    container_name: {{cookiecutter.__pkg_name}}-database-container
     networks:
-      - my-solution-network
+      - {{cookiecutter.__pkg_name}}-network
     environment:
       - POSTGRES_USER=glow
       - POSTGRES_PASSWORD=glow
@@ -14,11 +14,11 @@ services:
     volumes:
       - ./container_data/db:/var/lib/postgresql/data
 
-  my-solution-api:
-    image: my_solution_api:latest
-    container_name: my-solution-container-api
+  glow-api:
+    image: {{cookiecutter.__pkg_name}}-api:{{cookiecutter.__version}}
+    container_name: {{cookiecutter.__pkg_name}}-api-container
     networks:
-      - my-solution-network
+      - {{cookiecutter.__pkg_name}}-network
     environment:
       # All are optional
       - GLOW_PROJECT_FILES_DIRECTORY=/projects
@@ -27,7 +27,7 @@ services:
       - GLOW_API_PORT=50000
       - GLOW_DEBUG=1
       - GLOW_DATABASE_TYPE=postgresql
-      - GLOW_DATABASE_LOCATION=postgresql://glow:glow@my-solution-container-postgresql:5432
+      - GLOW_DATABASE_LOCATION=postgresql://glow:glow@{{cookiecutter.__pkg_name}}-database-container:5432
     ports:
       - 50000:50000
     volumes:
@@ -35,21 +35,21 @@ services:
       - ./container_data/projects:/projects  # Should match GLOW_PROJECT_FILES_DIRECTORY
       - ./container_data/transactions:/transactions  # Should match GLOW_METHOD_EXECUTION_DIRECTORY
 {% if cookiecutter.with_dash_ui == "yes" %}
-  my-solution-ui:
-    image: my_solution_ui:latest
-    container_name: my-solution-container-ui
+  glow-ui:
+    image: {{cookiecutter.__pkg_name}}-ui:{{cookiecutter.__version}}
+    container_name: {{cookiecutter.__pkg_name}}-ui-container
     networks:
-      - my-solution-network
+      - {{cookiecutter.__pkg_name}}-network
     environment:
       # All are optional
       - GLOW_DEBUG=1
       - GLOW_UI_HOST=0.0.0.0
       - GLOW_UI_PORT=50001
-      - GLOW_API_URL=http://my-solution-container-api:50000
+      - GLOW_API_URL=http://{{cookiecutter.__pkg_name}}-api-container:50000
     ports:
       - 50001:50001
 {% endif %}
 
 networks:
-  my-solution-network:
+  {{cookiecutter.__pkg_name}}-network:
     driver: bridge

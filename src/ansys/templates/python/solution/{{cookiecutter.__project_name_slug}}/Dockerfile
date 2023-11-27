@@ -1,34 +1,59 @@
+# === Base Stage ===
 FROM python:3.10-alpine as base
 
+# credentials will only be available during image built
 ARG SOLUTIONS_PRIVATE_PYPI_PAT
 
-RUN apk add --no-cache build-base libffi libressl gcc python3-dev linux-headers
-
-# TODO: get poetry version from pyproject file
+# TODO: get poetry version from pyproject file?
 RUN pip install --upgrade pip && \
     pip install poetry==1.5.1
-
 RUN poetry config http-basic.solutions-private-pypi PAT ${SOLUTIONS_PRIVATE_PYPI_PAT}
-RUN poetry config virtualenvs.create false
 
 COPY pyproject.toml poetry.lock /app/
 COPY src/ /app/src/
-COPY README.rst /app/README.rst
+COPY README.rst /app/
 
 WORKDIR /app
 
-FROM base as my_solution_api
+# TODO: include documentation in the package?
 
-RUN poetry install
+RUN poetry install --only build -vv && \
+    poetry build --format wheel && \
+    poetry export --without-hashes --format requirements.txt --output requirements_api.txt && \
+    poetry export --only ui --without-hashes --format requirements.txt --output requirements_ui.txt
 
-# We use glow_engine instead of my_solution_main as entrypoint because the latter also loads
+
+# === API Stage ===
+FROM python:3.10-alpine as solution_api
+
+# credentials will only be available during image built
+ARG SOLUTIONS_PRIVATE_PYPI_PAT
+
+COPY --from=base /app/dist/*.whl /dist/
+COPY --from=base /app/requirements_api.txt /dist/
+
+# required by psutil for the psutil._psutil_linux extension
+# TODO: how can we skip it and use a pre-built psutil that already includes it?
+RUN apk add --no-cache build-base linux-headers
+
+RUN pip install --upgrade pip && \
+    pip install /dist/*.whl -r /dist/requirements_api.txt --extra-index-url "https://PAT:${SOLUTIONS_PRIVATE_PYPI_PAT}@pkgs.dev.azure.com/pyansys/_packaging/ansys-solutions/pypi/simple/"
+RUN apk del build-base linux-headers && \
+    rm -rf /var/cache/apk/* /root/.cache/pip/* /dist
+
+# We use glow_engine instead of solutions' main as entrypoint because the latter also loads
 # the UI python files, carrying their dash dependencies, even if only the API is launched.
 ENTRYPOINT ["glow_engine", "api"]
 
 {% if cookiecutter.with_dash_ui == "yes" %}
-FROM my_solution_api as my_solution_ui
+# === UI Stage ===
+# Currently, UI is designed as an extra of the API server, that's why it's built over the API image, including its dependencies.
+FROM solution_api as solution_ui
 
-RUN poetry install --with ui
+COPY --from=base /app/requirements_ui.txt /dist/
+
+RUN pip install -r /dist/requirements_ui.txt --extra-index-url "https://PAT:${SOLUTIONS_PRIVATE_PYPI_PAT}@pkgs.dev.azure.com/pyansys/_packaging/ansys-solutions/pypi/simple/"
+RUN rm -rf /root/.cache/pip/* /dist
 
 ENTRYPOINT ["glow_engine", "ui"]
 {% endif %}
