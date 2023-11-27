@@ -15,7 +15,6 @@ license = "Proprietary"
 authors = ["ANSYS, Inc. <solution-applications.maintainers@ansys.com>"]
 maintainers = ["ANSYS, Inc. <solution-applications.maintainers@ansys.com>"]
 readme = "README.rst"
-documentation = "{{ cookiecutter.__repository_url }}"
 keywords = ["Ansys Solutions"]
 classifiers = [
     "Development Status :: 3 - Alpha",
