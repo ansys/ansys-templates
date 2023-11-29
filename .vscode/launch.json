@@ -13,16 +13,6 @@
         "port": 5724
       },
       "justMyCode": false
-    },
-    {
-      "name": "Python: Remote Attach Dash",
-      "type": "python",
-      "request": "attach",
-      "connect": {
-        "host": "localhost",
-        "port": 5725
-      },
-      "justMyCode": false
     }
   ]
 }
