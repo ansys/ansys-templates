@@ -19,9 +19,10 @@ WORKDIR /app
 
 RUN poetry install --only build -vv && \
     poetry build --format wheel && \
-    poetry export --without-hashes --format requirements.txt --output requirements_api.txt && \
-    poetry export --only ui --without-hashes --format requirements.txt --output requirements_ui.txt
-
+    poetry export --without-hashes --format requirements.txt --output requirements_api.txt
+{% if cookiecutter.with_dash_ui == "yes" %}
+RUN poetry export --only ui --without-hashes --format requirements.txt --output requirements_ui.txt
+{% endif %}
 
 # === API Stage ===
 FROM python:3.10-alpine as solution_api
