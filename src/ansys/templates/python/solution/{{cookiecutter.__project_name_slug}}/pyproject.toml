@@ -44,7 +44,7 @@ priority = "primary"
 python = ">=3.8, <3.11"
 ansys-dash-treeview = {version = "0.0.1.dev0", source = "solutions-private-pypi"}
 ansys-saf-portal = {version = "~1.0rc2", source = "solutions-private-pypi"}
-ansys-saf-desktop = {version = "~1.0rc1", source = "solutions-private-pypi"}
+ansys-saf-desktop = {version = "~1.0rc2", source = "solutions-private-pypi"}
 ansys-solutions-dash-lib = {version = "^0.4", source = "solutions-private-pypi"}
 {% if cookiecutter.with_dash_ui == "yes" %}
 dash = {version = "2.6.1"}
