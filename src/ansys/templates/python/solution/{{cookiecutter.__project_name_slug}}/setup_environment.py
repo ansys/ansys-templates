@@ -599,7 +599,7 @@ def configure_build_system(args: object) -> None:
         configure_poetry(
             DEPENDENCY_MANAGER_PATHS["common"]["build_system_venv"],
             args.credentials_management_method,
-            modern_installation = not args.disable_modern_installation
+            modern_installation=not args.disable_modern_installation
         )
         print()
         return

@@ -52,7 +52,7 @@ extensions = [
     "numpydoc",
     "sphinx.ext.intersphinx",
     "sphinx_copybutton",
-    "sphinx_tabs.tabs"
+    "sphinx_tabs.tabs",
 ]
 
 # Intersphinx mapping
