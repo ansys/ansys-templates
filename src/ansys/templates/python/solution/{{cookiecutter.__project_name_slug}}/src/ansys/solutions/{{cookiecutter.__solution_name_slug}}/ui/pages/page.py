@@ -9,10 +9,8 @@ import dash_bootstrap_components as dbc
 from dash_extensions.enrich import Input, Output, callback_context, dcc, html
 from dash_iconify import DashIconify
 
-from ansys.solutions.{{ cookiecutter.__solution_name_slug }}.solution.definition import (
-    {{ cookiecutter.__solution_definition_name }},
-)
-from ansys.solutions.{{ cookiecutter.__solution_name_slug }}.ui.pages import intro_page, first_page, second_page
+from ansys.solutions.{{ cookiecutter.__solution_name_slug }}.solution.definition import {{ cookiecutter.__solution_definition_name }}
+from ansys.solutions.{{ cookiecutter.__solution_name_slug }}.ui.pages import first_page, intro_page, second_page
 
 step_list = [
     {
@@ -29,7 +27,7 @@ step_list = [
         "key": "second_step",
         "text": "Second Step",
         "depth": 0,
-    }
+    },
 ]
 
 
@@ -39,23 +37,18 @@ layout = html.Div(
         dbc.Stack(
             [
                 html.Div(
-                    [
-                        html.Img(
-                        src = r"/assets/logos/ansys-solutions-horizontal-logo.png",
-                        style={'width': '80%'}
-                    )
-                    ],
+                    [html.Img(src=r"/assets/logos/ansys-solutions-horizontal-logo.png", style={"width": "80%"})],
                 ),
                 html.Div(
                     [
                         dbc.Button(
                             "Project Name:",
-                            id = "project-name",
-                            disabled = True,
+                            id="project-name",
+                            disabled=True,
                             style={
                                 "color": "rgba(0, 0, 0, 1)",
                                 "background-color": "rgba(255, 255, 255, 1)",
-                                "border-color": "rgba(0, 0, 0, 1)"
+                                "border-color": "rgba(0, 0, 0, 1)",
                             },
                         )
                     ],
@@ -63,8 +56,8 @@ layout = html.Div(
                 ),
                 html.Div(id="return-to-portal"),
             ],
-            direction = "horizontal",
-            gap = 3,
+            direction="horizontal",
+            gap=3,
         ),
         html.Br(),
         dbc.Row(
@@ -82,13 +75,7 @@ layout = html.Div(
                     width=2,
                     style={"background-color": "rgba(242, 242, 242, 0.6)"},  # Ansys grey
                 ),
-                dbc.Col(
-                    html.Div(
-                        id="page-content",
-                        style={"padding-right": "1%"}
-                    ),
-                    width=10
-                ),
+                dbc.Col(html.Div(id="page-content",style={"padding-right": "1%"}),width=10),
             ],
         ),
     ]
@@ -108,11 +95,11 @@ def return_to_portal(pathname):
         else [
             dbc.Button(
                 "Back to Projects",
-                id = "return-to-portal",
-                className = "me-2",
-                n_clicks = 0,
-                href = portal_ui_url,
-                style = {"background-color": "rgba(0, 0, 0, 1)", "border-color": "rgba(0, 0, 0, 1)"},
+                id="return-to-portal",
+                className="me-2",
+                n_clicks=0,
+                href=portal_ui_url,
+                style={"background-color": "rgba(0, 0, 0, 1)", "border-color": "rgba(0, 0, 0, 1)"},
             )
         ]
     )

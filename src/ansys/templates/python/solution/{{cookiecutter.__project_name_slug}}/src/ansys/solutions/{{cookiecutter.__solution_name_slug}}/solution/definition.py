@@ -12,6 +12,7 @@ from ansys.solutions.{{ cookiecutter.__solution_name_slug }}.solution.second_ste
 
 class Steps(StepsModel):
     """Workflow definition."""
+
     intro_step: IntroStep
     first_step: FirstStep
     second_step: SecondStep
@@ -19,5 +20,6 @@ class Steps(StepsModel):
 
 class {{ cookiecutter.__solution_definition_name }}(Solution):
     """Solution definition."""
+    
     display_name: str = "{{ cookiecutter.solution_display_name.replace('"', '') }}"
     steps: Steps
