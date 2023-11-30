@@ -66,14 +66,14 @@ def layout(problem_setup_step: ProblemSetupStep, monitoring_step: MonitoringStep
     )
     def update_view(n_intervals, pathname):
         """Update design table."""
-    
+
         # Get project
         project = DashClient[{{ cookiecutter.__solution_definition_name }}].get_project(pathname)
         # Get problem setup step
         problem_setup_step = project.steps.problem_setup_step
         # Get monitoring step
         monitoring_step = project.steps.monitoring_step
-    
+
         if monitoring_step.auto_update_activated:
             # Get project data
             full_project_status_info = json.loads(problem_setup_step.full_project_status_info_file.read_text())
