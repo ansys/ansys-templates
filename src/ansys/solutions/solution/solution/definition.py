@@ -12,6 +12,7 @@ from ansys.solutions.solution.solution.second_step import SecondStep
 
 class Steps(StepsModel):
     """Workflow definition."""
+
     intro_step: IntroStep
     first_step: FirstStep
     second_step: SecondStep
@@ -19,5 +20,6 @@ class Steps(StepsModel):
 
 class SolutionSolution(Solution):
     """Solution definition."""
+
     display_name: str = "My Solution"
     steps: Steps

@@ -17,7 +17,8 @@ def layout(step: IntroStep):
 
     solution_workflow_sketch_encoded = base64.b64encode(
         open(
-            os.path.join(Path(__file__).parent.parent.absolute(), "assets", "images", "solution-workflow-sketch.png"), "rb"
+            os.path.join(Path(__file__).parent.parent.absolute(), "assets", "images", "solution-workflow-sketch.png"),
+            "rb",
         ).read()
     )
 
