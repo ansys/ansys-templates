@@ -10,7 +10,7 @@ from dash_extensions.enrich import Input, Output, callback_context, dcc, html
 from dash_iconify import DashIconify
 
 from ansys.solutions.{{ cookiecutter.__solution_name_slug }}.solution.definition import {{ cookiecutter.__solution_definition_name }}
-from ansys.solutions.{{ cookiecutter.__solution_name_slug }}.ui.pages import intro_page, first_page, second_page
+from ansys.solutions.{{ cookiecutter.__solution_name_slug }}.ui.pages import first_page, intro_page, second_page
 
 step_list = [
     {
@@ -33,7 +33,7 @@ step_list = [
 
 layout = html.Div(
     [
-        dcc.Location(id="url", refresh=False), # represents the browser address bar and doesn't render anything
+        dcc.Location(id="url", refresh=False),  # represents the browser address bar and doesn't render anything
         dbc.Stack(
             [
                 html.Div(
@@ -75,7 +75,7 @@ layout = html.Div(
                     width=2,
                     style={"background-color": "rgba(242, 242, 242, 0.6)"},  # Ansys grey
                 ),
-                dbc.Col(html.Div(id="page-content",style={"padding-right": "1%"}),width=10),
+                dbc.Col(html.Div(id="page-content", style={"padding-right": "1%"}), width=10),
             ],
         ),
     ]

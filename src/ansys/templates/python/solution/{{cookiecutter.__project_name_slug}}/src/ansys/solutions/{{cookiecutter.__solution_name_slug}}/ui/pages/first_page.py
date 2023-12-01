@@ -4,7 +4,7 @@
 
 
 from ansys.saf.glow.client.dashclient import DashClient, callback
-from ansys.solutions.dash_components.table import InputRow,OutputRow
+from ansys.solutions.dash_components.table import InputRow, OutputRow
 from dash_extensions.enrich import Input, Output, State, dcc, html
 
 from ansys.solutions.{{ cookiecutter.__solution_name_slug }}.solution.definition import {{cookiecutter.__solution_definition_name}}
