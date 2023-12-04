@@ -21,6 +21,7 @@ copyright = f"(c) {datetime.now().year} ANSYS, Inc. All rights reserved"
 author = "ANSYS, Inc."
 release = version = package_configuration["tool"]["poetry"]["version"]
 cname = os.getenv("DOCUMENTATION_CNAME", "nocname.com")
+repository = package_configuration["tool"]["poetry"].get("repository")
 
 # ============================================ [Options for HTML output] ============================================ #
 
@@ -32,7 +33,7 @@ html_short_title = html_title = package_configuration["tool"]["poetry"]["name"]
 
 # specify the location of your github repo
 html_theme_options = {
-    "github_url": package_configuration["tool"]["poetry"]["repository"],
+    "github_url": repository if repository is not None else "",
     "show_prev_next": False,
     "show_breadcrumbs": True,
     "additional_breadcrumbs": [
