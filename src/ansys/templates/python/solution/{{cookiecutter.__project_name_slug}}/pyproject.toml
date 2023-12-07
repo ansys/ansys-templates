@@ -5,7 +5,7 @@ build-backend = "poetry.core.masonry.api"
 # The following lines were added to enforce the poetry version needed for the project.
 # It will be read by the setup_environment.py script to install this version.
 [build-system-requirements]
-build-system-version = "1.8.0"
+build-system-version = "1.7.0"
 
 [tool.poetry]
 name = "{{cookiecutter.__pkg_name}}"
@@ -47,11 +47,19 @@ ansys-saf-portal = {version = "1.0rc3", source = "solutions-private-pypi"}
 ansys-saf-desktop = {version = "1.0rc3", source = "solutions-private-pypi"}
 ansys-solutions-dash-lib = {version = "^0.4", source = "solutions-private-pypi"}
 {% if cookiecutter.with_dash_ui == "yes" %}
+<<<<<<< HEAD
 dash = {version = "2.6.1"}
 dash_bootstrap_components = {version = "1.4.1"}
 dash-extensions = {version = "0.1.3"}
 dash-iconify = {version = "0.1.2"}
 dash-uploader = {version = "0.6.0"}
+=======
+dash = "^2.6"
+dash_bootstrap_components = "^1.2"
+dash-extensions = ">=0.1.13"
+dash-iconify = "^0.1"
+dash-uploader = "^0.6"
+>>>>>>> main
 {% endif %}
 
 [tool.poetry.group.doc]
