@@ -73,9 +73,8 @@ class DesignTableAIO(html.Div):
                 "textAlign": "center",
                 "font_family": "Roboto",
                 "font_size": "15px",
-                "overflowX": "none", # Scroll through overflow
+                "overflowX": "scroll", # Scroll through overflow
                 "maxWidth": 1,
-                "text-overflow": "ellipsis",
             },
         }
 
