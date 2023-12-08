@@ -36,20 +36,17 @@ class DesignTableAIO(html.Div):
         datatable_props = {
             "data": data.to_dict('records'),
             "columns": [{"name": i, "id": i, "type": "text"} for i in data.columns],
-            "fixed_rows": {"headers": True},
+            "editable": True, # user can select and copy data
+            "fixed_rows": {"data": 0},
+            "fixed_columns": {"data": 0},
             "style_header": {
                 "textAlign": "center",
                 "font_family": "Roboto",
                 "font_size": "15px",
                 "fontWeight": "bold",
             },
-            "style_cell": {
-                "textAlign": "center",
-                "font_family": "Roboto",
-                "font_size": "15px",
-                "whiteSpace": "normal",
-            },
-            "style_data_conditional": [
+            "style_data_conditional":
+            [
                 {
                     "if": {"column_id": "Status", "filter_query": '{Status} eq "Succeeded"'},
                     "backgroundColor": "rgb(223, 240, 208)",
@@ -72,6 +69,13 @@ class DesignTableAIO(html.Div):
                 },
             ],
             "style_as_list_view": True,
+            "style_cell": {
+                "textAlign": "center",
+                "font_family": "Roboto",
+                "font_size": "15px",
+                "overflowX": "scroll", # Scroll through overflow
+                "maxWidth": 1,
+            },
         }
 
         super().__init__([
@@ -104,6 +108,8 @@ class DesignTableAIO(html.Div):
 
             for col, dtype in data.dtypes.items():
                 if dtype == "bool":
+                    data[col] = data[col].astype("str")
+                elif dtype == "object":
                     data[col] = data[col].astype("str")
 
             data = data.round(6)
