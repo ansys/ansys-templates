@@ -50,7 +50,7 @@ def layout(problem_setup_step: ProblemSetupStep, monitoring_step: MonitoringStep
             ),
             dcc.Interval(
                 id="design_table_auto_update",
-                interval=monitoring_step.auto_update_frequency,  # in milliseconds
+                interval=5000,  # in milliseconds
                 n_intervals=0,
                 disabled=False if monitoring_step.auto_update_activated else True
             ),
