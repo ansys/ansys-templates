@@ -32,19 +32,24 @@ packages = [
 ]
 
 [[tool.poetry.source]]
+name = "PyPI"
+priority = "primary"
+
+[[tool.poetry.source]]
 name = "solutions-private-pypi"
 url = "https://pkgs.dev.azure.com/pyansys/_packaging/ansys-solutions/pypi/simple/"
 priority = "supplemental"
 
 [[tool.poetry.source]]
-name = "PyPI"
-priority = "primary"
+name = "pyansys-private-pypi"
+url = "https://pkgs.dev.azure.com/pyansys/_packaging/pyansys/pypi/simple/"
+priority = "supplemental"
 
 [tool.poetry.dependencies]
 python = ">=3.8, <3.11"
 ansys-optislang-core = "0.4"
 ansys-saf-glow = {version = "0.4.4", source = "solutions-private-pypi"}
-ansys-saf-pim-light-server = {version = "^0.2.0", source = "solutions-private-pypi"}
+ansys-saf-pim-light-server = {version = "^0.3.0.dev1", source = "pyansys-private-pypi"}
 ansys-saf-portal = {version = "0.5.0", source = "solutions-private-pypi"}
 ansys-solutions-optislang-frontend-components = {version = "0.1.2", source = "solutions-private-pypi"}
 ansys-web-components-dash = {version = "^0.0.dev2", source = "solutions-private-pypi"}
