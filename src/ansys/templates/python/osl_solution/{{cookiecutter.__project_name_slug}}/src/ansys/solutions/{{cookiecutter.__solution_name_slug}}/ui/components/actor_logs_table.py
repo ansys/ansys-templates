@@ -23,6 +23,7 @@ class ActorLogsTableAIO(html.Div):
         of a `dash_table.DataTable` component.
 
         - `data` - Data to be displayed in the datatable component.
+        - `store_value` - Page number to be persisted in the pagination.
         - `aio_id` - The All-in-One component ID used to generate the table components's dictionary IDs.
         """
 

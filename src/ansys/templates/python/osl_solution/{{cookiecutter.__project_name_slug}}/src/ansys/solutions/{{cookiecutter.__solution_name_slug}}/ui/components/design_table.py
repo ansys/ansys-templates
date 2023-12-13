@@ -20,11 +20,12 @@ class DesignTableAIO(html.Div):
 
     ids = ids
 
-    def __init__(self, data: dict, aio_id: str = None):
+    def __init__(self, data: dict, store_value: int= None, aio_id: str = None):
         """DesignTableAIO is an All-in-One component that is composed
         of a `dash_table.DataTable` component.
 
         - `data` - Data to be displayed in the datatable component.
+        - `store_value` - Page number to be persisted in the pagination.
         - `aio_id` - The All-in-One component ID used to generate the table components's dictionary IDs.
         """
 
@@ -69,6 +70,7 @@ class DesignTableAIO(html.Div):
                 },
             ],
             "style_as_list_view": True,
+            "page_current": store_value,
             "style_cell": {
                 "textAlign": "center",
                 "font_family": "Roboto",

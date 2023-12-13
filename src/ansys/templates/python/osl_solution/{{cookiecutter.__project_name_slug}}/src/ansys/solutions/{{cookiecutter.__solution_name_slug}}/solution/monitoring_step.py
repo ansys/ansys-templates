@@ -32,6 +32,7 @@ class MonitoringStep(StepModel):
     auto_update_activated: bool = True
     actor_uid: Optional[str] = None
     selected_page: int = 0
+    design_table_selected_page: int = 0
     project_command_execution_status: dict = {"alert-message": "", "alert-color": "info"}
     actor_command_execution_status: dict = {"alert-message": "", "alert-color": "info"}
     project_btn_group_options: List = [

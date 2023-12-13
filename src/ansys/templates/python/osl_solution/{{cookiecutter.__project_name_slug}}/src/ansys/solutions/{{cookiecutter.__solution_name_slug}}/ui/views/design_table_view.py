@@ -46,6 +46,8 @@ def layout(problem_setup_step: ProblemSetupStep, monitoring_step: MonitoringStep
                 id="design_table",
                 children=DesignTableAIO(
                     design_table_data,
+                    monitoring_step.design_table_selected_page,
+                    aio_id = "design_table_logs"
                 )
             ),
             dcc.Interval(
@@ -54,6 +56,7 @@ def layout(problem_setup_step: ProblemSetupStep, monitoring_step: MonitoringStep
                 n_intervals=0,
                 disabled=False if monitoring_step.auto_update_activated else True
             ),
+            html.Div(id="dummy-table-output", style= {'display': 'none'}),
         ]
     )
 
@@ -102,6 +105,7 @@ def display_alerts(n_intervals, pathname):
 
 @callback(
     Output("design_table", "children"),
+    Output(DesignTableAIO.ids.datatable("design_table_logs"), "store_value"),
     Output("selected_state_dropdown", "options"),
     Output("selected_state_dropdown", "value"),
     Output("design_table_auto_update", "disabled"),
@@ -137,6 +141,7 @@ def update_view(n_intervals, pathname):
                     monitoring_step.selected_state_id = project_data.get("actors").get(monitoring_step.selected_actor_from_treeview).get("states_ids")[0]
             return (
                 DesignTableAIO(design_table_data),
+                monitoring_step.design_table_selected_page,
                 project_data.get("actors").get(monitoring_step.selected_actor_from_treeview).get("states_ids"),
                 monitoring_step.selected_state_id,
                 True if problem_setup_step.osl_project_state in ["NOT STARTED", "FINISHED", "ABORTED"] else False
@@ -146,3 +151,20 @@ def update_view(n_intervals, pathname):
             raise PreventUpdate
     else:
         raise PreventUpdate
+
+
+@callback(
+    Output("dummy-table-output", 'children'),
+    Input(DesignTableAIO.ids.datatable("design_table_logs"), "page_current"),
+    State("url", "pathname"),
+    prevent_initial_call=True,
+)
+def update_table(page_current, pathname):
+
+    # Get project
+    project = DashClient[Oscillator_CalibrationSolution].get_project(pathname)
+
+    # Get monitoring step
+    monitoring_step = project.steps.monitoring_step
+    monitoring_step.design_table_selected_page = page_current
+    return f"Dummy output updated {page_current}"
