@@ -38,7 +38,7 @@ class DesignTableAIO(html.Div):
             "data": data.to_dict('records'),
             "columns": [{"name": i, "id": i, "type": "text"} for i in data.columns],
             "editable": True, # user can select and copy data
-            "fixed_rows": {"data": 0},
+            "fixed_rows": {"headers": True},
             "fixed_columns": {"data": 0},
             "style_header": {
                 "textAlign": "center",
