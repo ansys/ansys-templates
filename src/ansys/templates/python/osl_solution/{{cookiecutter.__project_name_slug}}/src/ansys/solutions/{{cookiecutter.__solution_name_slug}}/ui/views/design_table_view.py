@@ -162,7 +162,7 @@ def update_view(n_intervals, pathname):
 def update_table(page_current, pathname):
 
     # Get project
-    project = DashClient[Oscillator_CalibrationSolution].get_project(pathname)
+    project = DashClient[{{ cookiecutter.__solution_definition_name }}].get_project(pathname)
 
     # Get monitoring step
     monitoring_step = project.steps.monitoring_step
