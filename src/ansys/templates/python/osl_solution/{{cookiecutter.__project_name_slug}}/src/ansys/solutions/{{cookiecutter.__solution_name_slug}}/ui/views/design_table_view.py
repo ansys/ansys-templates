@@ -105,7 +105,6 @@ def display_alerts(n_intervals, pathname):
 
 @callback(
     Output("design_table", "children"),
-    Output(DesignTableAIO.ids.datatable("design_table_logs"), "store_value"),
     Output("selected_state_dropdown", "options"),
     Output("selected_state_dropdown", "value"),
     Output("design_table_auto_update", "disabled"),
@@ -140,8 +139,7 @@ def update_view(n_intervals, pathname):
                 if len(project_data.get("actors").get(monitoring_step.selected_actor_from_treeview).get("states_ids")):
                     monitoring_step.selected_state_id = project_data.get("actors").get(monitoring_step.selected_actor_from_treeview).get("states_ids")[0]
             return (
-                DesignTableAIO(design_table_data),
-                monitoring_step.design_table_selected_page,
+                DesignTableAIO(design_table_data,monitoring_step.design_table_selected_page),
                 project_data.get("actors").get(monitoring_step.selected_actor_from_treeview).get("states_ids"),
                 monitoring_step.selected_state_id,
                 True if problem_setup_step.osl_project_state in ["NOT STARTED", "FINISHED", "ABORTED"] else False
