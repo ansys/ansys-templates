@@ -1,5 +1,5 @@
 # ---------------------------
-FROM python:3.8-slim AS base
+FROM python:3.9-slim AS base
 
 ENV PYTHONDONTWRITEBYTECODE=1
 ENV PYTHONUNBUFFERED=1
