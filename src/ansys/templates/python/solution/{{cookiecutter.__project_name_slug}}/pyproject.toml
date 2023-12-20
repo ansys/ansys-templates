@@ -57,7 +57,7 @@ dash-uploader = "^0.6"
 [tool.poetry.group.doc]
 optional = true
 [tool.poetry.group.doc.dependencies]
-ansys-sphinx-theme = "^0.8.0"
+ansys-sphinx-theme = "^0.12.5"
 numpydoc = "^1.4.0"
 sphinx = "5.1.0"
 sphinx-copybutton = "^0.5.1"
