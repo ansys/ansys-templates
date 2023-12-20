@@ -178,13 +178,13 @@ For building documentation, you can either run the usual rules provided in the
 
 .. code:: bash
 
-    make -C doc/ html && your_browser_name doc/html/index.html
+    make -C doc/ html && open doc/html/index.html
 
 However, the recommended way of checking documentation integrity is using:
 
 .. code:: bash
 
-    tox -e doc && your_browser_name .tox/doc_out/index.html
+    tox -e doc && open .tox/doc_out/index.html
 
 
 Distributing
