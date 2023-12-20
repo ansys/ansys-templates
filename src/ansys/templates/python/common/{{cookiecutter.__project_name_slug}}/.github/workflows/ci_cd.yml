@@ -11,7 +11,6 @@ env:
   MAIN_PYTHON_VERSION: '{{ cookiecutter.__requires_python }}'
   DOCUMENTATION_CNAME: '{{ cookiecutter.__product_name_slug }}.docs.pyansys.com'
   LIBRARY_NAME: '{{ cookiecutter.__pkg_namespace | replace(".", "-") }}'
-  LIBRARY_NAMESPACE: '{{ cookiecutter.__pkg_namespace }}'
 
 concurrency:
   group: {{ '${{ github.workflow }}-${{ github.ref }}' }}
@@ -55,7 +54,6 @@ jobs:
       - uses: ansys/actions/build-wheelhouse@v4
         with:
           library-name: {{ '${{ env.LIBRARY_NAME }}' }}
-          library-namespace: {{ '${{ env.LIBRARY_NAMESPACE }}' }}
           operating-system: {{ '${{ matrix.os }}' }}
           python-version: {{ '${{ matrix.python-version }}' }}
 
