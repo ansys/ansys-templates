@@ -19,7 +19,7 @@ setup(
     description="A basic python package",
     long_description=open("README.rst").read(),
     install_requires=["importlib-metadata >=4.0"],
-    python_requires=">=3.8",
+    python_requires=">=3.9",
     packages=find_packages(where="src"),
     package_dir={"": "src"},
 )
