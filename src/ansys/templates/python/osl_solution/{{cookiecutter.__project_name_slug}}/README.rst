@@ -78,7 +78,7 @@ Installation
 
   .. code:: bash
 
-    python setup_environment.py -d run
+    python setup_environment.py -d run -m
 
 5. Activate the virtual environment:
 

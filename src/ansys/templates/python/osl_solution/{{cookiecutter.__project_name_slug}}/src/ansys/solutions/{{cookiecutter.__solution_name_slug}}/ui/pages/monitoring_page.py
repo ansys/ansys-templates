@@ -16,7 +16,6 @@ from ansys.solutions.{{ cookiecutter.__solution_name_slug }}.solution.monitoring
 from ansys.solutions.{{ cookiecutter.__solution_name_slug }}.ui.views import (
     design_table_view,
     project_summary_view,
-    result_files_view,
     scenery_view,
     status_overview_view,
     summary_view,
@@ -27,7 +26,7 @@ from ansys.solutions.{{ cookiecutter.__solution_name_slug }}.utilities.common_fu
 
 def layout(problem_setup_step: ProblemSetupStep, monitoring_step: MonitoringStep) -> html.Div:
 
-    actor_info = extract_dict_by_key(problem_setup_step.project_tree, "uid", monitoring_step.selected_actor_from_treeview, expect_unique=True, return_index=False)
+    actor_info = extract_dict_by_key(problem_setup_step.osl_project_tree, "uid", monitoring_step.selected_actor_from_treeview, expect_unique=True, return_index=False)
     list_of_tabs = update_list_of_tabs(actor_info)
 
     return html.Div(
@@ -65,29 +64,30 @@ def layout(problem_setup_step: ProblemSetupStep, monitoring_step: MonitoringStep
 @callback(
     Output("monitoring_page_content", "children"),
     Input("monitoring_tabs", "active_tab"),
-    Input("url", "pathname"),
+    Input("selected_state_dropdown", "value"),
+    State("url", "pathname"),
 )
-def update_page_content(active_tab, pathname):
+def update_page_content(selected_tab, selected_state_id, pathname):
     """Update the page content according to the selected tab."""
 
     project = DashClient[{{ cookiecutter.__solution_definition_name }}].get_project(pathname)
     problem_setup_step = project.steps.problem_setup_step
     monitoring_step = project.steps.monitoring_step
 
-    if active_tab == "project_summary_tab":
+    monitoring_step.selected_state_id = selected_state_id
+
+    if selected_tab == "project_summary_tab":
         return project_summary_view.layout(problem_setup_step, monitoring_step)
-    elif active_tab == "summary_tab":
+    elif selected_tab == "summary_tab":
         return summary_view.layout(problem_setup_step, monitoring_step)
-    elif active_tab == "result_files_tab":
-        return result_files_view.layout(monitoring_step)
-    elif active_tab == "scenery_tab":
-        return scenery_view.layout(monitoring_step)
-    elif active_tab == "design_table_tab":
-        return design_table_view.layout(monitoring_step)
-    elif active_tab == "visualization_tab":
-        return visualization_view.layout(monitoring_step)
-    elif active_tab == "status_overview_tab":
-        return status_overview_view.layout(monitoring_step)
+    elif selected_tab == "scenery_tab":
+        return scenery_view.layout(problem_setup_step)
+    elif selected_tab == "design_table_tab":
+        return design_table_view.layout(problem_setup_step, monitoring_step)
+    elif selected_tab == "visualization_tab":
+        return visualization_view.layout(problem_setup_step, monitoring_step)
+    elif selected_tab == "status_overview_tab":
+        return status_overview_view.layout(problem_setup_step)
 
 
 @callback(

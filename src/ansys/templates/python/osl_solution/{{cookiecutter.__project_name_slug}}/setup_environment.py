@@ -1,6 +1,4 @@
 # ©2023, ANSYS Inc. Unauthorized use, distribution or duplication is prohibited.
-# CAPTURED v0.5.1 on 7/4/23 from:
-# https://github.com/Solution-Applications/common-files/blob/v0.4.0/setup-environment/setup_environment.py
 
 """
 A Python script to automate the setup of the Python ecosystem of a project.
@@ -156,7 +154,10 @@ DEPENDENCY_MANAGER_PATHS = {
 }
 
 configuration = toml.load(DEPENDENCY_MANAGER_PATHS["common"]["configuration_file"])
-STANDARD_OPTIONAL_DEPENDENCY_GROUPS = [group for group in configuration["tool"]["poetry"]["group"].keys()]
+STANDARD_OPTIONAL_DEPENDENCY_GROUPS = []
+if "group" in configuration["tool"]["poetry"].keys():
+    if len(configuration["tool"]["poetry"]["group"].keys()):
+        STANDARD_OPTIONAL_DEPENDENCY_GROUPS = [group for group in configuration["tool"]["poetry"]["group"].keys()]
 
 # =================================================== [Functions] =================================================== #
 
@@ -597,6 +598,7 @@ def configure_build_system(args: object) -> None:
         configure_poetry(
             DEPENDENCY_MANAGER_PATHS["common"]["build_system_venv"],
             args.credentials_management_method,
+            modern_installation = not args.disable_modern_installation
         )
         print()
         return
@@ -604,7 +606,7 @@ def configure_build_system(args: object) -> None:
     print()
 
 
-def configure_poetry(venv_name: str, credentials_management_method: str) -> None:
+def configure_poetry(venv_name: str, credentials_management_method: str, modern_installation: bool = True) -> None:
     """Configure Poetry."""
     poetry_executable = DEPENDENCY_MANAGER_PATHS[sys.platform]["dep_bin_venv_path"]
     # Get list of private sources
@@ -626,6 +628,9 @@ def configure_poetry(venv_name: str, credentials_management_method: str) -> None
     )
     # Turn-on in-project
     subprocess.run([poetry_executable, "config", "virtualenvs.create", "false", "--local"], check=True)
+    # Turn-off modern-installation
+    if not modern_installation:
+        subprocess.run([poetry_executable, "config", "installer.modern-installation", "false", "--local"], check=True)
     # Declare credentials for private sources
     for source in private_sources:
         print(f"Declare credentials for {source['name']}")
@@ -740,6 +745,13 @@ def parser() -> None:
         "-f",
         "--force-clear",
         help="Clean-up the workspace. Delete existing .venv., .poetry\.venv and .poetry\.cache.",
+        action="store_true",
+        required=False,
+    )
+    optional_inputs.add_argument(
+        "-m",
+        "--disable-modern-installation",
+        help="Disable Poetry modern installer.",
         action="store_true",
         required=False,
     )

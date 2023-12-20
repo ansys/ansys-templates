@@ -6,18 +6,16 @@ import dash_bootstrap_components as dbc
 import json
 import webbrowser
 
-from ansys_dash_treeview import AnsysDashTreeview
 from dash.exceptions import PreventUpdate
-from dash_extensions.enrich import Input, Output, State, callback_context, dcc, html
-from dash_iconify import DashIconify
+from dash_extensions.enrich import Input, Output, State, callback_context, dcc, html, no_update
 
 from ansys.saf.glow.client.dashclient import DashClient, callback
 from ansys.saf.glow.core.method_status import MethodStatus
-
 from ansys.solutions.{{ cookiecutter.__solution_name_slug }}.solution.definition import {{ cookiecutter.__solution_definition_name }}
 from ansys.solutions.{{ cookiecutter.__solution_name_slug }}.ui.components.logs_table import LogsTable
 from ansys.solutions.{{ cookiecutter.__solution_name_slug }}.ui.pages import monitoring_page, problem_setup_page
 from ansys.solutions.{{ cookiecutter.__solution_name_slug }}.utilities.common_functions import extract_dict_by_key
+from ansys_web_components_dash import AwcDashTree
 
 
 layout = html.Div(
@@ -33,7 +31,7 @@ layout = html.Div(
             id="progress_bar_update",
             interval=1000,
             n_intervals=0,
-            disabled=False
+            disabled=True
         ),
         dcc.Store(id='trigger_layout_display'),
         dcc.Store(id='trigger_treeview_display'),
@@ -52,15 +50,12 @@ def initialization(pathname):
     project = DashClient[{{ cookiecutter.__solution_definition_name }}].get_project(pathname)
 
     if not project.steps.problem_setup_step.project_initialized:
-        long_running = project.steps.problem_setup_step.upload_bulk_files_to_project_directory() # to be replaced by AssetFileReference
-        long_running.wait()
-        long_running = project.steps.problem_setup_step.get_app_metadata()
-        long_running.wait()
-        long_running = project.steps.problem_setup_step.get_default_placeholder_values()
-        long_running.wait()
+        project.steps.problem_setup_step.upload_bulk_files_to_project_directory()
+        project.steps.problem_setup_step.get_app_metadata()
+        project.steps.problem_setup_step.get_default_placeholder_values()
         project.steps.problem_setup_step.project_initialized = True
 
-    raise PreventUpdate
+    return True
 
 
 @callback(
@@ -83,7 +78,7 @@ def update_progress_bar(n_intervals, pathname):
         methods = ["upload_bulk_files_to_project_directory", "get_app_metadata", "get_default_placeholder_values"]
 
         for method in methods:
-            status = problem_setup_step.get_long_running_method_state(method).status
+            status = problem_setup_step.get_method_state(method).status
             if status == MethodStatus.Completed:
                 completion_rate += 1
             elif status == MethodStatus.Running:
@@ -93,7 +88,7 @@ def update_progress_bar(n_intervals, pathname):
         completion_rate = round(completion_rate / len(methods) * 100)
 
         return (
-            True,
+            no_update,
             [
                 dbc.Progress(
                     value=completion_rate,
@@ -112,16 +107,16 @@ def update_progress_bar(n_intervals, pathname):
 
 
 @callback(
-    Output("trigger_body_display", "data"),
+    Output("trigger_treeview_display", "data"),
     Output("page_layout", "children"),
-    Input("url", "pathname"),
     Input("trigger_layout_display", "data"),
+    State("url", "pathname"),
+    prevent_initial_call=True,
 )
-def display_page_layout(pathname, trigger_layout_display):
+def display_page_layout(trigger_layout_display, pathname):
     """Display page layout."""
     project = DashClient[{{ cookiecutter.__solution_definition_name }}].get_project(pathname)
     problem_setup_step = project.steps.problem_setup_step
-    monitoring_step = project.steps.monitoring_step
 
     if problem_setup_step.project_initialized:
         return (
@@ -173,15 +168,13 @@ def display_page_layout(pathname, trigger_layout_display):
                     [
                         dbc.Col(
                             [
-                                AnsysDashTreeview(
+                                AwcDashTree(
                                     id="navigation_tree",
+                                    multi=False,
+                                    height=950,
                                     items=problem_setup_step.treeview_items,
-                                    children=[
-                                        DashIconify(icon="bi:caret-right-square-fill"),
-                                        DashIconify(icon="bi:caret-down-square-fill"),
-                                    ],
-                                    style={"showButtons": True, "focusColor": "#ffb71b", "itemHeight": "32"},  # Ansys gold
-                                )
+                                    selectedItemIds=["problem_setup_step"]
+                                ),
                             ],
                             width=2,
                             style={"background-color": "rgba(242, 242, 242, 0.6)"},  # Ansys grey
@@ -215,22 +208,25 @@ def display_page_layout(pathname, trigger_layout_display):
 @callback(
     Output("body_content", "children"),
     Output("bottom_button_group", "children"),
-    Input("navigation_tree", "focus"),
-    Input("url", "pathname"),
+    Output("navigation_tree", "selectedItemIds"),
+    Input("navigation_tree", "treeItemClicked"),
     Input("trigger_body_display", "data"),
+    State("navigation_tree", "selectedItemIds"),
+    State("url", "pathname"),
+    prevent_initial_call=True,
 )
-def display_body_content(value, pathname, trigger_body_display):
+def display_body_content(value, trigger_body_display, selectedItemIds, pathname):
     """Display body content."""
     project = DashClient[{{ cookiecutter.__solution_definition_name }}].get_project(pathname)
     problem_setup_step = project.steps.problem_setup_step
     monitoring_step = project.steps.monitoring_step
-
+    last_selected_item=[selectedItemIds[0]]
     if problem_setup_step.project_initialized:
         triggered_id = callback_context.triggered[0]["prop_id"].split(".")[0]
         footer_buttons = [
             dbc.Button(
                 "optiSLang logs",
-                id="optislang_logs_button",
+                id="osl_logs_button",
                 n_clicks=0,
                 style={"background-color": "rgba(242, 242, 242, 0.6)", "borderColor": "rgba(242, 242, 242, 0.6)", "color": "rgba(0, 0, 0, 1)"},
                 size="sm",
@@ -246,26 +242,44 @@ def display_body_content(value, pathname, trigger_body_display):
                     size="sm"
                 )
             )
-        if triggered_id == "url" or triggered_id == "trigger_body_display" or trigger_body_display and len(triggered_id) == 0:
-            page_layout = problem_setup_page.layout(problem_setup_step, monitoring_step)
-        if triggered_id == "navigation_tree":
-            if value is None:
+        if triggered_id == "trigger_body_display":
+            page_layout = problem_setup_page.layout(problem_setup_step)
+        elif triggered_id == "navigation_tree":
+            if value["id"] is None:
                 page_layout = html.H1("Welcome!")
-            elif value == "problem_setup_step":
-                page_layout = problem_setup_page.layout(problem_setup_step, monitoring_step)
+            elif value["id"] == "problem_setup_step":
+                if "problem_setup_step" not in last_selected_item: # this is to minimize the number of times the page is reloaded. I noticed issues with the creation of the layout when the page is reloaded too many times closely together
+                    page_layout = problem_setup_page.layout(problem_setup_step)
+                    last_selected_item = ["problem_setup_step"]
+                else:
+                    raise PreventUpdate
             else:
-                monitoring_step.selected_actor_from_treeview = extract_dict_by_key(problem_setup_step.treeview_items, "key", value, expect_unique=True, return_index=False)["uid"]
+                # Get project data
+                project_data = json.loads(problem_setup_step.project_data_file.read_text())
+                # Record uid of actor selected from treeview
+                monitoring_step.selected_actor_from_treeview = extract_dict_by_key(problem_setup_step.osl_project_tree, "uid", value["id"], expect_unique=True, return_index=False)["uid"]
+                # Record hid of actor selected from treeview
+                if len(project_data["actors"][monitoring_step.selected_actor_from_treeview]["states_ids"]):
+                    monitoring_step.selected_state_id = project_data["actors"][monitoring_step.selected_actor_from_treeview]["states_ids"][0]
+                else:
+                    monitoring_step.selected_state_id = None
+                # Get page layout
                 page_layout = monitoring_page.layout(problem_setup_step, monitoring_step)
-                actors_states_ids = json.loads(monitoring_step.actors_states_ids_file.read_text())
+                last_selected_item = ["monitoring_step"]
+                # Update footer buttons
                 footer_buttons.insert(
                     0,
-                        dbc.DropdownMenu(
+                    dcc.Dropdown(
+                        options=[state_id for state_id in project_data["actors"][monitoring_step.selected_actor_from_treeview]["states_ids"]],
+                        value=monitoring_step.selected_state_id,
                         id="selected_state_dropdown",
-                        label=f"Selected state: {actors_states_ids[monitoring_step.selected_actor_from_treeview][0]}",
-                        size="sm",
-                        menu_variant="dark",
-                        children=[dbc.DropdownMenuItem(state_id) for state_id in actors_states_ids[monitoring_step.selected_actor_from_treeview]],
-                        style={"background-color": "rgba(242, 242, 242, 0.6)", "borderColor": "rgba(242, 242, 242, 0.6)", "color": "rgba(0, 0, 0, 1)"},
+                        disabled=False,
+                        clearable=False,
+                        searchable=True,
+                        style={
+                            "textAlign": "left",
+                            "width": "30%"
+                        },
                     ),
                 )
         footer = [
@@ -275,13 +289,14 @@ def display_body_content(value, pathname, trigger_body_display):
                 className="me-1",
             ),
             dbc.Collapse(
-                id="optislang_logs_collapse",
+                id="osl_logs_collapse",
                 is_open=False,
             )
         ]
         return (
             page_layout,
-            footer
+            footer,
+            last_selected_item
         )
     else:
         raise PreventUpdate
@@ -289,40 +304,45 @@ def display_body_content(value, pathname, trigger_body_display):
 
 @callback(
     Output("navigation_tree", "items"),
-    Input("url", "pathname"),
+    Output("trigger_body_display", "data"),
     Input("trigger_treeview_display", "data"),
+    State("url", "pathname"),
+    prevent_initial_call=True,
 )
-def display_tree_view(pathname, trigger_treeview_display):
+def display_tree_view(trigger_treeview_display, pathname):
     """Display treeview with all project nodes."""
     project = DashClient[{{ cookiecutter.__solution_definition_name }}].get_project(pathname)
     problem_setup_step = project.steps.problem_setup_step
 
     if problem_setup_step.project_initialized:
-        return problem_setup_step.treeview_items
+        return problem_setup_step.treeview_items, True
     else:
         raise PreventUpdate
 
 
 @callback(
-    Output("optislang_logs_collapse", "children"),
-    Output("optislang_logs_collapse", "is_open"),
-    Input("optislang_logs_button", "n_clicks"),
+    Output("osl_logs_collapse", "children"),
+    Output("osl_logs_collapse", "is_open"),
+    Input("osl_logs_button", "n_clicks"),
     Input("url", "pathname"),
-    State("optislang_logs_collapse", "is_open"),
+    State("osl_logs_collapse", "is_open"),
     prevent_initial_call=True,
 )
 def display_optislang_logs(n_clicks, pathname, is_open):
     """Display optiSLang logs."""
     project = DashClient[{{ cookiecutter.__solution_definition_name }}].get_project(pathname)
-    monitoring_step = project.steps.monitoring_step
+    problem_setup_step = project.steps.problem_setup_step
 
     if not n_clicks:
         # Button has never been clicked
         return None, False
 
-    table = LogsTable(monitoring_step.optislang_logs)
+    if problem_setup_step.project_locked:
+        osl_logs = problem_setup_step.osl_log_file.read_text().split('\n')
+        table = LogsTable(osl_logs)
+        return table.render(), not is_open
 
-    return table.render(), not is_open
+    raise PreventUpdate
 
 
 @callback(

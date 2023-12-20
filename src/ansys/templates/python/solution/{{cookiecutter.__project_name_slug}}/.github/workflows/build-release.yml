@@ -1,0 +1,83 @@
+name: build and release
+
+on:
+  push:
+    branches:
+      - main
+  pull_request:
+    branches:
+      - main
+    types: [opened, reopened, synchronize, ready_for_review]
+  release:
+    types: [published]
+  workflow_dispatch:
+
+env:
+  MAIN_PYTHON_VERSION: "3.8"
+  DOCUMENTATION_CNAME: ""
+  POETRY_HTTP_BASIC_SOLUTIONS_PRIVATE_PYPI_USERNAME: "PAT"
+  POETRY_HTTP_BASIC_SOLUTIONS_PRIVATE_PYPI_PASSWORD: {{ "${{ secrets.SOLUTIONS_PRIVATE_PYPI_PAT }}" }}
+
+concurrency:
+  group: {{ "${{ github.workflow }}-${{ github.ref }}" }}
+  cancel-in-progress: true
+
+jobs:
+  check-copyright:
+    name: Check copyright
+    runs-on: [ubuntu-latest]
+    timeout-minutes: 10
+    steps:
+      - name: Check copyright
+        uses: Solution-Applications/actions/check-copyright@v5
+        with:
+          gh-token: {{ "${{ secrets.WORKFLOW_TOKEN }}" }}
+
+  check-code-style:
+    name: Check code style
+    runs-on: [ubuntu-latest]
+    timeout-minutes: 10
+    steps:
+      - name: Check code style
+        uses: Solution-Applications/actions/check-code-style@v5
+        with:
+          python-version: {{ "${{ env.MAIN_PYTHON_VERSION }}" }}
+          gh-token: {{ "${{ secrets.WORKFLOW_TOKEN }}" }}
+          dependencies-source: "build-system"
+          check-poetry-lock: "true"
+          check-poetry: "true"
+
+  build:
+    name: Build
+    runs-on: [ubuntu-latest]
+    timeout-minutes: 10
+    steps:
+      - name: Build
+        uses: Solution-Applications/actions/build@v5
+        with:
+          artifact-name: "wheel"
+          python-version: {{ "${{ env.MAIN_PYTHON_VERSION }}" }}
+          gh-token: {{ "${{ secrets.WORKFLOW_TOKEN }}" }}
+          scripts-version: "v2.0.0"
+          dependencies-source: "build-system"
+          check-poetry-lock: "true"
+          check-poetry: "true"
+          retention-days: "7"
+          modern-installation: "true"
+
+  release:
+    if: |
+      github.event_name == 'release'
+    name: Release
+    needs: [check-copyright, check-code-style, build]
+    runs-on: [ubuntu-latest]
+    timeout-minutes: 10
+    steps:
+      - name: Release
+        uses: Solution-Applications/actions/release@v5
+        with:
+          python-version: {{ "${{ env.MAIN_PYTHON_VERSION }}" }}
+          gh-token: {{ "${{ secrets.WORKFLOW_TOKEN }}" }}
+          solutions-pypi-token:
+            {{ "${{ secrets.SOLUTIONS_PRIVATE_PYPI_ADMIN_TOKEN }}" }}
+          solutions-pypi-repository-url: https://pkgs.dev.azure.com/pyansys/_packaging/ansys-solutions/pypi/upload/

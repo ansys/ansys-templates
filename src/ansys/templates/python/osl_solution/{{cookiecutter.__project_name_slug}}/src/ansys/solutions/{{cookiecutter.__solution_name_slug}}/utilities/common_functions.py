@@ -6,7 +6,9 @@ import dash_bootstrap_components as dbc
 import re
 
 from pathlib import Path
-from typing import Any, Iterable, Union
+from typing import Any, Iterable, Union, Tuple
+
+from ansys.optislang.core.osl_server import OslServer
 
 
 MONITORING_TABS = [
@@ -18,7 +20,6 @@ MONITORING_TABS = [
         "is_actor": False,
     },
     {"label": "Summary", "tab_id": "summary_tab", "is_root": False, "is_system": True, "is_actor": True},
-    {"label": "Result Files", "tab_id": "result_files_tab", "is_root": True, "is_system": False, "is_actor": False},
     {"label": "Scenery", "tab_id": "scenery_tab", "is_root": True, "is_system": False, "is_actor": False},
     {"label": "Design Table", "tab_id": "design_table_tab", "is_root": True, "is_system": True, "is_actor": False},
     {"label": "Visualization", "tab_id": "visualization_tab", "is_root": True, "is_system": True, "is_actor": False},
@@ -70,35 +71,108 @@ PROJECT_STATES = {
 }
 
 
-def get_treeview_items_from_project_tree(project_tree: list) -> list:
+LOG_MESSAGE_COLORS = {
+    "info": "primary",
+    "warning": "warning",
+    "error": "danger"
+}
+
+
+def find_dicts_by_key_recursively(structure, target_level, current_path=[]):
+    results = []
+
+    if isinstance(structure, list):
+        for i, item in enumerate(structure):
+            path = current_path + [i]
+            results.extend(find_dicts_by_key_recursively(item, target_level, path))
+    elif isinstance(structure, dict):
+        if "level" in structure and structure["level"] == target_level:
+            results.append(current_path)
+        for key, value in structure.items():
+            path = current_path + [key]
+            results.extend(find_dicts_by_key_recursively(value, target_level, path))
+
+    return results
+
+
+def get_dict_from_indexes_sequence(nested_structure, mixed_keys):
+    """
+    Retrieve a dictionary from a complex nested structure of dictionaries and lists
+    using a mixed list of keys and indexes.
+
+    Args:
+        nested_structure (dict or list): The complex nested structure.
+        mixed_keys (list): List of keys and indexes to follow, in mixed order.
+
+    Returns:
+        dict: The retrieved dictionary, or None if not found.
+    """
+    for key_or_index in mixed_keys:
+        if isinstance(nested_structure, dict) and isinstance(key_or_index, str) and key_or_index in nested_structure:
+            nested_structure = nested_structure[key_or_index]
+        elif isinstance(nested_structure, list) and isinstance(key_or_index, int) and 0 <= key_or_index < len(nested_structure):
+            nested_structure = nested_structure[key_or_index]
+        else:
+            return None  # Key or index not found in the current level
+
+    if isinstance(nested_structure, dict):
+        return nested_structure
+    else:
+        return None  # If the final element is not a dictionary
+
+
+def get_treeview_items_from_project_tree(osl_project_tree: list) -> list:
 
     treeview_items = [
         {
-            "key": "problem_setup_step",
+            "id": "problem_setup_step",
             "text": "Problem Setup",
-            "depth": 0,
-            "uid": None,
+            "expanded": True,
+            "prefixIcon": {
+                "src": "https://s2.svgbox.net/hero-solid.svg?ic=adjustments"
+            },
+            "level": 0
         },
     ]
 
-    for node in project_tree:
-        if node["kind"] == "system":
+    for i, node in enumerate(osl_project_tree):
+        if node["is_root"]:
             treeview_items.append(
                 {
-                    "key": f'{node["name"].lower()}_{node["uid"]}_toggle',
+                    "id": node["uid"],
                     "text": node["name"],
-                    "depth": node["level"],
-                    "uid": node["uid"],
+                    "expanded": True,
+                    "prefixIcon": {
+                        "src": "https://s2.svgbox.net/materialui.svg?ic=account_tree"
+                    },
+                    "level": 0,
+                    "children": []
                 }
             )
-        treeview_items.append(
-            {
-                "key": f'{node["name"].lower()}_{node["uid"]}',
-                "text": node["name"],
-                "depth": node["level"] + 1 if node["kind"] == "system" else node["level"],
-                "uid": node["uid"],
-            }
-        )
+        else:
+            # Find parent node
+            matching_indexes = find_dicts_by_key_recursively(treeview_items, (node["level"] - 1))
+            if len(matching_indexes) == 0:
+                raise Exception("Unable to find parent node.")
+            parent_node = get_dict_from_indexes_sequence(treeview_items, matching_indexes[-1])
+            if node["kind"] == "system":
+                icon = "https://s2.svgbox.net/materialui.svg?ic=workspaces_filled"
+            elif node["kind"] == "actor":
+                icon = "https://s2.svgbox.net/materialui.svg?ic=workspaces_outline"
+            else:
+                raise ValueError(f"Unknown actor kind {node['kind']}.")
+            parent_node["children"].append(
+                {
+                    "id": node["uid"],
+                    "text": node["name"],
+                    "expanded": True,
+                    "prefixIcon": {
+                        "src": icon
+                    },
+                    "level": node["level"],
+                    "children": []
+                },
+            )
 
     return treeview_items
 
@@ -239,3 +313,21 @@ def update_placeholders(ui_values: list, placeholders: dict) -> dict:
         if parameter_name in placeholder_values:
             updated_dict[parameter_name] = input_value
     return updated_dict
+
+
+def check_optislang_server(osl_server: OslServer) -> None:
+    """optiSLang server health check."""
+
+    try:
+        server_is_alive = osl_server.get_server_is_alive()
+    except Exception as e:
+        return False
+
+    return server_is_alive
+
+
+def get_states_ids_from_states(actor_states: dict) -> Tuple[str]:
+    """Get available actor states ids from actor states response."""
+    if not actor_states.get("states", None):
+        return tuple([])
+    return tuple([state["hid"] for state in actor_states["states"]])

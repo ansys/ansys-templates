@@ -2,7 +2,7 @@ from ansys.templates.utils import keep_files
 
 
 DESIRED_STRUCTURE = [
-    ".github/workflows/ci.yml",
+    ".github/workflows/build-release.yml",
     ".vscode/launch.json",
     "doc/source/_static/ansys-solutions-logo-black-background.png",
     "doc/source/_static/README.md",
@@ -16,9 +16,9 @@ DESIRED_STRUCTURE = [
     "doc/make.bat",
     "doc/Makefile",
     "examples/README.md",
-    f"src/ansys/solutions/{{ cookiecutter.__solution_name_slug }}/model/assets/README.md",
-    f"src/ansys/solutions/{{ cookiecutter.__solution_name_slug }}/model/scripts/README.md",
-    f"src/ansys/solutions/{{ cookiecutter.__solution_name_slug }}/model/README.md",
+    f"src/ansys/solutions/{{ cookiecutter.__solution_name_slug }}/datamodel/README.md",
+    f"src/ansys/solutions/{{ cookiecutter.__solution_name_slug }}/logic/assets/README.md",
+    f"src/ansys/solutions/{{ cookiecutter.__solution_name_slug }}/logic/README.md",
     f"src/ansys/solutions/{{ cookiecutter.__solution_name_slug }}/solution/method_assets/README.md",
     f"src/ansys/solutions/{{ cookiecutter.__solution_name_slug }}/solution/definition.py",
     f"src/ansys/solutions/{{ cookiecutter.__solution_name_slug }}/solution/intro_step.py",
@@ -52,6 +52,7 @@ DESIRED_STRUCTURE = [
     "CONTRIBUTING.md",
     "CONTRIBUTORS.md",
     "LICENSE.rst",
+    "poetry.lock",
     "pyproject.toml",
     "README.rst",
     "setup_environment.py",

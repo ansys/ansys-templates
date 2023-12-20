@@ -38,7 +38,7 @@ PYBASIC_VARS = dict(
     __project_name_slug="pybasic",
     short_description="A basic Python Package",
     repository_url="https://platform.domain/organization/pybasic",
-    requires_python="3.8",
+    requires_python="3.9",
 )
 
 PYANSYS_VARS = PYANSYS_ADVANCED_VARS = dict(
@@ -47,7 +47,7 @@ PYANSYS_VARS = PYANSYS_ADVANCED_VARS = dict(
     __product_name_slug="product",
     __library_name_slug="library",
     __project_name_slug="pyproduct-library",
-    requires_python="3.8",
+    requires_python="3.9",
 )
 
 PYANSYS_OPENAPI_VARS = dict(
@@ -56,7 +56,7 @@ PYANSYS_OPENAPI_VARS = dict(
     __product_name_slug="product",
     __library_name_slug="library",
     __project_name_slug="pyproduct-library-openapi",
-    requires_python="3.8",
+    requires_python="3.9",
 )
 
 PYACE_VARS = dict(
@@ -66,7 +66,7 @@ PYACE_VARS = dict(
     copyright="My Company",
     enable_docker="Yes",
     __project_name_slug = "project",
-    requires_python="3.8",
+    requires_python="3.9",
 )
 
 DOC_PROJECT_VARS = dict(
@@ -74,7 +74,7 @@ DOC_PROJECT_VARS = dict(
     __project_name_slug = "doc-project",
     logo="Ansys",
     logo_color="black",
-    requires_python="3.8",
+    requires_python="3.9",
 )
 
 SOLUTION_VARS = dict(
@@ -284,7 +284,7 @@ DOC_PROJECT_STRUCTURE = [
 
 # Structure for solution projects
 SOLUTION_STRUCTURE = [
-    ".github/workflows/ci.yml",
+    ".github/workflows/build-release.yml",
     ".vscode/launch.json",
     "doc/source/_static/ansys-solutions-logo-black-background.png",
     "doc/source/_static/README.md",
@@ -298,9 +298,9 @@ SOLUTION_STRUCTURE = [
     "doc/make.bat",
     "doc/Makefile",
     "examples/README.md",
-    f"src/ansys/solutions/{SOLUTION_VARS['__solution_name_slug']}/model/assets/README.md",
-    f"src/ansys/solutions/{SOLUTION_VARS['__solution_name_slug']}/model/scripts/README.md",
-    f"src/ansys/solutions/{SOLUTION_VARS['__solution_name_slug']}/model/README.md",
+    f"src/ansys/solutions/{SOLUTION_VARS['__solution_name_slug']}/datamodel/README.md",
+    f"src/ansys/solutions/{SOLUTION_VARS['__solution_name_slug']}/logic/assets/README.md",
+    f"src/ansys/solutions/{SOLUTION_VARS['__solution_name_slug']}/logic/README.md",
     f"src/ansys/solutions/{SOLUTION_VARS['__solution_name_slug']}/solution/method_assets/README.md",
     f"src/ansys/solutions/{SOLUTION_VARS['__solution_name_slug']}/solution/definition.py",
     f"src/ansys/solutions/{SOLUTION_VARS['__solution_name_slug']}/solution/intro_step.py",
@@ -345,6 +345,7 @@ SOLUTION_STRUCTURE = [
     "CONTRIBUTING.md",
     "CONTRIBUTORS.md",
     "LICENSE.rst",
+    "poetry.lock",
     "pyproject.toml",
     "README.rst",
     "setup_environment.py",
@@ -352,7 +353,7 @@ SOLUTION_STRUCTURE = [
 ]
 
 OSL_SOLUTION_STRUCTURE = [
-    ".github/workflows/ci.yml",
+    ".github/workflows/build-release.yml",
     ".vscode/launch.json",
     "doc/source/_static/ansys-solutions-logo-black-background.png",
     "doc/source/_static/README.md",
@@ -366,7 +367,9 @@ OSL_SOLUTION_STRUCTURE = [
     "doc/make.bat",
     "doc/Makefile",
     "examples/README.md",
-    f"src/ansys/solutions/{OSL_SOLUTION_VARS['__solution_name_slug']}/model/assets/README.md",
+    f"src/ansys/solutions/{OSL_SOLUTION_VARS['__solution_name_slug']}/datamodel/datamodel.py",
+    f"src/ansys/solutions/{OSL_SOLUTION_VARS['__solution_name_slug']}/logic/README.md",
+    f"src/ansys/solutions/{OSL_SOLUTION_VARS['__solution_name_slug']}/logic/assets/README.md",
     f"src/ansys/solutions/{OSL_SOLUTION_VARS['__solution_name_slug']}/pim_configurations/osl_wrapper.py",
     f"src/ansys/solutions/{OSL_SOLUTION_VARS['__solution_name_slug']}/pim_configurations/pim_osl_configuration.py",
     f"src/ansys/solutions/{OSL_SOLUTION_VARS['__solution_name_slug']}/solution/method_assets/README.md",
@@ -386,14 +389,11 @@ OSL_SOLUTION_STRUCTURE = [
     f"src/ansys/solutions/{OSL_SOLUTION_VARS['__solution_name_slug']}/ui/components/design_table.py",
     f"src/ansys/solutions/{OSL_SOLUTION_VARS['__solution_name_slug']}/ui/components/logs_table.py",
     f"src/ansys/solutions/{OSL_SOLUTION_VARS['__solution_name_slug']}/ui/components/project_information_table.py",
-    f"src/ansys/solutions/{OSL_SOLUTION_VARS['__solution_name_slug']}/ui/components/service_table.py",
-    f"src/ansys/solutions/{OSL_SOLUTION_VARS['__solution_name_slug']}/ui/components/system_files.py",
     f"src/ansys/solutions/{OSL_SOLUTION_VARS['__solution_name_slug']}/ui/pages/monitoring_page.py",
     f"src/ansys/solutions/{OSL_SOLUTION_VARS['__solution_name_slug']}/ui/pages/page.py",
     f"src/ansys/solutions/{OSL_SOLUTION_VARS['__solution_name_slug']}/ui/pages/problem_setup_page.py",
     f"src/ansys/solutions/{OSL_SOLUTION_VARS['__solution_name_slug']}/ui/views/design_table_view.py",
     f"src/ansys/solutions/{OSL_SOLUTION_VARS['__solution_name_slug']}/ui/views/project_summary_view.py",
-    f"src/ansys/solutions/{OSL_SOLUTION_VARS['__solution_name_slug']}/ui/views/result_files_view.py",
     f"src/ansys/solutions/{OSL_SOLUTION_VARS['__solution_name_slug']}/ui/views/scenery_view.py",
     f"src/ansys/solutions/{OSL_SOLUTION_VARS['__solution_name_slug']}/ui/views/status_overview_view.py",
     f"src/ansys/solutions/{OSL_SOLUTION_VARS['__solution_name_slug']}/ui/views/summary_view.py",
