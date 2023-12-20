@@ -1,29 +1,40 @@
 repos:
 
-- repo: https://github.com/psf/black
-  rev: 22.3.0
-  hooks:
-  - id: black
+  - repo: https://github.com/psf/black
+    rev: 22.3.0
+    hooks:
+    - id: black
 
-- repo: https://github.com/pycqa/isort
-  rev: 5.11.5
-  hooks:
-  - id: isort
+  - repo: https://github.com/pycqa/isort
+    rev: 5.11.5
+    hooks:
+    - id: isort
 
-- repo: https://github.com/PyCQA/flake8
-  rev: 5.0.4
-  hooks:
-  - id: flake8
+  - repo: https://github.com/PyCQA/flake8
+    rev: 5.0.4
+    hooks:
+    - id: flake8
 
-- repo: https://github.com/codespell-project/codespell
-  rev: v2.2.2
-  hooks:
-  - id: codespell
-    args: [--skip, "doc/styles/*,*.js,*.tmp", --ignore-words, ".codespell.ignore", --exclude-file, ".codespell.exclude"]
+  - repo: https://github.com/codespell-project/codespell
+    rev: v2.2.2
+    hooks:
+    - id: codespell
+      args: [--skip, "doc/styles/*,*.js,*.tmp", --ignore-words, ".codespell.ignore", --exclude-file, ".codespell.exclude"]
 
-- repo: https://github.com/pycqa/pydocstyle
-  rev: 6.1.1
-  hooks:
-  - id: pydocstyle
-    additional_dependencies: [toml]
-    exclude: "tests/"
+  - repo: https://github.com/pycqa/pydocstyle
+    rev: 6.1.1
+    hooks:
+    - id: pydocstyle
+      additional_dependencies: [toml]
+      exclude: "tests/"
+
+  - repo: local
+    hooks:
+      - id: poetry-check
+        name: Check poetry pyproject.toml/poetry.lock
+        description: Ensure that pyproject.toml is valid and that pyproject.toml changes are synchronized to poetry.lock
+        entry: ".venv/Scripts/poetry.exe"
+        args: ["check", "--lock"]
+        language: system
+        always_run: true
+        pass_filenames: false

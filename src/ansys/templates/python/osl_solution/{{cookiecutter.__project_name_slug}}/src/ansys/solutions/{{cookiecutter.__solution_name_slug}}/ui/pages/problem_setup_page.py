@@ -19,6 +19,8 @@ from ansys.solutions.{{ cookiecutter.__solution_name_slug }}.utilities.common_fu
 def layout(problem_setup_step: ProblemSetupStep) -> html.Div:
     """Layout of the problem setup step."""
     if problem_setup_step.ui_placeholders and not problem_setup_step.project_locked:
+        while problem_setup_step.get_long_running_method_state("update_osl_placeholders_with_ui_values").status == MethodStatus.Running: # current workaround to avoid raising ConflictError: {"detail":"update_osl_placeholders_with_ui_values is already running"} # current workaround to avoid raising ConflictError: {"detail":"update_osl_placeholders_with_ui_values is already running"}
+            time.sleep(0.1)
         problem_setup_step.update_osl_placeholders_with_ui_values()
     project_properties_sections = to_dash_sections(
             problem_setup_step.placeholders, problem_setup_step.registered_files, problem_setup_step.project_locked
@@ -290,7 +292,7 @@ def initialize_dictionary_of_ui_placeholders(n_clicks, data, ids, input_file_ids
                 else:
                     parameters[key] = data[index]
                 ui_data.update({placeholder_name: parameters})
-            elif isinstance(data[index], list) == list and isinstance(data[index][0], bool):
+            elif isinstance(data[index], list):
                 value = data[index]
                 if True in value:
                     new_value = True
@@ -362,7 +364,7 @@ def update_ui_placeholders(value, id, pathname):
             elif isinstance(value, list) and False in value:
                 value = False
             ui_data[pm_name][key] = value
-        elif isinstance(value, list) and isinstance(value[0], bool):
+        elif isinstance(value, list):
             if True in value:
                 value = True
             else:
@@ -469,7 +471,7 @@ def update_start_designs_table(n_clicks_add, n_clicks_del, disabled_states, row_
         ui_data.update({"StartDesigns": new_designs})
 
         problem_setup_step.ui_placeholders = ui_data
-        while problem_setup_step.get_method_state("update_osl_placeholders_with_ui_values").status == MethodStatus.Running: # current workaround to avoid raising ConflictError: {"detail":"update_osl_placeholders_with_ui_values is already running"}
+        while problem_setup_step.get_long_running_method_state("update_osl_placeholders_with_ui_values").status == MethodStatus.Running: # current workaround to avoid raising ConflictError: {"detail":"update_osl_placeholders_with_ui_values is already running"}
             time.sleep(0.1)
         problem_setup_step.update_osl_placeholders_with_ui_values()
 

@@ -49,13 +49,15 @@ def extract_project_status_info(full_project_status_info: dict) -> dict:
     return data
 
 
-def extract_actor_information_data(actor_status_info: dict, kind: str) -> dict:
+def extract_actor_information_data(actor_status_info: dict, actor_info: dict, kind: str) -> dict:
     """ Extract actor information data from the optiSLang server response.
 
     Parameters
     ----------
     actor_status_info: dict
         Actor status info.
+    actor_info: dict
+        Actor info.
     kind: str
         Actor kind (actor/system).
 
@@ -86,7 +88,7 @@ def extract_actor_information_data(actor_status_info: dict, kind: str) -> dict:
             succeeded_designs = actor_status_info["succeeded_designs"]
             failed_designs = actor_status_info["failed_designs"]
             pending_designs = actor_status_info["pending_designs"]
-            total_designs = actor_status_info["total_designs"]
+            total_designs = actor_info["max_designs"]
             processed_designs = total_designs - pending_designs
             try:
                 status = int(processed_designs / total_designs * 100)
