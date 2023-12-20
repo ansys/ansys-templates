@@ -1,0 +1,23 @@
+name: Trigger end-to-end tests for solution templates
+on:
+  pull_request:
+    paths:
+      - 'src/ansys/templates/python/solution/**'
+      - 'src/ansys/templates/python/osl_solution/**'
+
+jobs:
+
+  solutions-e2e-tests:
+    name: Trigger solutions e2e tests
+    runs-on: ubuntu-latest
+    steps:
+      - name: github workflow dispatch
+        shell: bash
+        env:
+          GH_TOKEN: ${{ secrets.ANSYS_SOLUTIONS_E2E_TESTS }}
+        run: |
+          gh workflow run \
+          _ansys-templates-remote-ci.yml \
+          --repo "https://github.com/Solution-Applications/solution-templates-end-to-end-testing" \
+          --field ansys_templates_sha="${{ github.event.pull_request.head.sha }}" \
+          --ref "refs/heads/main"

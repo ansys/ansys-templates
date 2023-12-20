@@ -18,7 +18,7 @@ class ActorLogsTableAIO(html.Div):
 
     ids = ids
 
-    def __init__(self, data: dict, aio_id: str = None):
+    def __init__(self, data: dict, store_value: int= None, aio_id: str = None):
         """ActorLogsTableAIO is an All-in-One component that is composed
         of a `dash_table.DataTable` component.
 
@@ -42,6 +42,7 @@ class ActorLogsTableAIO(html.Div):
                 "font_size": "15px",
             },
             "style_as_list_view": True,
+            "page_current": store_value
         }
 
         super().__init__([
