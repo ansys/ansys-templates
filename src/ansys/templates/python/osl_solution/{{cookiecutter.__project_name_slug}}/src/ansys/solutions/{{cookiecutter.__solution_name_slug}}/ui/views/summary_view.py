@@ -113,8 +113,7 @@ def layout(problem_setup_step: ProblemSetupStep, monitoring_step: MonitoringStep
             interval=monitoring_step.auto_update_frequency,  # in milliseconds
             n_intervals=0,
             disabled=False if monitoring_step.auto_update_activated else True
-        ),
-        html.Div(id="dummy-output", style= {'display': 'block'}),
+        )
     ]
 
     # Build layout
@@ -224,7 +223,6 @@ def update_view(n_intervals, pathname):
 
 
 @callback(
-    Output("dummy-output", 'children'),
     Input(ActorLogsTableAIO.ids.datatable("actor_logs_table"), "page_current"),
     State("url", "pathname"),
     prevent_initial_call=True,
@@ -237,4 +235,3 @@ def update_table(page_current, pathname):
     # Get monitoring step
     monitoring_step = project.steps.monitoring_step
     monitoring_step.selected_page = page_current
-    return f"Dummy output updated {page_current}"

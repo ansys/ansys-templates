@@ -55,8 +55,7 @@ def layout(problem_setup_step: ProblemSetupStep, monitoring_step: MonitoringStep
                 interval=5000,  # in milliseconds
                 n_intervals=0,
                 disabled=False if monitoring_step.auto_update_activated else True
-            ),
-            html.Div(id="dummy-table-output", style= {'display': 'none'}),
+            )
         ]
     )
 
@@ -152,7 +151,6 @@ def update_view(n_intervals, pathname):
 
 
 @callback(
-    Output("dummy-table-output", 'children'),
     Input(DesignTableAIO.ids.datatable("design_table_logs"), "page_current"),
     State("url", "pathname"),
     prevent_initial_call=True,
@@ -165,4 +163,3 @@ def update_table(page_current, pathname):
     # Get monitoring step
     monitoring_step = project.steps.monitoring_step
     monitoring_step.design_table_selected_page = page_current
-    return f"Dummy output updated {page_current}"
