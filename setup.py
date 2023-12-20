@@ -21,7 +21,7 @@ setup(
     description="A python wrapper for ansys product library",
     long_description=open("README.rst").read(),
     install_requires=["importlib-metadata >=4.0"],
-    python_requires=">=3.8",
+    python_requires=">=3.9",
     packages=find_namespace_packages(where="src", include="ansys*"),
     package_dir={"": "src"},
 )
