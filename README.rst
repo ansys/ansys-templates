@@ -83,7 +83,7 @@ Users can install ``ansys-templates`` by running:
 The usage of `pipx`_ is encouraged too. See `installing ansys-templates using
 pipx`_.
 
-.. _pipx: https://pypa.github.io/pipx/
+.. _pipx: https://pipx.pypa.io/stable/
 .. _installing ansys-templates using pipx: https://templates.ansys.com/version/stable/getting_started/index.html#installing-pipx
 
 
