@@ -38,7 +38,7 @@ PYBASIC_VARS = dict(
     __project_name_slug="pybasic",
     short_description="A basic Python Package",
     repository_url="https://platform.domain/organization/pybasic",
-    requires_python="3.8",
+    requires_python="3.9",
 )
 
 PYANSYS_VARS = PYANSYS_ADVANCED_VARS = dict(
@@ -47,7 +47,7 @@ PYANSYS_VARS = PYANSYS_ADVANCED_VARS = dict(
     __product_name_slug="product",
     __library_name_slug="library",
     __project_name_slug="pyproduct-library",
-    requires_python="3.8",
+    requires_python="3.9",
 )
 
 PYANSYS_OPENAPI_VARS = dict(
@@ -56,7 +56,7 @@ PYANSYS_OPENAPI_VARS = dict(
     __product_name_slug="product",
     __library_name_slug="library",
     __project_name_slug="pyproduct-library-openapi",
-    requires_python="3.8",
+    requires_python="3.9",
 )
 
 PYACE_VARS = dict(
@@ -66,7 +66,7 @@ PYACE_VARS = dict(
     copyright="My Company",
     enable_docker="Yes",
     __project_name_slug = "project",
-    requires_python="3.8",
+    requires_python="3.9",
 )
 
 DOC_PROJECT_VARS = dict(
@@ -74,7 +74,7 @@ DOC_PROJECT_VARS = dict(
     __project_name_slug = "doc-project",
     logo="Ansys",
     logo_color="black",
-    requires_python="3.8",
+    requires_python="3.9",
 )
 
 SOLUTION_VARS = dict(
