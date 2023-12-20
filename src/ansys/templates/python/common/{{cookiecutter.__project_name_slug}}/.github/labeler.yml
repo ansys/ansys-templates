@@ -3,7 +3,15 @@ documentation:
   - any-glob-to-any-file: ['doc/source/**/*']
 maintenance:
 - changed-files:
+  {if cookiecutter.__build_system != "setuptools" %}
   - any-glob-to-any-file: ['.github/**/*', '.flake8', 'pyproject.toml']
+  {%- else -%}
+  - any-glob-to-any-file: ['.github/**/*', '.flake8', 'pyproject.toml', 'requirements/*']
+  {%- endif %}
 dependencies:
 - changed-files:
+  {%- if cookiecutter.__build_system != "setuptools" %}
   - any-glob-to-any-file: ['pyproject.toml']
+  {%- else -%}
+  - any-glob-to-any-file: ['requirements/*']
+  {%- endif %}
