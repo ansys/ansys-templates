@@ -167,11 +167,11 @@ if "group" in configuration["tool"]["poetry"].keys():
 def print_main_header(text: str, max_length: int = 100) -> None:
     """Display main header."""
 
-    for i in range(max_length):
+    for _ in range(max_length):
         print("=", end="")
     print()
     print(text)
-    for i in range(max_length):
+    for _ in range(max_length):
         print("=", end="")
     print()
     print()
@@ -226,7 +226,7 @@ def print_inputs_summary(args: object) -> None:
                 separator=":",
                 separator_position=37,
             )
-    print(f"Dependency management system         : poetry")
+    print("Dependency management system         : poetry")
     print(f"Dependency management system version : {args.build_system_version}")
     print(f"Credentials management               : {args.credentials_management_method}")
     print()
@@ -312,12 +312,61 @@ def check_inputs(args: object) -> None:
         args.dependencies = STANDARD_OPTIONAL_DEPENDENCY_GROUPS + ["run"]
     else:
         args.install_all = False
+
     # Check virtual environment name
     check_virtual_environment_name(args)
     # Check python version
     check_python_version(args)
     # Check if an install already exists
     args.has_install = check_existing_install(args)
+
+    if args.local_wheels and not os.path.exists(args.local_wheels):
+        raise FileNotFoundError(f"The directory '{args.local_wheels}' does not exist.")
+
+
+def modify_toml_file_in_case_of_wheel_files(args: object) -> None:
+    if not args.local_wheels:
+        return
+
+    wheels_path = args.local_wheels
+    wheel_files = {
+        filename.split("-")[0].replace("_", "-"): os.path.join(wheels_path, filename)
+        for filename in os.listdir(wheels_path)
+    }
+
+    # Add the local wheels to the toml file
+    configuration = toml.load(DEPENDENCY_MANAGER_PATHS["common"]["configuration_file"])
+    check_that_all_wheels_are_provided(wheel_files=wheel_files, configuration=configuration)
+
+    for package_name, wheel_file in wheel_files.items():
+        if package_name in configuration["tool"]["poetry"]["dependencies"]:
+            del configuration["tool"]["poetry"]["dependencies"][package_name]
+        configuration["tool"]["poetry"]["dependencies"][package_name] = {"file": wheel_file}
+
+    with open(os.path.join(os.getcwd(), DEPENDENCY_MANAGER_PATHS["common"]["configuration_file"]), "w") as f:
+        toml.dump(configuration, f)
+
+
+def check_that_all_wheels_are_provided(wheel_files: dict, configuration: dict) -> None:
+    private_packages = find_private_packages_in_lock_file()
+
+    for private_package in private_packages:
+        wheel_is_found = private_package in wheel_files
+        if not wheel_is_found:
+            raise FileNotFoundError(f"{private_package}.whl cannot be found in the local python wheels directory")
+
+
+def find_private_packages_in_lock_file() -> list:
+    lock_data = toml.load(os.path.join(os.getcwd(), DEPENDENCY_MANAGER_PATHS["common"]["lock_file"]))
+    packages = lock_data.get("package", [])
+
+    private_packages = [
+        package["name"]
+        for package in packages
+        if package.get("source", {}).get("reference") == "solutions-private-pypi"
+    ]
+
+    return private_packages
 
 
 # General-purpose ---------------------------------------------------------------------------------------------------
@@ -468,25 +517,13 @@ def get_python_package_versions(
         return extract_substring_between_markers(process.stderr, "(from versions:", ")").replace(" ", "").split(",")
 
 
-def upgrade_pip(python_executable: str = sys.executable) -> None:
-    """Upgrade to latest PIP version in the virtual environment."""
-
-    print("Upgrade to latest pip version")
-    subprocess.run(
-        [python_executable, "-m", "pip", "install", "--upgrade", "pip"],
-        check=True,
-        shell=DEPENDENCY_MANAGER_PATHS[sys.platform]["shell"],
-    )
-    print()
-
-
 def create_virtual_environment(args: object, venv: str = ".venv") -> None:
     """Create a virtual environment."""
 
     print("Create virtual environment")
     if not args.has_install or args.force_clear or args.force_clear_all:
         if sys.platform == "linux":
-            subprocess.run(["sudo", "apt-get", "install", "-y", "python3-venv"], check=True)
+            subprocess.run([sys.executable, "-m", "pip", "install", "virtualenv"], check=True)
         subprocess.run(
             [sys.executable, "-m", "venv", venv], check=True, shell=DEPENDENCY_MANAGER_PATHS[sys.platform]["shell"]
         )
@@ -550,7 +587,6 @@ def install_build_system(args: object) -> None:
             args.build_system_version = configuration["build-system-requirements"]["build-system-version"]
 
         create_virtual_environment(args, venv=DEPENDENCY_MANAGER_PATHS["common"]["build_system_venv"])
-        upgrade_pip(python_executable=DEPENDENCY_MANAGER_PATHS[sys.platform]["poetry_python_executable"])
         get_python_package(
             args.build_system_version,
             method="install",
@@ -571,9 +607,9 @@ def install_build_system(args: object) -> None:
                         "-ItemType",
                         "SymbolicLink",
                         "-Path",
-                        DEPENDENCY_MANAGER_PATHS[sys.platform]["dep_bin_venv_path"],
+                        f"'{DEPENDENCY_MANAGER_PATHS[sys.platform]['dep_bin_venv_path']}'",
                         "-Target",
-                        build_system_executable,
+                        f"'{build_system_executable}'",
                     ]
                 )
             elif sys.platform == "linux":
@@ -582,7 +618,7 @@ def install_build_system(args: object) -> None:
                         "ln",
                         "-sf",
                         build_system_executable,
-                        DEPENDENCY_MANAGER_PATHS[sys.platform]["dep_bin_venv_path"],
+                        DEPENDENCY_MANAGER_PATHS[sys.platform]['dep_bin_venv_path'],
                     ]
                 )
         return
@@ -598,7 +634,8 @@ def configure_build_system(args: object) -> None:
         configure_poetry(
             DEPENDENCY_MANAGER_PATHS["common"]["build_system_venv"],
             args.credentials_management_method,
-            modern_installation = not args.disable_modern_installation
+            modern_installation=not args.disable_modern_installation,
+            use_private_sources=not bool(args.local_wheels),
         )
         print()
         return
@@ -606,7 +643,12 @@ def configure_build_system(args: object) -> None:
     print()
 
 
-def configure_poetry(venv_name: str, credentials_management_method: str, modern_installation: bool = True) -> None:
+def configure_poetry(
+    venv_name: str,
+    credentials_management_method: str,
+    modern_installation: bool = True,
+    use_private_sources: bool = True,
+) -> None:
     """Configure Poetry."""
     poetry_executable = DEPENDENCY_MANAGER_PATHS[sys.platform]["dep_bin_venv_path"]
     # Get list of private sources
@@ -631,6 +673,10 @@ def configure_poetry(venv_name: str, credentials_management_method: str, modern_
     # Turn-off modern-installation
     if not modern_installation:
         subprocess.run([poetry_executable, "config", "installer.modern-installation", "false", "--local"], check=True)
+
+    if not use_private_sources:
+        return
+
     # Declare credentials for private sources
     for source in private_sources:
         print(f"Declare credentials for {source['name']}")
@@ -760,6 +806,14 @@ def parser() -> None:
         "--verbose",
         help="Activate verbose mode.",
         action="store_true",
+        required=False,
+    )
+    optional_inputs.add_argument(
+        "-lw",
+        "--local_wheels",
+        type=str,
+        help="Directory to find the location of the whl files for SAF dependencies",
+        default="",
         required=False,
     )
 
@@ -925,6 +979,8 @@ def main() -> None:
     # Check inputs consistency
     check_inputs(args)
 
+    modify_toml_file_in_case_of_wheel_files(args)
+
     # Update build system version
     get_build_system_version(args)
 
@@ -945,8 +1001,6 @@ def main() -> None:
     print_section_header("Setup virtual environment", max_length=100)
 
     create_virtual_environment(args)
-
-    upgrade_pip(python_executable=DEPENDENCY_MANAGER_PATHS[sys.platform]["python_executable"])
 
     # Setup dependency management system ------------------------------------------------------------------------------
 

@@ -1,5 +1,4 @@
 # ©2023, ANSYS Inc. Unauthorized use, distribution or duplication is prohibited.
-# common-files@v1.2.0
 
 """
 A Python script to automate the setup of the Python ecosystem of a project.
@@ -524,7 +523,7 @@ def create_virtual_environment(args: object, venv: str = ".venv") -> None:
     print("Create virtual environment")
     if not args.has_install or args.force_clear or args.force_clear_all:
         if sys.platform == "linux":
-            subprocess.run(["sudo", "apt-get", "install", "-y", "python3-venv"], check=True)
+            subprocess.run([sys.executable, "-m", "pip", "install", "virtualenv"], check=True)
         subprocess.run(
             [sys.executable, "-m", "venv", venv], check=True, shell=DEPENDENCY_MANAGER_PATHS[sys.platform]["shell"]
         )
@@ -608,9 +607,9 @@ def install_build_system(args: object) -> None:
                         "-ItemType",
                         "SymbolicLink",
                         "-Path",
-                        DEPENDENCY_MANAGER_PATHS[sys.platform]["dep_bin_venv_path"],
+                        f"'{DEPENDENCY_MANAGER_PATHS[sys.platform]['dep_bin_venv_path']}'",
                         "-Target",
-                        build_system_executable,
+                        f"'{build_system_executable}'",
                     ]
                 )
             elif sys.platform == "linux":
@@ -619,7 +618,7 @@ def install_build_system(args: object) -> None:
                         "ln",
                         "-sf",
                         build_system_executable,
-                        DEPENDENCY_MANAGER_PATHS[sys.platform]["dep_bin_venv_path"],
+                        DEPENDENCY_MANAGER_PATHS[sys.platform]['dep_bin_venv_path'],
                     ]
                 )
         return
