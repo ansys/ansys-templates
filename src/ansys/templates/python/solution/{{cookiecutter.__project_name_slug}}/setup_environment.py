@@ -618,7 +618,7 @@ def install_build_system(args: object) -> None:
                         "ln",
                         "-sf",
                         build_system_executable,
-                        DEPENDENCY_MANAGER_PATHS[sys.platform]['dep_bin_venv_path'],
+                        DEPENDENCY_MANAGER_PATHS[sys.platform]["dep_bin_venv_path"],
                     ]
                 )
         return
