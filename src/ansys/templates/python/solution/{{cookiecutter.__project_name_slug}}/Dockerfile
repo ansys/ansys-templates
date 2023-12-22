@@ -6,7 +6,7 @@ ARG SOLUTIONS_PRIVATE_PYPI_PAT
 
 # TODO: get poetry version from pyproject file?
 RUN pip install --upgrade pip && \
-    pip install poetry==1.5.1
+    pip install poetry==1.7.1
 RUN poetry config http-basic.solutions-private-pypi PAT ${SOLUTIONS_PRIVATE_PYPI_PAT}
 
 COPY pyproject.toml poetry.lock /app/
@@ -42,9 +42,8 @@ RUN pip install --upgrade pip && \
 RUN apk del build-base linux-headers && \
     rm -rf /var/cache/apk/* /root/.cache/pip/* /dist
 
-# We use glow_engine instead of solutions' main as entrypoint because the latter also loads
-# the UI python files, carrying their dash dependencies, even if only the API is launched.
-ENTRYPOINT ["glow_engine", "api"]
+# Launch API server directly with uvicorn
+ENTRYPOINT ["uvicorn", "ansys.saf.glow.api:app"]
 
 {% if cookiecutter.with_dash_ui == "yes" %}
 # === UI Stage ===
@@ -56,5 +55,6 @@ COPY --from=base /app/requirements_ui.txt /dist/
 RUN pip install -r /dist/requirements_ui.txt --extra-index-url "https://PAT:${SOLUTIONS_PRIVATE_PYPI_PAT}@pkgs.dev.azure.com/pyansys/_packaging/ansys-solutions/pypi/simple/"
 RUN rm -rf /root/.cache/pip/* /dist
 
+# Exposing UI app to be directly called with uvicorn is not available yet. Fallback to glow_engine CLI.
 ENTRYPOINT ["glow_engine", "ui"]
 {% endif %}
