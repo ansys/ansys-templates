@@ -42,7 +42,7 @@ priority = "primary"
 
 [tool.poetry.dependencies]
 python = ">=3.8, <3.11"
-ansys-saf-glow-engine = {version = "1.1.dev1", source = "solutions-private-pypi", allow-prereleases = true}
+ansys-saf-glow-engine = {version = "1.1.dev7", source = "solutions-private-pypi", allow-prereleases = true}
 
 {% if cookiecutter.with_dash_ui == "yes" %}
 [tool.poetry.group.ui]
