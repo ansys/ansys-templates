@@ -76,6 +76,10 @@ services:
     depends_on:
       glow-api:
         condition: service_healthy
+    healthcheck:
+      test: ["CMD", "curl", "-f", "http://localhost:50001/health"]
+      interval: 5s
+      retries: 20
     ports:
       - 50001:50001
 {% endif %}

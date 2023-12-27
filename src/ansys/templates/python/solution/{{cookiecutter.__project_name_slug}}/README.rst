@@ -132,16 +132,16 @@ To build the solution docker images (UI and API) run the following commands in t
      .. code-tab:: bash
        :caption: PowerShell
 
-        docker build --build-arg SOLUTIONS_PRIVATE_PYPI_PAT=$env:SOLUTIONS_PRIVATE_PYPI_PAT --target solution_api -t ansys-solutions-calculator-dockerized-api:0.1.dev0 .
+        docker build --build-arg SOLUTIONS_PRIVATE_PYPI_PAT=$env:SOLUTIONS_PRIVATE_PYPI_PAT --target solution_api -t {{cookiecutter.__project_name_slug}}-api:{{cookiecutter.__version}} .
 {% if cookiecutter.with_dash_ui == "yes" %}
-        docker build --build-arg SOLUTIONS_PRIVATE_PYPI_PAT=$env:SOLUTIONS_PRIVATE_PYPI_PAT --target solution_ui -t ansys-solutions-calculator-dockerized-ui:0.1.dev0 .
+        docker build --build-arg SOLUTIONS_PRIVATE_PYPI_PAT=$env:SOLUTIONS_PRIVATE_PYPI_PAT --target solution_ui -t {{cookiecutter.__project_name_slug}}-ui:{{cookiecutter.__version}} .
 {% endif %}
      .. code-tab:: bash
        :caption: CMD
 
-        docker build --build-arg SOLUTIONS_PRIVATE_PYPI_PAT=$SOLUTIONS_PRIVATE_PYPI_PAT --target solution_api -t ansys-solutions-calculator-dockerized-api:0.1.dev0 .
+        docker build --build-arg SOLUTIONS_PRIVATE_PYPI_PAT=$SOLUTIONS_PRIVATE_PYPI_PAT --target solution_api -t {{cookiecutter.__project_name_slug}}-api:{{cookiecutter.__version}} .
 {% if cookiecutter.with_dash_ui == "yes" %}
-        docker build --build-arg SOLUTIONS_PRIVATE_PYPI_PAT=$SOLUTIONS_PRIVATE_PYPI_PAT --target solution_ui -t ansys-solutions-calculator-dockerized-ui:0.1.dev0 .
+        docker build --build-arg SOLUTIONS_PRIVATE_PYPI_PAT=$SOLUTIONS_PRIVATE_PYPI_PAT --target solution_ui -t {{cookiecutter.__project_name_slug}}-ui:{{cookiecutter.__version}} .
 {% endif %}
 
 
