@@ -8,7 +8,7 @@ build-backend = "poetry.core.masonry.api"
 build-system-version = "1.7.0"
 
 [tool.poetry]
-name = "{{cookiecutter.__pkg_name}}"
+name = "{{cookiecutter.__project_name_slug}}"
 version = "{{cookiecutter.__version}}"
 description = "{{cookiecutter.__short_description}}"
 license = "Proprietary"
@@ -42,7 +42,7 @@ priority = "primary"
 
 [tool.poetry.dependencies]
 python = ">=3.8, <3.11"
-ansys-saf-glow-engine = {version = "1.1.dev1", source = "solutions-private-pypi", allow-prereleases = true}
+ansys-saf-glow-engine = {version = "1.1.dev7", source = "solutions-private-pypi", allow-prereleases = true}
 
 {% if cookiecutter.with_dash_ui == "yes" %}
 [tool.poetry.group.ui]

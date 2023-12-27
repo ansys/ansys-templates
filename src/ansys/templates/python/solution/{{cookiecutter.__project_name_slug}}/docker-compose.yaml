@@ -3,22 +3,36 @@ version: '3'
 services:
 
   postgresql:
-    image: postgres:latest
-    container_name: {{cookiecutter.__pkg_name}}-database-container
+    image: postgres:16.0
+    container_name: {{cookiecutter.__project_name_slug}}-database-container
     networks:
-      - {{cookiecutter.__pkg_name}}-network
+      - {{cookiecutter.__project_name_slug}}-internal
     environment:
       - POSTGRES_USER=glow
       - POSTGRES_PASSWORD=glow
     # don't expose ports, consumed internally by another container
     volumes:
-      - ./container_data/db:/var/lib/postgresql/data
+      - glow-database:/var/lib/postgresql/data
+    healthcheck:
+      test: ["CMD", "pg_isready", "-U", "glow"]
+      interval: 5s
+      retries: 20
 
   glow-api:
-    image: {{cookiecutter.__pkg_name}}-api:{{cookiecutter.__version}}
-    container_name: {{cookiecutter.__pkg_name}}-api-container
+    #image: {{cookiecutter.__project_name_slug}}-api:{{cookiecutter.__version}}
+    build:
+      context: .
+      dockerfile: ./Dockerfile
+      target: solution_api
+      args:
+        - SOLUTIONS_PRIVATE_PYPI_PAT=${SOLUTIONS_PRIVATE_PYPI_PAT}
+    container_name: {{cookiecutter.__project_name_slug}}-api-container
+    depends_on:
+      postgresql:
+        condition: service_healthy
     networks:
-      - {{cookiecutter.__pkg_name}}-network
+      - {{cookiecutter.__project_name_slug}}-external
+      - {{cookiecutter.__project_name_slug}}-internal
     environment:
       - GLOW_DEPLOYMENT=DockerCompose
       # Following ones are optional
@@ -28,32 +42,49 @@ services:
       - GLOW_API_PORT=50000
       - GLOW_DEBUG=1
       - GLOW_DATABASE_TYPE=postgresql
-      - GLOW_DATABASE_LOCATION=postgresql://glow:glow@{{cookiecutter.__pkg_name}}-database-container:5432
+      - GLOW_DATABASE_LOCATION=postgresql://glow:glow@{{cookiecutter.__project_name_slug}}-database-container:5432
     ports:
       - 50000:50000
+    healthcheck:
+      test: ["CMD", "curl", "-f", "http://localhost:50000/health"]
+      interval: 5s
+      retries: 20
     volumes:
       # All are optional
-      - ./container_data/projects:/projects  # Should match GLOW_PROJECT_FILES_DIRECTORY
-      - ./container_data/transactions:/transactions  # Should match GLOW_METHOD_EXECUTION_DIRECTORY
+      - glow-api-projects-data:/projects  # Should match GLOW_PROJECT_FILES_DIRECTORY
+      - glow-api-transactions-data:/transactions  # Should match GLOW_METHOD_EXECUTION_DIRECTORY
     # uvicorn does not consume GLOW_API_HOST and GLOW_API_PORT.
     command: "--host 0.0.0.0 --port 50000"
 {% if cookiecutter.with_dash_ui == "yes" %}
   glow-ui:
-    image: {{cookiecutter.__pkg_name}}-ui:{{cookiecutter.__version}}
-    container_name: {{cookiecutter.__pkg_name}}-ui-container
+    #image: {{cookiecutter.__project_name_slug}}-ui:{{cookiecutter.__version}}
+    build:
+      context: .
+      dockerfile: ./Dockerfile
+      target: solution_ui
+      args:
+        - SOLUTIONS_PRIVATE_PYPI_PAT=${SOLUTIONS_PRIVATE_PYPI_PAT}
     networks:
-      - {{cookiecutter.__pkg_name}}-network
+      - {{cookiecutter.__project_name_slug}}-external
     environment:
       - GLOW_DEPLOYMENT=DockerCompose
       # Following ones are optional
       - GLOW_DEBUG=1
       - GLOW_UI_HOST=0.0.0.0
       - GLOW_UI_PORT=50001
-      - GLOW_API_URL=http://{{cookiecutter.__pkg_name}}-api-container:50000
+      - GLOW_API_URL=http://{{cookiecutter.__project_name_slug}}-api-container:50000
+    depends_on:
+      glow-api:
+        condition: service_healthy
     ports:
       - 50001:50001
 {% endif %}
-
+volumes:
+  glow-database:
+  glow-api-projects-data:
+  glow-api-transactions-data:
 networks:
-  {{cookiecutter.__pkg_name}}-network:
+  {{cookiecutter.__project_name_slug}}-internal:
+    internal: true
+  {{cookiecutter.__project_name_slug}}-external:
     driver: bridge

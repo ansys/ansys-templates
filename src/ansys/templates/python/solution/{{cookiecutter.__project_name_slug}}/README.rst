@@ -107,26 +107,42 @@ To start the solution using a desktop orchestrator run the following commands in
 
     saf run
 
+Start the solution using Docker compose
+=======================================
 
-Start the solution using Docker
-===============================
+To start the solution using Docker compose run the following commands in the root of the project:
 
-To start the solution using a docker run the following commands in the root of the project:
-
-
-1. Build docker images:
-
-  .. code:: bash
-
-    docker build --build-arg SOLUTIONS_PRIVATE_PYPI_PAT=$SOLUTIONS_PRIVATE_PYPI_PAT --target solution_api -t {{cookiecutter.__pkg_name}}-api:{{cookiecutter.__version}} .
-{% if cookiecutter.with_dash_ui == "yes" %}
-    docker build --build-arg SOLUTIONS_PRIVATE_PYPI_PAT=$SOLUTIONS_PRIVATE_PYPI_PAT --target solution_ui -t {{cookiecutter.__pkg_name}}-ui:{{cookiecutter.__version}} .
-{% endif %}
-2. Launch the solution:
+1. Launch the solution
 
   .. code:: bash
 
     docker compose up
+
+This command will build the required docker images and start the containers using docker compose as an orchestrator.
+
+Build the Docker images
+========================
+
+To build the solution docker images (UI and API) run the following commands in the root of the project:
+
+
+1. Build docker images:
+   .. tabs::
+
+     .. code-tab:: bash
+       :caption: PowerShell
+
+        docker build --build-arg SOLUTIONS_PRIVATE_PYPI_PAT=$env:SOLUTIONS_PRIVATE_PYPI_PAT --target solution_api -t ansys-solutions-calculator-dockerized-api:0.1.dev0 .
+{% if cookiecutter.with_dash_ui == "yes" %}
+        docker build --build-arg SOLUTIONS_PRIVATE_PYPI_PAT=$env:SOLUTIONS_PRIVATE_PYPI_PAT --target solution_ui -t ansys-solutions-calculator-dockerized-ui:0.1.dev0 .
+{% endif %}
+     .. code-tab:: bash
+       :caption: CMD
+
+        docker build --build-arg SOLUTIONS_PRIVATE_PYPI_PAT=$SOLUTIONS_PRIVATE_PYPI_PAT --target solution_api -t ansys-solutions-calculator-dockerized-api:0.1.dev0 .
+{% if cookiecutter.with_dash_ui == "yes" %}
+        docker build --build-arg SOLUTIONS_PRIVATE_PYPI_PAT=$SOLUTIONS_PRIVATE_PYPI_PAT --target solution_ui -t ansys-solutions-calculator-dockerized-ui:0.1.dev0 .
+{% endif %}
 
 
 Documentation
