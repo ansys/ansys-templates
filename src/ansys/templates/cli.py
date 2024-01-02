@@ -125,11 +125,12 @@ def pyace_grpc():
     """Create gRPC project initialized for any developer."""
     create_project("pyace-grpc")
 
+
 @new.command()
 @click.option('-s', '--solution-name', type=str, help="Name of the solution in the definition.")
 @click.option('-d', '--solution-display-name', type=str, help="Name of the solution in the user interface.")
 @click.option("-u", "--with-dash-ui", is_flag=True, flag_value="1", help="With Dash UI")
-def solution(_from, solution_name, solution_display_name, with_dash_ui, application_archive):
+def solution(solution_name, solution_display_name, with_dash_ui):
     """[Ansys Internal Use Only] Create a solution based on SAF."""
     template = "solution"
     extra_context = load_inputs_from_configuration_file(PYTHON_TEMPLATES_SOLUTION_PATH)
@@ -140,6 +141,5 @@ def solution(_from, solution_name, solution_display_name, with_dash_ui, applicat
         extra_context["solution_display_name"] = solution_display_name
     if with_dash_ui:
         extra_context["with_dash_ui"] = "yes"
-        
 
     create_project(template, no_input=no_input, extra_context=extra_context)
