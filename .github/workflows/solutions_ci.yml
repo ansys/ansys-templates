@@ -3,7 +3,6 @@ on:
   pull_request:
     paths:
       - 'src/ansys/templates/python/solution/**'
-      - 'src/ansys/templates/python/osl_solution/**'
 
 jobs:
 

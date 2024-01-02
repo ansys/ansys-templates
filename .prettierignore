@@ -1,2 +1,1 @@
 src/ansys/templates/python/solution/{{cookiecutter.__project_name_slug}}/.github/workflows/build-release.yml
-src/ansys/templates/python/osl_solution/{{cookiecutter.__project_name_slug}}/.github/workflows/build-release.yml
