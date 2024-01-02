@@ -27,10 +27,7 @@ import os
 import click
 
 from ansys.templates import AVAILABLE_TEMPLATES_AND_DESCRIPTION, __version__
-from ansys.templates.paths import (
-    PYTHON_TEMPLATES_SOLUTION_PATH,
-    TEMPLATE_PATH_FINDER,
-)
+from ansys.templates.paths import PYTHON_TEMPLATES_SOLUTION_PATH, TEMPLATE_PATH_FINDER
 from ansys.templates.utils import bake_template, load_inputs_from_configuration_file
 
 
