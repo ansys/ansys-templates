@@ -159,7 +159,6 @@ its corresponding demonstration branch.
 * Demo branch for `pyace-flask`_
 * Demo branch for `pyace-grpc`_
 * Demo branch for `solution`_
-* Demo branch for `osl-solution`_
 
 
 .. _doc-project: https://github.com/ansys/ansys-templates/tree/demo/doc-project
@@ -173,5 +172,4 @@ its corresponding demonstration branch.
 .. _pyace-flask: https://github.com/ansys/ansys-templates/tree/demo/pyace-flask
 .. _pyace-grpc: https://github.com/ansys/ansys-templates/tree/demo/pyace-grpc
 .. _solution: https://github.com/ansys/ansys-templates/tree/demo/solution
-.. _osl-solution: https://github.com/ansys/ansys-templates/tree/demo/solution
 
