@@ -3,6 +3,7 @@
 ##############################################
 |python|
 
+
 .. note::
   This content needs to be configured according to the project specifics.
 
@@ -14,47 +15,32 @@ Introduction
   Add here a description of the project.
 
 
-Prerequisites
-=============
-
-Operation system
-----------------
-
-Windows 10 to latest.
-
-Python
-------
-
-Officially Python 3.8 to 3.10. Before starting the installation run ``python --version`` and check that it fits with the supported versions.
-
-Token
------
-
-Connection to the **Solutions** private PyPI server is required. The access is controlled via a token. Create a system environment variable named ``SOLUTIONS_PRIVATE_PYPI_PAT``
-and assign it with the **Solutions** token provided in `Connecting to the private PyPI <https://dev-docs.solutions.ansys.com/solution_journey/journey_prepare/connect_to_private_pypi.html>`_.
-
-Software
---------
-
-  .. list-table:: Required flagship products
-    :widths: 200 100
-    :header-rows: 1
-
-    * - Product
-      - Versions
-
-    * - SpaceClaim
-      - R22.2 to latest
-
-    * - Fluent
-      - R23.1 to latest
-
-    * - XXX
-      - RXX.X
-
-
 Installation
 ============
+
+Prerequisites
+-------------
+
+.. list-table:: 
+  :widths: 15 40
+
+  * - **Operating system**
+    - Windows 10
+  * - **Python distribution**
+    - From **3.8** to **3.10**.
+  * - **IDE**
+    - `Visual Studio Code <https://code.visualstudio.com/download#>`_
+  * - **Web framework**
+    - `Dash <https://dash.plotly.com/>`_
+  * - **Software**
+    - *List here the required software, if any.*
+  * - **Tokens**
+    - *Visit the `Solutions Developer's Guide <https://dev-docs.solutions.ansys.com/solution_journey/journey_prepare/connect_to_private_pypi>`_ to learn how to set the required tokens.*
+  * - **Environment variables**
+    - *List here the required environment variables, if any.*
+
+Setting up the development environment
+---------------------------------------
 
 1. Clone the repository:
 
@@ -97,8 +83,8 @@ Installation
 From now on, all the commands must be executed within the virtual environment.
 
 
-Start the solution
-==================
+Starting the solution
+=====================
 
 To start the solution run the following command anywhere in the project:
 

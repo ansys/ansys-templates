@@ -683,9 +683,9 @@ def configure_poetry(
         if source["name"].lower() == "pypi":
             continue
         elif source["url"] == "https://pkgs.dev.azure.com/pyansys/_packaging/pyansys/pypi/simple/":
-            token = os.environ["PYANSYS_PRIVATE_PYPI_PAT"]
+            token = os.environ["PYANSYS_PYPI_PRIVATE_PAT"]
         elif source["url"] == "https://pkgs.dev.azure.com/pyansys/_packaging/ansys-solutions/pypi/simple/":
-            token = os.environ["SOLUTIONS_PRIVATE_PYPI_PAT"]
+            token = os.environ["PYANSYS_PYPI_PRIVATE_PAT"]
         else:
             raise Exception(f"Unknown private source {source['name']} with url {source['url']}.")
         # Store credentials
