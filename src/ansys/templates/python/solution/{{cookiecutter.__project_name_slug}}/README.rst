@@ -21,7 +21,7 @@ Installation
 Prerequisites
 -------------
 
-.. list-table:: 
+.. list-table::
   :widths: 15 40
 
   * - **Operating system**
