@@ -2,10 +2,9 @@ name: Trigger end-to-end tests for solution templates
 on:
   pull_request:
     paths:
-      - 'src/ansys/templates/python/solution/**'
+      - "src/ansys/templates/python/solution/**"
 
 jobs:
-
   solutions-e2e-tests:
     name: Trigger solutions e2e tests
     runs-on: ubuntu-latest
@@ -13,7 +12,7 @@ jobs:
       - name: github workflow dispatch
         shell: bash
         env:
-          GH_TOKEN: ${{ secrets.ANSYS_SOLUTIONS_E2E_TESTS }}
+          GH_TOKEN: ${{ secrets.WORKFLOW_TOKEN }}
         run: |
           gh workflow run \
           _ansys-templates-remote-ci.yml \
