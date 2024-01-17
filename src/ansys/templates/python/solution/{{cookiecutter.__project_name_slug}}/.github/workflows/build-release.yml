@@ -29,7 +29,7 @@ jobs:
     timeout-minutes: 10
     steps:
       - name: Check copyright
-        uses: Solution-Applications/actions/check-copyright@v5
+        uses: ansys-internal/solution-applications-actions/check-copyright@v9
         with:
           gh-token: {{ "${{ secrets.WORKFLOW_TOKEN }}" }}
 
@@ -39,7 +39,7 @@ jobs:
     timeout-minutes: 10
     steps:
       - name: Check code style
-        uses: Solution-Applications/actions/check-code-style@v5
+        uses: ansys-internal/solution-applications-actions/check-code-style@v9
         with:
           python-version: {{ "${{ env.MAIN_PYTHON_VERSION }}" }}
           gh-token: {{ "${{ secrets.WORKFLOW_TOKEN }}" }}
@@ -53,12 +53,11 @@ jobs:
     timeout-minutes: 10
     steps:
       - name: Build
-        uses: Solution-Applications/actions/build@v5
+        uses: ansys-internal/solution-applications-actions/build@v9
         with:
           artifact-name: "wheel"
           python-version: {{ "${{ env.MAIN_PYTHON_VERSION }}" }}
           gh-token: {{ "${{ secrets.WORKFLOW_TOKEN }}" }}
-          scripts-version: "v2.0.0"
           dependencies-source: "build-system"
           check-poetry-lock: "true"
           check-poetry: "true"
@@ -74,7 +73,7 @@ jobs:
     timeout-minutes: 10
     steps:
       - name: Release
-        uses: Solution-Applications/actions/release@v5
+        uses: ansys-internal/solution-applications-actions/release@v9
         with:
           python-version: {{ "${{ env.MAIN_PYTHON_VERSION }}" }}
           gh-token: {{ "${{ secrets.WORKFLOW_TOKEN }}" }}

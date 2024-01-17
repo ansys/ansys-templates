@@ -60,7 +60,7 @@ Installation
 
    .. code:: bash
 
-     git clone https://github.com/Solution-Applications/{{ cookiecutter.__project_name_slug }}
+     git clone https://github.com/ansys-internal/{{ cookiecutter.__project_name_slug }}
 
 2. Navigate to the cloned project directory:
 
