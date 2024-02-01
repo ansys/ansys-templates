@@ -2,69 +2,96 @@
 
 """Sphinx documentation configuration file."""
 
-# ==================================================== [Imports] ==================================================== #
 
-from datetime import datetime
 import os
+from datetime import datetime
 from pathlib import Path
 
-from ansys_sphinx_theme import ansys_favicon, get_version_match
 import toml
+from ansys_sphinx_theme import ansys_favicon, get_version_match
 
-# ============================================== [Project Information] ============================================== #
 
-package_configuration = toml.load(Path(__file__).parent.parent.parent.absolute() / "pyproject.toml")
+BRANCH = "main"
+ORGANIZATION_NAME = "ansys-internal"
+DOC_PATH = "doc/source"
 
-# Project information
-project = package_configuration["tool"]["poetry"]["name"]
+
+def remove_scheme_from_url(url: str) -> tuple:
+    """Remove the scheme part of a URL."""
+
+    items = url.split("://")
+    if len(items) == 2:
+        return items[0], items[1]
+    else:
+        raise Exception(f"Fail to return the URL without the scheme part for {url}.")
+
+
+def get_repository_name_from_url(url: str) -> str:
+    repository_name = remove_scheme_from_url(repository_url)[1].split("/")[-1]
+    if ".git" in repository_name:
+        repository_name = repository_name.split(".git")[0]
+    return repository_name
+
+
+# ---------- // Project Information // --------------------------------------------------------------------------------
+
+configuration_file = Path(__file__).parent.parent.parent.absolute() / "pyproject.toml"
+if configuration_file.exists():
+    configuration = toml.load(configuration_file)
+else:
+    raise FileNotFoundError("No configuration file at project's root.")
+
+project_name = configuration.get("tool", {}).get("poetry", {}).get("name", None)
+package_version = configuration.get("tool", {}).get("poetry", {}).get("version", None)
+documentation_url = configuration.get("tool", {}).get("poetry", {}).get("documentation", None)
+repository_url = configuration.get("tool", {}).get("poetry", {}).get("repository", None)
+
+if documentation_url:
+    cname = remove_scheme_from_url(documentation_url)[1]
+else:
+    cname = None
+
+if documentation_url:
+    repository_name = remove_scheme_from_url(repository_url)
+else:
+    repository_name = None
+
 copyright = f"(c) {datetime.now().year} ANSYS, Inc. All rights reserved"
-author = "ANSYS, Inc."
-release = version = package_configuration["tool"]["poetry"]["version"]
-cname = os.getenv("DOCUMENTATION_CNAME", "nocname.com")
-repository = package_configuration["tool"]["poetry"].get("repository")
+author = "ANSYS Inc."
 
-# ============================================ [Options for HTML output] ============================================ #
 
-# Select desired logo, theme, and declare the html title
-html_logo = str(Path(__file__).parent.absolute() / "_static" / "ansys-solutions-logo-black-background.png")
-html_theme = "ansys_sphinx_theme"
-html_favicon = ansys_favicon
-html_short_title = html_title = package_configuration["tool"]["poetry"]["name"]
+# ---------- // General configuration // ------------------------------------------------------------------------------
 
-# specify the location of your github repo
-html_theme_options = {
-    "github_url": repository if repository is not None else "",
-    "show_prev_next": False,
-    "show_breadcrumbs": True,
-    "additional_breadcrumbs": [
-        ("PyAnsys", "https://docs.pyansys.com/"),
-    ],
-    "switcher": {
-        "json_url": f"{cname}/release/versions.json",
-        "version_match": get_version_match(version),
-    },
-    "navbar_end": ["version-switcher", "theme-switcher", "navbar-icon-links"],
-}
-
-# Sphinx extensions
 extensions = [
     "sphinx.ext.autodoc",
     "sphinx.ext.autosummary",
     "numpydoc",
     "sphinx.ext.intersphinx",
     "sphinx_copybutton",
-    "sphinx_tabs.tabs",
+    "sphinx_code_tabs",
+    "sphinx.ext.todo",
+    "sphinxcontrib.autodoc_pydantic",
+    "sphinx_design",
 ]
 
 # Intersphinx mapping
-intersphinx_mapping = {"python": ("https://docs.python.org/3", None)}
+intersphinx_mapping = {
+    "python": ("https://docs.python.org/dev", None),
+}
+
+# pydantic configuration
+autodoc_pydantic_model_show_json = False
+autodoc_pydantic_model_show_config = False
+autodoc_pydantic_settings_show_json = False
+autodoc_pydantic_model_show_validator_members = False
+autodoc_pydantic_model_show_validator_summary = False
+
+suppress_warnings = ["label.*"]
 
 # numpydoc configuration
+numpydoc_use_plots = True
 numpydoc_show_class_members = False
 numpydoc_xref_param_type = True
-
-# Consider enabling numpydoc validation. See:
-# https://numpydoc.readthedocs.io/en/latest/validation.html#
 numpydoc_validate = True
 numpydoc_validation_checks = {
     "GL06",  # Found unknown section
@@ -81,6 +108,13 @@ numpydoc_validation_checks = {
     # type, unless multiple values are being returned"
 }
 
+# Favicon
+html_favicon = ansys_favicon
+
+# notfound.extension
+notfound_template = "404.rst"
+notfound_urls_prefix = "/../"
+
 # static path
 html_static_path = ["_static"]
 
@@ -88,7 +122,132 @@ html_static_path = ["_static"]
 templates_path = ["_templates"]
 
 # The suffix(es) of source filenames.
-source_suffix = [".rst", ".md"]
+source_suffix = ".rst"
 
 # The master toctree document.
 master_doc = "index"
+
+# The language for content autogenerated by Sphinx. Refer to documentation
+# for a list of supported languages.
+#
+# This is also used if you do content translation via gettext catalogs.
+# Usually you set "language" from the command line for these cases.
+language = "en"
+
+# List of patterns, relative to source directory, that match files and
+# directories to ignore when looking for source files.
+# This pattern also affects html_static_path and html_extra_path.
+exclude_patterns = [
+    "_build",
+    "Thumbs.db",
+    ".DS_Store",
+    "links.rst",
+    "substitutions.rst",
+]
+
+# If true, `todo` and `todoList` produce output, else they produce nothing.
+todo_include_todos = False
+
+autodoc_mock_imports = ["ansys.platform", "opentelemetry"]
+numfig = True
+numfig_secnum_depth = 1
+numfig_format = {
+    "figure": "Figure %s ",
+    "table": "Table %s ",
+    "code-block": "Code sample %s ",
+}
+
+# ---------- // Copy button customization // --------------------------------------------------------------------------
+
+# exclude traditional Python prompts from the copied code
+copybutton_prompt_text = r">>> ?|\.\.\. "
+copybutton_prompt_is_regexp = True
+
+
+# ---------- // Sphinx Gallery Options // -----------------------------------------------------------------------------
+
+
+# ---------- // Options for HTML output // ----------------------------------------------------------------------------
+
+html_short_title = html_title = "Ansys Solutions {{cookiecutter.solution_display_name}}"
+html_theme = "ansys_sphinx_theme"
+html_logo = str(Path(__file__).parent.absolute() / "_static" / "ansys-solutions-logo-black-background.png")
+html_theme_options = {
+    "show_prev_next": False,
+    "show_breadcrumbs": True,
+    "collapse_navigation": True,
+    "use_edit_page_button": False,
+    "switcher": {
+        "json_url": f"https://{cname}/versions.json",
+        "version_match": get_version_match(package_version),
+    },
+}
+
+if str(os.getenv("DISABLE_GITHUB_URL_LINK")).lower() != "true":
+    html_theme_options["github_url"] = f"https://github.com/{ORGANIZATION_NAME}/{repository_name}"
+
+html_context = {
+    "display_github": False,  # Integrate GitHub
+    "github_user": ORGANIZATION_NAME,
+    "github_repo": repository_name,
+    "github_version": BRANCH,
+    "doc_path": DOC_PATH,
+}
+html_show_sourcelink = False
+html_compact_lists = False
+
+
+# ---------- // Options for HTMLHelp output // ------------------------------------------------------------------------
+
+# Output file base name for HTML help builder.
+htmlhelp_basename = "ansys-solutions-{{cookiecutter.__project_name_slug}}-documentation"
+
+
+# ---------- // Options for LaTeX output // ---------------------------------------------------------------------------
+
+latex_elements = {}
+
+# Grouping the document tree into LaTeX files. List of tuples
+# (source start file, target name, title,
+#  author, documentclass [howto, manual, or own class]).
+latex_documents = [
+    (
+        master_doc,
+        f"Ansys-Solutions-{{cookiecutter.__project_name_slug}}-Documentation-{package_version}.tex",
+        "Ansys Solutions {{cookiecutter.solution_display_name}} Documentation",
+        author,
+        "manual",
+    ),
+]
+
+
+# ---------- // [Options for manual page output // --------------------------------------------------------------------
+
+# One entry per manual page. List of tuples
+# (source start file, name, description, authors, manual section).
+man_pages = [
+    (
+        master_doc,
+        "Ansys Solutions {{cookiecutter.solution_display_name}}",
+        "Ansys Solutions {{cookiecutter.solution_display_name}} Documentation",
+        [author],
+        1,
+    )
+]
+
+
+# ---------- // Options for Texinfo output // -------------------------------------------------------------------------
+
+# Grouping the document tree into Texinfo files. List of tuples
+# (source start file, target name, title, author,
+#  dir menu entry, description, category)
+texinfo_documents = [
+    (
+        master_doc,
+        "Ansys Solutions {{cookiecutter.solution_display_name}}",
+        "Ansys Solutions {{cookiecutter.solution_display_name}} Documentation",
+        author,
+        "Ansys Solutions {{cookiecutter.solution_display_name}}",
+        "Engineering Software",
+    ),
+]
