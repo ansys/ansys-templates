@@ -47,7 +47,7 @@ layout = html.Div(
                     html.Div(
                         children=[
                             html.Div(
-                                html.Img(src=r"/assets/logos/ansys_solutions_logo_white.png", height="30px"),
+                                html.Img(src=r"/assets/logos/ansys_solutions_logo_white.png", height="36px"),
                                 style={
                                     "flex": "1",
                                     "text-align": "left",
@@ -61,11 +61,12 @@ layout = html.Div(
                                             id="project-name",
                                             size="sm",
                                             color="#FFFFFF",
+                                            style={"font-size": "16px"},
                                         ),
                                         dmc.ActionIcon(
-                                            DashIconify(icon="ph:code-fill", width=30),
+                                            DashIconify(icon="ph:code-fill", width=36),
                                             id="access-dev-guide",
-                                            size=30,
+                                            size=36,
                                             variant="transparent",
                                             style={"color": "#FFFFFF"},
                                         ),
@@ -97,7 +98,7 @@ layout = html.Div(
             ),
             color="#000000",
             sticky="top",
-            style={"height": "50px"},
+            style={"height": "80px"},
         ),
         dbc.Row(
             [
@@ -115,7 +116,6 @@ layout = html.Div(
                         ),
                     ],
                     width=2,
-                    style={"background-color": "rgba(242, 242, 242, 0.6)"},
                 ),
                 dbc.Col(html.Div(id="page-content", style={"padding-right": "0.7%"}), width=10),
             ],
@@ -138,9 +138,9 @@ def return_to_portal(pathname):
             html.A(
                 [
                     dmc.ActionIcon(
-                        DashIconify(icon="ion:exit-outline", width=30),
+                        DashIconify(icon="ion:exit-outline", width=36),
                         id="back-to-projects-icon",
-                        size=30,
+                        size=36,
                         variant="transparent",
                         style={"color": "#FFFFFF"},
                     ),

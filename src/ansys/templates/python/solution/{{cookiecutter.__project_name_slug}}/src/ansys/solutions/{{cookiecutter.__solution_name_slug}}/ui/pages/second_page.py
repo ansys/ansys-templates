@@ -12,7 +12,7 @@ def layout(step: SecondStep):
     """Layout of the second step page."""
     return html.Div(
         [
-            html.H1("Second Step", className="display-3", style={"font-size": "30px", "fontWeight": "bold"}),
+            html.H1("Second Step", className="display-3", style={"font-size": "48px", "fontWeight": "bold"}),
                html.P(
                     "This page is empty for now.",
                     className="lead",

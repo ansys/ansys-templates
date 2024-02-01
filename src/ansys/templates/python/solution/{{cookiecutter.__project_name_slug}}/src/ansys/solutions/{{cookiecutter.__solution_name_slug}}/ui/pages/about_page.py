@@ -24,7 +24,7 @@ def layout():
     return html.Div(
         dbc.Container(
             [
-                html.H1("{{cookiecutter.solution_display_name}}", className="display-3", style={"font-size": "40px", "fontWeight": "bold"}),
+                html.H1("{{cookiecutter.solution_display_name}}", className="display-3", style={"font-size": "48px", "fontWeight": "bold"}),
                 html.P(
                     "Add a short sentence to describe the goal of the solution.",
                     className="lead",
@@ -38,22 +38,22 @@ def layout():
                                 dbc.Row(
                                     [
                                         dmc.Space(h=30),
-                                        html.H4("Description", className="card-title"),
+                                        html.H4("Description", style={"font-size": "24px", "fontWeight": "bold"}),
                                         html.P(
                                             "Put here a short description of the solution.",
-                                            style={"font-size": "18px", "textAlign": "justify"},
+                                            style={"font-size": "16px", "textAlign": "justify"},
                                         ),
                                         dmc.Space(h=30),
-                                        html.H4("Customer Goals", className="card-title"),
+                                        html.H4("Customer Goals", style={"font-size": "24px", "fontWeight": "bold"}),
                                         html.P(
                                             "What are the benefits for the customer?",
-                                            style={"font-size": "18px", "textAlign": "justify"},
+                                            style={"font-size": "16px", "textAlign": "justify"},
                                         ),
                                         dmc.Space(h=30),
-                                        html.H4("Engineering Goals", className="card-title"),
+                                        html.H4("Engineering Goals", style={"font-size": "24px", "fontWeight": "bold"}),
                                         html.P(
                                             "What is the engineering problem to solve? What are the Key Performance Indicators (KPIs) to monitor?",
-                                            style={"font-size": "18px", "textAlign": "justify"},
+                                            style={"font-size": "16px", "textAlign": "justify"},
                                         )
                                     ]
                                 )
@@ -84,7 +84,5 @@ def layout():
                 ),
             ],
             fluid=True,
-            className="py-3",
         ),
-        className="p-3 bg-light rounded-3",
     )

@@ -6,6 +6,8 @@
 from ansys.saf.glow.client.dashclient import DashClient, callback
 from ansys.solutions.dash_components.table import InputRow, OutputRow
 from dash_extensions.enrich import Input, Output, State, dcc, html
+import dash_mantine_components as dmc
+from dash_iconify import DashIconify
 
 from ansys.solutions.{{ cookiecutter.__solution_name_slug }}.solution.definition import {{cookiecutter.__solution_definition_name}}
 from ansys.solutions.{{ cookiecutter.__solution_name_slug }}.solution.first_step import FirstStep
@@ -15,7 +17,7 @@ def layout(step: FirstStep):
     """Layout of the first step page."""
     return html.Div(
         [
-            html.H1("First Step", className="display-3", style={"font-size": "30px", "fontWeight": "bold"}),
+            html.H1("First Step", className="display-3", style={"font-size": "48px", "fontWeight": "bold"}),
                html.P(
                     "Compute the sum of two numbers.",
                     className="lead",
@@ -47,17 +49,23 @@ def layout(step: FirstStep):
                 description_width=4,
                 font_size="16px",
             ).get(),
-            InputRow(
-                "button",
-                "calculate",
-                "Calculate",
-                label_width=2,
-                value_width=4,
-                unit_width=1,
-                description_width=4,
-                class_name="button",
-                font_size="16px",
-            ).get(),
+            html.Br(),
+            html.Div(
+                dmc.Button(
+                    "Calculate",
+                    id="calculate",
+                    leftIcon=DashIconify(icon="streamline:startup-solid"),
+                    radius="xl",
+                    disabled=False,
+                    className="mantine-button",
+                    style={"color": "#FFFFFF", "width": "100%", "background-color": "#000000", "font-size": "14px"},
+                ),
+                style={
+                    "textAlign": "center",
+                    "margin-left": "275px",
+                    "width": "500px",
+                },
+            ),
             html.Br(),
             OutputRow(
                 "number",
