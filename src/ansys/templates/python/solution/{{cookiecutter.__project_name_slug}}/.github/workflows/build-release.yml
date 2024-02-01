@@ -17,7 +17,7 @@ env:
   DOCUMENTATION_CNAME: ""
   POETRY_HTTP_BASIC_SOLUTIONS_PRIVATE_PYPI_USERNAME: "PAT"
   POETRY_HTTP_BASIC_SOLUTIONS_PRIVATE_PYPI_PASSWORD: {{ "${{ secrets.SOLUTIONS_PRIVATE_PYPI_PAT }}" }}
-  SBOM_NAME: {{ cookiecutter.__project_name_slug }}
+  SBOM_NAME: "{{ cookiecutter.__project_name_slug }}"
   HTML_DOCUMENTATION_ARTIFACT: "{{ cookiecutter.__project_name_slug }}-documentation"
   BUILD_ARTIFACT_NAME: "{{ cookiecutter.__project_name_slug }}-build"
 
@@ -78,8 +78,8 @@ jobs:
       - name: Run tests
         uses: ansys-internal/solution-applications-actions/run-tests@v11
         with:
-          python-version: ${{ matrix.python-version }}
-          gh-token: ${{ secrets.WORKFLOW_TOKEN }}
+          python-version: {{ "${{ matrix.python-version }}" }}
+          gh-token: {{ "${{ secrets.WORKFLOW_TOKEN }}" }}
           check-coverage-ratio: false
 
   check-licenses:
@@ -92,8 +92,8 @@ jobs:
       - name: Check Licneses
         uses: ansys-internal/solution-applications-actions/check-licenses@v11
         with:
-          gh-token: ${{ secrets.WORKFLOW_TOKEN }}
-          python-version: ${{ env.MAIN_PYTHON_VERSION }}
+          gh-token: {{ "${{ secrets.WORKFLOW_TOKEN }}" }}
+          python-version: {{ "${{ env.MAIN_PYTHON_VERSION }}" }}
 
   package-solution:
     name: Package Solution
@@ -116,9 +116,9 @@ jobs:
         uses: ansys-internal/solution-applications-actions/generate-sbom@v11
         with:
           lockfile-path: "./poetry.lock"
-          sbom-name: ${{ env.SBOM_NAME }}
-          gh-token: ${{ secrets.WORKFLOW_TOKEN }}
-          python-version: ${{ env.MAIN_PYTHON_VERSION }}
+          sbom-name: {{ "${{ env.SBOM_NAME }}" }}
+          gh-token: {{ "${{ secrets.WORKFLOW_TOKEN }}" }}
+          python-version: {{ "${{ env.MAIN_PYTHON_VERSION }}" }}
 
   validate-sbom:
     if: |
@@ -131,8 +131,8 @@ jobs:
       - name: Validate SBOM
         uses: ansys-internal/solution-applications-actions/validate-sbom@v11
         with:
-          sbom-artifact: ${{ env.SBOM_NAME }}
-          gh-token: ${{ secrets.WORKFLOW_TOKEN }}
+          sbom-artifact: {{ "${{ env.SBOM_NAME }}" }}
+          gh-token: {{ "${{ secrets.WORKFLOW_TOKEN }}" }}
 
   release:
     if: |
@@ -183,8 +183,8 @@ jobs:
       - uses: ansys/actions/doc-deploy-dev@v5
         with:
           doc-artifact-name: {{ "${{ env.HTML_DOCUMENTATION_ARTIFACT}}" }}
-          cname: ${{ env.DOCUMENTATION_CNAME }}
-          token: ${{ secrets.GITHUB_TOKEN }}
+          cname: {{ "${{ env.DOCUMENTATION_CNAME }}" }}
+          token: {{ "${{ secrets.GITHUB_TOKEN }}" }}
 
   doc-deploy-stable:
     name: "Deploy stable documentation"
@@ -196,5 +196,5 @@ jobs:
       - uses: ansys/actions/doc-deploy-stable@v5
         with:
           doc-artifact-name: {{ "${{ env.HTML_DOCUMENTATION_ARTIFACT}}" }}
-          cname: ${{ env.DOCUMENTATION_CNAME }}
-          token: ${{ secrets.GITHUB_TOKEN }}
+          cname: {{ "${{ env.DOCUMENTATION_CNAME }}" }}
+          token: {{ "${{ secrets.GITHUB_TOKEN }}" }}

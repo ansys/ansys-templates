@@ -36,14 +36,14 @@ jobs:
         uses: actions/download-artifact@v4
         if: {{ "${{ steps.release.outputs.release_created }}" }}
         with:
-          github-token: ${{secrets.WORKFLOW_TOKEN}}
+          github-token: {{ "${{secrets.WORKFLOW_TOKEN}}" }}
           run-id: {{ "${{ github.event.workflow_run.id }}" }}
 
       - name: Update tags and release branch
         uses: ansys-internal/solution-applications-actions/tag-repository-version@v11
         if: {{ "${{ steps.release.outputs.release_created }}" }}
         with:
-          release-version: ${{ steps.release.outputs.tag_name }}" }}
+          release-version: {{ "${{ steps.release.outputs.tag_name }}" }}
           gh-token: {{ "${{ secrets.WORKFLOW_TOKEN }}" }}
 
       - name: Upload Release Artifact
