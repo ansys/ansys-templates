@@ -12,17 +12,22 @@ from ansys.solutions.{{ cookiecutter.__solution_name_slug }}.solution.first_step
 
 
 def layout(step: FirstStep):
-    """Layout of the first step UI."""
+    """Layout of the first step page."""
     return html.Div(
         [
-            dcc.Markdown("""#### First step""", className="display-3"),
-            dcc.Markdown("""###### Compute the sum of two numbers.""", className="display-3"),
-            html.Hr(className="my-2"),
+            html.H1("First Step", className="display-3", style={"font-size": "30px", "fontWeight": "bold"}),
+               html.P(
+                    "Compute the sum of two numbers.",
+                    className="lead",
+                    style={"font-size": "20px"},
+                ),
+                html.Hr(className="my-2"),
             html.Br(),
             InputRow(
                 "number",
                 "first-arg",
                 "First Argument",
+                row_default_value=step.first_arg,
                 row_description="Enter a value.",
                 label_width=2,
                 value_width=4,
@@ -34,6 +39,7 @@ def layout(step: FirstStep):
                 "number",
                 "second-arg",
                 "Second Argument",
+                row_default_value=step.second_arg,
                 row_description="Enter a value.",
                 label_width=2,
                 value_width=4,
@@ -78,10 +84,6 @@ def layout(step: FirstStep):
     )
 
 
-# This is an example callback which stores entered data and executes a method.
-# This is the only place where user entered data is persisted in this Dash app.
-# Notice that the project is referenced by a call to get_project and
-# the url is a State argument to the callback
 @callback(
     Output("result", "value"),
     Output("wait_completion", "children"),
