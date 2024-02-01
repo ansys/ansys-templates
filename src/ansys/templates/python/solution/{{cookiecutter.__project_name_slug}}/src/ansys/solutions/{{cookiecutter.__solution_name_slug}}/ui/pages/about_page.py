@@ -7,13 +7,12 @@ import os
 from pathlib import Path
 
 import dash_bootstrap_components as dbc
-import dash_mantine_components as dmc
 from dash_extensions.enrich import html
+import dash_mantine_components as dmc
 
 
 def layout():
     """Layout of the about page."""
-
     solution_workflow_sketch_encoded = base64.b64encode(
         open(
             os.path.join(Path(__file__).parent.parent.absolute(), "assets", "images", "solution-workflow-sketch.png"),
@@ -50,9 +49,12 @@ def layout():
                                             style={"font-size": "16px", "textAlign": "justify"},
                                         ),
                                         dmc.Space(h=30),
-                                        html.H4("Engineering Goals", style={"font-size": "24px", "fontWeight": "bold"}),
+                                        html.H4(
+                                            "Engineering Goals",
+                                            style={"font-size": "24px", "fontWeight": "bold"}),
                                         html.P(
-                                            "What is the engineering problem to solve? What are the Key Performance Indicators (KPIs) to monitor?",
+                                            "What is the engineering problem to solve? What are the Key Performance "
+                                            "Indicators (KPIs) to monitor?",
                                             style={"font-size": "16px", "textAlign": "justify"},
                                         )
                                     ]

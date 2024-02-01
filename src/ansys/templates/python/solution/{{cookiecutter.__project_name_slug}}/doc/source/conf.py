@@ -3,12 +3,12 @@
 """Sphinx documentation configuration file."""
 
 
-import os
 from datetime import datetime
+import os
 from pathlib import Path
 
-import toml
 from ansys_sphinx_theme import ansys_favicon, get_version_match
+import toml
 
 
 BRANCH = "main"
@@ -18,7 +18,6 @@ DOC_PATH = "doc/source"
 
 def remove_scheme_from_url(url: str) -> tuple:
     """Remove the scheme part of a URL."""
-
     items = url.split("://")
     if len(items) == 2:
         return items[0], items[1]
@@ -27,6 +26,7 @@ def remove_scheme_from_url(url: str) -> tuple:
 
 
 def get_repository_name_from_url(url: str) -> str:
+    """Get repository name from the URL."""
     repository_name = remove_scheme_from_url(repository_url)[1].split("/")[-1]
     if ".git" in repository_name:
         repository_name = repository_name.split(".git")[0]

@@ -6,8 +6,8 @@
 from ansys.saf.glow.client.dashclient import DashClient, callback
 from ansys.solutions.dash_components.table import InputRow, OutputRow
 from dash_extensions.enrich import Input, Output, State, dcc, html
-import dash_mantine_components as dmc
 from dash_iconify import DashIconify
+import dash_mantine_components as dmc
 
 from ansys.solutions.{{ cookiecutter.__solution_name_slug }}.solution.definition import {{cookiecutter.__solution_definition_name}}
 from ansys.solutions.{{ cookiecutter.__solution_name_slug }}.solution.first_step import FirstStep
@@ -102,7 +102,7 @@ def layout(step: FirstStep):
     prevent_initial_call=True,
 )
 def calculate(n_clicks, first_arg, second_arg, pathname):
-    """Callback function to trigger the computation."""
+    """Trigger the computation."""
     project = DashClient[{{cookiecutter.__solution_definition_name}}].get_project(pathname)
     step = project.steps.first_step
     step.first_arg = first_arg

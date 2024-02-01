@@ -97,15 +97,18 @@ jobs:
 
   package-solution:
     name: Package Solution
-    uses: ansys-internal/solution-applications-actions/package-solution@v11
     needs: build
-    with:
-      desktop-utility-version: "v1"
-      gh-token: {{ "${{ secrets.WORKFLOW_TOKEN }}" }}
-      python-version: {{ "${{ env.MAIN_PYTHON_VERSION }}" }}
-      solution-display-name: "{{ cookiecutter.solution_display_name }}"
-      solution-name: "{{ cookiecutter.__project_name_slug }}"
-      solutions-pypi-token: {{ "${{ secrets.SOLUTIONS_PRIVATE_PYPI_PAT }}" }}
+    runs-on: windows-latest
+    steps:
+      - name: Package Solution
+        uses: ansys-internal/solution-applications-actions/package-solution@v11
+        with:
+          desktop-utility-version: "v1"
+          gh-token: {{ "${{ secrets.WORKFLOW_TOKEN }}" }}
+          python-version: {{ "${{ env.MAIN_PYTHON_VERSION }}" }}
+          solution-display-name: "{{ cookiecutter.solution_display_name }}"
+          solution-name: "{{ cookiecutter.__project_name_slug }}"
+          solutions-pypi-token: {{ "${{ secrets.SOLUTIONS_PRIVATE_PYPI_PAT }}" }}
 
   generate-sbom:
     name: Generate SBOM
