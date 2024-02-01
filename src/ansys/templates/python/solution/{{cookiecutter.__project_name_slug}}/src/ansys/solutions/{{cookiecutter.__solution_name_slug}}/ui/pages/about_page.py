@@ -24,7 +24,7 @@ def layout():
     return html.Div(
         dbc.Container(
             [
-                 html.H1("{{cookiecutter.solution_display_name}}", className="display-3", style={"font-size": "40px", "fontWeight": "bold"}),
+                html.H1("{{cookiecutter.solution_display_name}}", className="display-3", style={"font-size": "40px", "fontWeight": "bold"}),
                 html.P(
                     "Add a short sentence to describe the goal of the solution.",
                     className="lead",

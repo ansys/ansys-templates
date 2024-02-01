@@ -307,7 +307,7 @@ SOLUTION_STRUCTURE = [
     f"src/ansys/solutions/{SOLUTION_VARS['__solution_name_slug']}/ui/assets/images/README.md",
     f"src/ansys/solutions/{SOLUTION_VARS['__solution_name_slug']}/ui/assets/images/solution-workflow-sketch.png",
     f"src/ansys/solutions/{SOLUTION_VARS['__solution_name_slug']}/ui/assets/logos/ansys_solutions_logo_black.png",
-    f"src/ansys/solutions/{SOLUTION_VARS['__solution_name_slug']}/ui/assets/logos/ansys_solutions_logo_white.png",    
+    f"src/ansys/solutions/{SOLUTION_VARS['__solution_name_slug']}/ui/assets/logos/ansys_solutions_logo_white.png",
     f"src/ansys/solutions/{SOLUTION_VARS['__solution_name_slug']}/ui/assets/scripts/README.md",
     f"src/ansys/solutions/{SOLUTION_VARS['__solution_name_slug']}/ui/components/README.md",
     f"src/ansys/solutions/{SOLUTION_VARS['__solution_name_slug']}/ui/pages/about_page.py",

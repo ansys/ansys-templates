@@ -10,7 +10,7 @@ Installation
 Prerequisites
 -------------
 
-.. list-table:: 
+.. list-table::
   :widths: 15 40
 
   * - **Operating system**
@@ -26,7 +26,7 @@ Prerequisites
       | <add-another-product-name>
       | <repeat-for-each-product>
   * - **Tokens**
-    - The environment variables ``PYANSYS_PRIVATE_PYPI_PAT`` is set with the corresponding token which can be find `here <https://dev-docs.solutions.ansys.com/solution_journey/journey_prepare/connect_to_private_pypi.html>`_.  
+    - The environment variables ``PYANSYS_PRIVATE_PYPI_PAT`` is set with the corresponding token which can be find `here <https://dev-docs.solutions.ansys.com/solution_journey/journey_prepare/connect_to_private_pypi.html>`_.
 
 
 Setting up the development environment
