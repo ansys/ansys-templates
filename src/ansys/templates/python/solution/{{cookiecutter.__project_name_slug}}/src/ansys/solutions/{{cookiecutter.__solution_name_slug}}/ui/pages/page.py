@@ -139,7 +139,7 @@ def return_to_portal(pathname):
             html.A(
                 [
                     dmc.ActionIcon(
-                        DashIconify(icon="ion:exit-outline", width=36),
+                        DashIconify(icon="carbon:return", width=36),
                         id="back-to-projects-icon",
                         size=36,
                         variant="transparent",
