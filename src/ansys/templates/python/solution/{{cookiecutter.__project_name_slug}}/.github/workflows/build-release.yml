@@ -19,7 +19,6 @@ env:
   POETRY_HTTP_BASIC_PYANSYS_PRIVATE_PYPI_PASSWORD: {{ "${{ secrets.PYANSYS_PRIVATE_PYPI_PAT }}" }}
   SBOM_NAME: "{{ cookiecutter.__project_name_slug }}"
   HTML_DOCUMENTATION_ARTIFACT: "{{ cookiecutter.__project_name_slug }}-documentation"
-  BUILD_ARTIFACT_NAME: "{{ cookiecutter.__project_name_slug }}-build"
 
 concurrency:
   group: {{ "${{ github.workflow }}-${{ github.ref }}" }}
@@ -57,7 +56,6 @@ jobs:
       - name: Build
         uses: ansys-internal/solution-applications-actions/build@v11
         with:
-          artifact-name: {{ "${{ env.BUILD_ARTIFACT_NAME }}" }}
           python-version: {{ "${{ env.MAIN_PYTHON_VERSION }}" }}
           gh-token: {{ "${{ secrets.WORKFLOW_TOKEN }}" }}
           scripts-version: "v2.0.0"
