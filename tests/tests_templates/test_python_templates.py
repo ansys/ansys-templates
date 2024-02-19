@@ -346,6 +346,8 @@ SOLUTION_STRUCTURE = [
     "README.rst",
     "setup_environment.py",
     "tox.ini",
+    "release-please-config.json",
+    "release-please-manifest.json"
 ]
 
 

@@ -57,7 +57,9 @@ DESIRED_STRUCTURE = [
     "README.rst",
     "setup_environment.py",
     "tox.ini",
-    ".env"
+    ".env",
+    "release-please-config.json",
+    "release-please-manifest.json"
 ]
 """A list holding all desired files to be included in the project."""
 
