@@ -599,7 +599,7 @@ def install_build_system(args: object) -> None:
         build_system_executable = DEPENDENCY_MANAGER_PATHS[sys.platform]["build_sys_exec"]
         if os.path.exists(build_system_executable):
             if sys.platform == "win32":
-                subprocess.run(
+                process = subprocess.run(
                     [
                         "powershell",
                         "-Command",
@@ -612,8 +612,10 @@ def install_build_system(args: object) -> None:
                         f"'{build_system_executable}'",
                     ]
                 )
+                if process.returncode == 0:
+                    check_if_user_is_internal_or_external()
             elif sys.platform == "linux":
-                subprocess.run(
+                process = subprocess.run(
                     [
                         "ln",
                         "-sf",
@@ -621,7 +623,11 @@ def install_build_system(args: object) -> None:
                         DEPENDENCY_MANAGER_PATHS[sys.platform]["dep_bin_venv_path"],
                     ]
                 )
+                if process.returncode == 0:
+                    check_if_user_is_internal_or_external()
         return
+    else:
+        check_if_user_is_internal_or_external()
     print("Skipped")
     print()
 
@@ -677,31 +683,41 @@ def configure_poetry(
     if not use_private_sources:
         return
 
+    is_token_exist = False
     # Declare credentials for private sources
     for source in private_sources:
         print(f"Declare credentials for {source['name']}")
+        USERNAME = "PAT"
+        token = None
         if source["name"].lower() == "pypi":
             continue
         elif source["url"] == "https://pkgs.dev.azure.com/pyansys/_packaging/pyansys/pypi/simple/":
-            token = os.environ["PYANSYS_PRIVATE_PYPI_PAT"]
+            token = os.environ.get("PYANSYS_PRIVATE_PYPI_PAT")
         elif source["url"] == "https://pkgs.dev.azure.com/pyansys/_packaging/ansys-solutions/pypi/simple/":
-            token = os.environ["SOLUTIONS_PRIVATE_PYPI_PAT"]
-        else:
-            raise Exception(f"Unknown private source {source['name']} with url {source['url']}.")
+            token = os.environ.get("SOLUTIONS_PRIVATE_PYPI_PAT")
+        elif source["url"] == "https://artifactory.ansys.com/artifactory/api/pypi/saf_pypi/simple/":
+            token = os.environ.get("ARTIFACTORY_PRIVATE_PYPI_PAT")
+            USERNAME = os.environ.get("ARTIFACTORY_PRIVATE_PYPI_USER")
+
+        is_token_exist = bool(token) if not is_token_exist else is_token_exist
+
         # Store credentials
-        if credentials_management_method == "keyring":
-            # Declare source URL
-            command_line = [poetry_executable, "config", f"repositories.{source['name']}", source["url"], "--local"]
-            subprocess.run(command_line, check=True)
-            # Declare source credentials
-            command_line = [poetry_executable, "config", f"http-basic.{source['name']}", "PAT", token, "--local"]
-            subprocess.run(command_line, check=True)
-        elif credentials_management_method == "environment-variables":
-            # Format source name to comply with Poetry environment variable syntax
-            source_name = source["name"].upper().replace("-", "_")
-            # Create Poetry environment variable
-            os.environ[f"POETRY_HTTP_BASIC_{source_name}_USERNAME"] = "PAT"
-            os.environ[f"POETRY_HTTP_BASIC_{source_name}_PASSWORD"] = token
+        if token and USERNAME:
+            if credentials_management_method == "keyring":
+                # Declare source URL
+                command_line = [poetry_executable, "config", f"repositories.{source['name']}", source["url"], "--local"]
+                subprocess.run(command_line, check=True)
+                # Declare source credentials
+                command_line = [poetry_executable, "config", f"http-basic.{source['name']}", USERNAME, token, "--local"]
+                subprocess.run(command_line, check=True)
+            elif credentials_management_method == "environment-variables":
+                # Format source name to comply with Poetry environment variable syntax
+                source_name = source["name"].upper().replace("-", "_")
+                # Create Poetry environment variable
+                os.environ[f"POETRY_HTTP_BASIC_{source_name}_USERNAME"] = USERNAME
+                os.environ[f"POETRY_HTTP_BASIC_{source_name}_PASSWORD"] = token
+    if not is_token_exist:
+        raise Exception("Please provide valid token for private sources")
 
 
 def check_dependency_group(dependency_group: str, configuration: str) -> bool:
@@ -957,6 +973,66 @@ def install_dotnet_linux_dependencies():
             check=True,
             shell=True,
         )
+        
+def check_if_user_is_internal_or_external():
+    private_pypi_pats = [
+        os.environ.get("PYANSYS_PRIVATE_PYPI_PAT"),
+        os.environ.get("SOLUTIONS_PRIVATE_PYPI_PAT")
+    ]
+    is_internal = any(private_pypi_pats)
+    private_sources_dict = {
+        'solutions-private-pypi': {'url': 'https://pkgs.dev.azure.com/pyansys/_packaging/ansys-solutions/pypi/simple/', 'priority': 'supplemental'},
+        'pyansys-private-pypi': {'url': 'https://pkgs.dev.azure.com/pyansys/_packaging/pyansys/pypi/simple/', 'priority': 'supplemental'},
+        'artifactory-private-pypi': {'url': 'https://artifactory.ansys.com/artifactory/api/pypi/saf_pypi/simple/', 'priority': 'supplemental'}
+    }
+    private_sources = get_private_sources(DEPENDENCY_MANAGER_PATHS["common"]["configuration_file"])
+    private_sources = [source for source in private_sources if source['name']!='PyPI']
+    internal_sources = {'solutions-private-pypi', 'pyansys-private-pypi'}
+    external_sources = {'artifactory-private-pypi'}
+    all_sources = {source['name'] for source in private_sources}
+
+    # Add sources if they are not already present
+    sources_to_add = set()
+    if is_internal:
+        sources_to_add |= internal_sources - all_sources
+    else:
+        sources_to_add |= external_sources - all_sources
+    
+    commands = [
+        [
+            DEPENDENCY_MANAGER_PATHS[sys.platform]["build_sys_exec"],
+            "source",
+            "add",
+            source,
+            private_sources_dict[source]['url'],
+            f"--priority={private_sources_dict[source]['priority']}"
+        ] for source in sources_to_add
+    ]
+    
+    # Remove sources that should not be present
+    sources_to_remove = set()
+    if is_internal:
+        sources_to_remove |= all_sources - internal_sources
+    else:
+        sources_to_remove |= all_sources - external_sources
+
+    commands += [
+        [
+            DEPENDENCY_MANAGER_PATHS[sys.platform]["build_sys_exec"],
+            "source",
+            "remove",
+            source
+        ] for source in sources_to_remove
+    ]
+
+    for command in commands:
+        process = subprocess.run(
+            command,
+            check=True,
+            shell=DEPENDENCY_MANAGER_PATHS[sys.platform]["shell"]
+        )
+        if process.returncode != 0:
+            break  
 
 
 def main() -> None:
