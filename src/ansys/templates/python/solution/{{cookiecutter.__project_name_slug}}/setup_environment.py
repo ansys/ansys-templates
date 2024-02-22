@@ -973,7 +973,7 @@ def install_dotnet_linux_dependencies():
             check=True,
             shell=True,
         )
-        
+
 def check_if_user_is_internal_or_external():
     private_pypi_pats = [
         os.environ.get("PYANSYS_PRIVATE_PYPI_PAT"),
@@ -986,7 +986,7 @@ def check_if_user_is_internal_or_external():
         'artifactory-private-pypi': {'url': 'https://artifactory.ansys.com/artifactory/api/pypi/saf_pypi/simple/', 'priority': 'supplemental'}
     }
     private_sources = get_private_sources(DEPENDENCY_MANAGER_PATHS["common"]["configuration_file"])
-    private_sources = [source for source in private_sources if source['name']!='PyPI']
+    private_sources = [source for source in private_sources if source['name'] != 'PyPI']
     internal_sources = {'solutions-private-pypi', 'pyansys-private-pypi'}
     external_sources = {'artifactory-private-pypi'}
     all_sources = {source['name'] for source in private_sources}
@@ -997,7 +997,7 @@ def check_if_user_is_internal_or_external():
         sources_to_add |= internal_sources - all_sources
     else:
         sources_to_add |= external_sources - all_sources
-    
+
     commands = [
         [
             DEPENDENCY_MANAGER_PATHS[sys.platform]["build_sys_exec"],
@@ -1008,7 +1008,7 @@ def check_if_user_is_internal_or_external():
             f"--priority={private_sources_dict[source]['priority']}"
         ] for source in sources_to_add
     ]
-    
+
     # Remove sources that should not be present
     sources_to_remove = set()
     if is_internal:
@@ -1032,7 +1032,7 @@ def check_if_user_is_internal_or_external():
             shell=DEPENDENCY_MANAGER_PATHS[sys.platform]["shell"]
         )
         if process.returncode != 0:
-            break  
+            break
 
 
 def main() -> None:
