@@ -300,13 +300,13 @@ tests = ["ansys-api-platform-instancemanagement (==1.0.0)", "grpcio-health-check
 
 [[package]]
 name = "ansys-saf-desktop"
-version = "1.0rc3"
+version = "1.0rc4"
 description = "Ansys Solution Application Framework / Guided Low Code Workflow (SAF DESKTOP)"
 optional = false
 python-versions = ">=3.8,<3.11"
 files = [
-    {file = "ansys_saf_desktop-1.0rc3-py3-none-any.whl", hash = "sha256:937b0f4b3bb56ce567d864986410038e5b8de620e8de32a4f137fa3dc9afb261"},
-    {file = "ansys_saf_desktop-1.0rc3.tar.gz", hash = "sha256:6a31ba0f70210312f37885b893f6cb287b42353cc9c67e75e059b77d49c9362f"},
+    {file = "ansys_saf_desktop-1.0rc4-py3-none-any.whl", hash = "sha256:eac913ec933a1afd4e6fc480cfb1f80b188c2c4cfb1b8a9dd41a6c80ff2b66e0"},
+    {file = "ansys_saf_desktop-1.0rc4.tar.gz", hash = "sha256:64ad6923f3d33d818539577404a4ea470f579cbe62bbff249d0ed80eb6b1d7ea"},
 ]
 
 [package.dependencies]
