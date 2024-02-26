@@ -16,6 +16,10 @@ Files: .github/*
 Copyright: 2023 ANSYS, Inc. and/or its affiliates.
 License: MIT
 
+Files: changelog.d/*
+Copyright: 2023 ANSYS, Inc. and/or its affiliates.
+License: MIT
+
 Files: doc/.vale.ini
 Copyright: 2023 ANSYS, Inc. and/or its affiliates.
 License: MIT
@@ -76,3 +80,6 @@ Files: CONTRIBUTORS.md
 Copyright: 2023 ANSYS, Inc. and/or its affiliates.
 License: MIT
 
+Files: CHANGELOG.md
+Copyright: 2023 ANSYS, Inc. and/or its affiliates.
+License: MIT
