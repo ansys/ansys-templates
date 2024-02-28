@@ -1,4 +1,5 @@
 # ©2023, ANSYS Inc. Unauthorized use, distribution or duplication is prohibited.
+# solutions-common-files@v2.0.1
 
 """
 A Python script to automate the setup of the Python ecosystem of a project.
@@ -166,7 +167,6 @@ if "group" in configuration["tool"]["poetry"].keys():
 
 def print_main_header(text: str, max_length: int = 100) -> None:
     """Display main header."""
-
     for _ in range(max_length):
         print("=", end="")
     print()
@@ -179,7 +179,6 @@ def print_main_header(text: str, max_length: int = 100) -> None:
 
 def print_section_header(text: str, max_length: int = 100) -> None:
     """Display a section header in the console."""
-
     section_header = ""
     if len(text) < max_length:
         section_header = text + " "
@@ -193,7 +192,6 @@ def print_section_header(text: str, max_length: int = 100) -> None:
 
 def print_input_value(input: str, value: str, separator: str = ":", separator_position: int = 60) -> None:
     """Print input value in console."""
-
     if len(input) < separator_position:
         text = input
         for i in range(len(text), separator_position):
@@ -206,7 +204,6 @@ def print_input_value(input: str, value: str, separator: str = ":", separator_po
 
 def print_inputs_summary(args: object) -> None:
     """Display a summary of the inputs."""
-
     print(f"OS                                   : {platform.system()}")
     print(f"Python version                       : {get_python_version()}")
     print(f"Virtual environment name             : {args.venv_name}")
@@ -237,7 +234,6 @@ def print_inputs_summary(args: object) -> None:
 
 def check_virtual_environment_name(args: object) -> None:
     """Check if the virtual environment name is consistent with the build system expectations."""
-
     if DEPENDENCY_MANAGER_PATHS["common"]["required_venv_name"] != args.venv_name:
         old_name = args.venv_name
         args.venv_name = DEPENDENCY_MANAGER_PATHS["common"]["required_venv_name"]
@@ -248,11 +244,7 @@ def check_virtual_environment_name(args: object) -> None:
 
 
 def check_python_version(args: object) -> None:
-    """
-    Check if the version of the current Python interpreter is consistent with the python version specifications
-    from the build system.
-    """
-
+    """Check if the version of the current Python interpreter is consistent with the python version specifications."""
     # Initialize lower/upper versions
     lower_version, upper_version, lower_bound_symbol, upper_bound_symbol = None, None, None, None
     lower_specification, upper_specification, single_specification = None, None, None
@@ -300,7 +292,6 @@ def check_python_version(args: object) -> None:
 
 def check_existing_install(args: object) -> str:
     """Check if an install exists already."""
-
     return os.path.isdir(args.venv_name)
 
 
@@ -325,6 +316,7 @@ def check_inputs(args: object) -> None:
 
 
 def modify_toml_file_in_case_of_wheel_files(args: object) -> None:
+    """Modify the toml file in case of wheel files."""
     if not args.local_wheels:
         return
 
@@ -348,6 +340,7 @@ def modify_toml_file_in_case_of_wheel_files(args: object) -> None:
 
 
 def check_that_all_wheels_are_provided(wheel_files: dict, configuration: dict) -> None:
+    """Check that all wheels are provided in the local wheels directory."""
     private_packages = find_private_packages_in_lock_file()
 
     for private_package in private_packages:
@@ -357,6 +350,7 @@ def check_that_all_wheels_are_provided(wheel_files: dict, configuration: dict) -
 
 
 def find_private_packages_in_lock_file() -> list:
+    """Find private packages in the lock file."""
     lock_data = toml.load(os.path.join(os.getcwd(), DEPENDENCY_MANAGER_PATHS["common"]["lock_file"]))
     packages = lock_data.get("package", [])
 
@@ -374,26 +368,21 @@ def find_private_packages_in_lock_file() -> list:
 
 def extract_substring_between_markers(string: str, marker_1: str, marker_2: str) -> str:
     """Extract substring between two markers using find() and slice()."""
-
     # find() method will search the given marker and stores its index
     mk1 = string.find(marker_1) + len(marker_1)
-    # find() method will search the given marker and sotres its index
+    # find() method will search the given marker and stores its index
     mk2 = string.find(marker_2, mk1)
     # using slicing substring will be fetched in between markers.
     return string[mk1:mk2]
 
 
 def read_integers_from_string(string: str) -> list:
-    """
-    Scan a string and extract integers. The regex matches any digit character (0-9).
-    """
-
+    """Scan a string and extract integers. The regex matches any digit character (0-9)."""
     return re.findall(r"\d+", string)
 
 
 def remove_scheme_from_url(url: str) -> tuple:
     """Remove the scheme part of a URL."""
-
     items = url.split("://")
     if len(items) == 2:
         return items[0], items[1]
@@ -403,7 +392,6 @@ def remove_scheme_from_url(url: str) -> tuple:
 
 def get_python_version() -> None:
     """Get Python version."""
-
     return f"{sys.version_info.major}.{sys.version_info.minor}.{sys.version_info.micro}"
 
 
@@ -416,7 +404,6 @@ def set_pip_command(
     python_executable: str = sys.executable,
 ) -> str:
     """Make pip command."""
-
     package_name = "poetry"
 
     # Add package version if specified
@@ -472,7 +459,6 @@ def get_python_package(
     -------
     None
     """
-
     # Set pip command
     command = set_pip_command(
         package_version=package_version,
@@ -498,7 +484,6 @@ def get_python_package_versions(
     python_executable: str = sys.executable,
 ) -> None:
     """Get available versions of a package."""
-
     # Set pip command
     command = set_pip_command(
         package_version="x",
@@ -519,7 +504,6 @@ def get_python_package_versions(
 
 def create_virtual_environment(args: object, venv: str = ".venv") -> None:
     """Create a virtual environment."""
-
     print("Create virtual environment")
     if not args.has_install or args.force_clear or args.force_clear_all:
         if sys.platform == "linux":
@@ -537,7 +521,6 @@ def create_virtual_environment(args: object, venv: str = ".venv") -> None:
 
 def get_private_sources(configuration_file: str) -> list:
     """Get list of private sources from configuration file."""
-
     configuration = toml.load(configuration_file)
     try:
         private_sources = configuration["tool"]["poetry"]["source"]
@@ -548,13 +531,11 @@ def get_private_sources(configuration_file: str) -> list:
 
 def get_version_from_python_specification(specification: str) -> str:
     """Read the version."""
-
     return ".".join(read_integers_from_string(specification))
 
 
 def get_sign_from_python_specification(specification: str) -> str:
     """Read the mathematical symbol expressing a constraint on the version."""
-
     first_part = specification.split(".")[0]
     sign = "".join([i for i in first_part if not i.isdigit()])
     if sign == "":
@@ -564,7 +545,6 @@ def get_sign_from_python_specification(specification: str) -> str:
 
 def get_build_system_version(args: object) -> str:
     """Assign build system version."""
-
     if not args.has_install or args.force_clear or args.force_clear_all:
         configuration = toml.load(DEPENDENCY_MANAGER_PATHS["common"]["configuration_file"])
         if "build-system-requirements" in configuration.keys():
@@ -579,7 +559,6 @@ def get_build_system_version(args: object) -> str:
 
 def install_build_system(args: object) -> None:
     """Install build system."""
-
     print("Install dependency management system.")
     if not args.has_install or args.force_clear or args.force_clear_all:
         configuration = toml.load(DEPENDENCY_MANAGER_PATHS["common"]["configuration_file"])
@@ -628,7 +607,6 @@ def install_build_system(args: object) -> None:
 
 def configure_build_system(args: object) -> None:
     """Configure the build system to enable connection to private sources."""
-
     print("Configure dependency management system.")
     if not args.has_install or args.force_clear or args.force_clear_all:
         configure_poetry(
@@ -683,9 +661,9 @@ def configure_poetry(
         if source["name"].lower() == "pypi":
             continue
         elif source["url"] == "https://pkgs.dev.azure.com/pyansys/_packaging/pyansys/pypi/simple/":
-            token = os.environ["PYANSYS_PRIVATE_PYPI_PAT"]
+            token = os.environ["PYANSYS_PYPI_PRIVATE_PAT"]
         elif source["url"] == "https://pkgs.dev.azure.com/pyansys/_packaging/ansys-solutions/pypi/simple/":
-            token = os.environ["SOLUTIONS_PRIVATE_PYPI_PAT"]
+            token = os.environ["PYANSYS_PYPI_PRIVATE_PAT"]
         else:
             raise Exception(f"Unknown private source {source['name']} with url {source['url']}.")
         # Store credentials
@@ -706,7 +684,6 @@ def configure_poetry(
 
 def check_dependency_group(dependency_group: str, configuration: str) -> bool:
     """Return True if the dependency group is available in the configuration file."""
-
     try:
         configuration["tool"]["poetry"]["group"][dependency_group]
         return True
@@ -719,7 +696,6 @@ def check_dependency_group(dependency_group: str, configuration: str) -> bool:
 
 def parser() -> None:
     """Parse command line arguments."""
-
     # Code Name
     program_name = "Setup Environment Utility"
     # Code description
@@ -822,7 +798,6 @@ def parser() -> None:
 
 def clear_workspace(args: object) -> None:
     """Remove residual items form previous installation (like venv directory, lock file ...)."""
-
     print("Clear workspace")
     if args.force_clear or args.force_clear_all:
         # Remove virtual environment
@@ -850,7 +825,6 @@ def clear_workspace(args: object) -> None:
 
 def install_production_dependencies(args: object) -> None:
     """Install the package (mandatory requirements only)."""
-
     print("Install production dependencies")
     if "run" in args.dependencies:
         subprocess.run(
@@ -870,7 +844,6 @@ def install_production_dependencies(args: object) -> None:
 
 def install_optional_dependencies(args: object) -> None:
     """Install optional requirements (doc, tests, build or style)."""
-
     # Load configuration file
     configuration = toml.load(DEPENDENCY_MANAGER_PATHS["common"]["configuration_file"])
     # Install standard optional dependency groups
@@ -941,6 +914,7 @@ def install_optional_dependencies(args: object) -> None:
 
 
 def install_dotnet_linux_dependencies():
+    """Install dotnet dependencies on linux."""
     print("Install dotnet dependencies")
     if sys.platform == "linux":
         subprocess.run(
@@ -961,7 +935,6 @@ def install_dotnet_linux_dependencies():
 
 def main() -> None:
     """Sequence of operations leading to the complete Python ecosystem."""
-
     # Start timer
     time_on = time.time()
     # Get current working directory
