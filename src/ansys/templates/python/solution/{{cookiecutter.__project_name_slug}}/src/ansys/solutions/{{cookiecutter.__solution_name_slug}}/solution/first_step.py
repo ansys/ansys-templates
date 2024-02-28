@@ -17,3 +17,4 @@ class FirstStep(StepModel):
     def calculate(self) -> None:
         """Method to compute the sum of two numbers."""
         self.result = self.first_arg + self.second_arg
+        
