@@ -56,6 +56,7 @@ DESIRED_STRUCTURE = [
     "pyproject.toml",
     "README.rst",
     "setup_environment.py",
+    "sonar-project.properties",
     "tox.ini",
     ".env"
 ]
