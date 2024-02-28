@@ -3,17 +3,21 @@
 """Frontend of the second step."""
 
 
-from dash_extensions.enrich import dcc, html
+from dash_extensions.enrich import html
 
 from ansys.solutions.solution.solution.second_step import SecondStep
 
 
 def layout(step: SecondStep):
-    """Layout of the second step UI."""
+    """Layout of the second step page."""
     return html.Div(
         [
-            dcc.Markdown("""#### Second step""", className="display-3"),
-            dcc.Markdown("""###### Subtitle.""", className="display-3"),
+            html.H1("Second Step", className="display-3", style={"font-size": "48px", "fontWeight": "bold"}),
+            html.P(
+                "This page is empty for now.",
+                className="lead",
+                style={"font-size": "20px"},
+            ),
             html.Hr(className="my-2"),
             html.Br(),
         ]

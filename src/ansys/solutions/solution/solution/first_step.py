@@ -15,5 +15,5 @@ class FirstStep(StepModel):
 
     @transaction(self=StepSpec(upload=["result"], download=["first_arg", "second_arg"]))
     def calculate(self) -> None:
-        """Method to compute the sum of two numbers."""
+        """Compute the sum of two numbers."""
         self.result = self.first_arg + self.second_arg

@@ -13,10 +13,12 @@ on:
   workflow_dispatch:
 
 env:
-  MAIN_PYTHON_VERSION: "3.8"
-  DOCUMENTATION_CNAME: ""
+  MAIN_PYTHON_VERSION: "3.9"
+  DOCUMENTATION_CNAME: "replace.me.ansys.com" # Replace with the CNAME of the documentation
   POETRY_HTTP_BASIC_SOLUTIONS_PRIVATE_PYPI_USERNAME: "PAT"
-  POETRY_HTTP_BASIC_SOLUTIONS_PRIVATE_PYPI_PASSWORD: ${{ secrets.SOLUTIONS_PRIVATE_PYPI_PAT }}
+  POETRY_HTTP_BASIC_SOLUTIONS_PRIVATE_PYPI_PASSWORD: ${{ secrets.PYANSYS_PRIVATE_PYPI_PAT }}
+  SBOM_NAME: "solution"
+  HTML_DOCUMENTATION_ARTIFACT: "solution-documentation"
 
 concurrency:
   group: ${{ github.workflow }}-${{ github.ref }}
@@ -29,7 +31,7 @@ jobs:
     timeout-minutes: 10
     steps:
       - name: Check copyright
-        uses: Solution-Applications/actions/check-copyright@v5
+        uses: ansys-internal/solution-applications-actions/check-copyright@v11
         with:
           gh-token: ${{ secrets.WORKFLOW_TOKEN }}
 
@@ -39,7 +41,7 @@ jobs:
     timeout-minutes: 10
     steps:
       - name: Check code style
-        uses: Solution-Applications/actions/check-code-style@v5
+        uses: ansys-internal/solution-applications-actions/check-code-style@v11
         with:
           python-version: ${{ env.MAIN_PYTHON_VERSION }}
           gh-token: ${{ secrets.WORKFLOW_TOKEN }}
@@ -50,12 +52,10 @@ jobs:
   build:
     name: Build
     runs-on: [ubuntu-latest]
-    timeout-minutes: 10
     steps:
       - name: Build
-        uses: Solution-Applications/actions/build@v5
+        uses: ansys-internal/solution-applications-actions/build@v11
         with:
-          artifact-name: "wheel"
           python-version: ${{ env.MAIN_PYTHON_VERSION }}
           gh-token: ${{ secrets.WORKFLOW_TOKEN }}
           scripts-version: "v2.0.0"
@@ -65,19 +65,138 @@ jobs:
           retention-days: "7"
           modern-installation: "true"
 
+  run-tests:
+    name: Run tests
+    runs-on: [windows-latest]
+    timeout-minutes: 20
+    strategy:
+      matrix:
+        python-version: ["3.8", "3.9", "3.10"]
+      fail-fast: false
+    steps:
+      - name: Run tests
+        uses: ansys-internal/solution-applications-actions/run-tests@v11
+        with:
+          python-version: ${{ matrix.python-version }}
+          gh-token: ${{ secrets.WORKFLOW_TOKEN }}
+          check-coverage-ratio: false
+
+  check-licenses:
+    if: |
+      github.event_name == 'push' && github.ref == 'refs/heads/main'
+    name: Check Licenses
+    runs-on: [ubuntu-latest]
+    timeout-minutes: 10
+    steps:
+      - name: Check Licneses
+        uses: ansys-internal/solution-applications-actions/check-licenses@v11
+        with:
+          gh-token: ${{ secrets.WORKFLOW_TOKEN }}
+          python-version: ${{ env.MAIN_PYTHON_VERSION }}
+
+  package-solution:
+    name: Package Solution
+    needs: build
+    runs-on: windows-latest
+    steps:
+      - name: Package Solution
+        uses: ansys-internal/solution-applications-actions/package-solution@v11
+        with:
+          desktop-utility-version: "v1"
+          gh-token: ${{ secrets.WORKFLOW_TOKEN }}
+          python-version: ${{ env.MAIN_PYTHON_VERSION }}
+          solution-display-name: "My Solution"
+          solution-name: "solution"
+          solutions-pypi-token: ${{ secrets.SOLUTIONS_PRIVATE_PYPI_PAT }}
+
+  generate-sbom:
+    name: Generate SBOM
+    runs-on: ubuntu-latest
+    timeout-minutes: 10
+    steps:
+      - name: Generate SBOM
+        uses: ansys-internal/solution-applications-actions/generate-sbom@v11
+        with:
+          lockfile-path: "./poetry.lock"
+          sbom-name: ${{ env.SBOM_NAME }}
+          gh-token: ${{ secrets.WORKFLOW_TOKEN }}
+          python-version: ${{ env.MAIN_PYTHON_VERSION }}
+
+  validate-sbom:
+    if: |
+      github.event_name == 'push'
+    name: Validate SBOM
+    runs-on: [ubuntu-latest]
+    timeout-minutes: 10
+    needs: generate-sbom
+    steps:
+      - name: Validate SBOM
+        uses: ansys-internal/solution-applications-actions/validate-sbom@v11
+        with:
+          sbom-artifact: ${{ env.SBOM_NAME }}
+          gh-token: ${{ secrets.WORKFLOW_TOKEN }}
+
   release:
     if: |
-      github.event_name == 'release'
+      github.event_name == 'release' && false
     name: Release
-    needs: [check-copyright, check-code-style, build]
+    needs: [build-doc, check-copyright, check-code-style, build, run-tests, check-licenses, package-solution, generate-sbom, validate-sbom]
     runs-on: [ubuntu-latest]
     timeout-minutes: 10
     steps:
       - name: Release
-        uses: Solution-Applications/actions/release@v5
+        uses: ansys-internal/solution-applications-actions/release-to-private-pypi@v11
         with:
           python-version: ${{ env.MAIN_PYTHON_VERSION }}
+          twine-repository-url: https://pkgs.dev.azure.com/pyansys/_packaging/ansys-solutions/pypi/upload/
+          twine-username: "TOKEN"
+          twine-password: ${{ secrets.SOLUTIONS_PRIVATE_PYPI_ADMIN_TOKEN }}
+
+  check-doc-style:
+    name: Check documentation style
+    runs-on: ubuntu-latest
+    timeout-minutes: 10
+    steps:
+      - name: Check documentation style
+        uses: ansys-internal/solution-applications-actions/check-doc-style@v11
+        with:
+          gh-token: ${{ secrets.GITHUB_TOKEN }}
+
+  build-doc:
+    name: Build documentation
+    runs-on: ubuntu-latest
+    needs: check-doc-style
+    timeout-minutes: 10
+    steps:
+      - name: Build documentation
+        uses: ansys-internal/solution-applications-actions/build-doc@v11
+        with:
           gh-token: ${{ secrets.WORKFLOW_TOKEN }}
-          solutions-pypi-token:
-            ${{ secrets.SOLUTIONS_PRIVATE_PYPI_ADMIN_TOKEN }}
-          solutions-pypi-repository-url: https://pkgs.dev.azure.com/pyansys/_packaging/ansys-solutions/pypi/upload/
+          python-version: ${{ env.MAIN_PYTHON_VERSION }}
+          documentation-artifact: ${{ env.HTML_DOCUMENTATION_ARTIFACT}}
+
+  doc-deploy-dev:
+    name: "Deploy development documentation"
+    # Deploy development only when merging or pushing to the 'main' branch
+    if: github.event_name == 'push' && !contains(github.ref, 'refs/tags')
+    runs-on: ubuntu-latest
+    needs: build-doc
+    steps:
+      - uses: ansys/actions/doc-deploy-dev@v5
+        with:
+          doc-artifact-name: ${{ env.HTML_DOCUMENTATION_ARTIFACT}}
+          cname: ${{ env.DOCUMENTATION_CNAME }}
+          token: ${{ secrets.GITHUB_TOKEN }}
+
+  doc-deploy-stable:
+    name: "Deploy stable documentation"
+    # Deploy release documentation when creating a new tag
+    if: github.event_name == 'push' && contains(github.ref, 'refs/tags')
+    runs-on: ubuntu-latest
+    needs: [build-doc, release]
+    steps:
+      - uses: ansys/actions/doc-deploy-stable@v5
+        with:
+          doc-artifact-name: ${{ env.HTML_DOCUMENTATION_ARTIFACT}}
+          cname: ${{ env.DOCUMENTATION_CNAME }}
+          token: ${{ secrets.GITHUB_TOKEN }}

@@ -10,7 +10,6 @@ from ansys.solutions.solution.ui import app
 
 def main():
     """Entry point."""
-
     glow_main(definition, app)
 
 
