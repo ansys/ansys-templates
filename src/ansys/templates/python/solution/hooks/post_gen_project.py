@@ -3,7 +3,9 @@ from ansys.templates.utils import keep_files
 
 DESIRED_STRUCTURE = [
     ".github/workflows/build-release.yml",
+    ".github/workflows/release-please.yml",
     ".vscode/launch.json",
+    ".vscode/extensions.json",
     "doc/source/_static/ansys-solutions-logo-black-background.png",
     "doc/source/_static/README.md",
     "doc/source/_templates/README.md",
@@ -21,7 +23,6 @@ DESIRED_STRUCTURE = [
     f"src/ansys/solutions/{{ cookiecutter.__solution_name_slug }}/logic/README.md",
     f"src/ansys/solutions/{{ cookiecutter.__solution_name_slug }}/solution/method_assets/README.md",
     f"src/ansys/solutions/{{ cookiecutter.__solution_name_slug }}/solution/definition.py",
-    f"src/ansys/solutions/{{ cookiecutter.__solution_name_slug }}/solution/intro_step.py",
     f"src/ansys/solutions/{{ cookiecutter.__solution_name_slug }}/solution/first_step.py",
     f"src/ansys/solutions/{{ cookiecutter.__solution_name_slug }}/solution/second_step.py",
     f"src/ansys/solutions/{{ cookiecutter.__solution_name_slug }}/__init__.py",
@@ -58,7 +59,9 @@ DESIRED_STRUCTURE = [
     "setup_environment.py",
     "sonar-project.properties",
     "tox.ini",
-    ".env"
+    ".env",
+    "release-please-config.json",
+    "release-please-manifest.json"
 ]
 """A list holding all desired files to be included in the project."""
 
@@ -66,11 +69,12 @@ UI_STRUCTURE = [
     f"src/ansys/solutions/{{ cookiecutter.__solution_name_slug }}/ui/assets/css/style.css",
     f"src/ansys/solutions/{{ cookiecutter.__solution_name_slug }}/ui/assets/images/README.md",
     f"src/ansys/solutions/{{ cookiecutter.__solution_name_slug }}/ui/assets/images/solution-workflow-sketch.png",
-    f"src/ansys/solutions/{{ cookiecutter.__solution_name_slug }}/ui/assets/logos/ansys-solutions-horizontal-logo.png",
+    f"src/ansys/solutions/{{ cookiecutter.__solution_name_slug }}/ui/assets/logos/ansys_solutions_logo_black.png",
+    f"src/ansys/solutions/{{ cookiecutter.__solution_name_slug }}/ui/assets/logos/ansys_solutions_logo_white.png",
     f"src/ansys/solutions/{{ cookiecutter.__solution_name_slug }}/ui/assets/scripts/README.md",
     f"src/ansys/solutions/{{ cookiecutter.__solution_name_slug }}/ui/components/README.md",
+    f"src/ansys/solutions/{{ cookiecutter.__solution_name_slug }}/ui/pages/about_page.py",
     f"src/ansys/solutions/{{ cookiecutter.__solution_name_slug }}/ui/pages/first_page.py",
-    f"src/ansys/solutions/{{ cookiecutter.__solution_name_slug }}/ui/pages/intro_page.py",
     f"src/ansys/solutions/{{ cookiecutter.__solution_name_slug }}/ui/pages/second_page.py",
     f"src/ansys/solutions/{{ cookiecutter.__solution_name_slug }}/ui/pages/page.py",
     f"src/ansys/solutions/{{ cookiecutter.__solution_name_slug }}/ui/app.py",
