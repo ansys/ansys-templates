@@ -244,9 +244,7 @@ def check_virtual_environment_name(args: object) -> None:
 
 
 def check_python_version(args: object) -> None:
-    """Check if the version of the current Python interpreter is consistent with the python version specifications
-    from the build system.
-    """
+    """Check if the version of the current Python interpreter is consistent with the python version specifications."""
     # Initialize lower/upper versions
     lower_version, upper_version, lower_bound_symbol, upper_bound_symbol = None, None, None, None
     lower_specification, upper_specification, single_specification = None, None, None

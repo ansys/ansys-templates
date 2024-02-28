@@ -49,14 +49,12 @@ def layout():
                                             style={"font-size": "16px", "textAlign": "justify"},
                                         ),
                                         dmc.Space(h=30),
-                                        html.H4(
-                                            "Engineering Goals",
-                                            style={"font-size": "24px", "fontWeight": "bold"}),
+                                        html.H4("Engineering Goals", style={"font-size": "24px", "fontWeight": "bold"}),
                                         html.P(
                                             "What is the engineering problem to solve? What are the Key Performance "
                                             "Indicators (KPIs) to monitor?",
                                             style={"font-size": "16px", "textAlign": "justify"},
-                                        )
+                                        ),
                                     ]
                                 )
                             ],

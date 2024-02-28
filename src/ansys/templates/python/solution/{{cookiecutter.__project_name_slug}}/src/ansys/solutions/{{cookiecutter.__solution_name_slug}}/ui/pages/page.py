@@ -16,7 +16,6 @@ import dash_mantine_components as dmc
 from ansys.solutions.{{ cookiecutter.__solution_name_slug }}.solution.definition import {{ cookiecutter.__solution_definition_name }}
 from ansys.solutions.{{ cookiecutter.__solution_name_slug }}.ui.pages import about_page, first_page, second_page
 
-
 step_list = [
     {
         "id": "about_page",
@@ -35,7 +34,7 @@ step_list = [
         "text": "Second Step",
         "prefixIcon": {"src": "https://s2.svgbox.net/materialui.svg?ic=label_outline"},
         "expanded": True,
-    }
+    },
 ]
 
 

@@ -13,12 +13,12 @@ def layout(step: SecondStep):
     return html.Div(
         [
             html.H1("Second Step", className="display-3", style={"font-size": "48px", "fontWeight": "bold"}),
-               html.P(
-                    "This page is empty for now.",
-                    className="lead",
-                    style={"font-size": "20px"},
-                ),
-                html.Hr(className="my-2"),
+            html.P(
+                "This page is empty for now.",
+                className="lead",
+                style={"font-size": "20px"},
+            ),
+            html.Hr(className="my-2"),
             html.Br(),
         ]
     )

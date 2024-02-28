@@ -18,12 +18,12 @@ def layout(step: FirstStep):
     return html.Div(
         [
             html.H1("First Step", className="display-3", style={"font-size": "48px", "fontWeight": "bold"}),
-               html.P(
-                    "Compute the sum of two numbers.",
-                    className="lead",
-                    style={"font-size": "20px"},
-                ),
-                html.Hr(className="my-2"),
+            html.P(
+                "Compute the sum of two numbers.",
+                className="lead",
+                style={"font-size": "20px"},
+            ),
+            html.Hr(className="my-2"),
             html.Br(),
             InputRow(
                 "number",
