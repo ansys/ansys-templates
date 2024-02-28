@@ -282,6 +282,7 @@ SOLUTION_STRUCTURE = [
     ".github/workflows/build-release.yml",
     ".github/workflows/release-please.yml",
     ".vscode/launch.json",
+    ".vscode/extensions.json",
     "doc/source/_static/ansys-solutions-logo-black-background.png",
     "doc/source/_static/README.md",
     "doc/source/_templates/README.md",

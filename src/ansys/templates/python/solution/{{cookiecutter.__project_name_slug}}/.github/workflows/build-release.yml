@@ -14,9 +14,9 @@ on:
 
 env:
   MAIN_PYTHON_VERSION: "3.9"
-  DOCUMENTATION_CNAME: ""
-  POETRY_HTTP_BASIC_PYANSYS_PRIVATE_PYPI_USERNAME: "PAT"
-  POETRY_HTTP_BASIC_PYANSYS_PRIVATE_PYPI_PASSWORD: {{ "${{ secrets.PYANSYS_PRIVATE_PYPI_PAT }}" }}
+  DOCUMENTATION_CNAME: "replace.me.ansys.com" # Replace with the CNAME of the documentation
+  POETRY_HTTP_BASIC_SOLUTIONS_PRIVATE_PYPI_USERNAME: "PAT"
+  POETRY_HTTP_BASIC_SOLUTIONS_PRIVATE_PYPI_PASSWORD: {{ "${{ secrets.PYANSYS_PRIVATE_PYPI_PAT }}" }}
   SBOM_NAME: "{{ cookiecutter.__project_name_slug }}"
   HTML_DOCUMENTATION_ARTIFACT: "{{ cookiecutter.__project_name_slug }}-documentation"
 
@@ -138,7 +138,7 @@ jobs:
 
   release:
     if: |
-      github.event_name == 'release'
+      github.event_name == 'release' && false
     name: Release
     needs: [build-doc, check-copyright, check-code-style, build, run-tests, check-licenses, package-solution, generate-sbom, validate-sbom]
     runs-on: [ubuntu-latest]
