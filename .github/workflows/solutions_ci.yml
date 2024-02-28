@@ -13,7 +13,7 @@ jobs:
       - name: github workflow dispatch
         shell: bash
         env:
-          GH_TOKEN: ${{ secrets.ANSYS_SOLUTIONS_E2E_TESTS }}
+          GH_TOKEN: ${{ secrets.WORKFLOW_TOKEN }} # ${{ secrets.ANSYS_SOLUTIONS_E2E_TESTS }}
         run: |
           gh workflow run \
           _ansys-templates-remote-ci.yml \
