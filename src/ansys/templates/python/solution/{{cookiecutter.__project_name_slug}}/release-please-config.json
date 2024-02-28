@@ -1,6 +1,6 @@
 {
   "release-type": "python",
-  "changelog-type": "github",
+  "changelog-type": "default",
   "plugins": ["sentence-case"],
   "packages": {
     ".": {}
