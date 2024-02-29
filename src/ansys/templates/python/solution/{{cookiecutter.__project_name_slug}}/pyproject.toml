@@ -5,7 +5,7 @@ build-backend = "poetry.core.masonry.api"
 # The following lines were added to enforce the poetry version needed for the project.
 # It will be read by the setup_environment.py script to install this version.
 [build-system-requirements]
-build-system-version = "1.7.0"
+build-system-version = "1.7.1"
 
 [tool.poetry]
 name = "{{cookiecutter.__pkg_name}}"
@@ -32,13 +32,13 @@ packages = [
 ]
 
 [[tool.poetry.source]]
+name = "PyPI"
+priority = "primary"
+
+[[tool.poetry.source]]
 name = "solutions-private-pypi"
 url = "https://pkgs.dev.azure.com/pyansys/_packaging/ansys-solutions/pypi/simple/"
 priority = "supplemental"
-
-[[tool.poetry.source]]
-name = "PyPI"
-priority = "primary"
 
 [tool.poetry.dependencies]
 python = ">=3.8, <3.11"
@@ -51,6 +51,7 @@ dash = "^2.6"
 dash_bootstrap_components = "^1.2"
 dash-extensions = ">=0.1.13"
 dash-iconify = "^0.1"
+dash-mantine-components = "^0.12.1"
 dash-uploader = "^0.6"
 {% endif %}
 
@@ -58,6 +59,7 @@ dash-uploader = "^0.6"
 optional = true
 [tool.poetry.group.doc.dependencies]
 ansys-sphinx-theme = "^0.8.0"
+autodoc-pydantic = "^2.0.1"
 numpydoc = "^1.4.0"
 sphinx = "5.1.0"
 sphinx-copybutton = "^0.5.1"
@@ -66,7 +68,7 @@ sphinx_code_tabs = "^0.5.3"
 sphinx-gallery = "^0.11.1"
 sphinx_mdinclude= "^0.5.3"
 sphinx-tabs = ">=1.2.1,<3.5.0"
-toml = "^0.10.0" # Needed by conf.py
+toml = "^0.10.0"
 
 [tool.poetry.group.tests]
 optional = true
@@ -78,10 +80,10 @@ pytest = "^7.1.2"
 pytest-cov = "^3.0.0"
 pytest-dependency = "^0.5.1"
 pytest-flakes = "^4.0.5"
-pytest-pep8 = "*"
-pytest-pythonpath = "*"
+pytest-pep8 = "^1.0"
+pytest-pythonpath = "^0.7"
 pytest-xdist = "^3.0.2"
-pytest-mock = "*"
+pytest-mock = "^3.12"
 tox = "^4.4.0"
 
 [tool.poetry.group.build]
@@ -89,6 +91,15 @@ optional = true
 [tool.poetry.group.build.dependencies]
 build = "^0.8.0"
 twine = "^4.0.1"
+
+[tool.poetry.group.style]
+optional = true
+[tool.poetry.group.style.dependencies]
+black = "24.1.1"
+isort = "5.13.2"
+flake8 = {version="7.0.0", python=">=3.8.1,<3.11"}
+codespell = "2.2.6"
+pydocstyle = "6.3.0"
 
 [tool.poetry.plugins."console_scripts"]
 {{ cookiecutter.__solution_name_slug }}_main = "ansys.solutions.{{ cookiecutter.__solution_name_slug }}.main:main"
