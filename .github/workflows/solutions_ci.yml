@@ -15,8 +15,10 @@ jobs:
         env:
           GH_TOKEN: ${{ secrets.ANSYS_SOLUTIONS_E2E_TESTS }}
         run: |
-          gh workflow run \
+          response=$(gh workflow run \
           _ansys-templates-remote-ci.yml \
           --repo "https://github.com/ansys-internal/solution-templates-end-to-end-testing" \
           --field ansys_templates_sha="${{ github.event.pull_request.head.sha }}" \
-          --ref "refs/heads/main"
+          --ref "refs/heads/main")
+
+          echo $response
