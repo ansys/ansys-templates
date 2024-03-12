@@ -5,12 +5,33 @@ on:
       - 'src/ansys/templates/python/solution/**'
 
 jobs:
+  check-changes:
+    runs-on: ubuntu-latest
+    outputs:
+      solution-templates-changes: ${{ steps.check-code-changes.outputs.solution-templates }}
+    steps:
+      - name: Checkout repository
+        uses: actions/checkout@v4
+        with:
+          fetch-depth: 0
+
+      - name: Check code changes
+        uses: dorny/paths-filter@v3
+        id: check-code-changes
+        with:
+          base: ${{ inputs.head-reference }}
+          ref: ${{ inputs.base-reference }}
+          filters: |
+            solution-templates:
+              - 'src/ansys/templates/python/solution/**'
 
   solutions-e2e-tests:
     name: Trigger solutions e2e tests
+    needs: [check-changes]
     runs-on: ubuntu-latest
     steps:
       - name: github workflow dispatch
+        if: ${{ needs.check-changes.outputs.solution-templates-changes == 'true' }}
         shell: bash
         env:
           GH_TOKEN: ${{ secrets.ANSYS_SOLUTIONS_E2E_TESTS }}
