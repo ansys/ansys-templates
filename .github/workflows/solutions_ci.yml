@@ -1,8 +1,6 @@
 name: Trigger end-to-end tests for solution templates
 on:
   pull_request:
-    paths:
-      - 'src/ansys/templates/python/solution/**'
 
 jobs:
   check-changes:
