@@ -5,11 +5,11 @@ repos:
   hooks:
   - id: autoflake
     args: [
-      --expand-star-imports,
-      --ignore-pass-statements,
-      --in-place,
-      --remove-all-unused-imports,
-      --remove-unused-variables
+      "--expand-star-imports",
+      "--ignore-pass-statements",
+      "--in-place",
+      "--remove-all-unused-imports",
+      "--remove-unused-variables",
     ]
 
   - repo: https://github.com/psf/black
