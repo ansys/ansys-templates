@@ -32,10 +32,10 @@ def main():
     """Entry point of the script."""
 
     # Get baked project location path
-    project_path = Path(os.getcwd())
+    project_path = Path(os.getcwd()) # noqa
 
     # Get the desired build system
-    build_system = "{{ cookiecutter.build_system }}"
+    build_system = "{{ cookiecutter.build_system }}" # noqa
 
     keep_files(DESIRED_STRUCTURE)
 
