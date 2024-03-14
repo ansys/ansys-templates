@@ -1,0 +1,9 @@
+{
+  "release-type": "python",
+  "changelog-type": "default",
+  "plugins": ["sentence-case"],
+  "extra-files": ["sonar-project.properties"],
+  "packages": {
+    ".": {}
+  }
+}

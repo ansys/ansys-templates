@@ -12,7 +12,6 @@ from ansys.solutions.{{ cookiecutter.__solution_name_slug }}.ui import app
 
 def main():
     """Entry point."""
-
     glow_main(definition{% if cookiecutter.with_dash_ui == "yes" %}, app{% elif cookiecutter.with_dash_ui == "no" %} None {% endif %})
 
 
