@@ -64,6 +64,7 @@ extensions = [
     "numpydoc",
     "sphinx.ext.intersphinx",
     "sphinx_copybutton",
+    "sphinx.ext.imgconverter",
 ]
 
 # Intersphinx mapping
