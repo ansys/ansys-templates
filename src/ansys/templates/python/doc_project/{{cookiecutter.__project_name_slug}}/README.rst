@@ -21,6 +21,21 @@ Previous command will run `pre-commit`_ for checking code quality.
 
 Documentation
 -------------
+
+Install imagemagick for image conversion:
+
+- Linux (Ubuntu)
+
+   .. code:: bash
+
+      sudo apt install imagemagick
+
+- Windows
+
+   .. code:: bash
+
+      winget install imagemagick
+
 Documentation can be rendered by running:
 
 .. code-block:: text
