@@ -1,5 +1,4 @@
 # ©2023, ANSYS Inc. Unauthorized use, distribution or duplication is prohibited.
-# solutions-common-files@v2.0.1
 
 """
 A Python script to automate the setup of the Python ecosystem of a project.
@@ -117,6 +116,7 @@ import subprocess
 import sys
 import textwrap
 import time
+import winreg
 
 try:
     from packaging.markers import Marker
@@ -244,7 +244,7 @@ def check_virtual_environment_name(args: object) -> None:
 
 
 def check_python_version(args: object) -> None:
-    """Check if the version of the current Python interpreter is consistent with the python version specifications."""
+    """Check if current Python is consistent with the python specifications from the build system."""
     # Initialize lower/upper versions
     lower_version, upper_version, lower_bound_symbol, upper_bound_symbol = None, None, None, None
     lower_specification, upper_specification, single_specification = None, None, None
@@ -295,6 +295,33 @@ def check_existing_install(args: object) -> str:
     return os.path.isdir(args.venv_name)
 
 
+def is_long_paths_enabled():
+    """Check if long paths are enabled on Windows."""
+    try:
+        # Open the registry key
+        with winreg.OpenKey(winreg.HKEY_LOCAL_MACHINE, r"SYSTEM\CurrentControlSet\Control\FileSystem") as key:
+            # Read the value of LongPathsEnabled
+            value, _ = winreg.QueryValueEx(key, "LongPathsEnabled")
+            return value == 1
+    except FileNotFoundError:
+        # The key doesn't exist, which means long paths are not enabled
+        return False
+
+
+def is_path_too_long(path):
+    """Check if the path exceeds the maximum allowed length on Windows."""
+    # Maximum allowed path length for Windows
+    max_path_length_windows = 260
+
+    # Check if the path to each file is too long
+    for root, dirs, files in os.walk(path):
+        for file in files:
+            file_path = os.path.join(root, file)
+            if len(file_path) > max_path_length_windows:
+                return True
+    return False
+
+
 def check_inputs(args: object) -> None:
     """Check inputs consistency."""
     # Rework dependencies argument if all option is selected
@@ -311,8 +338,19 @@ def check_inputs(args: object) -> None:
     # Check if an install already exists
     args.has_install = check_existing_install(args)
 
-    if args.local_wheels and not os.path.exists(args.local_wheels):
-        raise FileNotFoundError(f"The directory '{args.local_wheels}' does not exist.")
+    if args.local_wheels:
+        if not os.path.exists(args.local_wheels):
+            raise FileNotFoundError(f"The directory '{args.local_wheels}' does not exist.")
+
+        if sys.platform == "win32":
+            path_too_long = is_path_too_long(args.local_wheels)
+
+            if path_too_long and not is_long_paths_enabled():
+                raise Exception(
+                    f"Path length to file(s) in '{args.local_wheels}' exceeds the maximum limit in Windows."
+                    "Please enable Windows Long Path support or use a shorter path. You can find information on "
+                    "how to enable this at https://pip.pypa.io/warnings/enable-long-paths"
+                )
 
 
 def modify_toml_file_in_case_of_wheel_files(args: object) -> None:
