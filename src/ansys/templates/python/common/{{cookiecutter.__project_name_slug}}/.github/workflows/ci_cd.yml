@@ -86,6 +86,7 @@ jobs:
       - uses: ansys/actions/doc-build@v5
         with:
           python-version: {{ '${{ env.MAIN_PYTHON_VERSION }}' }}
+          dependencies: "imagemagick"
 
   build-library:
     name: "Build library basic example"

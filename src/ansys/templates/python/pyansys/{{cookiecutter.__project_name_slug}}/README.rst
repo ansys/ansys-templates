@@ -90,6 +90,20 @@ environment, which is another reason to consider using `tox`_.
 Documentation
 -------------
 
+Install imagemagick for image conversion:
+
+- Linux (Ubuntu)
+
+   .. code:: bash
+
+      sudo apt install imagemagick
+
+- Windows
+
+   .. code:: bash
+
+      winget install imagemagick
+
 For building documentation, you can either run the usual rules provided in the
 `Sphinx`_ Makefile, such us:
 
