@@ -1,0 +1,58 @@
+name: Release, please
+
+on:
+  workflow_run:
+    workflows: [CI]
+    types:
+      - completed
+
+permissions:
+  contents: write
+  pull-requests: write
+
+env:
+  SOLUTION_NAME: {{ cookiecutter.__project_name_slug }}
+
+jobs:
+  release-please:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/create-github-app-token@v1
+        id: app-token
+        with:
+          app-id: {{ "${{ vars.ANSYS_RELEASE_PLEASE_BOT_ID }}" }}
+          private-key: {{ "${{ secrets.ANSYS_RELEASE_PLEASE_BOT_TOKEN }}" }}
+
+      - uses: google-github-actions/release-please-action@v4
+        id: release
+        with:
+          token: {{ "${{ steps.app-token.outputs.token }}" }}
+
+      - uses: actions/checkout@v4
+        if: {{ "${{ steps.release.outputs.release_created }}" }}
+
+      - name: Download artifact
+        id: download-artifact
+        uses: actions/download-artifact@v4
+        if: {{ "${{ steps.release.outputs.release_created }}" }}
+        with:
+          github-token: {{ "${{secrets.WORKFLOW_TOKEN}}" }}
+          run-id: {{ "${{ github.event.workflow_run.id }}" }}
+
+      - name: Update tags and release branch
+        uses: ansys-internal/solution-applications-actions/tag-repository-version@v11
+        if: {{ "${{ steps.release.outputs.release_created }}" }}
+        with:
+          release-version: {{ "${{ steps.release.outputs.tag_name }}" }}
+          gh-token: {{ "${{ secrets.WORKFLOW_TOKEN }}" }}
+
+      - name: Upload Release Artifact
+        if: {{ "${{ steps.release.outputs.release_created }}" }}
+        env:
+          GITHUB_TOKEN: {{ "${{ secrets.WORKFLOW_TOKEN }}" }}
+        shell: pwsh
+        run: |
+          ls
+          ls {{ "${{ env.SOLUTION_NAME }}-${{ github.event.workflow_run.id }}" }}
+          Compress-Archive -Path {{ "${{ env.SOLUTION_NAME }}-${{ github.event.workflow_run.id }}/* -DestinationPath ${{ env.SOLUTION_NAME }}-${{ steps.release.outputs.tag_name }}.zip" }}
+          gh release upload {{ "${{ steps.release.outputs.tag_name }} ${{ env.SOLUTION_NAME }}-${{ steps.release.outputs.tag_name }}.zip" }}
