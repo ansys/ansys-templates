@@ -33,7 +33,6 @@ jobs:
         uses: ansys/actions/doc-style@v6
         with:
           token: ${{ secrets.GITHUB_TOKEN }}
-          vale-version: "3.3.0"
 
   doc-build:
     name: Doc building
