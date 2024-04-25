@@ -18,6 +18,18 @@ concurrency:
 
 jobs:
 
+  update-changelog:
+    name: "Update CHANGELOG for new tag"
+    if: github.event_name == 'push' && contains(github.ref, 'refs/tags')
+    runs-on: ubuntu-latest
+    permissions:
+      contents: write
+      pull-requests: write
+    steps:
+      - uses: ansys/actions/doc-deploy-changelog@{{ version }}
+        with:
+          token: {{ '${{ secrets.PYANSYS_CI_BOT_TOKEN }}' }}
+
   code-style:
     name: "Code style"
     runs-on: ubuntu-latest
@@ -27,12 +39,14 @@ jobs:
           python-version: {{ '${{ env.MAIN_PYTHON_VERSION }}' }}
 
   doc-style:
-    name: "Documentation style"
+    name: Documentation Style Check
     runs-on: ubuntu-latest
     steps:
-      - uses: ansys/actions/doc-style@v6
+      - name: PyAnsys documentation style checks
+        uses: ansys/actions/doc-style@v6
         with:
           token: {{ '${{ secrets.GITHUB_TOKEN }}' }}
+          vale-version: "3.4.1"
 
   smoke-tests:
     name: "Build and Smoke tests"
@@ -44,7 +58,7 @@ jobs:
         os: [ubuntu-latest, windows-latest]
         {% set required_minor = cookiecutter.__requires_python[2:] | int %}
         {%- set python_versions = [ ] -%}
-        {%- for minor in range(7, 11) -%}
+        {%- for minor in range(9, 13) -%}
         {%- if minor >= required_minor -%}
         {{ python_versions.append("3." + minor | string ) or ''}}
         {%- endif -%}
@@ -66,7 +80,7 @@ jobs:
        os: [ubuntu-latest, windows-latest]
        {% set required_minor = cookiecutter.__requires_python[2:] | int %}
        {%- set python_versions = [ ] -%}
-       {%- for minor in range(7, 11) -%}
+       {%- for minor in range(9, 13) -%}
        {%- if minor >= required_minor -%}
        {{ python_versions.append("3." + minor | string ) or ''}}
        {%- endif -%}
@@ -78,24 +92,39 @@ jobs:
         with:
           pytest-extra-args: "--cov=ansys --cov-report=term --cov-report=html:.cov/html"
 
+      - name: Upload coverage results
+        uses: actions/upload-artifact@v4
+        if: {{ '${{ env.MAIN_PYTHON_VERSION }}' }} == {{ '${{ matrix.python-version }}' }}
+        with:
+          name: coverage-tests-{{ '${{ matrix.os }}' }}
+          path: .cov
+          retention-days: 7
+
+      - name: Upload coverage results (as .coverage)
+        uses: actions/upload-artifact@v4
+        if: {{ '${{ env.MAIN_PYTHON_VERSION }}' }} == {{ '${{ matrix.python-version }}' }}
+        with:
+          name: coverage-file-tests-{{ '${{ matrix.os }}' }}
+          path: .coverage
+          retention-days: 7
+
   doc-build:
     name: "Build documentation"
     runs-on: ubuntu-latest
     needs: [doc-style]
     steps:
-      - uses: ansys/actions/doc-build@v5
+      - uses: ansys/actions/doc-build@v6
         with:
           python-version: {{ '${{ env.MAIN_PYTHON_VERSION }}' }}
 
   build-library:
-    name: "Build library basic example"
+    name: Build library
     runs-on: ubuntu-latest
-    needs: [doc-build, tests]
     steps:
-      - uses: ansys/actions/build-library@v5
+      - name: "Build library source and wheel artifacts"
+        uses: ansys/actions/build-library@v6
         with:
           library-name: {{ '${{ env.LIBRARY_NAME }}' }}
-          python-version: {{ '${{ env.MAIN_PYTHON_VERSION }}' }}
 
   doc-deploy-dev:
     name: "Deploy development documentation"
@@ -119,4 +148,60 @@ jobs:
           cname: {{ '${{ env.DOCUMENTATION_CNAME }}' }}
           token: {{ '${{ secrets.GITHUB_TOKEN }}' }}
 
+  doc-deploy-index:
+    name: "Index the documentation and scrap using PyMeilisearch"
+    runs-on: ubuntu-latest
+    needs: doc-deploy-dev
+    if: github.event_name == 'push'
+    steps:
+      - name: Scrape the stable documentation to PyMeilisearch
+        run: |
+          VERSION=$(python -c "from {{ cookiecutter.__pkg_namespace }} import __version__; print('.'.join(__version__.split('.')[:2]))")
+          VERSION_MEILI=$(python -c "from {{ cookiecutter.__pkg_namespace }} import __version__; print('-'.join(__version__.split('.')[:2]))")
+          echo "Calculated VERSION: $VERSION"
+          echo "Calculated VERSION_MEILI: $VERSION_MEILI"
 
+      - name: "Deploy the latest documentation index"
+        uses: ansys/actions/doc-deploy-index@v4.1
+        with:
+          cname: "{{ '${{ env.DOCUMENTATION_CNAME }}' }}/version/$VERSION"
+          index-name: "{{ '${{ LIBRARY_NAME }}'}}v$VERSION_MEILI"
+          host-url: {{ '${{ vars.MEILISEARCH_HOST_URL }}' }}
+          api-key: {{ '${{ secrets.MEILISEARCH_API_KEY }}' }}
+
+  release-pypi-private:
+    name: "Release to the private PyPI repository"
+    runs-on: ubuntu-latest
+    needs: [build-library, update-changelog]
+    steps:
+      - name: "Release to the private PyPI repository"
+        if: github.event_name == 'push' && contains(github.ref, 'refs/tags')
+        uses: ansys/actions/release-pypi-private@v6
+        with:
+          library-name: {{ '${{ env.LIBRARY_NAME }}' }}
+          twine-username: "__token__"
+          twine-token: {{ '${{ secrets.PYANSYS_PYPI_PRIVATE_PAT }}' }}
+
+  release-pypi-public:
+    name: "Release to the public PyPI repository"
+    runs-on: ubuntu-latest
+    needs: [release-pypi-private]
+    steps:
+      - name: "Release to the public PyPI repository"
+        if: github.event_name == 'push' && contains(github.ref, 'refs/tags')
+        uses: ansys/actions/release-pypi-public@v6
+        with:
+          library-name: {{ '${{ env.DOCUMENTATION_CNAME }}' }}
+          twine-username: "__token__"
+          twine-token: {{ '${{ secrets.PYPI_TOKEN }}' }}
+
+  release-github:
+    name: "Release to GitHub"
+    runs-on: ubuntu-latest
+    needs: [release-pypi-public]
+    steps:
+      - name: "Release to GitHub"
+        if: github.event_name == 'push' && contains(github.ref, 'refs/tags')
+        uses: ansys/actions/release-github@v6
+        with:
+          library-name: {{ '${{ env.DOCUMENTATION_CNAME }}' }}
