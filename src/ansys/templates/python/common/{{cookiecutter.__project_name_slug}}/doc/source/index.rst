@@ -3,4 +3,10 @@
    Provide any documentation specific to your online documentation
    here.
 
+.. toctree::
+   :hidden:
+   :maxdepth: 3
+
+   changelog
+
 .. include:: ../../README.rst

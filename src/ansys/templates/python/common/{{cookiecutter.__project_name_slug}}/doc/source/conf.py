@@ -112,3 +112,10 @@ source_suffix = ".rst"
 
 # The master toctree document.
 master_doc = "index"
+
+# If we are on a release, we have to ignore the "release" URLs, since it is not
+# available until the release is published.
+if switcher_version != "dev":
+    linkcheck_ignore.append(
+        f"https://github.com/ansys/{{ cookiecutter.__pkg_namespace }}/releases/tag/v{__version__}"
+    )
