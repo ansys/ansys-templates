@@ -1,17 +1,17 @@
-{% if sections[""] %}
-{% for category, val in definitions.items() if category in sections[""] %}
+{{ '{% if sections[""] %}' }}
+{{ '{% for category, val in definitions.items() if category in sections[""] %}' }}
 
-{{ definitions[category]['name'] }}
-{% set underline = '^' * definitions[category]['name']|length %}
-{{ underline }}
+{{ "{{ definitions[category]['name'] }}" }}
+{{ "{% set underline = '^' * definitions[category]['name']|length %}" }}
+{{ '{{ underline }}' }}
 
-{% for text, values in sections[""][category].items() %}
-- {{ text }} {{ values|join(', ') }}
-{% endfor %}
+{{ '{% for text, values in sections[""][category].items() %}' }}
+- {{ '{{ text }}' }} {{ "{{ values|join(', ') }}" }}
+{{ '{% endfor %}' }}
 
-{% endfor %}
-{% else %}
+{{ '{% endfor %}' }}
+{{ '{% else %}' }}
 No significant changes.
 
 
-{% endif %}
+{{ '{% endif %}' }}
