@@ -6,11 +6,11 @@ Py{{ cookiecutter.product_name }} {{ cookiecutter.library_name }}
    :target: https://docs.pyansys.com/
    :alt: PyAnsys
 
-.. |python| image:: https://img.shields.io/pypi/pyversions/{{cookiecutter.__project_name_slug}}?logo=pypi
+.. |python| image:: https://img.shields.io/pypi/pyversions/{{cookiecutter.__pkg_name}}?logo=pypi
    :target: https://pypi.org/project/{{cookiecutter.__pkg_name}}/
    :alt: Python
 
-.. |pypi| image:: https://img.shields.io/pypi/v/{{cookiecutter.__project_name_slug}}.svg?logo=python&logoColor=white
+.. |pypi| image:: https://img.shields.io/pypi/v/{{cookiecutter.__pkg_name}}.svg?logo=python&logoColor=white
    :target: https://pypi.org/project/{{cookiecutter.__pkg_name}}
    :alt: PyPI
 

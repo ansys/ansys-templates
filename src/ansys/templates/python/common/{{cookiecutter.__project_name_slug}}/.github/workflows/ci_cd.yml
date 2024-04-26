@@ -11,6 +11,8 @@ env:
   MAIN_PYTHON_VERSION: '{{ cookiecutter.__requires_python }}'
   DOCUMENTATION_CNAME: '{{ cookiecutter.__product_name_slug }}.docs.pyansys.com'
   LIBRARY_NAME: '{{ cookiecutter.__pkg_namespace | replace(".", "-") }}'
+  MEILISEARCH_API_KEY: ${{ secrets.MEILISEARCH_API_KEY }}
+  MEILISEARCH_HOST_URL: ${{ vars.MEILISEARCH_HOST_URL }}
 
 concurrency:
   group: {{ '${{ github.workflow }}-${{ github.ref }}' }}
@@ -175,8 +177,8 @@ jobs:
 
       - name: "Get the version to PyMeilisearch"
         run: |
-          VERSION=$(python -c "from ansys.geometry.core import __version__; print('.'.join(__version__.split('.')[:2]))")
-          VERSION_MEILI=$(python -c "from ansys.geometry.core import __version__; print('-'.join(__version__.split('.')[:2]))")
+          VERSION=$(python -c "from {{ cookiecutter.__pkg_namespace }} import __version__; print('.'.join(__version__.split('.')[:2]))")
+          VERSION_MEILI=$(python -c "from {{ cookiecutter.__pkg_namespace }} import __version__; print('-'.join(__version__.split('.')[:2]))")
           echo "Calculated VERSION: $VERSION"
           echo "Calculated VERSION_MEILI: $VERSION_MEILI"
           echo "VERSION=$VERSION" >> $GITHUB_ENV
@@ -217,13 +219,13 @@ jobs:
   #         twine-username: "__token__"
   #         twine-token: {{ '${{ secrets.PYPI_TOKEN }}' }}
 
-  release-github:
-    name: "Release to GitHub"
-    runs-on: ubuntu-latest
-    needs: [release-pypi-public]
-    steps:
-      - name: "Release to GitHub"
-        if: github.event_name == 'push' && contains(github.ref, 'refs/tags')
-        uses: ansys/actions/release-github@v6
-        with:
-          library-name: {{ '${{ env.DOCUMENTATION_CNAME }}' }}
+  # release-github:
+  #   name: "Release to GitHub"
+  #   runs-on: ubuntu-latest
+  #   needs: [release-pypi-public]
+  #   steps:
+  #     - name: "Release to GitHub"
+  #       if: github.event_name == 'push' && contains(github.ref, 'refs/tags')
+  #       uses: ansys/actions/release-github@v6
+  #       with:
+  #         library-name: {{ '${{ env.DOCUMENTATION_CNAME }}' }}
