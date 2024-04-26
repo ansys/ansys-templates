@@ -46,7 +46,6 @@ jobs:
         uses: ansys/actions/doc-style@v6
         with:
           token: {{ '${{ secrets.GITHUB_TOKEN }}' }}
-          vale-version: "3.4.1"
 
   smoke-tests:
     name: "Build and Smoke tests"
@@ -130,9 +129,9 @@ jobs:
     name: "Deploy development documentation"
     runs-on: ubuntu-latest
     needs: [build-library]
-    if: github.event_name == 'push' && !contains(github.ref, 'refs/tags')
+    if: github.ref == 'refs/heads/main'
     steps:
-      - uses: ansys/actions/doc-deploy-dev@v5
+      - uses: ansys/actions/doc-deploy-dev@v6
         with:
           cname: {{ '${{ env.DOCUMENTATION_CNAME }}' }}
           token: {{ '${{ secrets.GITHUB_TOKEN }}' }}
@@ -143,31 +142,54 @@ jobs:
     needs: [build-library]
     if: github.event_name == 'push' && contains(github.ref, 'refs/tags')
     steps:
-      - uses: ansys/actions/doc-deploy-stable@v5
+      - uses: ansys/actions/doc-deploy-stable@v6
         with:
           cname: {{ '${{ env.DOCUMENTATION_CNAME }}' }}
           token: {{ '${{ secrets.GITHUB_TOKEN }}' }}
 
-  doc-deploy-index:
-    name: "Index the documentation and scrap using PyMeilisearch"
+  doc-index-dev:
+    name: "Deploy dev index docs"
+    if: github.ref == 'refs/heads/main'
     runs-on: ubuntu-latest
     needs: doc-deploy-dev
-    if: github.event_name == 'push'
     steps:
-      - name: Scrape the stable documentation to PyMeilisearch
+      - name: "Deploy the latest documentation index"
+        uses: ansys/actions/doc-deploy-index@v6
+        with:
+          cname: "{{ '${{ env.DOCUMENTATION_CNAME }}' }}/version/dev"
+          index-name: "{{ '${{ LIBRARY_NAME }}'}}vdev"
+          host-url: {{ '${{ env.MEILISEARCH_HOST_URL }}' }}
+          api-key: {{ '${{ env.MEILISEARCH_API_KEY }}' }}
+          python-version: {{ '${{ env.MAIN_PYTHON_VERSION }}' }}
+
+  doc-index-stable:
+    name: "Deploy stable docs index"
+    runs-on: ubuntu-latest
+    needs: doc-deploy-stable
+    steps:
+      - name: "Install Git and clone project"
+        uses: actions/checkout@v4
+
+      - name: "Install the package requirements"
+        run: pip install -e .
+
+      - name: "Get the version to PyMeilisearch"
         run: |
-          VERSION=$(python -c "from {{ cookiecutter.__pkg_namespace }} import __version__; print('.'.join(__version__.split('.')[:2]))")
-          VERSION_MEILI=$(python -c "from {{ cookiecutter.__pkg_namespace }} import __version__; print('-'.join(__version__.split('.')[:2]))")
+          VERSION=$(python -c "from ansys.geometry.core import __version__; print('.'.join(__version__.split('.')[:2]))")
+          VERSION_MEILI=$(python -c "from ansys.geometry.core import __version__; print('-'.join(__version__.split('.')[:2]))")
           echo "Calculated VERSION: $VERSION"
           echo "Calculated VERSION_MEILI: $VERSION_MEILI"
+          echo "VERSION=$VERSION" >> $GITHUB_ENV
+          echo "VERSION_MEILI=$VERSION_MEILI" >> $GITHUB_ENV
 
       - name: "Deploy the latest documentation index"
-        uses: ansys/actions/doc-deploy-index@v4.1
+        uses: ansys/actions/doc-deploy-index@v6
         with:
-          cname: "{{ '${{ env.DOCUMENTATION_CNAME }}' }}/version/$VERSION"
-          index-name: "{{ '${{ LIBRARY_NAME }}'}}v$VERSION_MEILI"
-          host-url: {{ '${{ vars.MEILISEARCH_HOST_URL }}' }}
-          api-key: {{ '${{ secrets.MEILISEARCH_API_KEY }}' }}
+          cname: "{{ '${{ env.DOCUMENTATION_CNAME }}' }}/version/{{ '${{ env.VERSION }}' }}"
+          index-name: "{{ '${{ env.LIBRARY_NAME }}' }}-v{{ '${{ env.VERSION_MEILI }}' }}"
+          host-url: {{ '${{ env.MEILISEARCH_HOST_URL }}' }}
+          api-key: {{ '${{ env.MEILISEARCH_API_KEY }}' }}
+          python-version: {{ '${{ env.MAIN_PYTHON_VERSION }}' }}
 
   release-pypi-private:
     name: "Release to the private PyPI repository"
@@ -182,18 +204,18 @@ jobs:
           twine-username: "__token__"
           twine-token: {{ '${{ secrets.PYANSYS_PYPI_PRIVATE_PAT }}' }}
 
-  release-pypi-public:
-    name: "Release to the public PyPI repository"
-    runs-on: ubuntu-latest
-    needs: [release-pypi-private]
-    steps:
-      - name: "Release to the public PyPI repository"
-        if: github.event_name == 'push' && contains(github.ref, 'refs/tags')
-        uses: ansys/actions/release-pypi-public@v6
-        with:
-          library-name: {{ '${{ env.DOCUMENTATION_CNAME }}' }}
-          twine-username: "__token__"
-          twine-token: {{ '${{ secrets.PYPI_TOKEN }}' }}
+  # release-pypi-public:
+  #   name: "Release to the public PyPI repository"
+  #   runs-on: ubuntu-latest
+  #   needs: [release-pypi-private]
+  #   steps:
+  #     - name: "Release to the public PyPI repository"
+  #       if: github.event_name == 'push' && contains(github.ref, 'refs/tags')
+  #       uses: ansys/actions/release-pypi-public@v6
+  #       with:
+  #         library-name: {{ '${{ env.DOCUMENTATION_CNAME }}' }}
+  #         twine-username: "__token__"
+  #         twine-token: {{ '${{ secrets.PYPI_TOKEN }}' }}
 
   release-github:
     name: "Release to GitHub"

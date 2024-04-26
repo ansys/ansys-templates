@@ -20,10 +20,10 @@ readme = "README.rst"
 requires-python = ">={{ cookiecutter.__requires_python }}"
 license = {file = "LICENSE"}
 authors = [
-    {name = "ANSYS, Inc.", email = "pyansys.support@ansys.com"},
+    {name = "ANSYS, Inc.", email = "pyansys.core@ansys.com"},
 ]
 maintainers = [
-    {name = "PyAnsys developers", email = "pyansys.core@ansys.com"},
+    {name = "ANSYS, Inc.", email = "pyansys.core@ansys.com"},
 ]
 
 classifiers = [
@@ -32,9 +32,7 @@ classifiers = [
     "License :: OSI Approved :: MIT License",
     "Operating System :: OS Independent",
 ]
-dependencies = [
-    "importlib-metadata >=4.0",
-]
+dependencies = []
 
 [project.optional-dependencies]
 tests = [
@@ -56,6 +54,7 @@ name = "{{ cookiecutter.__pkg_namespace }}"
 Source = "{{ cookiecutter.__repository_url }}"
 Tracker = "{{ cookiecutter.__repository_url }}/issues"
 Homepage = "{{ cookiecutter.__repository_url }}"
+Documentation = "https://{{ cookiecutter.product_name }}.docs.pyansys.com"
 
 {% elif cookiecutter.__build_system == "poetry"  %}
 [tool.poetry]
@@ -65,7 +64,7 @@ version = "{{ cookiecutter.__version }}"
 description = "{{ cookiecutter.__short_description }}"
 license = "MIT"
 authors = ["ANSYS, Inc. <pyansys.core@ansys.com>"]
-maintainers = ["PyAnsys developers <pyansys.core@ansys.com>"]
+maintainers = ["ANSYS, Inc. <pyansys.core@ansys.com>"]
 readme = "README.rst"
 repository = "{{ cookiecutter.__repository_url }}"
 classifiers = [
