@@ -6,7 +6,13 @@ At least two installation modes are provided: user and developer.
 For users
 ^^^^^^^^^
 
+{%- if cookiecutter.__template_name == "pyansys-advanced" %}
 In order to install Py{{ cookiecutter.product_name }} {{ cookiecutter.library_name }}, make sure you
+{%- elif cookiecutter.__template_name != "solution" %}
+In order to install {{ cookiecutter.project_name }}, make sure you
+{%- else %}
+In order to install {{ cookiecutter.solution_name }}, make sure you
+{%- endif %}
 have the latest version of `pip`_. To do so, run:
 
 .. code:: bash
@@ -33,7 +39,13 @@ Then, you can simply execute:
 For developers
 ^^^^^^^^^^^^^^
 
+{%- if cookiecutter.__template_name == "pyansys-advanced" %}
 Installing Py{{ cookiecutter.product_name }} {{ cookiecutter.library_name }} in developer mode allows
+{%- elif cookiecutter.__template_name != "solution" %}
+Installing Py{{ cookiecutter.project_name }} in developer mode allows
+{%- else %}
+Installing Py{{ cookiecutter.solution_name }} in developer mode allows
+{%- endif %}
 you to modify the source and enhance it.
 
 Before contributing to the project, please refer to the `PyAnsys Developer's guide`_ and then follow these steps:
