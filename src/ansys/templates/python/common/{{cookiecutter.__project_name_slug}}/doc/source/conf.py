@@ -32,7 +32,7 @@ release = version = __version__
 {%- elif cookiecutter.__template_name == "doc-project" %}
 release = version = "{{ cookiecutter.__version }}"
 {%- endif %}
-cname = os.getenv("DOCUMENTATION_CNAME", "{{ cookiecutter.product_name }}.docs.pyansys.com")
+cname = os.getenv("DOCUMENTATION_CNAME", "{{ cookiecutter.__documentation_url }}")
 switcher_version = get_version_match(__version__)
 
 # Select desired logo, theme, and declare the html title
@@ -125,6 +125,8 @@ if switcher_version != "dev":
 # Keep these while the repository is private
 linkcheck_ignore = [
     "{{ cookiecutter.__repository_url }}/*",
-    "https://{{ cookiecutter.product_name }}.docs.pyansys.com/version/stable/*",
+    {%- if cookiecutter.__template_name == "pyansys-advanced" %}
+    "{{ cookiecutter.__documentation_url }}/version/stable/*",
+    {%- endif %}
     "https://pypi.org/project/{{cookiecutter.__pkg_name}}",
 ]
