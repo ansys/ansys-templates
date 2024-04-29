@@ -95,7 +95,7 @@ jobs:
 
       - name: Upload coverage results
         uses: actions/upload-artifact@v4
-        if: {{ '${{ env.MAIN_PYTHON_VERSION }}' }} == {{ '${{ matrix.python-version }}' }}
+        if: env.MAIN_PYTHON_VERSION == matrix.python-version
         with:
           name: coverage-tests-{{ '${{ matrix.os }}' }}
           path: .cov
@@ -103,7 +103,7 @@ jobs:
 
       - name: Upload coverage results (as .coverage)
         uses: actions/upload-artifact@v4
-        if: {{ '${{ env.MAIN_PYTHON_VERSION }}' }} == {{ '${{ matrix.python-version }}' }}
+        if: env.MAIN_PYTHON_VERSION == matrix.python-version
         with:
           name: coverage-file-tests-{{ '${{ matrix.os }}' }}
           path: .coverage
