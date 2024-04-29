@@ -27,7 +27,6 @@ DESIRED_STRUCTURE = [
     "doc/source/index.rst",
     "doc/source/_static/README.md",
     "doc/source/_templates/README.md",
-    "doc/source/examples",
     "doc/source/getting_started/index.rst",
     "doc/source/changelog.rst",
     "doc/source/examples.rst",
