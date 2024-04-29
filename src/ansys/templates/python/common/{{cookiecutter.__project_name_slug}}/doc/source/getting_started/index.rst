@@ -93,8 +93,8 @@ Before contributing to the project, please refer to the `PyAnsys Developer's gui
       tox
 
 
-How to testing
---------------
+How to test
+-----------
 
 This project takes advantage of `tox`_. This tool allows to automate common
 development tasks (similar to Makefile) but it is oriented towards Python

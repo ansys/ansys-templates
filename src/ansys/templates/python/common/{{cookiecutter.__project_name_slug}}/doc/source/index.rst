@@ -3,10 +3,13 @@
    Provide any documentation specific to your online documentation
    here.
 
+.. include:: ../../README.rst
+   :start-after: .. contribute_start
+
 .. toctree::
    :hidden:
    :maxdepth: 3
 
+   getting_started/index
+   examples
    changelog
-
-.. include:: ../../README.rst

@@ -36,6 +36,7 @@ Overview
 
 {{ cookiecutter.short_description }}
 
+.. contribute_start
 
 Installation
 ^^^^^^^^^^^^

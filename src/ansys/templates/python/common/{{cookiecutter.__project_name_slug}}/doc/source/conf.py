@@ -32,6 +32,7 @@ release = version = __version__
 release = version = "{{ cookiecutter.__version }}"
 {%- endif %}
 cname = os.getenv("DOCUMENTATION_CNAME", "{{ cookiecutter.product_name }}.docs.pyansys.com")
+switcher_version = get_version_match(__version__)
 
 # Select desired logo, theme, and declare the html title
 html_logo = logo
@@ -52,7 +53,7 @@ html_theme_options = {
     ],
     "switcher": {
         "json_url": f"https://{cname}/versions.json",
-        "version_match": get_version_match(__version__),
+        "version_match": switcher_version,
     },
     "check_switcher": False,
 }
