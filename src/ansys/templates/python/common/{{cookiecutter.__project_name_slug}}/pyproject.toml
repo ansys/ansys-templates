@@ -17,7 +17,7 @@ name = "{{ cookiecutter.__pkg_name }}"
 version = "{{ cookiecutter.__version }}"
 description = "{{ cookiecutter.__short_description }}"
 readme = "README.rst"
-requires-python = ">={{ cookiecutter.__requires_python }}"
+requires-python = ">={{ cookiecutter.__requires_python }},<4.0"
 license = {file = "LICENSE"}
 authors = [
     {name = "ANSYS, Inc.", email = "pyansys.core@ansys.com"},
