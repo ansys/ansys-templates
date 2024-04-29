@@ -6,7 +6,7 @@ At least two installation modes are provided: user and developer.
 For users
 ^^^^^^^^^
 
-{%- if cookiecutter.__template_name == "pyansys-advanced" %}
+{%- if cookiecutter.__product_name_slug != "" %}
 In order to install Py{{ cookiecutter.product_name }} {{ cookiecutter.library_name }}, make sure you
 {%- elif cookiecutter.__template_name != "solution" %}
 In order to install {{ cookiecutter.project_name }}, make sure you
@@ -39,7 +39,7 @@ Then, you can simply execute:
 For developers
 ^^^^^^^^^^^^^^
 
-{%- if cookiecutter.__template_name == "pyansys-advanced" %}
+{%- if cookiecutter.__product_name_slug != "" %}
 Installing Py{{ cookiecutter.product_name }} {{ cookiecutter.library_name }} in developer mode allows
 {%- elif cookiecutter.__template_name != "solution" %}
 Installing Py{{ cookiecutter.project_name }} in developer mode allows

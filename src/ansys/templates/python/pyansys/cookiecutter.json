@@ -15,6 +15,7 @@
   "__repository_url": "{{ cookiecutter.repository_url }}",
   "__documentation_url": "",
   "requires_python": ["3.9", "3.10", "3.11", "3.12"],
+  "build_system": "setuptools",
   "__build_system": "setuptools",
   "__requires_python": "{{ cookiecutter.requires_python }}",
   "__logo": "pyansys",

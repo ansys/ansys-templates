@@ -13,6 +13,7 @@
   "repository_url": "",
   "__repository_url": "{{ cookiecutter.repository_url }}",
   "__documentation_url": "",
+  "build_system": "setuptools",
   "__build_system": "setuptools",
   "max_linelength": "100",
   "__max_linelength": "{{ cookiecutter.max_linelength }}",

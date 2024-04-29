@@ -13,6 +13,7 @@
   "__requires_python": "3.9",
   "__repository_url": "",
   "__documentation_url": "",
+  "build_system": "poetry",
   "__build_system": "poetry",
   "__max_linelength": "120",
   "__logo": "solutions",
