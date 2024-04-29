@@ -24,6 +24,7 @@ DESIRED_STRUCTURE = [
     "doc/source/conf.py",
     "doc/source/examples.rst",
     "doc/source/getting_started/index.rst",
+    "doc/source/index.rst",
     "doc/source/_static/README.md",
     "doc/source/_templates/README.md",
     "examples/README.md",
