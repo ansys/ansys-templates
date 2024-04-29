@@ -54,7 +54,7 @@ name = "{{ cookiecutter.__pkg_namespace }}"
 Source = "{{ cookiecutter.__repository_url }}"
 Tracker = "{{ cookiecutter.__repository_url }}/issues"
 Homepage = "{{ cookiecutter.__repository_url }}"
-Documentation = "https://{{ cookiecutter.product_name }}.docs.pyansys.com"
+Documentation = "{{ cookiecutter.__documentation_url }}"
 
 {% elif cookiecutter.__build_system == "poetry"  %}
 [tool.poetry]
