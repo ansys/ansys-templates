@@ -54,7 +54,7 @@ Before contributing to the project, please refer to the `PyAnsys Developer's gui
 
    .. code:: bash
 
-      git clone {{ cookiecutter.repository_url }}
+      git clone {{ cookiecutter.__repository_url }}
 
 #. Create a fresh-clean Python environment and activate it:
 
