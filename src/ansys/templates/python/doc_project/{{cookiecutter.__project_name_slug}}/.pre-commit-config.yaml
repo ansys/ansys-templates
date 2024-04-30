@@ -1,5 +1,17 @@
 repos:
 
+- repo: https://github.com/PyCQA/autoflake
+  rev: v2.3.1
+  hooks:
+  - id: autoflake
+    args: [
+      "--expand-star-imports",
+      "--ignore-pass-statements",
+      "--in-place",
+      "--remove-all-unused-imports",
+      "--remove-unused-variables",
+    ]
+
 - repo: https://github.com/psf/black
   rev: 23.1.0
   hooks:
