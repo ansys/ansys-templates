@@ -57,7 +57,7 @@ else:
 
 copyright = f"(c) {datetime.now().year} ANSYS, Inc. All rights reserved"
 author = "ANSYS Inc."
-switcher_version = get_version_match(__version__)
+switcher_version = get_version_match(package_version)
 
 
 # ---------- // General configuration // ------------------------------------------------------------------------------
@@ -264,6 +264,4 @@ linkcheck_ignore = [
 # If we are on a release, we have to ignore the "release" URLs, since it is not
 # available until the release is published.
 if switcher_version != "dev":
-    linkcheck_ignore.append(
-        f"https://github.com/ansys/{{ cookiecutter.__pkg_namespace }}/releases/tag/v{__version__}"
-    )
+    linkcheck_ignore.append(f"https://github.com/ansys/{{ cookiecutter.__pkg_namespace }}/releases/tag/v{package_version}")
