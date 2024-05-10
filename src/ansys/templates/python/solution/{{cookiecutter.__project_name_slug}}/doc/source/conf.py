@@ -250,3 +250,19 @@ texinfo_documents = [
         "Engineering Software",
     ),
 ]
+
+# Keep these while the repository is private
+linkcheck_ignore = [
+    "{{ cookiecutter.__repository_url }}/*",
+    {%- if cookiecutter.__template_name == "pyansys-advanced" %}
+    "{{ cookiecutter.__documentation_url }}/version/stable/*",
+    {%- endif %}
+    "https://pypi.org/project/{{cookiecutter.__pkg_name}}",
+]
+
+# If we are on a release, we have to ignore the "release" URLs, since it is not
+# available until the release is published.
+if switcher_version != "dev":
+    linkcheck_ignore.append(
+        f"https://github.com/ansys/{{ cookiecutter.__pkg_namespace }}/releases/tag/v{__version__}"
+    )

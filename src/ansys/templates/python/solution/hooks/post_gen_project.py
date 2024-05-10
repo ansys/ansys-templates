@@ -4,6 +4,9 @@ from ansys.templates.utils import keep_files
 DESIRED_STRUCTURE = [
     ".github/workflows/build-release.yml",
     ".github/workflows/release-please.yml",
+    ".github/workflows/label.yml",
+    ".github/labeler.yml",
+    ".github/labels.yml",
     ".vscode/launch.json",
     ".vscode/extensions.json",
     "doc/changelog.d/changelog_template.jinja",
