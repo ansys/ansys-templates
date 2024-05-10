@@ -21,13 +21,13 @@ have the latest version of `pip`_. To do so, run:
 
 Then, you can simply execute:
 
-{% if cookiecutter.build_system in ["flit", "setuptools"] -%}
+{% if cookiecutter.__build_system in ["flit", "setuptools"] -%}
 
 .. code:: bash
 
     python -m pip install {{ cookiecutter.__pkg_name }}
 
-{% elif cookiecutter.build_system == "poetry" -%}
+{% elif cookiecutter.__build_system == "poetry" -%}
 
 .. code:: bash
 
@@ -76,7 +76,7 @@ Before contributing to the project, please refer to the `PyAnsys Developer's gui
 
    .. code:: bash
 
-      python -m pip install -U pip {{ cookiecutter.build_system }} tox
+      python -m pip install -U pip {{ cookiecutter.__build_system }} tox
       python -m pip install -r requirements/requirements_build.txt
       python -m pip install -r requirements/requirements_doc.txt
       python -m pip install -r requirements/requirements_tests.txt
@@ -84,13 +84,13 @@ Before contributing to the project, please refer to the `PyAnsys Developer's gui
 
 #. Install the project in editable mode:
 
-    {% if cookiecutter.build_system in ["flit", "setuptools"] -%}
+    {% if cookiecutter.__build_system in ["flit", "setuptools"] -%}
 
    .. code:: bash
 
       python -m pip install --editable {{ cookiecutter.__pkg_name }}
 
-    {% elif cookiecutter.build_system == "poetry" -%}
+    {% elif cookiecutter.__build_system == "poetry" -%}
 
    .. code:: bash
 
