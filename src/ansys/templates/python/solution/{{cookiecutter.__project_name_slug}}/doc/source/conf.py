@@ -57,6 +57,7 @@ else:
 
 copyright = f"(c) {datetime.now().year} ANSYS, Inc. All rights reserved"
 author = "ANSYS Inc."
+switcher_version = get_version_match(__version__)
 
 
 # ---------- // General configuration // ------------------------------------------------------------------------------
@@ -178,7 +179,7 @@ html_theme_options = {
     "use_edit_page_button": False,
     "switcher": {
         "json_url": f"https://{cname}/versions.json",
-        "version_match": get_version_match(package_version),
+        "version_match": switcher_version,
     },
 }
 
