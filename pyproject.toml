@@ -27,17 +27,13 @@ build-backend = "flit_core.buildapi"
 
 [project]
 name = "ansys-templates"
-version = "1.8.0"
+version = "2.1.0"
 description = "Creates Python projects according to PyAnsys guidelines"
 readme = "README.rst"
 requires-python = ">=3.9,<4"
-license = {file = "LICENSE"}
-authors = [
-    {name = "ANSYS, Inc.", email = "pyansys.core@ansys.com"},
-]
-maintainers = [
-    {name = "ANSYS, Inc.", email = "pyansys.core@ansys.com"},
-]
+license = { file = "LICENSE" }
+authors = [{ name = "ANSYS, Inc.", email = "pyansys.core@ansys.com" }]
+maintainers = [{ name = "ANSYS, Inc.", email = "pyansys.core@ansys.com" }]
 
 classifiers = [
     "Development Status :: 4 - Beta",
@@ -59,10 +55,7 @@ dependencies = [
 ]
 
 [project.optional-dependencies]
-tests = [
-    "pytest==8.1.1",
-    "pytest-cov==4.1.0",
-]
+tests = ["pytest==8.1.1", "pytest-cov==4.1.0"]
 doc = [
     "ansys-sphinx-theme==0.14.1",
     "numpydoc==1.6.0",
