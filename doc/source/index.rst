@@ -4,3 +4,12 @@
    here.
 
 .. include:: ../../README.rst
+   :start-after: .. contribute_start
+
+.. toctree::
+   :hidden:
+   :maxdepth: 3
+
+   getting_started/index
+   examples
+   changelog
