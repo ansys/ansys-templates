@@ -3,6 +3,7 @@ my_solution
 ##############################################
 |python|
 
+.. contribute_start
 
 Installation
 ============

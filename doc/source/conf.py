@@ -57,6 +57,7 @@ else:
 
 copyright = f"(c) {datetime.now().year} ANSYS, Inc. All rights reserved"
 author = "ANSYS Inc."
+switcher_version = get_version_match(package_version)
 
 
 # ---------- // General configuration // ------------------------------------------------------------------------------
@@ -178,7 +179,7 @@ html_theme_options = {
     "use_edit_page_button": False,
     "switcher": {
         "json_url": f"https://{cname}/versions.json",
-        "version_match": get_version_match(package_version),
+        "version_match": switcher_version,
     },
 }
 
@@ -250,3 +251,14 @@ texinfo_documents = [
         "Engineering Software",
     ),
 ]
+
+# Keep these while the repository is private
+linkcheck_ignore = [
+    "/*",
+    "https://pypi.org/project/ansys-solutions-my-solution",
+]
+
+# If we are on a release, we have to ignore the "release" URLs, since it is not
+# available until the release is published.
+if switcher_version != "dev":
+    linkcheck_ignore.append(f"https://github.com/ansys/ansys.solutions.my_solution/releases/tag/v{package_version}")
