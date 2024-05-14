@@ -2,4 +2,10 @@ from ansys.product.library import __version__
 
 
 def test_pkg_version():
-    assert __version__ == "0.1.dev0"
+    import importlib.metadata as importlib_metadata
+
+    # Read from the pyproject.toml
+    # major, minor, patch
+    read_version = importlib_metadata.version("ansys-product-library")
+
+    assert __version__ == read_version
