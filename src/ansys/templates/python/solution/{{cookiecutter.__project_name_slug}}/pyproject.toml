@@ -42,7 +42,7 @@ priority = "supplemental"
 
 [tool.poetry.dependencies]
 python = ">=3.8.1, <3.11"
-ansys-saf-portal = {version = "1.0rc3", source = "solutions-private-pypi"}
+ansys-saf-portal = {version = "1.0.1", source = "solutions-private-pypi"}
 ansys-saf-desktop = {version = "1.0.0", source = "solutions-private-pypi"}
 {% if cookiecutter.with_dash_ui == "yes" %}
 ansys-web-components-dash = {version = "^0.0.dev2", source = "solutions-private-pypi"}
