@@ -27,7 +27,7 @@ build-backend = "flit_core.buildapi"
 
 [project]
 name = "ansys-templates"
-version = "1.8.0"
+version = "1.7.0"
 description = "Creates Python projects according to PyAnsys guidelines"
 readme = "README.rst"
 requires-python = ">=3.9,<4"
