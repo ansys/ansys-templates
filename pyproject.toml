@@ -8,13 +8,13 @@ name = "ansys-product-library"
 version = "0.1.dev0"
 description = "A python wrapper for ansys product library"
 readme = "README.rst"
-requires-python = ">=3.9"
+requires-python = ">=3.9,<4.0"
 license = {file = "LICENSE"}
 authors = [
-    {name = "ANSYS, Inc.", email = "pyansys.support@ansys.com"},
+    {name = "ANSYS, Inc.", email = "pyansys.core@ansys.com"},
 ]
 maintainers = [
-    {name = "PyAnsys developers", email = "pyansys.core@ansys.com"},
+    {name = "ANSYS, Inc.", email = "pyansys.core@ansys.com"},
 ]
 
 classifiers = [
@@ -23,9 +23,7 @@ classifiers = [
     "License :: OSI Approved :: MIT License",
     "Operating System :: OS Independent",
 ]
-dependencies = [
-    "importlib-metadata >=4.0",
-]
+dependencies = []
 
 [project.optional-dependencies]
 tests = [
@@ -33,9 +31,9 @@ tests = [
     "pytest-cov==4.1.0",
 ]
 doc = [
-    "ansys-sphinx-theme==0.12.5",
-    "numpydoc==1.6.0",
-    "sphinx==7.2.6",
+    "ansys-sphinx-theme==0.15.2",
+    "numpydoc==1.7.0",
+    "sphinx==7.3.7",
     "sphinx-copybutton==0.5.2",
 ]
 
@@ -47,6 +45,7 @@ name = "ansys.product.library"
 Source = "https://github.com/ansys/pyproduct-library"
 Tracker = "https://github.com/ansys/pyproduct-library/issues"
 Homepage = "https://github.com/ansys/pyproduct-library"
+Documentation = "https://product.docs.pyansys.com"
 
 
 [tool.black]
@@ -64,3 +63,37 @@ source = ["ansys.product"]
 
 [tool.coverage.report]
 show_missing = true
+
+[tool.towncrier]
+package = "ansys.product.library"
+directory = "doc/changelog.d"
+filename = "doc/source/changelog.rst"
+start_string = ".. towncrier release notes start\n"
+template = "doc/changelog.d/changelog_template.jinja"
+title_format = "`{version} <https://github.com/ansys/ansys.product.library/releases/tag/v{version}>`_ - {project_date}"
+issue_format = "`#{issue} <https://github.com/ansys/ansys.product.library/pull/{issue}>`_"
+
+[[tool.towncrier.type]]
+directory = "added"
+name = "Added"
+showcontent = true
+
+[[tool.towncrier.type]]
+directory = "changed"
+name = "Changed"
+showcontent = true
+
+[[tool.towncrier.type]]
+directory = "fixed"
+name = "Fixed"
+showcontent = true
+
+[[tool.towncrier.type]]
+directory = "dependencies"
+name = "Dependencies"
+showcontent = true
+
+[[tool.towncrier.type]]
+directory = "miscellaneous"
+name = "Miscellaneous"
+showcontent = true

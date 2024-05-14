@@ -6,12 +6,12 @@ Pyproduct library
    :target: https://docs.pyansys.com/
    :alt: PyAnsys
 
-.. |python| image:: https://img.shields.io/pypi/pyversions/pyproduct-library?logo=pypi
-   :target: https://pypi.org/project/pyproduct-library/
+.. |python| image:: https://img.shields.io/pypi/pyversions/ansys-product-library?logo=pypi
+   :target: https://pypi.org/project/ansys-product-library/
    :alt: Python
 
-.. |pypi| image:: https://img.shields.io/pypi/v/pyproduct-library.svg?logo=python&logoColor=white
-   :target: https://pypi.org/project/pyproduct-library
+.. |pypi| image:: https://img.shields.io/pypi/v/ansys-product-library.svg?logo=python&logoColor=white
+   :target: https://pypi.org/project/ansys-product-library
    :alt: PyPI
 
 .. |codecov| image:: https://codecov.io/gh/ansys/pyproduct-library/branch/main/graph/badge.svg
@@ -31,161 +31,60 @@ Pyproduct library
    :alt: Black
 
 
+Overview
+--------
+
 A Python wrapper for Ansys product library
 
+.. contribute_start
 
-How to install
---------------
+Installation
+^^^^^^^^^^^^
 
-At least two installation modes are provided: user and developer.
-
-For users
-^^^^^^^^^
-
-In order to install Pyproduct library, make sure you
-have the latest version of `pip`_. To do so, run:
+You can use `pip <https://pypi.org/project/pip/>`_ to install Pyproduct library.
 
 .. code:: bash
 
-    python -m pip install -U pip
+    pip install ansys-product-library
 
-Then, you can simply execute:
+To install the latest development version, run these commands:
 
 .. code:: bash
 
-    python -m pip install ansys-product-library
+    git clone https://github.com/ansys/pyproduct-library
+    cd pyproduct-library
+    pip install -e .
 
-For developers
-^^^^^^^^^^^^^^
+For more information, see `Getting Started`_.
 
-Installing Pyproduct library in developer mode allows
-you to modify the source and enhance it.
-
-Before contributing to the project, please refer to the `PyAnsys Developer's guide`_. You will
-need to follow these steps:
-
-#. Start by cloning this repository:
-
-   .. code:: bash
-
-      git clone https://github.com/ansys/pyproduct-library
-
-#. Create a fresh-clean Python environment and activate it:
-
-   .. code:: bash
-
-      # Create a virtual environment
-      python -m venv .venv
-
-      # Activate it in a POSIX system
-      source .venv/bin/activate
-
-      # Activate it in Windows CMD environment
-      .venv\Scripts\activate.bat
-
-      # Activate it in Windows Powershell
-      .venv\Scripts\Activate.ps1
-
-#. Make sure you have the latest required build system and doc, testing, and CI tools:
-
-   .. code:: bash
-
-      python -m pip install -U pip flit tox
-      python -m pip install -r requirements/requirements_build.txt
-      python -m pip install -r requirements/requirements_doc.txt
-      python -m pip install -r requirements/requirements_tests.txt
-
-
-#. Install the project in editable mode:
-
-    .. code:: bash
-
-      python -m pip install --editable ansys-product-library
-
-    #. Finally, verify your development installation by running:
-
-   .. code:: bash
-
-      tox
-
-
-How to testing
---------------
-
-This project takes advantage of `tox`_. This tool allows to automate common
-development tasks (similar to Makefile) but it is oriented towards Python
-development.
-
-Using tox
-^^^^^^^^^
-
-As Makefile has rules, `tox`_ has environments. In fact, the tool creates its
-own virtual environment so anything being tested is isolated from the project in
-order to guarantee project's integrity. The following environments commands are provided:
-
-- **tox -e style**: will check for coding style quality.
-- **tox -e py**: checks for unit tests.
-- **tox -e py-coverage**: checks for unit testing and code coverage.
-- **tox -e doc**: checs for documentation building process.
-
-
-Raw testing
+Basic usage
 ^^^^^^^^^^^
 
-If required, you can always call the style commands (`black`_, `isort`_,
-`flake8`_...) or unit testing ones (`pytest`_) from the command line. However,
-this does not guarantee that your project is being tested in an isolated
-environment, which is the reason why tools like `tox`_ exist.
+This code shows how to import Pyproduct library and use some basic capabilities:
 
+.. code:: python
 
-A note on pre-commit
-^^^^^^^^^^^^^^^^^^^^
+    print("Put sample code here")
 
-The style checks take advantage of `pre-commit`_. Developers are not forced but
-encouraged to install this tool via:
+For comprehensive usage information, see `Examples`_ in the `Pyproduct library documentation`_.
 
-.. code:: bash
+Documentation and issues
+^^^^^^^^^^^^^^^^^^^^^^^^
+Documentation for the latest stable release of Pyproduct library is hosted at `Pyproduct library documentation`_.
 
-    python -m pip install pre-commit && pre-commit install
+In the upper right corner of the documentation's title bar, there is an option for switching from
+viewing the documentation for the latest stable release to viewing the documentation for the
+development version or previously released versions.
 
+On the `Pyproduct library Issues <https://github.com/ansys/pyproduct-library/issues>`_ page,
+you can create issues to report bugs and request new features. On the `Pyproduct library Discussions
+<https://github.com/ansys/pyproduct-library/discussions>`_ page or the `Discussions <https://discuss.ansys.com/>`_
+page on the Ansys Developer portal, you can post questions, share ideas, and get community feedback.
 
-Documentation
--------------
-
-For building documentation, you can either run the usual rules provided in the
-`Sphinx`_ Makefile, such us:
-
-.. code:: bash
-
-    make -C doc/ html && open doc/html/index.html
-
-However, the recommended way of checking documentation integrity is using:
-
-.. code:: bash
-
-    tox -e doc && open .tox/doc_out/index.html
-
-
-Distributing
-------------
-
-If you would like to create either source or wheel files, start by installing
-the building requirements and then executing the build module:
-
-.. code:: bash
-
-    python -m pip install -r requirements/requirements_build.txt
-    python -m build
-    python -m twine check dist/*
+To reach the project support team, email `pyansys.core@ansys.com <mailto:pyansys.core@ansys.com>`_.
 
 
 .. LINKS AND REFERENCES
-.. _black: https://github.com/psf/black
-.. _flake8: https://flake8.pycqa.org/en/latest/
-.. _isort: https://github.com/PyCQA/isort
-.. _pip: https://pypi.org/project/pip/
-.. _pre-commit: https://pre-commit.com/
-.. _PyAnsys Developer's guide: https://dev.docs.pyansys.com/
-.. _pytest: https://docs.pytest.org/en/stable/
-.. _Sphinx: https://www.sphinx-doc.org/en/master/
-.. _tox: https://tox.wiki/
+.. _Getting Started: https://product.docs.pyansys.com/version/stable/getting_started/index.html
+.. _Examples: https://product.docs.pyansys.com/version/stable/examples.html
+.. _Pyproduct library documentation: https://product.docs.pyansys.com/version/stable/index.html
