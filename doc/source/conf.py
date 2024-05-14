@@ -1,4 +1,5 @@
 """Sphinx documentation configuration file."""
+
 import os
 from datetime import datetime
 
@@ -10,7 +11,8 @@ project = "doc-project"
 copyright = f"(c) {datetime.now().year} ANSYS, Inc. All rights reserved"
 author = "ANSYS, Inc."
 release = version = "0.1.dev0"
-cname = os.getenv("DOCUMENTATION_CNAME", "docs.pyansys.com")
+cname = os.getenv("DOCUMENTATION_CNAME", "")
+switcher_version = get_version_match(__version__)
 
 # Select desired logo, theme, and declare the html title
 html_logo = logo
@@ -27,7 +29,7 @@ html_theme_options = {
     ],
     "switcher": {
         "json_url": f"https://{cname}/versions.json",
-        "version_match": get_version_match(__version__),
+        "version_match": switcher_version,
     },
     "check_switcher": False,
 }
@@ -87,3 +89,16 @@ source_suffix = ".rst"
 
 # The master toctree document.
 master_doc = "index"
+
+# Keep these while the repository is private
+linkcheck_ignore = [
+    "https://github.com/ansys/doc-project/*",
+    "https://pypi.org/project/",
+]
+
+# If we are on a release, we have to ignore the "release" URLs, since it is not
+# available until the release is published.
+if switcher_version != "dev":
+    linkcheck_ignore.append(
+        f"https://github.com/ansys//releases/tag/v{__version__}"
+    )
