@@ -1,3 +1,6 @@
 ANSYS
-Ansys
-ansys
+[Aa]nsys
+isort
+Makefile
+py
+pytest
