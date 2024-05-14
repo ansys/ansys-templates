@@ -34,7 +34,8 @@ project = "Ansys Templates"
 copyright = f"(c) 2022-{datetime.today().year} ANSYS, Inc. and/or its affiliates."
 author = "ANSYS, Inc."
 release = version = __version__
-cname = os.getenv("DOCUMENTATION_CNAME", "nocname.com")
+cname = os.getenv("DOCUMENTATION_CNAME", "templates.ansys.com")
+switcher_version = get_version_match(__version__)
 
 # use the default pyansys logo
 html_logo = ansys_logo_black
@@ -115,3 +116,12 @@ source_suffix = ".rst"
 
 # The master toctree document.
 master_doc = "index"
+
+linkcheck_ignore = []
+
+# If we are on a release, we have to ignore the "release" URLs, since it is not
+# available until the release is published.
+if switcher_version != "dev":
+    linkcheck_ignore.append(
+        f"https://github.com/ansys/ansys-templates/releases/tag/v{__version__}"
+    )
