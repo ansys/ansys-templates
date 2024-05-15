@@ -6,7 +6,7 @@
 import webbrowser
 
 from ansys.saf.glow.client.dashclient import DashClient, callback
-from ansys_web_components_dash import AwcDashTree
+from ansys_web_components_dash import Tree
 from dash.exceptions import PreventUpdate
 import dash_bootstrap_components as dbc
 from dash_extensions.enrich import Input, Output, callback_context, dcc, html
@@ -106,7 +106,7 @@ layout = html.Div(
                     [
                         dmc.Space(h=10),
                         dbc.Row(
-                            AwcDashTree(
+                            Tree(
                                 id="navigation_tree",
                                 multi=False,
                                 height=250,
