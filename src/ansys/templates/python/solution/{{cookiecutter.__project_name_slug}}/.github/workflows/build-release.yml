@@ -25,6 +25,18 @@ concurrency:
   cancel-in-progress: true
 
 jobs:
+  update-changelog:
+    name: "Update CHANGELOG for new tag"
+    if: github.event_name == 'push' && contains(github.ref, 'refs/tags')
+    runs-on: ubuntu-latest
+    permissions:
+      contents: write
+      pull-requests: write
+    steps:
+      - uses: ansys/actions/doc-deploy-changelog@v6
+        with:
+          token: {{ "${{ secrets.PYANSYS_CI_BOT_TOKEN }}" }}
+
   check-copyright:
     name: Check copyright
     runs-on: [ubuntu-latest]
@@ -140,7 +152,7 @@ jobs:
     if: |
       github.event_name == 'release' && false
     name: Release
-    needs: [build-doc, check-copyright, check-code-style, build, run-tests, check-licenses, package-solution, generate-sbom, validate-sbom]
+    needs: [update-changelog, build-doc, check-copyright, check-code-style, build, run-tests, check-licenses, package-solution, generate-sbom, validate-sbom]
     runs-on: [ubuntu-latest]
     timeout-minutes: 10
     steps:

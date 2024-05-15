@@ -1,10 +1,5 @@
 repos:
 
-- repo: https://github.com/fsfe/reuse-tool
-  rev: v1.1.2
-  hooks:
-    - id: reuse
-
 - repo: https://github.com/psf/black
   rev: 23.3.0
   hooks:
@@ -50,3 +45,11 @@ repos:
   rev: 0.22.0
   hooks:
     - id: check-github-workflows
+
+- repo: https://github.com/ansys/pre-commit-hooks
+  rev: v0.3.1
+  hooks:
+  - id: add-license-headers
+    args:
+    - --start_year=2022
+    exclude: 'src/ansys/templates/python/'
