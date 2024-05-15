@@ -6,12 +6,12 @@ Py{{ cookiecutter.product_name }} {{ cookiecutter.library_name }}
    :target: https://docs.pyansys.com/
    :alt: PyAnsys
 
-.. |python| image:: https://img.shields.io/pypi/pyversions/{{cookiecutter.__project_name_slug}}?logo=pypi
-   :target: https://pypi.org/project/{{cookiecutter.__project_name_slug}}/
+.. |python| image:: https://img.shields.io/pypi/pyversions/{{cookiecutter.__pkg_name}}?logo=pypi
+   :target: https://pypi.org/project/{{cookiecutter.__pkg_name}}/
    :alt: Python
 
-.. |pypi| image:: https://img.shields.io/pypi/v/{{cookiecutter.__project_name_slug}}.svg?logo=python&logoColor=white
-   :target: https://pypi.org/project/{{cookiecutter.__project_name_slug}}
+.. |pypi| image:: https://img.shields.io/pypi/v/{{cookiecutter.__pkg_name}}.svg?logo=python&logoColor=white
+   :target: https://pypi.org/project/{{cookiecutter.__pkg_name}}
    :alt: PyPI
 
 .. |codecov| image:: https://codecov.io/gh/ansys/{{cookiecutter.__project_name_slug}}/branch/main/graph/badge.svg
@@ -31,182 +31,60 @@ Py{{ cookiecutter.product_name }} {{ cookiecutter.library_name }}
    :alt: Black
 
 
+Overview
+--------
+
 {{ cookiecutter.short_description }}
 
+.. contribute_start
 
-How to install
---------------
+Installation
+^^^^^^^^^^^^
 
-At least two installation modes are provided: user and developer.
-
-For users
-^^^^^^^^^
-
-In order to install Py{{ cookiecutter.product_name }} {{ cookiecutter.library_name }}, make sure you
-have the latest version of `pip`_. To do so, run:
+You can use `pip <https://pypi.org/project/pip/>`_ to install Py{{ cookiecutter.product_name }} {{ cookiecutter.library_name }}.
 
 .. code:: bash
 
-    python -m pip install -U pip
+    pip install {{cookiecutter.__pkg_name}}
 
-Then, you can simply execute:
-
-{% if cookiecutter.build_system in ["flit", "setuptools"] -%}
+To install the latest development version, run these commands:
 
 .. code:: bash
 
-    python -m pip install {{ cookiecutter.__pkg_name }}
+    git clone {{cookiecutter.__repository_url}}
+    cd {{ cookiecutter.__project_name_slug }}
+    pip install -e .
 
-{% elif cookiecutter.build_system == "poetry" -%}
+For more information, see `Getting Started`_.
 
-.. code:: bash
-
-    poetry run python -m pip install {{ cookiecutter.__pkg_name }}
-
-{% endif -%}
-
-
-For developers
-^^^^^^^^^^^^^^
-
-Installing Py{{ cookiecutter.product_name }} {{ cookiecutter.library_name }} in developer mode allows
-you to modify the source and enhance it.
-
-Before contributing to the project, please refer to the `PyAnsys Developer's guide`_. You will
-need to follow these steps:
-
-#. Start by cloning this repository:
-
-   .. code:: bash
-
-      git clone {{ cookiecutter.repository_url }}
-
-#. Create a fresh-clean Python environment and activate it:
-
-   .. code:: bash
-
-      # Create a virtual environment
-      python -m venv .venv
-
-      # Activate it in a POSIX system
-      source .venv/bin/activate
-
-      # Activate it in Windows CMD environment
-      .venv\Scripts\activate.bat
-
-      # Activate it in Windows Powershell
-      .venv\Scripts\Activate.ps1
-
-#. Make sure you have the latest required build system and doc, testing, and CI tools:
-
-   .. code:: bash
-
-      python -m pip install -U pip {{ cookiecutter.build_system }} tox
-      python -m pip install -r requirements/requirements_build.txt
-      python -m pip install -r requirements/requirements_doc.txt
-      python -m pip install -r requirements/requirements_tests.txt
-
-
-#. Install the project in editable mode:
-
-    {% if cookiecutter.build_system in ["flit", "setuptools"] -%}
-
-   .. code:: bash
-
-      python -m pip install --editable {{ cookiecutter.__pkg_name }}
-
-    {% elif cookiecutter.build_system == "poetry" -%}
-
-   .. code:: bash
-
-      poetry run python -m pip install {{ cookiecutter.__pkg_name }}
-
-    {% endif -%}
-
-#. Finally, verify your development installation by running:
-
-   .. code:: bash
-
-      tox
-
-
-How to testing
---------------
-
-This project takes advantage of `tox`_. This tool allows to automate common
-development tasks (similar to Makefile) but it is oriented towards Python
-development.
-
-Using tox
-^^^^^^^^^
-
-As Makefile has rules, `tox`_ has environments. In fact, the tool creates its
-own virtual environment so anything being tested is isolated from the project in
-order to guarantee project's integrity. The following environments commands are provided:
-
-- **tox -e style**: will check for coding style quality.
-- **tox -e py**: checks for unit tests.
-- **tox -e py-coverage**: checks for unit testing and code coverage.
-- **tox -e doc**: checs for documentation building process.
-
-
-Raw testing
+Basic usage
 ^^^^^^^^^^^
 
-If required, you can always call the style commands (`black`_, `isort`_,
-`flake8`_...) or unit testing ones (`pytest`_) from the command line. However,
-this does not guarantee that your project is being tested in an isolated
-environment, which is the reason why tools like `tox`_ exist.
+This code shows how to import Py{{ cookiecutter.product_name }} {{ cookiecutter.library_name }} and use some basic capabilities:
 
+.. code:: python
 
-A note on pre-commit
-^^^^^^^^^^^^^^^^^^^^
+    print("Put sample code here")
 
-The style checks take advantage of `pre-commit`_. Developers are not forced but
-encouraged to install this tool via:
+For comprehensive usage information, see `Examples`_ in the `Py{{ cookiecutter.product_name }} {{ cookiecutter.library_name }} documentation`_.
 
-.. code:: bash
+Documentation and issues
+^^^^^^^^^^^^^^^^^^^^^^^^
+Documentation for the latest stable release of Py{{ cookiecutter.product_name }} {{ cookiecutter.library_name }} is hosted at `Py{{ cookiecutter.product_name }} {{ cookiecutter.library_name }} documentation`_.
 
-    python -m pip install pre-commit && pre-commit install
+In the upper right corner of the documentation's title bar, there is an option for switching from
+viewing the documentation for the latest stable release to viewing the documentation for the
+development version or previously released versions.
 
+On the `Py{{ cookiecutter.product_name }} {{ cookiecutter.library_name }} Issues <{{cookiecutter.__repository_url}}/issues>`_ page,
+you can create issues to report bugs and request new features. On the `Py{{ cookiecutter.product_name }} {{ cookiecutter.library_name }} Discussions
+<{{cookiecutter.__repository_url}}/discussions>`_ page or the `Discussions <https://discuss.ansys.com/>`_
+page on the Ansys Developer portal, you can post questions, share ideas, and get community feedback.
 
-Documentation
--------------
-
-For building documentation, you can either run the usual rules provided in the
-`Sphinx`_ Makefile, such us:
-
-.. code:: bash
-
-    make -C doc/ html && open doc/html/index.html
-
-However, the recommended way of checking documentation integrity is using:
-
-.. code:: bash
-
-    tox -e doc && open .tox/doc_out/index.html
-
-
-Distributing
-------------
-
-If you would like to create either source or wheel files, start by installing
-the building requirements and then executing the build module:
-
-.. code:: bash
-
-    python -m pip install -r requirements/requirements_build.txt
-    python -m build
-    python -m twine check dist/*
+To reach the project support team, email `pyansys.core@ansys.com <mailto:pyansys.core@ansys.com>`_.
 
 
 .. LINKS AND REFERENCES
-.. _black: https://github.com/psf/black
-.. _flake8: https://flake8.pycqa.org/en/latest/
-.. _isort: https://github.com/PyCQA/isort
-.. _pip: https://pypi.org/project/pip/
-.. _pre-commit: https://pre-commit.com/
-.. _PyAnsys Developer's guide: https://dev.docs.pyansys.com/
-.. _pytest: https://docs.pytest.org/en/stable/
-.. _Sphinx: https://www.sphinx-doc.org/en/master/
-.. _tox: https://tox.wiki/
+.. _Getting Started: https://{{ cookiecutter.product_name }}.docs.pyansys.com/version/stable/getting_started/index.html
+.. _Examples: https://{{ cookiecutter.product_name }}.docs.pyansys.com/version/stable/examples.html
+.. _Py{{ cookiecutter.product_name }} {{ cookiecutter.library_name }} documentation: https://{{ cookiecutter.product_name }}.docs.pyansys.com/version/stable/index.html
