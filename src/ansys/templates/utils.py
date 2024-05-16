@@ -164,6 +164,21 @@ def keep_files(files_list, project_path=Path(os.getcwd())):
     [folder.rmdir() for folder in folders if not os.listdir(str(folder))]
 
 
+def rename_files(files_list: list[tuple[str, str]], project_path=Path(os.getcwd())):
+    """Rename files in the project.
+
+    Parameters
+    ----------
+    files_list : list
+        List of tuples containing the original and new file names.
+    project_path : Path
+        Project's root directory.
+
+    """
+
+    for old_name, new_name in files_list:
+        (project_path / old_name).rename(project_path / new_name)
+
 def bake_template(template_path, output_path, license_path=MIT_LICENSE, **cookiecutter_kwargs):
     """
     Bakes project using desired template and common files.
