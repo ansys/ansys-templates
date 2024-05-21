@@ -12,6 +12,9 @@ line_length = 100
 default_section = "THIRDPARTY"
 src_paths = ["doc", "src", "tests"]
 
+[tool.pydocstyle]
+convention = "numpy"
+
 [tool.coverage.run]
 source = ["pybasic"]
 
