@@ -2,6 +2,7 @@ from ansys.templates.utils import keep_files
 
 
 DESIRED_STRUCTURE = [
+    ".devcontainer/devcontainer.json"
     ".github/workflows/build-release.yml",
     ".github/workflows/release-please.yml",
     ".github/workflows/label.yml",
