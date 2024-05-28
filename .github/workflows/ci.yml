@@ -119,7 +119,7 @@ jobs:
 
   doc-deploy-development:
     name: Doc dev version deploy
-    if: github.event_name == 'push'
+    #if: github.event_name == 'push'
     runs-on: ubuntu-latest
     needs: build-library
     steps:
