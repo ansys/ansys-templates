@@ -113,10 +113,9 @@ def main():
     """Entry point of the script."""
     # Apply the desired structure to the project
     keep_files(DESIRED_STRUCTURE)
-    # Create a list of tuples combining AWC_UI_STRUCTURE and UI_STRUCTURE
-    combined_structure = list(zip(AWC_UI_STRUCTURE, UI_STRUCTURE))
-    # Rename files in the project
-    rename_files(combined_structure)
+    if "{{ cookiecutter.dash_ui }}" == "awc":
+        combined_structure = list(zip(AWC_UI_STRUCTURE, UI_STRUCTURE))
+        rename_files(combined_structure)
 
 
 if __name__ == "__main__":

@@ -177,7 +177,15 @@ def rename_files(files_list: list[tuple[str, str]], project_path=Path(os.getcwd(
     """
 
     for old_name, new_name in files_list:
-        (project_path / old_name).rename(project_path / new_name)
+        old_file = (project_path / old_name).absolute()
+        new_file = (project_path / new_name).absolute()
+        new_file.parent.mkdir(parents=True, exist_ok=True)
+        old_file.rename(new_file)
+        for parent in old_file.parents:
+            if parent == project_path:
+                break
+            if not os.listdir(parent):
+                parent.rmdir()
 
 def bake_template(template_path, output_path, license_path=MIT_LICENSE, **cookiecutter_kwargs):
     """
