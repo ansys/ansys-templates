@@ -6,7 +6,8 @@ import base64
 import os
 from pathlib import Path
 
-from ansys_web_components_dash import AwcDash, AwcDashEnum
+import ansys_web_components_dash as AwcDash
+from ansys_web_components_dash import AwcDashEnum
 from dash_extensions.enrich import html
 
 

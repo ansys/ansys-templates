@@ -4,8 +4,9 @@
 
 
 from ansys.saf.glow.client.dashclient import DashClient, callback
-from ansys_web_components_dash import AwcDash, AwcDashEnum
-from dash_extensions.enrich import Input, Output, State, dcc, html
+import ansys_web_components_dash as AwcDash
+from ansys_web_components_dash import AwcDashEnum
+from dash_extensions.enrich import Input, Output, State, html
 
 from ansys.solutions.{{ cookiecutter.__solution_name_slug }}.solution.definition import {{cookiecutter.__solution_definition_name}}
 from ansys.solutions.{{ cookiecutter.__solution_name_slug }}.solution.first_step import FirstStep

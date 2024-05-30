@@ -26,7 +26,7 @@ class DashApp(DashProxy):
             </body>
         </html>
         """
-    
+
 app = DashApp(
     __name__,
     external_stylesheets=[],

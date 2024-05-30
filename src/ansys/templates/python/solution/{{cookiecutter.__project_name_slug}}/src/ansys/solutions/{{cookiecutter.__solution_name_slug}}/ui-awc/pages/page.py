@@ -5,7 +5,8 @@
 import webbrowser
 
 from ansys.saf.glow.client.dashclient import DashClient, callback
-from ansys_web_components_dash import AwcDash, AwcDashEnum, Tree
+import ansys_web_components_dash as AwcDash
+from ansys_web_components_dash import AwcDashEnum, Tree
 from dash.exceptions import PreventUpdate
 from dash_extensions.enrich import Input, Output, callback_context, dcc, html, State
 from dash import clientside_callback, ctx
