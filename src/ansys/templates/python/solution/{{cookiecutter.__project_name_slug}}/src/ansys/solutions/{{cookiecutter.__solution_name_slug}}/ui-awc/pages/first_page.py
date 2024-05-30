@@ -106,13 +106,13 @@ def layout(step: FirstStep):
 
 @callback(
     Output("result", "value"),
-    Input("calculate", "n_clicks"),
+    Input("calculate", "clicked"),
     State("first-arg", "value"),
     State("second-arg", "value"),
     State("url", "pathname"),
     prevent_initial_call=True,
 )
-def calculate(n_clicks, first_arg, second_arg, pathname):
+def calculate(clicked, first_arg, second_arg, pathname):
     """Trigger the computation."""
     project = DashClient[{{cookiecutter.__solution_definition_name}}].get_project(pathname)
     step = project.steps.first_step

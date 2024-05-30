@@ -8,7 +8,7 @@ from dash_extensions.enrich import html
 from ansys.solutions.{{ cookiecutter.__solution_name_slug }}.solution.second_step import SecondStep
 
 
-def layout():
+def layout(step: SecondStep):
     """Layout of the second step page."""
     return html.Div(
         [
