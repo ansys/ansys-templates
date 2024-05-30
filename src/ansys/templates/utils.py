@@ -175,7 +175,6 @@ def rename_files(files_list: list[tuple[str, str]], project_path=Path(os.getcwd(
         Project's root directory.
 
     """
-
     for old_name, new_name in files_list:
         old_file = (project_path / old_name).absolute()
         new_file = (project_path / new_name).absolute()
