@@ -4,7 +4,7 @@
   "__solution_name_slug": "{{ cookiecutter.solution_name.lower().replace('-', '_').replace(' ', '_') }}",
   "solution_display_name": "My Solution",
   "__project_name_slug": "{{ cookiecutter.solution_name.lower().replace('_', '-').replace(' ', '-') }}",
-  "dash_ui": ["no", "default", "awc"],
+  "dash_ui": ["default", "awc", "no"],
   "__solution_definition_name": "{{ cookiecutter.__solution_name_slug.title() }}Solution",
   "__version": "0.1.dev0",
   "__short_description": "",
