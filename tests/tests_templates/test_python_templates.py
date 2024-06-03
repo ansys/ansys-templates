@@ -287,6 +287,7 @@ DOC_PROJECT_STRUCTURE = [
 
 # Structure for solution projects
 SOLUTION_STRUCTURE = [
+    ".devcontainer/devcontainer.json",
     ".github/workflows/build-release.yml",
     ".github/workflows/release-please.yml",
     ".github/workflows/label.yml",
