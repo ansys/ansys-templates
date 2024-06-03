@@ -80,6 +80,7 @@ DOC_PROJECT_VARS = dict(
 SOLUTION_VARS = dict(
     __solution_name_slug="solution",
     __project_name_slug="solution",
+    dash_ui="default",
 )
 
 PYCOMMON_STRUCTURE = [

@@ -126,7 +126,7 @@ def pyace_grpc():
 @new.command()
 @click.option('-s', '--solution-name', type=str, help="Name of the solution in the definition.")
 @click.option('-d', '--solution-display-name', type=str, help="Name of the solution in the user interface.")
-@click.option("-u", "--with-dash-ui", is_flag=True, flag_value="1", help="With Dash UI")
+@click.option("-u", "--with-dash-ui", type=click.Choice(["No", "Default", "AWC"]), help="Create a Dash UI for the solution.")
 def solution(solution_name, solution_display_name, with_dash_ui):
     """[Ansys Internal Use Only] Create a solution based on SAF."""
     template = "solution"
@@ -136,7 +136,11 @@ def solution(solution_name, solution_display_name, with_dash_ui):
         extra_context["solution_name"] = solution_name
     if solution_display_name:
         extra_context["solution_display_name"] = solution_display_name
-    if with_dash_ui:
-        extra_context["with_dash_ui"] = "yes"
+    if with_dash_ui == "No":
+        extra_context["dash_ui"] = "no"
+    elif with_dash_ui == "Default":
+        extra_context["dash_ui"] = "default"
+    elif with_dash_ui == "AWC":
+        extra_context["dash_ui"] = "awc"
 
     create_project(template, no_input=no_input, extra_context=extra_context)

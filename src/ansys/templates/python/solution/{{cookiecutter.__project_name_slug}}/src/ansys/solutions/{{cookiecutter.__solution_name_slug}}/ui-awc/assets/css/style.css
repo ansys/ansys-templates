@@ -1,0 +1,47 @@
+/*©2022, ANSYS Inc. Unauthorized use, distribution or duplication is prohibited.*/
+
+
+.back-link {
+    text-align: right;
+}
+
+.accordion-button {
+    text-align: left;
+    display: block;
+    color:#fff;
+    background-color:#000000;
+    border-color:#000000;
+}
+
+.accordion-button:not(.collapsed) {
+    text-align: left;
+    display: block;
+    color:#fff;
+    background-color:#000000;
+    border-color:#000000;
+}
+
+.g-0{
+    width: 150%
+}
+
+.tab-style {
+    color: #000000;
+    background-color: #FFFFFF;
+    text-color: #000000;
+}
+
+.tab-label-style {
+    color: #000000;
+    text-color: "#000000";
+}
+
+
+.tab-active-style {
+    color: #FFFFFF;
+    text-color: "#000000";
+    background-color: #000000;
+    border-style: solid;
+    border-color: #FFFFFF;
+}
+

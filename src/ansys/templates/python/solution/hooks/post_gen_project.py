@@ -1,4 +1,4 @@
-from ansys.templates.utils import keep_files
+from ansys.templates.utils import keep_files, rename_files
 
 
 DESIRED_STRUCTURE = [
@@ -88,14 +88,38 @@ UI_STRUCTURE = [
     f"src/ansys/solutions/{{ cookiecutter.__solution_name_slug }}/ui/app.py",
 ]
 
+AWC_UI_STRUCTURE = [
+    f"src/ansys/solutions/{{ cookiecutter.__solution_name_slug }}/ui-awc/assets/css/style.css",
+    f"src/ansys/solutions/{{ cookiecutter.__solution_name_slug }}/ui-awc/assets/images/README.md",
+    f"src/ansys/solutions/{{ cookiecutter.__solution_name_slug }}/ui-awc/assets/images/solution-workflow-sketch.png",
+    f"src/ansys/solutions/{{ cookiecutter.__solution_name_slug }}/ui-awc/assets/logos/ansys_solutions_logo_black.png",
+    f"src/ansys/solutions/{{ cookiecutter.__solution_name_slug }}/ui-awc/assets/logos/ansys_solutions_logo_white.png",
+    f"src/ansys/solutions/{{ cookiecutter.__solution_name_slug }}/ui-awc/assets/scripts/README.md",
+    f"src/ansys/solutions/{{ cookiecutter.__solution_name_slug }}/ui-awc/components/README.md",
+    f"src/ansys/solutions/{{ cookiecutter.__solution_name_slug }}/ui-awc/pages/about_page.py",
+    f"src/ansys/solutions/{{ cookiecutter.__solution_name_slug }}/ui-awc/pages/first_page.py",
+    f"src/ansys/solutions/{{ cookiecutter.__solution_name_slug }}/ui-awc/pages/second_page.py",
+    f"src/ansys/solutions/{{ cookiecutter.__solution_name_slug }}/ui-awc/pages/page.py",
+    f"src/ansys/solutions/{{ cookiecutter.__solution_name_slug }}/ui-awc/app.py",
+]
+
 # Add UI structure to desired structure if applicable
-if "{{ cookiecutter.with_dash_ui }}" == "yes":
+if "{{ cookiecutter.dash_ui }}" == "default":
     DESIRED_STRUCTURE = DESIRED_STRUCTURE + UI_STRUCTURE
+elif "{{ cookiecutter.dash_ui }}" == "awc":
+    DESIRED_STRUCTURE = DESIRED_STRUCTURE + AWC_UI_STRUCTURE
+if "{{ cookiecutter.dash_ui }}" != "default":
+    DESIRED_STRUCTURE.remove("poetry.lock")
+
 
 def main():
     """Entry point of the script."""
     # Apply the desired structure to the project
     keep_files(DESIRED_STRUCTURE)
+    if "{{ cookiecutter.dash_ui }}" == "awc":
+        combined_structure = list(zip(AWC_UI_STRUCTURE, UI_STRUCTURE))
+        rename_files(combined_structure)
+
 
 if __name__ == "__main__":
     main()
