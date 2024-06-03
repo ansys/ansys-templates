@@ -20,6 +20,7 @@ repos:
     hooks:
     - id: codespell
       args: [--skip, "doc/styles/*,*.js,*.tmp", --ignore-words, ".codespell.ignore", --exclude-file, ".codespell.exclude"]
+      exclude: "pyproject.toml"
 
   - repo: https://github.com/pycqa/pydocstyle
     rev: 6.3.0
