@@ -116,7 +116,9 @@ import subprocess
 import sys
 import textwrap
 import time
-import winreg
+
+if platform.system() == "Windows":
+    import winreg
 
 try:
     from packaging.markers import Marker

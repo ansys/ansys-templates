@@ -1,4 +1,4 @@
-# Copyright (C) 2023 ANSYS, Inc. and/or its affiliates.
+# Copyright (C) 2024 ANSYS, Inc. and/or its affiliates.
 # SPDX-License-Identifier: MIT
 #
 #
@@ -27,7 +27,7 @@ build-backend = "flit_core.buildapi"
 
 [project]
 name = "ansys-templates"
-version = "1.8.0"
+version = "2.2.dev0"
 description = "Creates Python projects according to PyAnsys guidelines"
 readme = "README.rst"
 requires-python = ">=3.9,<4"
@@ -64,7 +64,7 @@ tests = [
     "pytest-cov==4.1.0",
 ]
 doc = [
-    "ansys-sphinx-theme==0.14.1",
+    "ansys-sphinx-theme==0.16.0",
     "numpydoc==1.6.0",
     "sphinx==7.3.7",
     "sphinx-copybutton==0.5.2",

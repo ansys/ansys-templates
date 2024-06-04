@@ -80,6 +80,7 @@ DOC_PROJECT_VARS = dict(
 SOLUTION_VARS = dict(
     __solution_name_slug="solution",
     __project_name_slug="solution",
+    dash_ui="default",
 )
 
 PYCOMMON_STRUCTURE = [
@@ -287,6 +288,7 @@ DOC_PROJECT_STRUCTURE = [
 
 # Structure for solution projects
 SOLUTION_STRUCTURE = [
+    ".devcontainer/devcontainer.json",
     ".github/workflows/build-release.yml",
     ".github/workflows/release-please.yml",
     ".github/workflows/label.yml",
