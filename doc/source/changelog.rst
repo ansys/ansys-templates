@@ -32,12 +32,14 @@ Fixed
 - fix: update pydocstyle in ``pyproject.toml`` file `#478 <https://github.com/ansys/ansys-templates/pull/478>`_
 - fix: run tests with specified python-version in CI `#480 <https://github.com/ansys/ansys-templates/pull/480>`_
 - fix: change socio-economic to socioeconomic for codespell v2.3.0 `#485 <https://github.com/ansys/ansys-templates/pull/485>`_
+- fix: suppress ``autosectionlabel`` warning for ``changelog`` file `#487 <https://github.com/ansys/ansys-templates/pull/487>`_
 
 
 Dependencies
 ^^^^^^^^^^^^
 
 - Build(deps): Bump ansys-sphinx-theme from 0.14.1 to 0.16.0 `#475 <https://github.com/ansys/ansys-templates/pull/475>`_
+- Build(deps): Bump pytest from 8.1.1 to 8.2.1 `#479 <https://github.com/ansys/ansys-templates/pull/479>`_
 
 
 Miscellaneous
