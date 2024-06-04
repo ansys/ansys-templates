@@ -58,9 +58,6 @@ capabilities and features of each template:
    for each one of the templates. Take a look to these branches for having a
    better idea on the final project layout.
 
-
-.. _doc-project:
-
 doc-project
 -----------
 This template renders a documentation project based on Sphinx. You can chose
@@ -83,7 +80,6 @@ To create a new project using this template by running:
 
     `ansys-templates/demo - doc-project <https://github.com/ansys/ansys-templates/tree/demo/doc-project>`_
 
-.. _pybasic:
 
 pybasic
 -------
@@ -110,8 +106,6 @@ To create a new project using this template by running:
     `ansys-templates/demo - pybasic <https://github.com/ansys/ansys-templates/tree/demo/pybasic>`_
 
 
-.. _pyansys:
-
 pyansys
 -------
 This template renders to a basic Python project compliant with the latest
@@ -136,8 +130,6 @@ To create a new project using this template, run:
 
     `ansys-templates/demo - pyansys <https://github.com/ansys/ansys-templates/tree/demo/pyansys>`_
 
-
-.. _pyansys-advanced:
 
 pyansys-advanced
 ----------------
@@ -169,8 +161,6 @@ To create a new project using this template, run:
     * `ansys-templates/demo - pyansys-advanced-setuptools <https://github.com/ansys/ansys-templates/tree/demo/pyansys-advanced-setuptools>`_
 
 
-.. _pyansys-openapi-client:
-
 pyansys-openapi-client
 ----------------------
 Create an OpenAPI Client Package project compliant with PyAnsys guidelines.
@@ -191,7 +181,6 @@ To create a new project using this template, run:
 
     Demo unavailable at the moment.
 
-.. _pyace:
 
 pyace
 -----
@@ -220,8 +209,6 @@ To create a new project using this template, run:
     `ansys-templates/demo - pyace-pkg <https://github.com/ansys/ansys-templates/tree/demo/pyace-pkg>`_
 
 
-.. _pyace-fast:
-
 pyace-fast
 ----------
 This template renders to a basic Python project compliant with the latest
@@ -248,8 +235,6 @@ To create a new project using this template, run:
 
     `ansys-templates/demo - pyace-fast <https://github.com/ansys/ansys-templates/tree/demo/pyace-fast>`_
 
-
-.. _pyace-flask:
 
 pyace-flask
 -----------
@@ -279,8 +264,6 @@ To create a new project using this template, run:
     `ansys-templates/demo - pyace-flask <https://github.com/ansys/ansys-templates/tree/demo/pyace-flask>`_
 
 
-.. _pyace-grpc:
-
 pyace-grpc
 ----------
 This template renders to a basic Python project compliant with the latest
@@ -306,8 +289,6 @@ To create a new project using this template, run:
 .. admonition:: Link to demo
 
     `ansys-templates/demo - pyace-grpc <https://github.com/ansys/ansys-templates/tree/demo/pyace-grpc>`_
-
-.. _solution:
 
 solution
 --------
