@@ -65,7 +65,6 @@ html_theme_options = {
 extensions = [
     "numpydoc",
     "sphinx.ext.autodoc",
-    "sphinx.ext.autosectionlabel",
     "sphinx.ext.autosummary",
     "sphinx.ext.intersphinx",
     "sphinx_copybutton",
