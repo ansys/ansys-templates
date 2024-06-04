@@ -65,11 +65,13 @@ html_theme_options = {
 extensions = [
     "numpydoc",
     "sphinx.ext.autodoc",
-    "sphinx.ext.autosectionlabel",
     "sphinx.ext.autosummary",
+    "sphinx.ext.autosectionlabel",
     "sphinx.ext.intersphinx",
     "sphinx_copybutton",
 ]
+
+suppress_warnings = ["autosectionlabel.changelog"]
 
 # Intersphinx mapping
 intersphinx_mapping = {
