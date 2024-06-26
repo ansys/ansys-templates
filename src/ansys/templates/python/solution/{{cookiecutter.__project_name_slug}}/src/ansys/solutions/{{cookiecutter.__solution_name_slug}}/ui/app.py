@@ -6,6 +6,7 @@ import os
 import tempfile
 
 import dash_bootstrap_components as dbc
+import dash_mantine_components as dmc
 from dash_extensions.enrich import DashProxy, MultiplexerTransform, NoOutputTransform, TriggerTransform
 import dash_uploader as du
 
@@ -24,4 +25,4 @@ du.configure_upload(app, UPLOAD_DIRECTORY)
 # dash uploader configuration
 from ansys.solutions.{{ cookiecutter.__solution_name_slug }}.ui.pages.page import layout
 
-app.layout = layout
+app.layout = dmc.MantineProvider(layout)
