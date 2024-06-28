@@ -870,14 +870,14 @@ def update_lock_file_to_consider_local_wheels(args: object) -> None:
 
     print("Adapting lock file to consider local wheels.")
     subprocess.run(
-            [
-                DEPENDENCY_MANAGER_PATHS[sys.platform]["build_sys_exec"],
-                "lock",
-                "--no-update",
-            ],
-            check=True,
-            shell=DEPENDENCY_MANAGER_PATHS[sys.platform]["shell"],
-        )
+        [
+            DEPENDENCY_MANAGER_PATHS[sys.platform]["build_sys_exec"],
+            "lock",
+            "--no-update",
+        ],
+        check=True,
+        shell=DEPENDENCY_MANAGER_PATHS[sys.platform]["shell"],
+    )
 
 
 def install_production_dependencies(args: object) -> None:
