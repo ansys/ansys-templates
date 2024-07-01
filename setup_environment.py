@@ -863,6 +863,23 @@ def clear_workspace(args: object) -> None:
     print()
 
 
+def update_lock_file_to_consider_local_wheels(args: object) -> None:
+    """Specify in the poetry.lock file that some packages come from a local wheel file."""
+    if not args.local_wheels:
+        return
+
+    print("Adapting lock file to consider local wheels.")
+    subprocess.run(
+        [
+            DEPENDENCY_MANAGER_PATHS[sys.platform]["build_sys_exec"],
+            "lock",
+            "--no-update",
+        ],
+        check=True,
+        shell=DEPENDENCY_MANAGER_PATHS[sys.platform]["shell"],
+    )
+
+
 def install_production_dependencies(args: object) -> None:
     """Install the package (mandatory requirements only)."""
     print("Install production dependencies")
@@ -1026,6 +1043,8 @@ def main() -> None:
     # Install dependencies --------------------------------------------------------------------------------------------
 
     print_section_header("Install dependencies", max_length=100)
+
+    update_lock_file_to_consider_local_wheels(args)
 
     install_production_dependencies(args)
 
