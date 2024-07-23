@@ -105,3 +105,4 @@ Copyright (c) ANSYS Inc. All rights reserved.
 .. BADGES
 
 .. |python| image:: https://img.shields.io/badge/Python-3.8–3.10-blue.svg
+
