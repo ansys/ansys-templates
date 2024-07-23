@@ -3,6 +3,7 @@
 """Initialization of the frontend layout across all the steps."""
 
 
+import json
 import webbrowser
 
 from ansys.saf.glow.client.dashclient import DashClient, callback
@@ -12,7 +13,6 @@ import dash_bootstrap_components as dbc
 from dash_extensions.enrich import Input, Output, callback_context, dcc, html
 from dash_iconify import DashIconify
 import dash_mantine_components as dmc
-import json
 
 from ansys.solutions.{{ cookiecutter.__solution_name_slug }}.solution.definition import {{ cookiecutter.__solution_definition_name }}
 from ansys.solutions.{{ cookiecutter.__solution_name_slug }}.ui.pages import about_page, first_page, second_page
@@ -181,7 +181,7 @@ def access_dev_guide_documentation(n_clicks):
 @callback(
     Output("page-content", "children"),
     Input("url", "pathname"),
-    Input(Tree.ids.selected_item('navigation_tree'), 'data'),
+    Input(Tree.ids.selected_item('navigation_tree'), "data"),
     prevent_initial_call=True,
 )
 def display_page(pathname, value):
