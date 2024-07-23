@@ -181,7 +181,7 @@ def access_dev_guide_documentation(n_clicks):
 @callback(
     Output("page-content", "children"),
     Input("url", "pathname"),
-    Input(Tree.ids.selected_item('navigation_tree'), "data"),
+    Input(Tree.ids.selected_item("navigation_tree"), "data"),
     prevent_initial_call=True,
 )
 def display_page(pathname, value):
