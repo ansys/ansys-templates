@@ -4,7 +4,7 @@
 
 
 from ansys.saf.glow.client.dashclient import DashClient, callback
-from ansys.solutions.dash_components.table import InputRow, OutputRow
+from ansys.solutions.dash_super_components import InputRow, OutputRow
 from dash_extensions.enrich import Input, Output, State, dcc, html
 from dash_iconify import DashIconify
 import dash_mantine_components as dmc

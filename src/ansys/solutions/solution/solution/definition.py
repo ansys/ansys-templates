@@ -20,4 +20,5 @@ class SolutionSolution(Solution):
     """Solution definition."""
 
     display_name: str = "My Solution"
+    version: int = 1
     steps: Steps
