@@ -3,10 +3,11 @@
 """Initialization of the frontend layout across all the steps."""
 
 
+import json
 import webbrowser
 
 from ansys.saf.glow.client.dashclient import DashClient, callback
-from ansys_web_components_dash import Tree
+from ansys.solutions.dash_super_components import Tree
 from dash.exceptions import PreventUpdate
 import dash_bootstrap_components as dbc
 from dash_extensions.enrich import Input, Output, callback_context, dcc, html
@@ -20,19 +21,19 @@ step_list = [
     {
         "id": "about_page",
         "text": "About",
-        "prefixIcon": {"src": "https://s2.svgbox.net/hero-solid.svg?ic=home"},
+        "prefixIcon": "material-symbols:home",
         "expanded": True,
     },
     {
         "id": "first_page",
         "text": "First Step",
-        "prefixIcon": {"src": "https://s2.svgbox.net/materialui.svg?ic=label"},
+        "prefixIcon": "game-icons:crossed-air-flows",
         "expanded": True,
     },
     {
         "id": "second_page",
         "text": "Second Step",
-        "prefixIcon": {"src": "https://s2.svgbox.net/materialui.svg?ic=label_outline"},
+        "prefixIcon": "carbon:ibm-engineering-workflow-mgmt",
         "expanded": True,
     },
 ]
@@ -107,11 +108,9 @@ layout = html.Div(
                         dmc.Space(h=10),
                         dbc.Row(
                             Tree(
-                                id="navigation_tree",
-                                multi=False,
-                                height=250,
+                                aio_id="navigation_tree",
                                 items=step_list,
-                                selectedItemIds=["about_page"],
+                                active_item_id="about_page",
                             )
                         ),
                     ],
@@ -180,31 +179,27 @@ def access_dev_guide_documentation(n_clicks):
 
 
 @callback(
-    Output("navigation_tree", "focusRequested"),
     Output("page-content", "children"),
-    [
-        Input("url", "pathname"),
-        Input("navigation_tree", "treeItemClicked"),
-    ],
+    Input("url", "pathname"),
+    Input(Tree.ids.selected_item("navigation_tree"), "data"),
     prevent_initial_call=True,
 )
 def display_page(pathname, value):
     """Display page content."""
     project = DashClient[{{ cookiecutter.__solution_definition_name }}].get_project(pathname)
     triggered_id = callback_context.triggered[0]["prop_id"].split(".")[0]
-    focusRequested = ""
     if triggered_id == "url":
-        return "", about_page.layout()
-    if triggered_id == "navigation_tree":
-        if value["id"] is None:
-            page_layout = html.H1("Welcome!")
-        elif value["id"] == "about_page":
-            focusRequested = "about_page"
-            page_layout = about_page.layout()
-        elif value["id"] == "first_page":
-            focusRequested = "first_page"
-            page_layout = first_page.layout(project.steps.first_step)
-        elif value["id"] == "second_page":
-            focusRequested = "second_page"
-            page_layout = second_page.layout(project.steps.second_step)
-        return focusRequested, page_layout
+        return about_page.layout()
+    else:
+        triggered_id = json.loads(triggered_id)
+        if isinstance(triggered_id, dict):
+            if triggered_id["aio_id"] == "navigation_tree":
+                if value["index"] == "about_page":
+                    return about_page.layout()
+                elif value["index"] == "first_page":
+                    return first_page.layout(project.steps.first_step)
+                elif value["index"] == "second_page":
+                    return second_page.layout(project.steps.second_step)
+                else:
+                    raise ValueError(f"Unknown page selection: {value['index']}")
+    raise PreventUpdate
