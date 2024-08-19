@@ -3,7 +3,6 @@
 import os
 from datetime import datetime
 
-from ansys_sphinx_theme import ansys_logo_black as logo
 from ansys_sphinx_theme import get_version_match
 
 # Project information
@@ -15,7 +14,6 @@ cname = os.getenv("DOCUMENTATION_CNAME", "")
 switcher_version = get_version_match(__version__)
 
 # Select desired logo, theme, and declare the html title
-html_logo = logo
 html_theme = "ansys_sphinx_theme"
 html_short_title = html_title = "doc-project"
 
@@ -32,6 +30,7 @@ html_theme_options = {
         "version_match": switcher_version,
     },
     "check_switcher": False,
+    "logo": "ansys",
 }
 
 # Sphinx extensions
