@@ -25,7 +25,7 @@
 from datetime import datetime
 import os
 
-from ansys_sphinx_theme import ansys_favicon, ansys_logo_black, get_version_match
+from ansys_sphinx_theme import ansys_favicon, get_version_match
 
 from ansys.templates import __version__
 
@@ -38,7 +38,6 @@ cname = os.getenv("DOCUMENTATION_CNAME", "templates.ansys.com")
 switcher_version = get_version_match(__version__)
 
 # use the default pyansys logo
-html_logo = ansys_logo_black
 html_favicon = ansys_favicon
 html_theme = "ansys_sphinx_theme"
 html_short_title = html_title = project  # necessary for proper breadcrumb title
@@ -58,7 +57,7 @@ html_theme_options = {
         "json_url": f"https://{cname}/versions.json",
         "version_match": get_version_match(__version__),
     },
-    "check_switcher": False,
+    "logo": "ansys",
 }
 
 # Sphinx extensions

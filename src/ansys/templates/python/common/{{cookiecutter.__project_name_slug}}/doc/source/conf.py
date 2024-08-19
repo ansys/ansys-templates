@@ -4,15 +4,6 @@ from datetime import datetime
 import os
 
 from ansys_sphinx_theme import get_version_match
-{%- if cookiecutter.__logo == "ansys" and cookiecutter.__logo_color == "white" %}
-from ansys_sphinx_theme import ansys_logo_white as logo
-{%- elif cookiecutter.__logo == "ansys" and cookiecutter.__logo_color == "black" %}
-from ansys_sphinx_theme import ansys_logo_black as logo
-{%- elif cookiecutter.__logo == "pyansys" and cookiecutter.__logo_color == "white" %}
-from ansys_sphinx_theme import pyansys_logo_white as logo
-{%- elif cookiecutter.__logo == "pyansys" and cookiecutter.__logo_color == "black" %}
-from ansys_sphinx_theme import pyansys_logo_black as logo
-{%- endif %}
 
 {%- if cookiecutter.__template_name != "doc-project" %}
 from {{cookiecutter.__pkg_namespace}} import __version__
@@ -36,7 +27,6 @@ cname = os.getenv("DOCUMENTATION_CNAME", "{{ cookiecutter.__documentation_url }}
 switcher_version = get_version_match(__version__)
 
 # Select desired logo, theme, and declare the html title
-html_logo = logo
 html_theme = "ansys_sphinx_theme"
 html_short_title = html_title = "{{ cookiecutter.__project_name_slug }}"
 
@@ -57,6 +47,11 @@ html_theme_options = {
         "version_match": switcher_version,
     },
     "check_switcher": False,
+    {%- if cookiecutter.__logo == "pyansys" %}
+    "logo": "pyansys",
+    {%- elif cookiecutter.__logo == "ansys" %}
+    "logo": "ansys",
+    {%- endif %}
 }
 
 # Sphinx extensions
