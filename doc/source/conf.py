@@ -4,7 +4,6 @@ from datetime import datetime
 import os
 
 from ansys_sphinx_theme import get_version_match
-from ansys_sphinx_theme import pyansys_logo_black as logo
 from pybasic import __version__
 
 
@@ -17,7 +16,6 @@ cname = os.getenv("DOCUMENTATION_CNAME", "")
 switcher_version = get_version_match(__version__)
 
 # Select desired logo, theme, and declare the html title
-html_logo = logo
 html_theme = "ansys_sphinx_theme"
 html_short_title = html_title = "pybasic"
 
@@ -34,6 +32,7 @@ html_theme_options = {
         "version_match": switcher_version,
     },
     "check_switcher": False,
+    "logo": "pyansys",
 }
 
 # Sphinx extensions
