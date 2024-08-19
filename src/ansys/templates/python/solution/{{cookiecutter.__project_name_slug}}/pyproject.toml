@@ -94,7 +94,7 @@ tox = "^4.4.0"
 optional = true
 [tool.poetry.group.build.dependencies]
 build = "^0.8.0"
-twine = "^4.0.1"
+twine = "^5.1.1"
 
 [tool.poetry.group.style]
 optional = true
