@@ -221,6 +221,7 @@ Main features of this package are:
 - Ability to integrate Docker within the project.
 
 To create a new project using this template, run:
+
 .. code-block:: text
 
     ansys-templates new pyace-fast
@@ -274,6 +275,7 @@ Main features of this package are:
 - Ability to integrate Docker within the project.
 
 To create a new project using this template, run:
+
 .. code-block:: text
 
     ansys-templates new pyace-grpc
