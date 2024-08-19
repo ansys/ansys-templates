@@ -1,4 +1,4 @@
-# Copyright (C) 2023 ANSYS, Inc. and/or its affiliates.
+# Copyright (C) 2022 - 2024 ANSYS, Inc. and/or its affiliates.
 # SPDX-License-Identifier: MIT
 #
 #
@@ -80,6 +80,7 @@ DOC_PROJECT_VARS = dict(
 SOLUTION_VARS = dict(
     __solution_name_slug="solution",
     __project_name_slug="solution",
+    dash_ui="default",
 )
 
 PYCOMMON_STRUCTURE = [
@@ -100,13 +101,17 @@ PYCOMMON_STRUCTURE = [
     "CONTRIBUTING.md",
     "CONTRIBUTORS.md",
     "examples/README.md",
+    "doc/changelog.d/changelog_template.jinja",
     "doc/Makefile",
     "doc/make.bat",
     "doc/.vale.ini",
     "doc/styles/.gitignore",
-    "doc/styles/Vocab/ANSYS/accept.txt",
-    "doc/styles/Vocab/ANSYS/reject.txt",
+    "doc/styles/config/vocabularies/ANSYS/accept.txt",
+    "doc/styles/config/vocabularies/ANSYS/reject.txt",
+    "doc/source/getting_started/index.rst",
+    "doc/source/changelog.rst",
     "doc/source/conf.py",
+    "doc/source/examples.rst",
     "doc/source/index.rst",
     "doc/source/_static/README.md",
     "doc/source/_templates/README.md",
@@ -126,13 +131,13 @@ PYBASIC_STRUCTURE = deepcopy(PYCOMMON_STRUCTURE) + [
     f"src/{PYBASIC_VARS['project_name']}/__init__.py",
 ]
 [PYBASIC_STRUCTURE.remove(file) for file in
- [".github/dependabot.yml", ".github/labeler.yml", ".github/labels.yml", ".github/workflows/label.yml", ".github/workflows/ci_cd.yml", ".pre-commit-config.yaml", "azure-pipeline.yml", "tox.ini"]]
+ [".github/dependabot.yml", ".github/labeler.yml", ".github/labels.yml", ".github/workflows/label.yml", ".github/workflows/ci_cd.yml", "doc/changelog.d/changelog_template.jinja", ".pre-commit-config.yaml", "azure-pipeline.yml", "tox.ini"]]
 
 # Structure for pyansys projects
 PYANSYS_STRUCTURE = deepcopy(PYCOMMON_STRUCTURE) + [
     f"src/ansys/{PYANSYS_VARS['__product_name_slug']}/{PYANSYS_VARS['__library_name_slug']}/__init__.py",
 ]
-[PYANSYS_STRUCTURE.remove(file) for file in [".github/dependabot.yml", ".github/labeler.yml", ".github/labels.yml", ".github/workflows/label.yml", ".github/workflows/ci_cd.yml", "azure-pipeline.yml", "tox.ini"]]
+[PYANSYS_STRUCTURE.remove(file) for file in [".github/dependabot.yml", ".github/labeler.yml", ".github/labels.yml", ".github/workflows/label.yml", ".github/workflows/ci_cd.yml", "doc/changelog.d/changelog_template.jinja", "azure-pipeline.yml", "tox.ini"]]
 
 # Structure for pyansys-advanced projects
 PYANSYS_ADVANCED_STRUCTURE = deepcopy(PYCOMMON_STRUCTURE) + [
@@ -255,10 +260,14 @@ DOC_PROJECT_STRUCTURE = [
     "doc/Makefile",
     "doc/make.bat",
     "doc/.vale.ini",
+    "doc/changelog.d/changelog_template.jinja",
     "doc/styles/.gitignore",
-    "doc/styles/Vocab/ANSYS/accept.txt",
-    "doc/styles/Vocab/ANSYS/reject.txt",
+    "doc/styles/config/vocabularies/ANSYS/accept.txt",
+    "doc/styles/config/vocabularies/ANSYS/reject.txt",
+    "doc/source/getting_started/index.rst",
+    "doc/source/changelog.rst",
     "doc/source/conf.py",
+    "doc/source/examples.rst",
     "doc/source/index.rst",
     "doc/source/_static/README.md",
     "doc/source/_templates/README.md",
@@ -279,17 +288,25 @@ DOC_PROJECT_STRUCTURE = [
 
 # Structure for solution projects
 SOLUTION_STRUCTURE = [
+    ".devcontainer/devcontainer.json",
     ".github/workflows/build-release.yml",
     ".github/workflows/release-please.yml",
+    ".github/workflows/label.yml",
+    ".github/labeler.yml",
+    ".github/labels.yml",
     ".vscode/launch.json",
     ".vscode/extensions.json",
+    "doc/changelog.d/changelog_template.jinja",
     "doc/source/_static/ansys-solutions-logo-black-background.png",
     "doc/source/_static/README.md",
     "doc/source/_templates/README.md",
+    "doc/source/getting_started/index.rst",
+    "doc/source/changelog.rst",
     "doc/source/conf.py",
+    "doc/source/examples.rst",
     "doc/source/index.rst",
-    "doc/styles/Vocab/ANSYS/accept.txt",
-    "doc/styles/Vocab/ANSYS/reject.txt",
+    "doc/styles/config/vocabularies/ANSYS/accept.txt",
+    "doc/styles/config/vocabularies/ANSYS/reject.txt",
     "doc/styles/.gitignore",
     "doc/.vale.ini",
     "doc/make.bat",

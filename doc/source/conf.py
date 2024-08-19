@@ -25,7 +25,7 @@
 from datetime import datetime
 import os
 
-from ansys_sphinx_theme import ansys_favicon, ansys_logo_black, get_version_match
+from ansys_sphinx_theme import ansys_favicon, get_version_match
 
 from ansys.templates import __version__
 
@@ -34,10 +34,10 @@ project = "Ansys Templates"
 copyright = f"(c) 2022-{datetime.today().year} ANSYS, Inc. and/or its affiliates."
 author = "ANSYS, Inc."
 release = version = __version__
-cname = os.getenv("DOCUMENTATION_CNAME", "nocname.com")
+cname = os.getenv("DOCUMENTATION_CNAME", "templates.ansys.com")
+switcher_version = get_version_match(__version__)
 
 # use the default pyansys logo
-html_logo = ansys_logo_black
 html_favicon = ansys_favicon
 html_theme = "ansys_sphinx_theme"
 html_short_title = html_title = project  # necessary for proper breadcrumb title
@@ -57,18 +57,20 @@ html_theme_options = {
         "json_url": f"https://{cname}/versions.json",
         "version_match": get_version_match(__version__),
     },
-    "check_switcher": False,
+    "logo": "ansys",
 }
 
 # Sphinx extensions
 extensions = [
     "numpydoc",
     "sphinx.ext.autodoc",
-    "sphinx.ext.autosectionlabel",
     "sphinx.ext.autosummary",
+    "sphinx.ext.autosectionlabel",
     "sphinx.ext.intersphinx",
     "sphinx_copybutton",
 ]
+
+suppress_warnings = ["autosectionlabel.changelog"]
 
 # Intersphinx mapping
 intersphinx_mapping = {
@@ -115,3 +117,12 @@ source_suffix = ".rst"
 
 # The master toctree document.
 master_doc = "index"
+
+linkcheck_ignore = []
+
+# If we are on a release, we have to ignore the "release" URLs, since it is not
+# available until the release is published.
+if switcher_version != "dev":
+    linkcheck_ignore.append(
+        f"https://github.com/ansys/ansys-templates/releases/tag/v{__version__}"
+    )

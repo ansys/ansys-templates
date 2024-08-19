@@ -80,7 +80,6 @@ To create a new project using this template by running:
 
     `ansys-templates/demo - doc-project <https://github.com/ansys/ansys-templates/tree/demo/doc-project>`_
 
-
 pybasic
 -------
 This template renders to a basic Python project. It does not follow the Ansys
@@ -105,7 +104,6 @@ To create a new project using this template by running:
 
     `ansys-templates/demo - pybasic <https://github.com/ansys/ansys-templates/tree/demo/pybasic>`_
 
-
 pyansys
 -------
 This template renders to a basic Python project compliant with the latest
@@ -129,7 +127,6 @@ To create a new project using this template, run:
 .. admonition:: Link to demo
 
     `ansys-templates/demo - pyansys <https://github.com/ansys/ansys-templates/tree/demo/pyansys>`_
-
 
 pyansys-advanced
 ----------------
@@ -160,7 +157,6 @@ To create a new project using this template, run:
     * `ansys-templates/demo - pyansys-advanced-poetry <https://github.com/ansys/ansys-templates/tree/demo/pyansys-advanced-poetry>`_
     * `ansys-templates/demo - pyansys-advanced-setuptools <https://github.com/ansys/ansys-templates/tree/demo/pyansys-advanced-setuptools>`_
 
-
 pyansys-openapi-client
 ----------------------
 Create an OpenAPI Client Package project compliant with PyAnsys guidelines.
@@ -180,7 +176,6 @@ To create a new project using this template, run:
 .. admonition:: Link to demo
 
     Demo unavailable at the moment.
-
 
 pyace
 -----
@@ -208,7 +203,6 @@ To create a new project using this template, run:
 
     `ansys-templates/demo - pyace-pkg <https://github.com/ansys/ansys-templates/tree/demo/pyace-pkg>`_
 
-
 pyace-fast
 ----------
 This template renders to a basic Python project compliant with the latest
@@ -234,7 +228,6 @@ To create a new project using this template, run:
 .. admonition:: Link to demo
 
     `ansys-templates/demo - pyace-fast <https://github.com/ansys/ansys-templates/tree/demo/pyace-fast>`_
-
 
 pyace-flask
 -----------
@@ -262,7 +255,6 @@ To create a new project using this template, run:
 .. admonition:: Link to demo
 
     `ansys-templates/demo - pyace-flask <https://github.com/ansys/ansys-templates/tree/demo/pyace-flask>`_
-
 
 pyace-grpc
 ----------

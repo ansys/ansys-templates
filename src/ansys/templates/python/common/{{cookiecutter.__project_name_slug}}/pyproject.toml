@@ -17,13 +17,13 @@ name = "{{ cookiecutter.__pkg_name }}"
 version = "{{ cookiecutter.__version }}"
 description = "{{ cookiecutter.__short_description }}"
 readme = "README.rst"
-requires-python = ">={{ cookiecutter.__requires_python }}"
+requires-python = ">={{ cookiecutter.__requires_python }},<4.0"
 license = {file = "LICENSE"}
 authors = [
-    {name = "ANSYS, Inc.", email = "pyansys.support@ansys.com"},
+    {name = "ANSYS, Inc.", email = "pyansys.core@ansys.com"},
 ]
 maintainers = [
-    {name = "PyAnsys developers", email = "pyansys.core@ansys.com"},
+    {name = "ANSYS, Inc.", email = "pyansys.core@ansys.com"},
 ]
 
 classifiers = [
@@ -32,22 +32,19 @@ classifiers = [
     "License :: OSI Approved :: MIT License",
     "Operating System :: OS Independent",
 ]
-dependencies = [
-    "importlib-metadata >=4.0",
-]
+dependencies = []
 
 [project.optional-dependencies]
 tests = [
-    "pytest==7.4.3",
+    "pytest==8.2.1",
     "pytest-cov==4.1.0",
 ]
 doc = [
-    "ansys-sphinx-theme==0.12.5",
-    "numpydoc==1.6.0",
-    "sphinx==7.2.6",
+    "ansys-sphinx-theme==1.0.5",
+    "numpydoc==1.8.0",
+    "Sphinx==8.0.2",
     "sphinx-copybutton==0.5.2",
 ]
-
 
 [tool.flit.module]
 name = "{{ cookiecutter.__pkg_namespace }}"
@@ -56,6 +53,10 @@ name = "{{ cookiecutter.__pkg_namespace }}"
 Source = "{{ cookiecutter.__repository_url }}"
 Tracker = "{{ cookiecutter.__repository_url }}/issues"
 Homepage = "{{ cookiecutter.__repository_url }}"
+Documentation = "{{ cookiecutter.__documentation_url }}"
+
+[tool.pydocstyle]
+convention = "numpy"
 
 {% elif cookiecutter.__build_system == "poetry"  %}
 [tool.poetry]
@@ -65,7 +66,7 @@ version = "{{ cookiecutter.__version }}"
 description = "{{ cookiecutter.__short_description }}"
 license = "MIT"
 authors = ["ANSYS, Inc. <pyansys.core@ansys.com>"]
-maintainers = ["PyAnsys developers <pyansys.core@ansys.com>"]
+maintainers = ["ANSYS, Inc. <pyansys.core@ansys.com>"]
 readme = "README.rst"
 repository = "{{ cookiecutter.__repository_url }}"
 classifiers = [
@@ -116,8 +117,45 @@ line_length = {{ cookiecutter.__max_linelength }}
 default_section = "THIRDPARTY"
 src_paths = ["doc", "src", "tests"]
 
+[tool.pydocstyle]
+convention = "numpy"
+
 [tool.coverage.run]
 source = ["{{ cookiecutter.__coverage_source }}"]
 
 [tool.coverage.report]
 show_missing = true
+
+[tool.towncrier]
+package = "{{ cookiecutter.__pkg_namespace }}"
+directory = "doc/changelog.d"
+filename = "doc/source/changelog.rst"
+start_string = ".. towncrier release notes start\n"
+template = "doc/changelog.d/changelog_template.jinja"
+title_format = "`{version} <https://github.com/ansys/{{ cookiecutter.__pkg_namespace }}/releases/tag/v{version}>`_ - {project_date}"
+issue_format = "`#{issue} <https://github.com/ansys/{{ cookiecutter.__pkg_namespace }}/pull/{issue}>`_"
+
+[[tool.towncrier.type]]
+directory = "added"
+name = "Added"
+showcontent = true
+
+[[tool.towncrier.type]]
+directory = "changed"
+name = "Changed"
+showcontent = true
+
+[[tool.towncrier.type]]
+directory = "fixed"
+name = "Fixed"
+showcontent = true
+
+[[tool.towncrier.type]]
+directory = "dependencies"
+name = "Dependencies"
+showcontent = true
+
+[[tool.towncrier.type]]
+directory = "miscellaneous"
+name = "Miscellaneous"
+showcontent = true

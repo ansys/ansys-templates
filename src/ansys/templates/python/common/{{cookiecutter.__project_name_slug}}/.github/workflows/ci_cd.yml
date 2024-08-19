@@ -11,6 +11,8 @@ env:
   MAIN_PYTHON_VERSION: '{{ cookiecutter.__requires_python }}'
   DOCUMENTATION_CNAME: '{{ cookiecutter.__product_name_slug }}.docs.pyansys.com'
   LIBRARY_NAME: '{{ cookiecutter.__pkg_namespace | replace(".", "-") }}'
+  MEILISEARCH_API_KEY: {{ '${{ secrets.MEILISEARCH_API_KEY }}' }}
+  MEILISEARCH_HOST_URL: {{ '${{ vars.MEILISEARCH_HOST_URL }}' }}
 
 concurrency:
   group: {{ '${{ github.workflow }}-${{ github.ref }}' }}
@@ -18,19 +20,32 @@ concurrency:
 
 jobs:
 
+  update-changelog:
+    name: "Update CHANGELOG (on release)"
+    if: github.event_name == 'push' && contains(github.ref, 'refs/tags')
+    runs-on: ubuntu-latest
+    permissions:
+      contents: write
+      pull-requests: write
+    steps:
+      - uses: ansys/actions/doc-deploy-changelog@v7
+        with:
+          token: {{ '${{ secrets.PYANSYS_CI_BOT_TOKEN }}' }}
+
   code-style:
     name: "Code style"
     runs-on: ubuntu-latest
     steps:
-      - uses: ansys/actions/code-style@v5
+      - uses: ansys/actions/code-style@v7
         with:
           python-version: {{ '${{ env.MAIN_PYTHON_VERSION }}' }}
 
   doc-style:
-    name: "Documentation style"
+    name: "Documentation Style Check"
     runs-on: ubuntu-latest
     steps:
-      - uses: ansys/actions/doc-style@v5
+      - name: PyAnsys documentation style checks
+        uses: ansys/actions/doc-style@v7
         with:
           token: {{ '${{ secrets.GITHUB_TOKEN }}' }}
 
@@ -44,14 +59,14 @@ jobs:
         os: [ubuntu-latest, windows-latest]
         {% set required_minor = cookiecutter.__requires_python[2:] | int %}
         {%- set python_versions = [ ] -%}
-        {%- for minor in range(7, 11) -%}
+        {%- for minor in range(9, 13) -%}
         {%- if minor >= required_minor -%}
         {{ python_versions.append("3." + minor | string ) or ''}}
         {%- endif -%}
         {%- endfor -%}
         python-version: {{ python_versions }}
     steps:
-      - uses: ansys/actions/build-wheelhouse@v5
+      - uses: ansys/actions/build-wheelhouse@v7
         with:
           library-name: {{ '${{ env.LIBRARY_NAME }}' }}
           operating-system: {{ '${{ matrix.os }}' }}
@@ -66,7 +81,7 @@ jobs:
        os: [ubuntu-latest, windows-latest]
        {% set required_minor = cookiecutter.__requires_python[2:] | int %}
        {%- set python_versions = [ ] -%}
-       {%- for minor in range(7, 11) -%}
+       {%- for minor in range(9, 13) -%}
        {%- if minor >= required_minor -%}
        {{ python_versions.append("3." + minor | string ) or ''}}
        {%- endif -%}
@@ -74,36 +89,53 @@ jobs:
        python-version: {{ python_versions }}
       fail-fast: false
     steps:
-      - uses: ansys/actions/tests-pytest@v5
+      - name: PyAnsys tests check
+        uses: ansys/actions/tests-pytest@v7
         with:
           pytest-extra-args: "--cov=ansys --cov-report=term --cov-report=html:.cov/html"
+          python-version: {{ '${{ matrix.python-version }}' }}
+
+      - name: Upload coverage results
+        uses: actions/upload-artifact@v4
+        if: env.MAIN_PYTHON_VERSION == matrix.python-version
+        with:
+          name: coverage-tests-{{ '${{ matrix.os }}' }}
+          path: .cov
+          retention-days: 7
+
+      - name: Upload coverage results (as .coverage)
+        uses: actions/upload-artifact@v4
+        if: env.MAIN_PYTHON_VERSION == matrix.python-version
+        with:
+          name: coverage-file-tests-{{ '${{ matrix.os }}' }}
+          path: .coverage
+          retention-days: 7
 
   doc-build:
     name: "Build documentation"
     runs-on: ubuntu-latest
     needs: [doc-style]
     steps:
-      - uses: ansys/actions/doc-build@v5
+      - uses: ansys/actions/doc-build@v7
         with:
           python-version: {{ '${{ env.MAIN_PYTHON_VERSION }}' }}
 
   build-library:
-    name: "Build library basic example"
+    name: "Build library"
     runs-on: ubuntu-latest
-    needs: [doc-build, tests]
     steps:
-      - uses: ansys/actions/build-library@v5
+      - name: "Build library source and wheel artifacts"
+        uses: ansys/actions/build-library@v7
         with:
           library-name: {{ '${{ env.LIBRARY_NAME }}' }}
-          python-version: {{ '${{ env.MAIN_PYTHON_VERSION }}' }}
 
   doc-deploy-dev:
     name: "Deploy development documentation"
     runs-on: ubuntu-latest
-    needs: [build-library]
-    if: github.event_name == 'push' && !contains(github.ref, 'refs/tags')
+    needs: [doc-build, build-library]
+    if: github.ref == 'refs/heads/main'
     steps:
-      - uses: ansys/actions/doc-deploy-dev@v5
+      - uses: ansys/actions/doc-deploy-dev@v7
         with:
           cname: {{ '${{ env.DOCUMENTATION_CNAME }}' }}
           token: {{ '${{ secrets.GITHUB_TOKEN }}' }}
@@ -111,12 +143,92 @@ jobs:
   doc-deploy-stable:
     name: "Deploy stable documentation"
     runs-on: ubuntu-latest
-    needs: [build-library]
+    needs: [doc-build, build-library]
     if: github.event_name == 'push' && contains(github.ref, 'refs/tags')
     steps:
-      - uses: ansys/actions/doc-deploy-stable@v5
+      - uses: ansys/actions/doc-deploy-stable@v7
         with:
           cname: {{ '${{ env.DOCUMENTATION_CNAME }}' }}
           token: {{ '${{ secrets.GITHUB_TOKEN }}' }}
 
+  # Uncomment doc-index-dev and doc-index stable once the repository becomes public
+  # doc-index-dev:
+  #   name: "Deploy dev index docs"
+  #   if: github.ref == 'refs/heads/main'
+  #   runs-on: ubuntu-latest
+  #   needs: doc-deploy-dev
+  #   steps:
+  #     - name: "Deploy the latest documentation index"
+  #       uses: ansys/actions/doc-deploy-index@v7
+  #       with:
+  #         cname: "{{ '${{ env.DOCUMENTATION_CNAME }}' }}/version/dev"
+  #         index-name: "{{ '${{ env.LIBRARY_NAME }}'}}-vdev"
+  #         host-url: {{ '${{ env.MEILISEARCH_HOST_URL }}' }}
+  #         api-key: {{ '${{ env.MEILISEARCH_API_KEY }}' }}
+  #         python-version: {{ '${{ env.MAIN_PYTHON_VERSION }}' }}
 
+  # doc-index-stable:
+  #   name: "Deploy stable docs index"
+  #   runs-on: ubuntu-latest
+  #   needs: doc-deploy-stable
+  #   steps:
+  #     - name: "Install Git and clone project"
+  #       uses: actions/checkout@v4
+
+  #     - name: "Install the package requirements"
+  #       run: pip install -e .
+
+  #     - name: "Get the version to PyMeilisearch"
+  #       run: |
+  #         VERSION=$(python -c "from {{ cookiecutter.__pkg_namespace }} import __version__; print('.'.join(__version__.split('.')[:2]))")
+  #         VERSION_MEILI=$(python -c "from {{ cookiecutter.__pkg_namespace }} import __version__; print('-'.join(__version__.split('.')[:2]))")
+  #         echo "Calculated VERSION: $VERSION"
+  #         echo "Calculated VERSION_MEILI: $VERSION_MEILI"
+  #         echo "VERSION=$VERSION" >> $GITHUB_ENV
+  #         echo "VERSION_MEILI=$VERSION_MEILI" >> $GITHUB_ENV
+
+  #     - name: "Deploy the latest documentation index"
+  #       uses: ansys/actions/doc-deploy-index@v7
+  #       with:
+  #         cname: "{{ '${{ env.DOCUMENTATION_CNAME }}' }}/version/{{ '${{ env.VERSION }}' }}"
+  #         index-name: "{{ '${{ env.LIBRARY_NAME }}' }}-v{{ '${{ env.VERSION_MEILI }}' }}"
+  #         host-url: {{ '${{ env.MEILISEARCH_HOST_URL }}' }}
+  #         api-key: {{ '${{ env.MEILISEARCH_API_KEY }}' }}
+  #         python-version: {{ '${{ env.MAIN_PYTHON_VERSION }}' }}
+
+  release-pypi-private:
+    name: "Release to the private PyPI repository"
+    runs-on: ubuntu-latest
+    needs: [doc-build, build-library, update-changelog]
+    steps:
+      - name: "Release to the private PyPI repository"
+        if: github.event_name == 'push' && contains(github.ref, 'refs/tags')
+        uses: ansys/actions/release-pypi-private@v7
+        with:
+          library-name: {{ '${{ env.LIBRARY_NAME }}' }}
+          twine-username: "__token__"
+          twine-token: {{ '${{ secrets.PYANSYS_PYPI_PRIVATE_PAT }}' }}
+
+  # release-pypi-public:
+  #   name: "Release to the public PyPI repository"
+  #   runs-on: ubuntu-latest
+  #   needs: [release-pypi-private]
+  #   steps:
+  #     - name: "Release to the public PyPI repository"
+  #       if: github.event_name == 'push' && contains(github.ref, 'refs/tags')
+  #       uses: ansys/actions/release-pypi-public@v7
+  #       with:
+  #         library-name: {{ '${{ env.DOCUMENTATION_CNAME }}' }}
+  #         twine-username: "__token__"
+  #         twine-token: {{ '${{ secrets.PYPI_TOKEN }}' }}
+
+  release-github:
+    name: "Release to GitHub"
+    runs-on: ubuntu-latest
+    needs: [doc-build, release-pypi-private]
+    steps:
+      - name: "Release to GitHub"
+        if: github.event_name == 'push' && contains(github.ref, 'refs/tags')
+        uses: ansys/actions/release-github@v7
+        with:
+          library-name: {{ '${{ env.DOCUMENTATION_CNAME }}' }}
