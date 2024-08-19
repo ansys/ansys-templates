@@ -284,8 +284,8 @@ To create a new project using this template, run:
 
 solution
 --------
-This template renders to a Python project compliant with the latest Solutions
-Application guidelines:
+This template renders to a Python project compliant with the latest Solution
+Applications guidelines:
 
 Main features of this package are:
 
@@ -297,6 +297,7 @@ Main features of this package are:
 - Includes a ``tox.ini`` file.
 
 To create a new project using this template, run:
+
 .. code-block:: text
 
     ansys-templates new solution
