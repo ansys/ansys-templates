@@ -1,4 +1,4 @@
-# Copyright (C) 2023 ANSYS, Inc. and/or its affiliates.
+# Copyright (C) 2022 - 2024 ANSYS, Inc. and/or its affiliates.
 # SPDX-License-Identifier: MIT
 #
 #
@@ -163,6 +163,28 @@ def keep_files(files_list, project_path=Path(os.getcwd())):
     # Removing undesired empty folders
     [folder.rmdir() for folder in folders if not os.listdir(str(folder))]
 
+
+def rename_files(files_list: list[tuple[str, str]], project_path=Path(os.getcwd())):
+    """Rename files in the project.
+
+    Parameters
+    ----------
+    files_list : list
+        List of tuples containing the original and new file names.
+    project_path : Path
+        Project's root directory.
+
+    """
+    for old_name, new_name in files_list:
+        old_file = (project_path / old_name).absolute()
+        new_file = (project_path / new_name).absolute()
+        new_file.parent.mkdir(parents=True, exist_ok=True)
+        old_file.rename(new_file)
+        for parent in old_file.parents:
+            if parent == project_path:
+                break
+            if not os.listdir(parent):
+                parent.rmdir()
 
 def bake_template(template_path, output_path, license_path=MIT_LICENSE, **cookiecutter_kwargs):
     """
