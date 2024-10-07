@@ -61,7 +61,6 @@ DESIRED_STRUCTURE = [
     "CONTRIBUTING.md",
     "CONTRIBUTORS.md",
     "LICENSE.rst",
-    "poetry.lock",
     "pyproject.toml",
     "README.rst",
     "setup_environment.py",
@@ -108,8 +107,6 @@ if "{{ cookiecutter.dash_ui }}" == "default":
     DESIRED_STRUCTURE = DESIRED_STRUCTURE + UI_STRUCTURE
 elif "{{ cookiecutter.dash_ui }}" == "awc":
     DESIRED_STRUCTURE = DESIRED_STRUCTURE + AWC_UI_STRUCTURE
-if "{{ cookiecutter.dash_ui }}" != "default":
-    DESIRED_STRUCTURE.remove("poetry.lock")
 
 
 def main():
