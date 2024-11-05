@@ -169,7 +169,7 @@ copybutton_prompt_is_regexp = True
 
 # ---------- // Options for HTML output // ----------------------------------------------------------------------------
 
-html_short_title = html_title = "Ansys Solutions {{cookiecutter.solution_display_name}}"
+html_short_title = html_title = "Ansys Solutions {{cookiecutter.__solution_display_name}}"
 html_theme = "ansys_sphinx_theme"
 html_logo = str(Path(__file__).parent.absolute() / "_static" / "ansys-solutions-logo-black-background.png")
 html_theme_options = {
@@ -214,7 +214,7 @@ latex_documents = [
     (
         master_doc,
         f"Ansys-Solutions-{{cookiecutter.__project_name_slug}}-Documentation-{package_version}.tex",
-        "Ansys Solutions {{cookiecutter.solution_display_name}} Documentation",
+        "Ansys Solutions {{cookiecutter.__solution_display_name}} Documentation",
         author,
         "manual",
     ),
@@ -228,8 +228,8 @@ latex_documents = [
 man_pages = [
     (
         master_doc,
-        "Ansys Solutions {{cookiecutter.solution_display_name}}",
-        "Ansys Solutions {{cookiecutter.solution_display_name}} Documentation",
+        "Ansys Solutions {{cookiecutter.__solution_display_name}}",
+        "Ansys Solutions {{cookiecutter.__solution_display_name}} Documentation",
         [author],
         1,
     )
@@ -244,10 +244,10 @@ man_pages = [
 texinfo_documents = [
     (
         master_doc,
-        "Ansys Solutions {{cookiecutter.solution_display_name}}",
-        "Ansys Solutions {{cookiecutter.solution_display_name}} Documentation",
+        "Ansys Solutions {{cookiecutter.__solution_display_name}}",
+        "Ansys Solutions {{cookiecutter.__solution_display_name}} Documentation",
         author,
-        "Ansys Solutions {{cookiecutter.solution_display_name}}",
+        "Ansys Solutions {{cookiecutter.__solution_display_name}}",
         "Engineering Software",
     ),
 ]

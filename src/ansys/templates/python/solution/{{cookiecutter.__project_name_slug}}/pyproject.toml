@@ -14,7 +14,7 @@ description = "{{cookiecutter.__short_description}}"
 license = "Proprietary"
 authors = ["ANSYS, Inc. <solution-applications.maintainers@ansys.com>"]
 maintainers = ["ANSYS, Inc. <solution-applications.maintainers@ansys.com>"]
-readme = "README.rst"
+readme = "README.md"
 keywords = ["Ansys Solutions"]
 classifiers = [
     "Development Status :: 3 - Alpha",
@@ -40,23 +40,31 @@ priority = "supplemental"
 
 [tool.poetry.dependencies]
 python = ">=3.10,<3.11"
-ansys-saf-portal = {version = "1.1.1", source = "solutions-private-pypi"}
-ansys-saf-desktop = {version = "1.2.1", source = "solutions-private-pypi"}
-{% if cookiecutter.dash_ui == "default" %}
+ansys-saf-glow-engine = {version = "1.11.2", source = "solutions-private-pypi"}
+
+[tool.poetry.group.ui]
+optional = true
+[tool.poetry.group.ui.dependencies]
 ansys-solutions-dash-super-components = {version = "0.1.dev0", source = "solutions-private-pypi", python = ">=3.10,<3.11"}
+{% if cookiecutter.__frontend_type == "dash" %}
 dash = "^2.6"
 dash_bootstrap_components = "^1.2"
 dash-extensions = ">=0.1.13"
 dash-iconify = "^0.1"
 dash-mantine-components = "^0.12.1"
 dash-uploader = "^0.6"
-{% elif cookiecutter.dash_ui == "awc" %}
+{% elif cookiecutter.__frontend_type == "awc-dash" %}
 ansys-web-components-dash = {version = ">=0.0.dev4", source = "solutions-private-pypi"}
-ansys-solutions-dash-super-components = {version = "0.1.dev0", source = "solutions-private-pypi", python = ">=3.10,<3.11"}
 dash = "^2.6"
 dash_bootstrap_components = "^1.2"
 dash-uploader = "^0.6"
 {% endif %}
+
+[tool.poetry.group.desktop]
+optional = true
+[tool.poetry.group.desktop.dependencies]
+ansys-saf-desktop = {version = "1.2.1", source = "solutions-private-pypi"}
+ansys-saf-portal = {version = "1.1.1", source = "solutions-private-pypi"}
 
 [tool.poetry.group.doc]
 optional = true

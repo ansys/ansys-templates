@@ -19,6 +19,6 @@ class Steps(StepsModel):
 class {{ cookiecutter.__solution_definition_name }}(Solution):
     """Solution definition."""
 
-    display_name: str = "{{ cookiecutter.solution_display_name.replace('"', '') }}"
+    display_name: str = "{{ cookiecutter.__solution_display_name.replace('"', '') }}"
     version: int = 1
     steps: Steps
