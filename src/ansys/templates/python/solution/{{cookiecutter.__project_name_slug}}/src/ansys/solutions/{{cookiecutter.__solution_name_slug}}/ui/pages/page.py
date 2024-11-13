@@ -3,79 +3,120 @@
 """Initialization of the frontend layout across all the steps."""
 
 
+import json
+import webbrowser
+
 from ansys.saf.glow.client.dashclient import DashClient, callback
-from ansys_dash_treeview import AnsysDashTreeview
+from ansys.solutions.dash_super_components import Tree
+from dash.exceptions import PreventUpdate
 import dash_bootstrap_components as dbc
 from dash_extensions.enrich import Input, Output, callback_context, dcc, html
 from dash_iconify import DashIconify
+import dash_mantine_components as dmc
 
 from ansys.solutions.{{ cookiecutter.__solution_name_slug }}.solution.definition import {{ cookiecutter.__solution_definition_name }}
-from ansys.solutions.{{ cookiecutter.__solution_name_slug }}.ui.pages import first_page, intro_page, second_page
+from ansys.solutions.{{ cookiecutter.__solution_name_slug }}.ui.pages import about_page, first_page, second_page
 
 step_list = [
     {
-        "key": "intro_step",
-        "text": "Introduction",
-        "depth": 0,
+        "id": "about_page",
+        "text": "About",
+        "prefixIcon": "material-symbols:home",
+        "expanded": True,
     },
     {
-        "key": "first_step",
+        "id": "first_page",
         "text": "First Step",
-        "depth": 0,
+        "prefixIcon": "game-icons:crossed-air-flows",
+        "expanded": True,
     },
     {
-        "key": "second_step",
+        "id": "second_page",
         "text": "Second Step",
-        "depth": 0,
+        "prefixIcon": "carbon:ibm-engineering-workflow-mgmt",
+        "expanded": True,
     },
 ]
 
 
 layout = html.Div(
     [
-        dcc.Location(id="url", refresh=False),  # represents the browser address bar and doesn't render anything
-        dbc.Stack(
-            [
-                html.Div(
-                    [html.Img(src=r"/assets/logos/ansys-solutions-horizontal-logo.png", style={"width": "80%"})],
-                ),
-                html.Div(
-                    [
-                        dbc.Button(
-                            "Project Name:",
-                            id="project-name",
-                            disabled=True,
-                            style={
-                                "color": "rgba(0, 0, 0, 1)",
-                                "background-color": "rgba(255, 255, 255, 1)",
-                                "border-color": "rgba(0, 0, 0, 1)",
-                            },
-                        )
-                    ],
-                    className="ms-auto",
-                ),
-                html.Div(id="return-to-portal"),
-            ],
-            direction="horizontal",
-            gap=3,
+        dcc.Location(id="url", refresh=False),
+        dbc.Navbar(
+            dbc.Container(
+                [
+                    html.Div(
+                        children=[
+                            html.Div(
+                                html.Img(src=r"/assets/logos/ansys_solutions_logo_white.png", height="36px"),
+                                style={
+                                    "flex": "1",
+                                    "text-align": "left",
+                                },
+                            ),
+                            html.Div(
+                                dmc.Group(
+                                    [
+                                        dmc.Text(
+                                            "Project name:",
+                                            id="project-name",
+                                            size="sm",
+                                            color="#FFFFFF",
+                                            style={"font-size": "16px"},
+                                        ),
+                                        dmc.ActionIcon(
+                                            DashIconify(icon="ph:code-fill", width=36),
+                                            id="access-dev-guide",
+                                            size=36,
+                                            variant="transparent",
+                                            style={"color": "#FFFFFF"},
+                                        ),
+                                        dbc.Popover(
+                                            "Get access to the Solution's Developer Guide.",
+                                            target="access-dev-guide",
+                                            body=True,
+                                            trigger="hover",
+                                        ),
+                                        html.Div(id="return-to-portal"),
+                                    ],
+                                    spacing=10,
+                                ),
+                                style={
+                                    "display": "flex",
+                                    "align-items": "flex-end",
+                                },
+                            ),
+                        ],
+                        style={
+                            "display": "flex",
+                            "justify-content": "space-between",
+                            "width": "100%",
+                        },
+                    )
+                ],
+                style={"max-width": "inherit"},
+                fluid=True,
+            ),
+            color="#000000",
+            sticky="top",
+            style={"height": "80px"},
         ),
-        html.Br(),
         dbc.Row(
             [
                 dbc.Col(
-                    AnsysDashTreeview(
-                        id="navigation_tree",
-                        items=step_list,
-                        children=[
-                            DashIconify(icon="bi:caret-right-square-fill"),
-                            DashIconify(icon="bi:caret-down-square-fill"),
-                        ],
-                        style={"showButtons": True, "focusColor": "#ffb71b", "itemHeight": "32"},  # Ansys gold
-                    ),
+                    [
+                        dmc.Space(h=10),
+                        dbc.Row(
+                            Tree(
+                                aio_id="navigation_tree",
+                                items=step_list,
+                                active_item_id="about_page",
+                            )
+                        ),
+                    ],
                     width=2,
-                    style={"background-color": "rgba(242, 242, 242, 0.6)"},  # Ansys grey
                 ),
-                dbc.Col(html.Div(id="page-content", style={"padding-right": "1%"}), width=10),
+                dbc.Col(html.Div(id="page-content", style={"padding-right": "0.7%"}), width=10),
             ],
         ),
     ]
@@ -93,13 +134,23 @@ def return_to_portal(pathname):
         []
         if portal_ui_url is None
         else [
-            dbc.Button(
-                "Back to Projects",
-                id="return-to-portal",
-                className="me-2",
-                n_clicks=0,
+            html.A(
+                [
+                    dmc.ActionIcon(
+                        DashIconify(icon="carbon:return", width=36),
+                        id="back-to-projects-icon",
+                        size=36,
+                        variant="transparent",
+                        style={"color": "#FFFFFF"},
+                    ),
+                    dbc.Popover(
+                        "Back to Projects.",
+                        target="back-to-projects-icon",
+                        body=True,
+                        trigger="hover",
+                    ),
+                ],
                 href=portal_ui_url,
-                style={"background-color": "rgba(0, 0, 0, 1)", "border-color": "rgba(0, 0, 0, 1)"},
             )
         ]
     )
@@ -116,15 +167,21 @@ def display_poject_name(pathname):
     return f"Project Name: {project.project_display_name}"
 
 
-# this callback is essential for initializing the step based on the persisted
-# state of the project when the browser first displays the project to the user
-# given the project's URL
+@callback(
+    Output("access-dev-guide", "children"),
+    Input("access-dev-guide", "n_clicks"),
+    prevent_initial_call=True,
+)
+def access_dev_guide_documentation(n_clicks):
+    """Open the Developer's Guide home page in the web browser."""
+    webbrowser.open_new("https://dev-docs.solutions.ansys.com/index.html")
+    raise PreventUpdate
+
+
 @callback(
     Output("page-content", "children"),
-    [
-        Input("url", "pathname"),
-        Input("navigation_tree", "focus"),
-    ],
+    Input("url", "pathname"),
+    Input(Tree.ids.selected_item("navigation_tree"), "data"),
     prevent_initial_call=True,
 )
 def display_page(pathname, value):
@@ -132,14 +189,17 @@ def display_page(pathname, value):
     project = DashClient[{{ cookiecutter.__solution_definition_name }}].get_project(pathname)
     triggered_id = callback_context.triggered[0]["prop_id"].split(".")[0]
     if triggered_id == "url":
-        return intro_page.layout(project.steps.intro_step)
-    if triggered_id == "navigation_tree":
-        if value is None:
-            page_layout = html.H1("Welcome!")
-        elif value == "intro_step":
-            page_layout = intro_page.layout(project.steps.intro_step)
-        elif value == "first_step":
-            page_layout = first_page.layout(project.steps.first_step)
-        elif value == "second_step":
-            page_layout = second_page.layout(project.steps.second_step)
-        return page_layout
+        return about_page.layout()
+    else:
+        triggered_id = json.loads(triggered_id)
+        if isinstance(triggered_id, dict):
+            if triggered_id["aio_id"] == "navigation_tree":
+                if value["index"] == "about_page":
+                    return about_page.layout()
+                elif value["index"] == "first_page":
+                    return first_page.layout(project.steps.first_step)
+                elif value["index"] == "second_page":
+                    return second_page.layout(project.steps.second_step)
+                else:
+                    raise ValueError(f"Unknown page selection: {value['index']}")
+    raise PreventUpdate

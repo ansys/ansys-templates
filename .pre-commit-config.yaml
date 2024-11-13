@@ -1,23 +1,18 @@
 repos:
 
-- repo: https://github.com/fsfe/reuse-tool
-  rev: v1.1.2
-  hooks:
-    - id: reuse
-
 - repo: https://github.com/psf/black
-  rev: 23.3.0
+  rev: 24.8.0
   hooks:
   - id: black
     exclude: ^src/ansys/templates/python/
 
 - repo: https://github.com/pycqa/isort
-  rev: 5.12.0
+  rev: 5.13.2
   hooks:
   - id: isort
 
 - repo: https://github.com/PyCQA/flake8
-  rev: 6.0.0
+  rev: 7.1.1
   hooks:
   - id: flake8
     args: [
@@ -37,7 +32,7 @@ repos:
     exclude: ^src/ansys/templates/python/|^tests
 
 - repo: https://github.com/pre-commit/pre-commit-hooks
-  rev: v4.4.0
+  rev: v4.6.0
   hooks:
   - id: check-merge-conflict
   - id: check-yaml
@@ -47,6 +42,14 @@ repos:
 
 # Validates github workflow files
 - repo: https://github.com/python-jsonschema/check-jsonschema
-  rev: 0.22.0
+  rev: 0.29.1
   hooks:
     - id: check-github-workflows
+
+- repo: https://github.com/ansys/pre-commit-hooks
+  rev: v0.4.3
+  hooks:
+  - id: add-license-headers
+    args:
+    - --start_year=2022
+    exclude: 'src/ansys/templates/python/'

@@ -1,4 +1,4 @@
-# Copyright (C) 2023 ANSYS, Inc. and/or its affiliates.
+# Copyright (C) 2022 - 2024 ANSYS, Inc. and/or its affiliates.
 # SPDX-License-Identifier: MIT
 #
 #
@@ -80,11 +80,7 @@ DOC_PROJECT_VARS = dict(
 SOLUTION_VARS = dict(
     __solution_name_slug="solution",
     __project_name_slug="solution",
-)
-
-OSL_SOLUTION_VARS = dict(
-    __solution_name_slug="osl_solution",
-    __project_name_slug="osl_solution",
+    dash_ui="default",
 )
 
 PYCOMMON_STRUCTURE = [
@@ -105,13 +101,17 @@ PYCOMMON_STRUCTURE = [
     "CONTRIBUTING.md",
     "CONTRIBUTORS.md",
     "examples/README.md",
+    "doc/changelog.d/changelog_template.jinja",
     "doc/Makefile",
     "doc/make.bat",
     "doc/.vale.ini",
     "doc/styles/.gitignore",
-    "doc/styles/Vocab/ANSYS/accept.txt",
-    "doc/styles/Vocab/ANSYS/reject.txt",
+    "doc/styles/config/vocabularies/ANSYS/accept.txt",
+    "doc/styles/config/vocabularies/ANSYS/reject.txt",
+    "doc/source/getting_started/index.rst",
+    "doc/source/changelog.rst",
     "doc/source/conf.py",
+    "doc/source/examples.rst",
     "doc/source/index.rst",
     "doc/source/_static/README.md",
     "doc/source/_templates/README.md",
@@ -131,13 +131,13 @@ PYBASIC_STRUCTURE = deepcopy(PYCOMMON_STRUCTURE) + [
     f"src/{PYBASIC_VARS['project_name']}/__init__.py",
 ]
 [PYBASIC_STRUCTURE.remove(file) for file in
- [".github/dependabot.yml", ".github/labeler.yml", ".github/labels.yml", ".github/workflows/label.yml", ".github/workflows/ci_cd.yml", ".pre-commit-config.yaml", "azure-pipeline.yml", "tox.ini"]]
+ [".github/dependabot.yml", ".github/labeler.yml", ".github/labels.yml", ".github/workflows/label.yml", ".github/workflows/ci_cd.yml", "doc/changelog.d/changelog_template.jinja", ".pre-commit-config.yaml", "azure-pipeline.yml", "tox.ini"]]
 
 # Structure for pyansys projects
 PYANSYS_STRUCTURE = deepcopy(PYCOMMON_STRUCTURE) + [
     f"src/ansys/{PYANSYS_VARS['__product_name_slug']}/{PYANSYS_VARS['__library_name_slug']}/__init__.py",
 ]
-[PYANSYS_STRUCTURE.remove(file) for file in [".github/dependabot.yml", ".github/labeler.yml", ".github/labels.yml", ".github/workflows/label.yml", ".github/workflows/ci_cd.yml", "azure-pipeline.yml", "tox.ini"]]
+[PYANSYS_STRUCTURE.remove(file) for file in [".github/dependabot.yml", ".github/labeler.yml", ".github/labels.yml", ".github/workflows/label.yml", ".github/workflows/ci_cd.yml", "doc/changelog.d/changelog_template.jinja", "azure-pipeline.yml", "tox.ini"]]
 
 # Structure for pyansys-advanced projects
 PYANSYS_ADVANCED_STRUCTURE = deepcopy(PYCOMMON_STRUCTURE) + [
@@ -260,10 +260,14 @@ DOC_PROJECT_STRUCTURE = [
     "doc/Makefile",
     "doc/make.bat",
     "doc/.vale.ini",
+    "doc/changelog.d/changelog_template.jinja",
     "doc/styles/.gitignore",
-    "doc/styles/Vocab/ANSYS/accept.txt",
-    "doc/styles/Vocab/ANSYS/reject.txt",
+    "doc/styles/config/vocabularies/ANSYS/accept.txt",
+    "doc/styles/config/vocabularies/ANSYS/reject.txt",
+    "doc/source/getting_started/index.rst",
+    "doc/source/changelog.rst",
     "doc/source/conf.py",
+    "doc/source/examples.rst",
     "doc/source/index.rst",
     "doc/source/_static/README.md",
     "doc/source/_templates/README.md",
@@ -284,15 +288,25 @@ DOC_PROJECT_STRUCTURE = [
 
 # Structure for solution projects
 SOLUTION_STRUCTURE = [
+    ".devcontainer/devcontainer.json",
     ".github/workflows/build-release.yml",
+    ".github/workflows/release-please.yml",
+    ".github/workflows/label.yml",
+    ".github/labeler.yml",
+    ".github/labels.yml",
     ".vscode/launch.json",
+    ".vscode/extensions.json",
+    "doc/changelog.d/changelog_template.jinja",
     "doc/source/_static/ansys-solutions-logo-black-background.png",
     "doc/source/_static/README.md",
     "doc/source/_templates/README.md",
+    "doc/source/getting_started/index.rst",
+    "doc/source/changelog.rst",
     "doc/source/conf.py",
+    "doc/source/examples.rst",
     "doc/source/index.rst",
-    "doc/styles/Vocab/ANSYS/accept.txt",
-    "doc/styles/Vocab/ANSYS/reject.txt",
+    "doc/styles/config/vocabularies/ANSYS/accept.txt",
+    "doc/styles/config/vocabularies/ANSYS/reject.txt",
     "doc/styles/.gitignore",
     "doc/.vale.ini",
     "doc/make.bat",
@@ -303,7 +317,6 @@ SOLUTION_STRUCTURE = [
     f"src/ansys/solutions/{SOLUTION_VARS['__solution_name_slug']}/logic/README.md",
     f"src/ansys/solutions/{SOLUTION_VARS['__solution_name_slug']}/solution/method_assets/README.md",
     f"src/ansys/solutions/{SOLUTION_VARS['__solution_name_slug']}/solution/definition.py",
-    f"src/ansys/solutions/{SOLUTION_VARS['__solution_name_slug']}/solution/intro_step.py",
     f"src/ansys/solutions/{SOLUTION_VARS['__solution_name_slug']}/solution/first_step.py",
     f"src/ansys/solutions/{SOLUTION_VARS['__solution_name_slug']}/solution/second_step.py",
     f"src/ansys/solutions/{SOLUTION_VARS['__solution_name_slug']}/__init__.py",
@@ -311,11 +324,12 @@ SOLUTION_STRUCTURE = [
     f"src/ansys/solutions/{SOLUTION_VARS['__solution_name_slug']}/ui/assets/css/style.css",
     f"src/ansys/solutions/{SOLUTION_VARS['__solution_name_slug']}/ui/assets/images/README.md",
     f"src/ansys/solutions/{SOLUTION_VARS['__solution_name_slug']}/ui/assets/images/solution-workflow-sketch.png",
-    f"src/ansys/solutions/{SOLUTION_VARS['__solution_name_slug']}/ui/assets/logos/ansys-solutions-horizontal-logo.png",
+    f"src/ansys/solutions/{SOLUTION_VARS['__solution_name_slug']}/ui/assets/logos/ansys_solutions_logo_black.png",
+    f"src/ansys/solutions/{SOLUTION_VARS['__solution_name_slug']}/ui/assets/logos/ansys_solutions_logo_white.png",
     f"src/ansys/solutions/{SOLUTION_VARS['__solution_name_slug']}/ui/assets/scripts/README.md",
     f"src/ansys/solutions/{SOLUTION_VARS['__solution_name_slug']}/ui/components/README.md",
+    f"src/ansys/solutions/{SOLUTION_VARS['__solution_name_slug']}/ui/pages/about_page.py",
     f"src/ansys/solutions/{SOLUTION_VARS['__solution_name_slug']}/ui/pages/first_page.py",
-    f"src/ansys/solutions/{SOLUTION_VARS['__solution_name_slug']}/ui/pages/intro_page.py",
     f"src/ansys/solutions/{SOLUTION_VARS['__solution_name_slug']}/ui/pages/second_page.py",
     f"src/ansys/solutions/{SOLUTION_VARS['__solution_name_slug']}/ui/pages/page.py",
     f"src/ansys/solutions/{SOLUTION_VARS['__solution_name_slug']}/ui/app.py",
@@ -349,96 +363,16 @@ SOLUTION_STRUCTURE = [
     "pyproject.toml",
     "README.rst",
     "setup_environment.py",
+    "sonar-project.properties",
     "tox.ini",
+    "release-please-config.json",
+    "release-please-manifest.json"
 ]
 
-OSL_SOLUTION_STRUCTURE = [
-    ".github/workflows/build-release.yml",
-    ".vscode/launch.json",
-    "doc/source/_static/ansys-solutions-logo-black-background.png",
-    "doc/source/_static/README.md",
-    "doc/source/_templates/README.md",
-    "doc/source/conf.py",
-    "doc/source/index.rst",
-    "doc/styles/Vocab/ANSYS/accept.txt",
-    "doc/styles/Vocab/ANSYS/reject.txt",
-    "doc/styles/.gitignore",
-    "doc/.vale.ini",
-    "doc/make.bat",
-    "doc/Makefile",
-    "examples/README.md",
-    f"src/ansys/solutions/{OSL_SOLUTION_VARS['__solution_name_slug']}/datamodel/datamodel.py",
-    f"src/ansys/solutions/{OSL_SOLUTION_VARS['__solution_name_slug']}/logic/README.md",
-    f"src/ansys/solutions/{OSL_SOLUTION_VARS['__solution_name_slug']}/logic/assets/README.md",
-    f"src/ansys/solutions/{OSL_SOLUTION_VARS['__solution_name_slug']}/pim_configurations/osl_wrapper.py",
-    f"src/ansys/solutions/{OSL_SOLUTION_VARS['__solution_name_slug']}/pim_configurations/pim_osl_configuration.py",
-    f"src/ansys/solutions/{OSL_SOLUTION_VARS['__solution_name_slug']}/solution/method_assets/README.md",
-    f"src/ansys/solutions/{OSL_SOLUTION_VARS['__solution_name_slug']}/solution/definition.py",
-    f"src/ansys/solutions/{OSL_SOLUTION_VARS['__solution_name_slug']}/solution/problem_setup_step.py",
-    f"src/ansys/solutions/{OSL_SOLUTION_VARS['__solution_name_slug']}/solution/monitoring_step.py",
-    f"src/ansys/solutions/{OSL_SOLUTION_VARS['__solution_name_slug']}/solution/optislang_manager.py",
-    f"src/ansys/solutions/{OSL_SOLUTION_VARS['__solution_name_slug']}/ui/assets/css/style.css",
-    f"src/ansys/solutions/{OSL_SOLUTION_VARS['__solution_name_slug']}/ui/assets/images/README.md",
-    f"src/ansys/solutions/{OSL_SOLUTION_VARS['__solution_name_slug']}/ui/assets/logos/ansys-solutions-horizontal-logo.png",
-    f"src/ansys/solutions/{OSL_SOLUTION_VARS['__solution_name_slug']}/ui/assets/scripts/README.md",
-    f"src/ansys/solutions/{OSL_SOLUTION_VARS['__solution_name_slug']}/ui/components/actor_information_table.py",
-    f"src/ansys/solutions/{OSL_SOLUTION_VARS['__solution_name_slug']}/ui/components/actor_logs_table.py",
-    f"src/ansys/solutions/{OSL_SOLUTION_VARS['__solution_name_slug']}/ui/components/actor_statistics_table.py",
-    f"src/ansys/solutions/{OSL_SOLUTION_VARS['__solution_name_slug']}/ui/components/button_group.py",
-    f"src/ansys/solutions/{OSL_SOLUTION_VARS['__solution_name_slug']}/ui/components/node_control.py",
-    f"src/ansys/solutions/{OSL_SOLUTION_VARS['__solution_name_slug']}/ui/components/design_table.py",
-    f"src/ansys/solutions/{OSL_SOLUTION_VARS['__solution_name_slug']}/ui/components/logs_table.py",
-    f"src/ansys/solutions/{OSL_SOLUTION_VARS['__solution_name_slug']}/ui/components/project_information_table.py",
-    f"src/ansys/solutions/{OSL_SOLUTION_VARS['__solution_name_slug']}/ui/pages/monitoring_page.py",
-    f"src/ansys/solutions/{OSL_SOLUTION_VARS['__solution_name_slug']}/ui/pages/page.py",
-    f"src/ansys/solutions/{OSL_SOLUTION_VARS['__solution_name_slug']}/ui/pages/problem_setup_page.py",
-    f"src/ansys/solutions/{OSL_SOLUTION_VARS['__solution_name_slug']}/ui/views/design_table_view.py",
-    f"src/ansys/solutions/{OSL_SOLUTION_VARS['__solution_name_slug']}/ui/views/project_summary_view.py",
-    f"src/ansys/solutions/{OSL_SOLUTION_VARS['__solution_name_slug']}/ui/views/scenery_view.py",
-    f"src/ansys/solutions/{OSL_SOLUTION_VARS['__solution_name_slug']}/ui/views/status_overview_view.py",
-    f"src/ansys/solutions/{OSL_SOLUTION_VARS['__solution_name_slug']}/ui/views/summary_view.py",
-    f"src/ansys/solutions/{OSL_SOLUTION_VARS['__solution_name_slug']}/ui/views/visualization_view.py",
-    f"src/ansys/solutions/{OSL_SOLUTION_VARS['__solution_name_slug']}/ui/app.py",
-    f"src/ansys/solutions/{OSL_SOLUTION_VARS['__solution_name_slug']}/utilities/common_functions.py",
-    f"src/ansys/solutions/{OSL_SOLUTION_VARS['__solution_name_slug']}/__init__.py",
-    f"src/ansys/solutions/{OSL_SOLUTION_VARS['__solution_name_slug']}/main.py",
-    "telemetry/grafana/compose.yaml",
-    "telemetry/grafana/_deploy/compose/collector/otel-collector-config.yaml",
-    "telemetry/grafana/_deploy/compose/grafana/grafana-dashboard.json",
-    "telemetry/grafana/_deploy/compose/grafana/grafana-dashboards.yml",
-    "telemetry/grafana/_deploy/compose/grafana/grafana-datasources.yml",
-    "telemetry/grafana/_deploy/compose/grafana/grafana.ini",
-    "telemetry/grafana/_deploy/compose/loki/loki.yml",
-    "telemetry/grafana/_deploy/compose/prometheus/prometheus.yml",
-    "telemetry/tracelens/compose.yaml",
-    "tests/common_test_files/README.md",
-    "tests/integration/test_integration_dummy.py",
-    "tests/unit/test_unit_dummy.py",
-    "tests/conftest.py",
-    ".codespell.exclude",
-    ".codespell.ignore",
-    ".env",
-    ".flake8",
-    ".gitignore",
-    ".pre-commit-config.yaml",
-    "AUTHORS",
-    "CHANGELOG.md",
-    "CODE_OF_CONDUCT.md",
-    "CODEOWNERS",
-    "CONTRIBUTING.md",
-    "CONTRIBUTORS.md",
-    "LICENSE.rst",
-    "poetry.lock",
-    "pyproject.toml",
-    "README.rst",
-    "setup_environment.py",
-    "tox.ini"
-]
 
 # A dictionary relating templates name with their variables and structure
 TEMPLATES_VARIABLES_AND_STRUCTURE = {
     "common": [PYCOMMON_VARS, PYCOMMON_STRUCTURE],
-    "osl-solution": [OSL_SOLUTION_VARS, OSL_SOLUTION_STRUCTURE],
     "pybasic": [PYBASIC_VARS, PYBASIC_STRUCTURE],
     "pyansys": [PYANSYS_VARS, PYANSYS_STRUCTURE],
     "pyansys-advanced": [PYANSYS_ADVANCED_VARS, PYANSYS_ADVANCED_STRUCTURE],

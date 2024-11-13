@@ -1,28 +1,29 @@
 repos:
 
   - repo: https://github.com/psf/black
-    rev: 22.3.0
+    rev: 24.4.2
     hooks:
     - id: black
 
   - repo: https://github.com/pycqa/isort
-    rev: 5.11.5
+    rev: 5.13.2
     hooks:
     - id: isort
 
   - repo: https://github.com/PyCQA/flake8
-    rev: 5.0.4
+    rev: 7.0.0
     hooks:
     - id: flake8
 
   - repo: https://github.com/codespell-project/codespell
-    rev: v2.2.2
+    rev: v2.3.0
     hooks:
     - id: codespell
       args: [--skip, "doc/styles/*,*.js,*.tmp", --ignore-words, ".codespell.ignore", --exclude-file, ".codespell.exclude"]
+      exclude: "pyproject.toml"
 
   - repo: https://github.com/pycqa/pydocstyle
-    rev: 6.1.1
+    rev: 6.3.0
     hooks:
     - id: pydocstyle
       additional_dependencies: [toml]

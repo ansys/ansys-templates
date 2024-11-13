@@ -97,7 +97,7 @@ For building documentation, you can either run the usual rules provided in the
     make -C doc/ html
 
     # optionally view the generated documentation (on linux) with
-    your_browser_name doc/html/index.html
+    open doc/html/index.html
 
 
 Distributing

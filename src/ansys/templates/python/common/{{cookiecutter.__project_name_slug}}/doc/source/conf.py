@@ -1,17 +1,9 @@
 """Sphinx documentation configuration file."""
+
 from datetime import datetime
 import os
 
 from ansys_sphinx_theme import get_version_match
-{%- if cookiecutter.__logo == "ansys" and cookiecutter.__logo_color == "white" %}
-from ansys_sphinx_theme import ansys_logo_white as logo
-{%- elif cookiecutter.__logo == "ansys" and cookiecutter.__logo_color == "black" %}
-from ansys_sphinx_theme import ansys_logo_black as logo
-{%- elif cookiecutter.__logo == "pyansys" and cookiecutter.__logo_color == "white" %}
-from ansys_sphinx_theme import pyansys_logo_white as logo
-{%- elif cookiecutter.__logo == "pyansys" and cookiecutter.__logo_color == "black" %}
-from ansys_sphinx_theme import pyansys_logo_black as logo
-{%- endif %}
 
 {%- if cookiecutter.__template_name != "doc-project" %}
 from {{cookiecutter.__pkg_namespace}} import __version__
@@ -31,10 +23,10 @@ release = version = __version__
 {%- elif cookiecutter.__template_name == "doc-project" %}
 release = version = "{{ cookiecutter.__version }}"
 {%- endif %}
-cname = os.getenv("DOCUMENTATION_CNAME", "docs.pyansys.com")
+cname = os.getenv("DOCUMENTATION_CNAME", "{{ cookiecutter.__documentation_url }}")
+switcher_version = get_version_match(__version__)
 
 # Select desired logo, theme, and declare the html title
-html_logo = logo
 html_theme = "ansys_sphinx_theme"
 html_short_title = html_title = "{{ cookiecutter.__project_name_slug }}"
 
@@ -52,9 +44,14 @@ html_theme_options = {
     ],
     "switcher": {
         "json_url": f"https://{cname}/versions.json",
-        "version_match": get_version_match(__version__),
+        "version_match": switcher_version,
     },
     "check_switcher": False,
+    {%- if cookiecutter.__logo == "pyansys" %}
+    "logo": "pyansys",
+    {%- elif cookiecutter.__logo == "ansys" %}
+    "logo": "ansys",
+    {%- endif %}
 }
 
 # Sphinx extensions
@@ -112,3 +109,19 @@ source_suffix = ".rst"
 
 # The master toctree document.
 master_doc = "index"
+
+# Keep these while the repository is private
+linkcheck_ignore = [
+    "{{ cookiecutter.__repository_url }}/*",
+    {%- if cookiecutter.__template_name == "pyansys-advanced" %}
+    "{{ cookiecutter.__documentation_url }}/version/stable/*",
+    {%- endif %}
+    "https://pypi.org/project/{{cookiecutter.__pkg_name}}",
+]
+
+# If we are on a release, we have to ignore the "release" URLs, since it is not
+# available until the release is published.
+if switcher_version != "dev":
+    linkcheck_ignore.append(
+        f"https://github.com/ansys/{{ cookiecutter.__pkg_namespace }}/releases/tag/v{__version__}"
+    )

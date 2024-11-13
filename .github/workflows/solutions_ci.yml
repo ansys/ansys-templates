@@ -1,23 +1,52 @@
 name: Trigger end-to-end tests for solution templates
 on:
   pull_request:
-    paths:
-      - 'src/ansys/templates/python/solution/**'
-      - 'src/ansys/templates/python/osl_solution/**'
 
 jobs:
+  check-changes:
+    runs-on: ubuntu-latest
+    outputs:
+      solution-templates-changes: ${{ steps.check-code-changes.outputs.solution-templates }}
+    steps:
+      - name: Checkout repository
+        uses: actions/checkout@v4
+        with:
+          fetch-depth: 0
+
+      - name: Check code changes
+        uses: dorny/paths-filter@v3
+        id: check-code-changes
+        with:
+          base: ${{ inputs.head-reference }}
+          ref: ${{ inputs.base-reference }}
+          filters: |
+            solution-templates:
+              - 'src/ansys/templates/python/solution/**'
 
   solutions-e2e-tests:
     name: Trigger solutions e2e tests
+    needs: [check-changes]
     runs-on: ubuntu-latest
     steps:
       - name: github workflow dispatch
+        if: ${{ needs.check-changes.outputs.solution-templates-changes == 'true' }}
         shell: bash
         env:
           GH_TOKEN: ${{ secrets.ANSYS_SOLUTIONS_E2E_TESTS }}
         run: |
           gh workflow run \
           _ansys-templates-remote-ci.yml \
-          --repo "https://github.com/Solution-Applications/solution-templates-end-to-end-testing" \
+          --repo "https://github.com/ansys-internal/solution-templates-end-to-end-testing" \
           --field ansys_templates_sha="${{ github.event.pull_request.head.sha }}" \
           --ref "refs/heads/main"
+
+      - name: mock e2e tests
+        if: ${{ needs.check-changes.outputs.solution-templates-changes == 'false' }}
+        run: |
+          curl -L \
+          -X POST \
+          -H "Accept: application/vnd.github+json" \
+          -H "Authorization: Bearer ${{ secrets.GITHUB_TOKEN }}" \
+          -H "X-GitHub-Api-Version: 2022-11-28" \
+          https://api.github.com/repos/ansys/ansys-templates/statuses/${{ github.event.pull_request.head.sha }} \
+          -d "{\"state\": \"success\", \"context\": \" basic_solution_validation\", \"description\": \"Mock End-to-end tests with SAF Solution\" }"

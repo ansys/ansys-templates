@@ -3,64 +3,41 @@
 ##############################################
 |python|
 
-.. note::
-  This content needs to be configured according to the project specifics.
-
-
-Introduction
-============
-
-.. note::
-  Add here a description of the project.
-
-
-Prerequisites
-=============
-
-Operation system
-----------------
-
-Windows 10 to latest.
-
-Python
-------
-
-Officially Python 3.8 to 3.10. Before starting the installation run ``python --version`` and check that it fits with the supported versions.
-
-Token
------
-
-Connection to the **Solutions** private PyPI server is required. The access is controlled via a token. Create a system environment variable named ``SOLUTIONS_PRIVATE_PYPI_PAT``
-and assign it with the **Solutions** token provided in `Connecting to the private PyPI <https://dev-docs.solutions.ansys.com/solution_journey/journey_prepare/connect_to_private_pypi.html>`_.
-
-Software
---------
-
-  .. list-table:: Required flagship products
-    :widths: 200 100
-    :header-rows: 1
-
-    * - Product
-      - Versions
-
-    * - SpaceClaim
-      - R22.2 to latest
-
-    * - Fluent
-      - R23.1 to latest
-
-    * - XXX
-      - RXX.X
-
+.. contribute_start
 
 Installation
 ============
+
+Prerequisites
+-------------
+
+.. list-table::
+  :widths: 15 40
+
+  * - **Operating system**
+    - Windows 10
+  * - **Python distribution**
+    - Python distribution between **3.8** to **3.10**.
+  * - **IDE**
+    - `Visual Studio Code <https://code.visualstudio.com/download#>`_.
+  * - **Web framework**
+    - `Dash <https://dash.plotly.com/>`_
+  * - **Software**
+    - | <replace-with-product-name>
+      | <add-another-product-name>
+      | <repeat-for-each-product>
+  * - **Tokens**
+    - The environment variables ``PYANSYS_PRIVATE_PYPI_PAT`` is set with the corresponding token which can be find `here <https://dev-docs.solutions.ansys.com/solution_journey/journey_prepare/connect_to_private_pypi.html>`_.
+
+
+Setting up the development environment
+---------------------------------------
 
 1. Clone the repository:
 
    .. code:: bash
 
-     git clone https://github.com/Solution-Applications/{{ cookiecutter.__project_name_slug }}
+     git clone https://github.com/ansys-internal/{{ cookiecutter.__project_name_slug }}
 
 2. Navigate to the cloned project directory:
 
@@ -110,10 +87,10 @@ To start the solution run the following command anywhere in the project:
 Documentation
 =============
 
-Refer to the `Solution Developer's Guide <https://dev-docs.solutions.ansys.com/index.html>`_ to get more information on how to the
-get started with solutions.
+Refer to the `Solution Developer's Guide <https://dev-docs.solutions.ansys.com/index.html>`_ to get more information on how to
+get started with building solutions.
 
-To develop your solution, refer to the Solution Application Framework (SAF) documentations:
+Refer to the documentations below to get more details on how to use the Solution Application Framework (SAF):
 
 * `GLOW doc <https://saf.docs.solutions.ansys.com/version/stable/>`_
 * `Portal doc <https://potential-adventure-ovlqkq9.pages.github.io/version/dev/>`_
