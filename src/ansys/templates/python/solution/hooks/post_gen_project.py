@@ -53,7 +53,6 @@ DESIRED_STRUCTURE = [
     "tests/conftest.py",
     ".codespell.exclude",
     ".codespell.ignore",
-    ".env",
     ".flake8",
     ".gitignore",
     ".pre-commit-config.yaml",
@@ -70,7 +69,6 @@ DESIRED_STRUCTURE = [
     "setup_environment.py",
     "sonar-project.properties",
     "tox.ini",
-    ".env",
     "release-please-config.json",
     "release-please-manifest.json"
 ]

@@ -351,7 +351,6 @@ SOLUTION_STRUCTURE = [
     "tests/conftest.py",
     ".codespell.exclude",
     ".codespell.ignore",
-    ".env",
     ".flake8",
     ".gitignore",
     ".pre-commit-config.yaml",
