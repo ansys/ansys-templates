@@ -81,6 +81,22 @@ To start the solution run the following command anywhere in the project:
 saf run
 ```
 
+## Generate an executable installer
+
+To generate an executable installer from the solution application:
+
+1. Install the build dependencies:
+
+```bash
+poetry install --only build
+```
+
+2. Run the ``saf package`` command:
+
+```bash
+saf package --solution-display-name <display-name>
+```
+
 # Containerized Desktop Installation
 
 ## Setup
