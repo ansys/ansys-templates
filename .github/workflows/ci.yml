@@ -52,7 +52,7 @@ jobs:
     needs: doc-style
     steps:
       - name: "Run Ansys documentation building action"
-        uses: ansys/actions/doc-build@v7
+        uses: ansys/actions/doc-build@v8
 
   wheelhouse:
     name: Wheelhouse Python ${{ matrix.os }}
