@@ -302,6 +302,7 @@ SOLUTION_STRUCTURE = [
     "doc/changelog.d/changelog_template.jinja",
     "doc/source/_static/ansys-solutions-logo-black-background.png",
     "doc/source/_static/README.md",
+    "doc/source/_static/css/custom.css",
     "doc/source/_templates/README.md",
     "doc/source/getting_started/index.rst",
     "doc/source/changelog.rst",

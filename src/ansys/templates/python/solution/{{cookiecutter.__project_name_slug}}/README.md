@@ -9,7 +9,7 @@
 | ------------------------ | ------- |
 | Solution Owner           | XXXXXXX |
 | Solution Product Manager | XXXXXXX |
-| Domain SME               | XXXXXXX |
+| Domain ``SME``           | XXXXXXX |
 | Development Manager      | XXXXXXX |
 | Solution development     | XXXXXXX |
 | UI/UX                    | XXXXXXX |
