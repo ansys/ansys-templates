@@ -10,9 +10,13 @@ DESIRED_STRUCTURE = [
     ".github/labels.yml",
     ".vscode/launch.json",
     ".vscode/extensions.json",
+    "deployments/dev/.env",
+    "deployments/dev/compose-dev.yaml",
+    "deployments/dev/Dockerfile-dev",
     "doc/changelog.d/changelog_template.jinja",
     "doc/source/_static/ansys-solutions-logo-black-background.png",
     "doc/source/_static/README.md",
+    "doc/source/_static/css/custom.css",
     "doc/source/_templates/README.md",
     "doc/source/getting_started/index.rst",
     "doc/source/changelog.rst",
@@ -50,7 +54,6 @@ DESIRED_STRUCTURE = [
     "tests/conftest.py",
     ".codespell.exclude",
     ".codespell.ignore",
-    ".env",
     ".flake8",
     ".gitignore",
     ".pre-commit-config.yaml",
@@ -63,11 +66,10 @@ DESIRED_STRUCTURE = [
     "LICENSE.rst",
     "poetry.lock",
     "pyproject.toml",
-    "README.rst",
+    "README.md",
     "setup_environment.py",
     "sonar-project.properties",
     "tox.ini",
-    ".env",
     "release-please-config.json",
     "release-please-manifest.json"
 ]
@@ -88,6 +90,7 @@ UI_STRUCTURE = [
     f"src/ansys/solutions/{{ cookiecutter.__solution_name_slug }}/ui/app.py",
 ]
 
+
 AWC_UI_STRUCTURE = [
     f"src/ansys/solutions/{{ cookiecutter.__solution_name_slug }}/ui-awc/assets/css/style.css",
     f"src/ansys/solutions/{{ cookiecutter.__solution_name_slug }}/ui-awc/assets/images/README.md",
@@ -104,11 +107,11 @@ AWC_UI_STRUCTURE = [
 ]
 
 # Add UI structure to desired structure if applicable
-if "{{ cookiecutter.dash_ui }}" == "default":
+if "{{ cookiecutter.__frontend_type }}" == "dash":
     DESIRED_STRUCTURE = DESIRED_STRUCTURE + UI_STRUCTURE
-elif "{{ cookiecutter.dash_ui }}" == "awc":
+elif "{{ cookiecutter.__frontend_type }}" == "awc-dash":
     DESIRED_STRUCTURE = DESIRED_STRUCTURE + AWC_UI_STRUCTURE
-if "{{ cookiecutter.dash_ui }}" != "default":
+if "{{ cookiecutter.__frontend_type }}" != "dash":
     DESIRED_STRUCTURE.remove("poetry.lock")
 
 
@@ -116,7 +119,7 @@ def main():
     """Entry point of the script."""
     # Apply the desired structure to the project
     keep_files(DESIRED_STRUCTURE)
-    if "{{ cookiecutter.dash_ui }}" == "awc":
+    if "{{ cookiecutter.__frontend_type }}" == "awc-dash":
         combined_structure = list(zip(AWC_UI_STRUCTURE, UI_STRUCTURE))
         rename_files(combined_structure)
 

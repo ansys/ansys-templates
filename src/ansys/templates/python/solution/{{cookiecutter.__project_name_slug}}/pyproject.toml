@@ -5,7 +5,7 @@ build-backend = "poetry.core.masonry.api"
 # The following lines were added to enforce the poetry version needed for the project.
 # It will be read by the setup_environment.py script to install this version.
 [build-system-requirements]
-build-system-version = "1.8.3"
+build-system-version = "1.8.4"
 
 [tool.poetry]
 name = "{{cookiecutter.__pkg_name}}"
@@ -14,7 +14,7 @@ description = "{{cookiecutter.__short_description}}"
 license = "Proprietary"
 authors = ["ANSYS, Inc. <solution-applications.maintainers@ansys.com>"]
 maintainers = ["ANSYS, Inc. <solution-applications.maintainers@ansys.com>"]
-readme = "README.rst"
+readme = "README.md"
 keywords = ["Ansys Solutions"]
 classifiers = [
     "Development Status :: 3 - Alpha",
@@ -40,38 +40,52 @@ priority = "supplemental"
 
 [tool.poetry.dependencies]
 python = ">=3.10,<3.11"
-ansys-saf-portal = {version = "1.1.1", source = "solutions-private-pypi"}
-ansys-saf-desktop = {version = "1.2.1", source = "solutions-private-pypi"}
-{% if cookiecutter.dash_ui == "default" %}
+ansys-saf-glow-engine = {version = "1.11.2", source = "solutions-private-pypi"}
+
+[tool.poetry.group.ui]
+optional = true
+[tool.poetry.group.ui.dependencies]
 ansys-solutions-dash-super-components = {version = "0.1.dev0", source = "solutions-private-pypi", python = ">=3.10,<3.11"}
+{% if cookiecutter.__frontend_type == "dash" %}
 dash = "^2.6"
 dash_bootstrap_components = "^1.2"
 dash-extensions = ">=0.1.13"
 dash-iconify = "^0.1"
 dash-mantine-components = "^0.12.1"
 dash-uploader = "^0.6"
-{% elif cookiecutter.dash_ui == "awc" %}
+{% elif cookiecutter.__frontend_type == "awc-dash" %}
 ansys-web-components-dash = {version = ">=0.0.dev4", source = "solutions-private-pypi"}
-ansys-solutions-dash-super-components = {version = "0.1.dev0", source = "solutions-private-pypi", python = ">=3.10,<3.11"}
 dash = "^2.6"
 dash_bootstrap_components = "^1.2"
 dash-uploader = "^0.6"
 {% endif %}
 
+[tool.poetry.group.desktop]
+optional = true
+[tool.poetry.group.desktop.dependencies]
+ansys-saf-desktop = {version = "1.2.1", source = "solutions-private-pypi"}
+ansys-saf-portal = {version = "1.1.1", source = "solutions-private-pypi"}
+
 [tool.poetry.group.doc]
 optional = true
 [tool.poetry.group.doc.dependencies]
-ansys-sphinx-theme = "^0.8.0"
-autodoc-pydantic = "^2.0.1"
-numpydoc = "^1.4.0"
-sphinx = "5.1.0"
-sphinx-copybutton = "^0.5.1"
-sphinx_design = "^0.3.0"
-sphinx_code_tabs = "^0.5.3"
-sphinx-gallery = "^0.11.1"
-sphinx_mdinclude= "^0.5.3"
+ansys-sphinx-theme = "^1.2.2"
+autodoc-pydantic = "^2.2.0"
+nbsphinx = "^0.8.9"
+numpydoc = "^1.6.0"
+sphinx = "^7.2.6"
+sphinx-copybutton = "^0.5.2"
+sphinx_toolbox = "^3.5"
+sphinxcontrib-mermaid = "^0.7.1"
+sphinxcontrib-video = "^0.3.1"
+sphinx-code-tabs = "^0.5.5"
 sphinx-tabs = ">=1.2.1,<3.5.0"
-toml = "^0.10.0"
+sphinx-gallery = "^0.15"
+sphinx-design = "^0.6.1"
+sphinx-markdown-builder = "^0.6.6"
+sphinxemoji = "^0.2"
+toml = "^0.10"
+vale = "^2.26.0.0"
 
 [tool.poetry.group.tests]
 optional = true
@@ -94,6 +108,9 @@ optional = true
 [tool.poetry.group.build.dependencies]
 build = "^0.8.0"
 twine = "^5.1.1"
+pyinstaller = "^6.11.1"
+toml = "^0.10.2"
+pyc-wheel = "^1.2.7"
 
 [tool.poetry.group.style]
 optional = true

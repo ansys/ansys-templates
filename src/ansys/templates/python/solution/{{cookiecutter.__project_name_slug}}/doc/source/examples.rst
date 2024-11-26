@@ -6,7 +6,7 @@ These examples demonstrate the behavior and usage of Py{{ cookiecutter.product_n
 {%- elif cookiecutter.__template_name != "solution" %}
 These examples demonstrate the behavior and usage of {{ cookiecutter.project_name }}.
 {%- else %}
-These examples demonstrate the behavior and usage of {{ cookiecutter.solution_name }}.
+These examples demonstrate the behavior and usage of {{ cookiecutter.__solution_name }}.
 {%- endif %}
 
 {{ '.. Provide links to the files in doc/source/examples below:' }}
