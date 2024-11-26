@@ -1,10 +1,7 @@
-..
-   Just reuse the root readme to avoid duplicating the documentation.
-   Provide any documentation specific to your online documentation
-   here.
+####################################################################################################
+Ansys Solutions My Solution |version|
+####################################################################################################
 
-.. include:: ../../README.rst
-   :start-after: .. contribute_start
 
 .. toctree::
    :hidden:

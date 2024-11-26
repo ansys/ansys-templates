@@ -1,0 +1,103 @@
+version: "3.9"
+
+name: solution-0-1-dev0
+
+networks:
+  solution-0-1-dev0-internal:
+    internal: true
+  solution-0-1-dev0-external:
+    driver: bridge
+
+services:
+  solution-0-1-dev0-postgresql:
+    image: postgres:16.0
+    networks:
+      - solution-0-1-dev0-internal
+    environment:
+      - POSTGRES_USER=glow
+      - POSTGRES_PASSWORD=glow
+    healthcheck:
+      test: [ "CMD", "pg_isready", "-U", "glow" ]
+      interval: 5s
+      retries: 20
+    volumes:
+      - solution-0-1-dev0-database:/var/lib/postgresql/data
+
+  solution-0-1-dev0-api:
+    image: solution-0-1-dev0-api-dev
+    build:
+      context: ../../
+      dockerfile: deployments/dev/Dockerfile-dev
+      target: solution_api
+      args:
+        - PYANSYS_PRIVATE_PYPI_PAT=${PYANSYS_PRIVATE_PYPI_PAT}
+    depends_on:
+      solution-0-1-dev0-postgresql:
+        condition: service_healthy
+    networks:
+      - solution-0-1-dev0-external
+      - solution-0-1-dev0-internal
+    env_file:
+      - .env
+    environment:
+      - GLOW_API_HOST=0.0.0.0
+      - GLOW_API_PORT=50000
+      - GLOW_DATABASE_TYPE=postgresql
+      - GLOW_DATABASE_LOCATION=postgresql://glow:glow@solution-0-1-dev0-postgresql:5432
+      - GLOW_PROJECT_FILES_DIRECTORY=/projects
+      - GLOW_METHOD_EXECUTION_DIRECTORY=/transactions
+      - OTEL_EXPORTER_OTLP_TRACES_ENDPOINT=${OTEL_EXPORTER_OTLP_TRACES_ENDPOINT}
+      - OTEL_EXPORTER_OTLP_ENDPOINT=${OTEL_EXPORTER_OTLP_ENDPOINT}
+    ports:
+      - ${GLOW_API_CONTAINER_PORT}:50000
+    healthcheck:
+      test: [ "CMD", "curl", "-f", "http://localhost:50000/health" ]
+      interval: 5s
+      retries: 20
+    volumes:
+      - ${GLOW_PROJECTS_DIR_SOLUTION}:/projects
+      - ${GLOW_TRANSACTIONS_DIR_SOLUTION}:/transactions
+    develop:
+      watch:
+        - action: sync+restart
+          path: /src/ansys/solutions/my_solution/solution
+          target: /app/src/ansys/solutions/my_solution/solution
+
+  solution-0-1-dev0-ui:
+    image: solution-0-1-dev0-ui-dev
+    build:
+      context: ../../
+      dockerfile: deployments/dev/Dockerfile-dev
+      target: solution_ui
+      args:
+        - PYANSYS_PRIVATE_PYPI_PAT=${PYANSYS_PRIVATE_PYPI_PAT}
+    depends_on:
+      solution-0-1-dev0-api:
+        condition: service_healthy
+    networks:
+      - solution-0-1-dev0-external
+    env_file:
+      - .env
+    environment:
+      - GLOW_DEPLOYMENT=DockerCompose
+      - GLOW_UI_HOST=0.0.0.0
+      - GLOW_UI_PORT=50001
+      - GLOW_API_URL=http://solution-0-1-dev0-api:50000
+      - GLOW_UI_PROJECT_FILES_DIRECTORY=/projects
+      - GLOW_WS_EVENTS_ADDR=127.0.0.1:8000
+    ports:
+      - ${GLOW_UI_CONTAINER_PORT}:50001
+    healthcheck:
+      test: [ "CMD", "curl", "-f", "http://localhost:50001/health" ]
+      interval: 5s
+      retries: 20
+    volumes:
+      - ${GLOW_PROJECTS_DIR_SOLUTION}:/projects
+    develop:
+      watch:
+        - action: sync+restart
+          path: /src/ansys/solutions/my_solution/ui
+          target: /app/src/ansys/solutions/my_solution/ui
+
+volumes:
+  solution-0-1-dev0-database:
