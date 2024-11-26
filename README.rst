@@ -45,7 +45,7 @@ Ansys templates
    :alt: CH-CI
 
 .. |MIT| image:: https://img.shields.io/badge/License-MIT-yellow.svg
-   :target: https://opensource.org/license/MIT
+   :target: https://opensource.org/blog/license/mit
    :alt: MIT
 
 .. |black| image:: https://img.shields.io/badge/code%20style-black-000000.svg?style=flat
