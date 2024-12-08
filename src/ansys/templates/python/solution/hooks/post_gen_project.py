@@ -1,6 +1,5 @@
 from ansys.templates.utils import keep_files, rename_files
 import shutil
-from pathlib import Path
 import os
 
 DESIRED_STRUCTURE = [

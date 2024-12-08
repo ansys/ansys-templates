@@ -28,5 +28,5 @@
   "_copy_without_render": [
     "*.html",
     "setup_environment.py"
-  ] 
+  ]
 }

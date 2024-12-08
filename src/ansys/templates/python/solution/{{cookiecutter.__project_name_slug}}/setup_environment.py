@@ -559,14 +559,14 @@ def create_virtual_environment(args: object, venv: str = ".venv") -> None:
 def load_env_file(file_path):
     if not os.path.exists(file_path):
         raise FileNotFoundError(f"{file_path} does not exist.")
-    
+
     var_pattern = re.compile(r'\$\{(\w+)\}')
 
     def resolve_value(value):
         """Resolve environment variable placeholders in the value."""
         matches = var_pattern.findall(value)
         for match in matches:
-            env_value = os.getenv(match, "")  
+            env_value = os.getenv(match, "")
             value = value.replace(f"${{{match}}}", env_value)
         return value
 
@@ -722,7 +722,7 @@ def configure_poetry(
     # Declare credentials for private sources
     for source in private_sources:
         if source["name"].lower() == "pypi":
-            continue        
+            continue
         print(f"Declare credentials for {source['name']}")
         source_name_slug = source["name"].upper().replace("-", "_")
         username = os.environ.get(f"{source_name_slug}_USERNAME", "")
@@ -732,7 +732,7 @@ def configure_poetry(
                 f"No token found for private source {source['url']}."
             )
         certificate = os.environ.get(f"{source_name_slug}_CERTIFICATE", None)
-            
+
         # Store credentials
         if credentials_management_method == "keyring":
             # Declare source URL
@@ -871,7 +871,7 @@ def parser() -> None:
         help="Path to the environment file to be used to set environment variables.",
         default=".env",
         required=False,
-    )    
+    )
 
     return parser.parse_args()
 
