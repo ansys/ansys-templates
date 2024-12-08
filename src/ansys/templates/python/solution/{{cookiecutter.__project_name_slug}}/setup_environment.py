@@ -556,6 +556,30 @@ def create_virtual_environment(args: object, venv: str = ".venv") -> None:
     print()
 
 
+def load_env_file(file_path):
+    if not os.path.exists(file_path):
+        raise FileNotFoundError(f"{file_path} does not exist.")
+    
+    var_pattern = re.compile(r'\$\{(\w+)\}')
+
+    def resolve_value(value):
+        """Resolve environment variable placeholders in the value."""
+        matches = var_pattern.findall(value)
+        for match in matches:
+            env_value = os.getenv(match, "")  
+            value = value.replace(f"${{{match}}}", env_value)
+        return value
+
+    with open(file_path) as file:
+        for line in file:
+            line = line.strip()
+            if not line or line.startswith('#'):
+                continue
+            if '=' in line:
+                key, value = line.split('=', 1)
+                resolved_value = resolve_value(value.strip())
+                os.environ[key.strip()] = resolved_value
+
 # Dependency Management System (Build System) -----------------------------------------------------------------------
 
 
@@ -697,29 +721,37 @@ def configure_poetry(
 
     # Declare credentials for private sources
     for source in private_sources:
-        print(f"Declare credentials for {source['name']}")
         if source["name"].lower() == "pypi":
-            continue
-        elif source["url"] == "https://pkgs.dev.azure.com/pyansys/_packaging/pyansys/pypi/simple/":
-            token = os.environ["PYANSYS_PYPI_PRIVATE_PAT"]
-        elif source["url"] == "https://pkgs.dev.azure.com/pyansys/_packaging/ansys-solutions/pypi/simple/":
-            token = os.environ["PYANSYS_PYPI_PRIVATE_PAT"]
-        else:
-            raise Exception(f"Unknown private source {source['name']} with url {source['url']}.")
+            continue        
+        print(f"Declare credentials for {source['name']}")
+        source_name_slug = source["name"].upper().replace("-", "_")
+        username = os.environ.get(f"{source_name_slug}_USERNAME", "")
+        token = os.environ.get(f"{source_name_slug}_TOKEN", None)
+        if not token:
+            raise Exception(
+                f"No token found for private source {source['url']}."
+            )
+        certificate = os.environ.get(f"{source_name_slug}_CERTIFICATE", None)
+            
         # Store credentials
         if credentials_management_method == "keyring":
             # Declare source URL
             command_line = [poetry_executable, "config", f"repositories.{source['name']}", source["url"], "--local"]
             subprocess.run(command_line, check=True)
             # Declare source credentials
-            command_line = [poetry_executable, "config", f"http-basic.{source['name']}", "PAT", token, "--local"]
+            command_line = [poetry_executable, "config", f"http-basic.{source['name']}", username, token, "--local"]
             subprocess.run(command_line, check=True)
         elif credentials_management_method == "environment-variables":
             # Format source name to comply with Poetry environment variable syntax
             source_name = source["name"].upper().replace("-", "_")
             # Create Poetry environment variable
-            os.environ[f"POETRY_HTTP_BASIC_{source_name}_USERNAME"] = "PAT"
+            os.environ[f"POETRY_HTTP_BASIC_{source_name}_USERNAME"] = username
             os.environ[f"POETRY_HTTP_BASIC_{source_name}_PASSWORD"] = token
+
+        # Add custom certificates
+        if certificate:
+            command_line = [poetry_executable, "config", f"certificates.{source['name']}.cert", certificate, "--local"]
+            subprocess.run(command_line, check=True)
 
 
 def check_dependency_group(dependency_group: str, configuration: str) -> bool:
@@ -832,6 +864,14 @@ def parser() -> None:
         default="",
         required=False,
     )
+    optional_inputs.add_argument(
+        "-z",
+        "--env",
+        type=str,
+        help="Path to the environment file to be used to set environment variables.",
+        default=".env",
+        required=False,
+    )    
 
     return parser.parse_args()
 
@@ -1006,6 +1046,8 @@ def main() -> None:
 
     # Read command line inputs
     args = parser()
+
+    load_env_file(args.env)
 
     # Check inputs consistency
     check_inputs(args)

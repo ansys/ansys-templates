@@ -4,13 +4,14 @@
 
 
 import json
+import flask
 import webbrowser
 
 from ansys.saf.glow.client.dashclient import DashClient, callback
 from ansys.solutions.dash_super_components import Tree
 from dash.exceptions import PreventUpdate
 import dash_bootstrap_components as dbc
-from dash_extensions.enrich import Input, Output, callback_context, dcc, html
+from dash_extensions.enrich import Input, Output, State, callback_context, dcc, html
 from dash_iconify import DashIconify
 import dash_mantine_components as dmc
 
@@ -67,6 +68,19 @@ layout = html.Div(
                                         dmc.ActionIcon(
                                             DashIconify(icon="ph:code-fill", width=36),
                                             id="access-dev-guide",
+                                            size=36,
+                                            variant="transparent",
+                                            style={"color": "#FFFFFF"},
+                                        ),
+                                        dbc.Popover(
+                                            "Open in browser.",
+                                            target="open-in-browser",
+                                            body=True,
+                                            trigger="hover",
+                                        ),
+                                        dmc.ActionIcon(
+                                            DashIconify(icon="pepicons-pencil:internet", width=36),
+                                            id="open-in-browser",
                                             size=36,
                                             variant="transparent",
                                             style={"color": "#FFFFFF"},
@@ -175,6 +189,19 @@ def display_poject_name(pathname):
 def access_dev_guide_documentation(n_clicks):
     """Open the Developer's Guide home page in the web browser."""
     webbrowser.open_new("https://dev-docs.solutions.ansys.com/index.html")
+    raise PreventUpdate
+
+
+@callback(
+    Output("open-in-browser", "children"),
+    Input("open-in-browser", "n_clicks"),
+    State("url", "pathname"),
+    prevent_initial_call=True,
+)
+def open_in_browser(n_clicks, pathname):
+    """Open the solution UI in the web browser."""
+    project = DashClient[{{cookiecutter.__solution_definition_name}}].get_project(pathname)
+    webbrowser.open_new(f"{flask.request.host_url}{project.url}")
     raise PreventUpdate
 
 

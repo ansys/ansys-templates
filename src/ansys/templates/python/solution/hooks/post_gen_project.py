@@ -1,5 +1,7 @@
 from ansys.templates.utils import keep_files, rename_files
-
+import shutil
+from pathlib import Path
+import os
 
 DESIRED_STRUCTURE = [
     ".devcontainer/devcontainer.json",
@@ -14,9 +16,8 @@ DESIRED_STRUCTURE = [
     "deployments/dev/compose-dev.yaml",
     "deployments/dev/Dockerfile-dev",
     "doc/changelog.d/changelog_template.jinja",
-    "doc/source/_static/ansys-solutions-logo-black-background.png",
-    "doc/source/_static/README.md",
     "doc/source/_static/css/custom.css",
+    "doc/source/_static/images/repository-banner.png",
     "doc/source/_templates/README.md",
     "doc/source/getting_started/index.rst",
     "doc/source/changelog.rst",
@@ -30,9 +31,14 @@ DESIRED_STRUCTURE = [
     "doc/make.bat",
     "doc/Makefile",
     "examples/README.md",
+    "lock_files/awc/poetry.lock",
+    "lock_files/dash/poetry.lock",
     f"src/ansys/solutions/{{ cookiecutter.__solution_name_slug }}/datamodel/README.md",
     f"src/ansys/solutions/{{ cookiecutter.__solution_name_slug }}/logic/assets/README.md",
     f"src/ansys/solutions/{{ cookiecutter.__solution_name_slug }}/logic/README.md",
+    f"src/ansys/solutions/{{ cookiecutter.__solution_name_slug }}/portal_assets/application.svg",
+    f"src/ansys/solutions/{{ cookiecutter.__solution_name_slug }}/portal_assets/description.json",
+    f"src/ansys/solutions/{{ cookiecutter.__solution_name_slug }}/portal_assets/project.svg",
     f"src/ansys/solutions/{{ cookiecutter.__solution_name_slug }}/solution/method_assets/README.md",
     f"src/ansys/solutions/{{ cookiecutter.__solution_name_slug }}/solution/definition.py",
     f"src/ansys/solutions/{{ cookiecutter.__solution_name_slug }}/solution/first_step.py",
@@ -52,6 +58,7 @@ DESIRED_STRUCTURE = [
     "tests/integration/test_integration_dummy.py",
     "tests/unit/test_unit_dummy.py",
     "tests/conftest.py",
+    ".env",
     ".codespell.exclude",
     ".codespell.ignore",
     ".flake8",
@@ -122,7 +129,10 @@ def main():
     if "{{ cookiecutter.__frontend_type }}" == "awc-dash":
         combined_structure = list(zip(AWC_UI_STRUCTURE, UI_STRUCTURE))
         rename_files(combined_structure)
-
+        shutil.move(os.path.join("lock_files", "awc", "poetry.lock"), ".")
+    elif "{{ cookiecutter.__frontend_type }}" == "dash":
+        shutil.move(os.path.join("lock_files", "dash", "poetry.lock"), ".")
+    shutil.rmtree("lock_files")
 
 if __name__ == "__main__":
     main()

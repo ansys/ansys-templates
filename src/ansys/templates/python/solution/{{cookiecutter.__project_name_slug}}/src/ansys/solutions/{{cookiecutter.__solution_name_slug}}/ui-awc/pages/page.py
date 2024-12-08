@@ -3,6 +3,7 @@
 """Initialization of the frontend layout across all the steps."""
 
 import webbrowser
+import flask
 
 from ansys.saf.glow.client.dashclient import DashClient, callback
 import ansys_web_components_dash as AwcDash
@@ -137,6 +138,14 @@ layout = html.Div(
                                     awcTooltip="Get access to the Solution Developer's Guide.",
                                 ),
                                 AwcDash.Button(
+                                    id="open-in-browser",
+                                    text="Open in Browser",
+                                    type=AwcDashEnum.ButtonType.TERTIARY.value,
+                                    icon={"icon": AwcDashEnum.Icons.ISOLATION.value},
+                                    iconOnly=True,
+                                    awcTooltip="Open in browser.",
+                                ),
+                                AwcDash.Button(
                                     id="return-to-portal",
                                     text="Back",
                                     iconOnly=True,
@@ -204,17 +213,32 @@ layout = html.Div(
 def display_poject_name(pathname):
     """Display current project name."""
     project = DashClient[{{cookiecutter.__solution_definition_name}}].get_project(pathname)
-    return f"Project Name: {project.project_display_name}"
+    return f"{project.project_display_name}"
+
 
 @callback(
     Output("access-dev-guide", "children"),
     Input("access-dev-guide", "clicked"),
     prevent_initial_call=True,
 )
-def access_dev_guide_documentation(n_clicks):
+def access_dev_guide_documentation(clicked):
     """Open the Solution Developer's Guide in the web browser."""
     webbrowser.open_new("https://dev-docs.solutions.ansys.com/index.html")
     raise PreventUpdate
+
+
+@callback(
+    Output("open-in-browser", "children"),
+    Input("open-in-browser", "clicked"),
+    State("url", "pathname"),
+    prevent_initial_call=True,
+)
+def open_in_browser(clicked, pathname):
+    """Open the solution UI in the web browser."""
+    project = DashClient[{{cookiecutter.__solution_definition_name}}].get_project(pathname)
+    webbrowser.open_new(f"{flask.request.host_url}{project.url}")
+    raise PreventUpdate
+
 
 @callback(
     Output("navigation_tree", "focusRequested"),
@@ -246,23 +270,25 @@ def display_page(pathname, value):
             page_layout = second_page.layout(project.steps.second_step)
         return focusRequested, page_layout
 
-# Manages the Open / close popup of settings
+
 @callback(
     Output("popout", "isOpen"),
     Input("popout-button", "clicked"),
     State("popout", "isOpen"),
 )
 def popout_button_event_inside(popout_button, isOpen):
+    """Manage the Open / close popup of settings."""
     if popout_button:
         return not isOpen
     raise PreventUpdate
 
-# Manages the selection of the Modes buttons
+
 @callback(
     [Output("auto-mode", "selected"), Output("dark-mode", "selected"), Output("light-mode", "selected")],
     [Input("auto-mode", "clicked"), Input("dark-mode", "clicked"), Input("light-mode", "clicked")],
 )
 def modes_on_callback(auto, dark, light):
+    """Manage the selection of the Modes buttons."""
     if ctx.triggered_id:
         if "light-mode" in ctx.triggered_id:
             return False, False, True
@@ -273,18 +299,22 @@ def modes_on_callback(auto, dark, light):
     else:
         raise PreventUpdate
 
+
 clientside_callback(
     """
     (autoOn) => {
         document.documentElement.id = 'root';
         let browserMode = window.matchMedia("(prefers-color-scheme: dark)");
-        console.log('Browser modeOn: ', browserMode.media, browserMode.matches)
-        if(browserMode.matches){
-            document.documentElement.classList.remove('light');
-            document.documentElement.classList.add('dark');
-        } else {
-            document.documentElement.classList.remove('dark');
-            document.documentElement.classList.add('light');
+        document.documentElement.classList.add('dark');
+        if (autoOn){
+            console.log('Browser modeOn: ', browserMode.media, browserMode.matches)
+            if(browserMode.matches){
+                document.documentElement.classList.remove('light');
+                document.documentElement.classList.add('dark');
+            } else {
+                document.documentElement.classList.remove('dark');
+                document.documentElement.classList.add('light');
+            }
         }
         return autoOn;
     }
@@ -308,6 +338,7 @@ clientside_callback(
     Input("light-mode", "clicked"),
 )
 
+
 clientside_callback(
     """
     (darkOn) => {
@@ -321,6 +352,7 @@ clientside_callback(
     Output("dark-mode", "clicked"),
     Input("dark-mode", "clicked"),
 )
+
 
 clientside_callback(
     """
