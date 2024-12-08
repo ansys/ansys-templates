@@ -971,20 +971,21 @@ def install_optional_dependencies(args: object) -> None:
 
 
 def install_dotnet_linux_dependencies():
-    """Install dotnet dependencies on linux."""
     print("Install dotnet dependencies")
     if sys.platform == "linux":
         subprocess.run(
-            'set -xe \
+            """
+            set -xe \
             && wget https://dot.net/v1/dotnet-install.sh \
             && chmod +x dotnet-install.sh \
-            && ./dotnet-install.sh --install-dir /home/$USER/.dotnet --version 3.1.0 --runtime aspnetcore \
+            && ./dotnet-install.sh --install-dir /home/$USER/.dotnet --version 8.0.8 --runtime aspnetcore \
             && grep -qxF "DOTNET_ROOT=/home/$USER/.dotnet" /home/$USER/.bash_profile \
             || echo DOTNET_ROOT=/home/$USER/.dotnet >> /home/$USER/.bash_profile \
             && grep -qxF "PATH=\$PATH:/home/$USER/.dotnet" /home/$USER/.bash_profile \
             || echo "PATH=\$PATH:/home/$USER/.dotnet" >> /home/$USER/.bash_profile \
             && echo "\nsource /home/$USER/.bash_profile" >> ./.venv/bin/activate \
-            && rm dotnet-install.sh',
+            && rm dotnet-install.sh
+            """,
             check=True,
             shell=True,
         )
