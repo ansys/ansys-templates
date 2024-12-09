@@ -118,7 +118,7 @@ notfound_urls_prefix = "/../"
 # static path
 html_static_path = ["_static"]
 
-html_css_files = ['css/custom.css']
+html_css_files = ["css/custom.css"]
 
 # Add any paths that contain templates here, relative to this directory.
 templates_path = ["_templates"]
