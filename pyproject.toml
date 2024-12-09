@@ -40,7 +40,8 @@ priority = "supplemental"
 
 [tool.poetry.dependencies]
 python = ">=3.10,<3.11"
-ansys-saf-glow-engine = {version = "1.11.2", source = "solutions-private-pypi"}
+ansys-saf-glow-engine = {version = "^1.17.0", source = "solutions-private-pypi"}
+pydantic = "<2.9.2"
 
 [tool.poetry.group.ui]
 optional = true
@@ -58,8 +59,8 @@ dash-uploader = "^0.6"
 [tool.poetry.group.desktop]
 optional = true
 [tool.poetry.group.desktop.dependencies]
-ansys-saf-desktop = {version = "1.2.1", source = "solutions-private-pypi"}
-ansys-saf-portal = {version = "1.1.1", source = "solutions-private-pypi"}
+ansys-saf-portal = {version = "^1.2.1", source = "solutions-private-pypi"}
+ansys-saf-desktop = {version = "^1.2.4", source = "solutions-private-pypi"}
 
 [tool.poetry.group.doc]
 optional = true
