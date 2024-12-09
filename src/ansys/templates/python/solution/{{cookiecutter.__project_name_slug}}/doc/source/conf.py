@@ -171,9 +171,8 @@ copybutton_prompt_is_regexp = True
 
 # ---------- // Options for HTML output // ----------------------------------------------------------------------------
 
-html_short_title = html_title = "Ansys Solutions {{cookiecutter.__solution_display_name}}"
+html_short_title = html_title = "Ansys Solutions A"
 html_theme = "ansys_sphinx_theme"
-html_logo = str(Path(__file__).parent.absolute() / "_static" / "ansys-solutions-logo-black-background.png")
 html_theme_options = {
     "logo": "ansys",
     "show_prev_next": False,
@@ -208,7 +207,7 @@ html_compact_lists = False
 # ---------- // Options for HTMLHelp output // ------------------------------------------------------------------------
 
 # Output file base name for HTML help builder.
-htmlhelp_basename = "ansys-solutions-{{cookiecutter.__project_name_slug}}-documentation"
+htmlhelp_basename = "ansys-solutions-a-documentation"
 
 
 # ---------- // Options for LaTeX output // ---------------------------------------------------------------------------
@@ -221,8 +220,8 @@ latex_elements = {}
 latex_documents = [
     (
         master_doc,
-        f"Ansys-Solutions-{{cookiecutter.__project_name_slug}}-Documentation-{package_version}.tex",
-        "Ansys Solutions {{cookiecutter.__solution_display_name}} Documentation",
+        f"Ansys-Solutions-a-Documentation-{package_version}.tex",
+        "Ansys Solutions A Documentation",
         author,
         "manual",
     ),
@@ -236,8 +235,8 @@ latex_documents = [
 man_pages = [
     (
         master_doc,
-        "Ansys Solutions {{cookiecutter.__solution_display_name}}",
-        "Ansys Solutions {{cookiecutter.__solution_display_name}} Documentation",
+        "Ansys Solutions A",
+        "Ansys Solutions A Documentation",
         [author],
         1,
     )
@@ -252,24 +251,21 @@ man_pages = [
 texinfo_documents = [
     (
         master_doc,
-        "Ansys Solutions {{cookiecutter.__solution_display_name}}",
-        "Ansys Solutions {{cookiecutter.__solution_display_name}} Documentation",
+        "Ansys Solutions A",
+        "Ansys Solutions A Documentation",
         author,
-        "Ansys Solutions {{cookiecutter.__solution_display_name}}",
+        "Ansys Solutions A",
         "Engineering Software",
     ),
 ]
 
 # Keep these while the repository is private
 linkcheck_ignore = [
-    "{{ cookiecutter.__repository_url }}/*",
-    {%- if cookiecutter.__template_name == "pyansys-advanced" %}
-    "{{ cookiecutter.__documentation_url }}/version/stable/*",
-    {%- endif %}
-    "https://pypi.org/project/{{cookiecutter.__pkg_name}}",
+    "/*",
+    "https://pypi.org/project/ansys-solutions-a",
 ]
 
 # If we are on a release, we have to ignore the "release" URLs, since it is not
 # available until the release is published.
 if switcher_version != "dev":
-    linkcheck_ignore.append(f"https://github.com/ansys/{{ cookiecutter.__pkg_namespace }}/releases/tag/v{package_version}")
+    linkcheck_ignore.append(f"https://github.com/ansys/ansys.solutions.a/releases/tag/v{package_version}")
