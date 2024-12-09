@@ -12,30 +12,10 @@ Prerequisites
 
 2. This script needs to be executed at project's root.
 
-3. Currently, this code only supports:
-    * ``windows`` as operating system
-    * ``poetry`` as dependency management system
-    * projects without dependency management systems
-    * ``poetry`` 1.2 to latest.
-
-4. The following project structure is expected for projects without a dependency management system:
-    project-name
-    ├──requirements/                    # Folder containing the optional group of dependencies.
-    │  ├── requirements_doc.txt         # Requirements file associated to the documentation group.
-    │  ├── requirements_tests.txt       # Requirements file associated to the tests group.
-    │  ├── requirements_style.txt       # Requirements file associated to the style group.
-    │  └── requirements_build.txt       # Requirements file associated to the build group.
-
-5. The following project structure is expected for projects with a dependency management system:
-    project-name
-    └── pyproject.toml                  # Configuration of the build system.
-
-The following packages are needed on top of the standard Python configuration: ``toml`` and ``packaging``.
-
 Usage
 -----
 
-To create a virtual environment and install the dependency management system of the project (if any):
+To create a virtual environment and install the dependency management system of the project:
     ``python setup_environment.py``
 
 To install a particular dependency group use the ``-d`` option:
@@ -51,14 +31,6 @@ It is possible to combine several groups:
 To install all available dependencies (production and optional) use the ``all`` option:
     ``python setup_environment.py -d all``
 
-Extra dependency groups refer to any group declared in the configuration file of the dependency management system which
-are not part of doc, tests, style and build. To install these groups use the ``x`` option:
-    ``python setup_environment.py -x <name-of-the-group>``
-
-There are two locations where the script will search for optional dependencies:
-    * First it checks the ``pyproject.toml`` configuration file and search for optional dependency groups
-    * Alternatively, it looks for a ``requirements`` folder at project root containing requirements files with the
-      name of the dependency group. For instance: requirements/requirements_doc.txt for the documentation group.
 
 To enforce the version of the dependency manager two options are possible:
 
@@ -68,13 +40,13 @@ To enforce the version of the dependency manager two options are possible:
     purely internal.
     ```
     [build-system-requirements]
-    build-system-version = "1.4.2"
+    build-system-version = "1.8.4"
     ```
 
     2. If the ``pyproject.toml`` does not contain a ``build-system-version``, the ``setup_environment.py`` checks the
     ``-s`` option which can be provided in the command line when executing the script. In the example below, version
-    1.4.2 is enforced:
-    ``python setup_environment.py -s 1.4.2``
+    1.8.4 is enforced:
+    ``python setup_environment.py -s 1.8.4``
 
 Note that ``-s`` takes precedence over ``build-system-version``. If none of the two options listed above are used, the
 script simply takes the latest version of the dependency manager.
@@ -85,6 +57,20 @@ To reinstall all dependencies by deleting both venvs and local poetry cache:
 To reinstall all dependencies by deleting venvs, local poetry cache and lock file. This option must be
 used only if REALLY necessary as the installation time for the whole process will be quite long.
     ``python setup_environment.py -F``
+
+Private sources
+---------------
+
+If a private source is declared in the pyproject.toml file, the script expects the credentials to be stored in
+environment variables and declared in the .env file at project's root. Given a private source declared in the
+pyproject.toml under the named ``my-private-pypi``, the following environment variables must be declared in the
+.env file:
+    * MY_PRIVATE_PYPI_USERNAME: the username associated with the private source.
+    * MY_PRIVATE_PYPI_PASSWORD: the download token of the private source.
+
+If a custom certificate authority is required to access the private source, the following environment variable
+must be declared:
+    * MY_PRIVATE_PYPI_CERTIFICATE: the path to the certificate authority file.
 
 What this script is doing?
 --------------------------
@@ -267,21 +253,7 @@ def check_python_version(args: object) -> None:
             lower_specification, upper_specification = None, python_compatibility
         else:
             single_specification = python_compatibility
-    # Process lower constraint
-    if lower_specification:
-        lower_version = get_version_from_python_specification(lower_specification)
-        lower_bound_symbol = get_sign_from_python_specification(lower_specification)
-        marker = Marker(f"python_full_version {lower_bound_symbol} '{lower_version}'")
-        if not marker.evaluate():
-            raise Exception(f"Python version must be {lower_bound_symbol} {lower_version}.")
-    # Process upper constraint
-    if upper_specification:
-        upper_version = get_version_from_python_specification(upper_specification)
-        upper_bound_symbol = get_sign_from_python_specification(upper_specification)
-        marker = Marker(f"python_full_version {upper_bound_symbol} '{upper_version}'")
-        if not marker.evaluate():
-            raise Exception(f"Python version must be {upper_bound_symbol} {upper_version}.")
-    # Process single
+
     if single_specification:
         version = get_version_from_python_specification(single_specification)
         sign = get_sign_from_python_specification(single_specification)
@@ -290,6 +262,26 @@ def check_python_version(args: object) -> None:
         marker = Marker(f"python_full_version {sign} '{version}'")
         if not marker.evaluate():
             raise Exception(f"Python version must be equal to {version}.")
+    else:
+        error_message = "Python version must be "
+        if lower_specification:
+            lower_version = get_version_from_python_specification(lower_specification)
+            lower_bound_symbol = get_sign_from_python_specification(lower_specification)
+            lower_marker = Marker(f"python_full_version {lower_bound_symbol} '{lower_version}'")
+            error_message += f"{lower_bound_symbol} {lower_version}"
+        if upper_specification:
+            upper_version = get_version_from_python_specification(upper_specification)
+            upper_bound_symbol = get_sign_from_python_specification(upper_specification)
+            upper_marker = Marker(f"python_full_version {upper_bound_symbol} '{upper_version}'")
+            if lower_specification:
+                error_message += f" and "
+            error_message += f"{upper_bound_symbol} {upper_version}"
+        if lower_specification:
+            if not lower_marker.evaluate():
+                raise Exception(error_message)
+        if upper_specification:
+            if not upper_marker.evaluate():
+                raise Exception(error_message)
 
 
 def check_existing_install(args: object) -> str:
