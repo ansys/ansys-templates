@@ -31,7 +31,6 @@ It is possible to combine several groups:
 To install all available dependencies (production and optional) use the ``all`` option:
     ``python setup_environment.py -d all``
 
-
 To enforce the version of the dependency manager two options are possible:
 
     1. ``setup_environment.py`` reads the ``pyproject.toml`` and looks for a ``build-system-version`` key within
@@ -549,10 +548,11 @@ def create_virtual_environment(args: object, venv: str = ".venv") -> None:
 
 
 def load_env_file(file_path):
+    """Load content of an environment file into the environment variables."""
     if not os.path.exists(file_path):
         raise FileNotFoundError(f"{file_path} does not exist.")
 
-    var_pattern = re.compile(r'\$\{(\w+)\}')
+    var_pattern = re.compile(r"\$\{(\w+)\}")
 
     def resolve_value(value):
         """Resolve environment variable placeholders in the value."""
@@ -565,12 +565,13 @@ def load_env_file(file_path):
     with open(file_path) as file:
         for line in file:
             line = line.strip()
-            if not line or line.startswith('#'):
+            if not line or line.startswith("#"):
                 continue
-            if '=' in line:
-                key, value = line.split('=', 1)
+            if "=" in line:
+                key, value = line.split("=", 1)
                 resolved_value = resolve_value(value.strip())
                 os.environ[key.strip()] = resolved_value
+
 
 # Dependency Management System (Build System) -----------------------------------------------------------------------
 
@@ -720,9 +721,7 @@ def configure_poetry(
         username = os.environ.get(f"{source_name_slug}_USERNAME", "")
         token = os.environ.get(f"{source_name_slug}_TOKEN", None)
         if not token:
-            raise Exception(
-                f"No token found for private source {source['url']}."
-            )
+            raise Exception(f"No token found for private source {source['url']}.")
         certificate = os.environ.get(f"{source_name_slug}_CERTIFICATE", None)
 
         # Store credentials
@@ -1003,6 +1002,7 @@ def install_optional_dependencies(args: object) -> None:
 
 
 def install_dotnet_linux_dependencies():
+    """Install .NET for Linux."""
     print("Install dotnet dependencies")
     if sys.platform == "linux":
         subprocess.run(

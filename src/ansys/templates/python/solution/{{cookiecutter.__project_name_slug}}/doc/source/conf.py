@@ -117,7 +117,6 @@ notfound_urls_prefix = "/../"
 
 # static path
 html_static_path = ["_static"]
-
 html_css_files = ['css/custom.css']
 
 # Add any paths that contain templates here, relative to this directory.
@@ -181,7 +180,7 @@ html_theme_options = {
     "use_edit_page_button": False,
     "additional_breadcrumbs": [
         ("Ansys Internal", "https://github.com/ansys-internal"),
-     ],
+    ],
     "switcher": {
         "json_url": f"https://{cname}/versions.json",
         "version_match": switcher_version,
@@ -198,7 +197,7 @@ html_context = {
     "github_repo": repository_name,
     "github_version": BRANCH,
     "doc_path": DOC_PATH,
-    "default_mode": "dark"
+    "default_mode": "dark",
 }
 html_show_sourcelink = False
 html_compact_lists = False
