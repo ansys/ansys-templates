@@ -1,0 +1,27 @@
+[
+  {
+    "name": "dev",
+    "version": "dev",
+    "url": "https://templates.ansys.com/version/dev/"
+  },
+  {
+    "name": "5.0 (stable)",
+    "version": "5.0",
+    "url": "https://templates.ansys.com/version/stable/"
+  },
+  {
+    "name": "4.0",
+    "version": "4.0",
+    "url": "https://templates.ansys.com/version/4.0/"
+  },
+  {
+    "name": "3.0",
+    "version": "3.0",
+    "url": "https://templates.ansys.com/version/3.0/"
+  },
+  {
+    "name": "Older versions",
+    "version": "N/A",
+    "url": "https://templates.ansys.com/version/"
+  }
+]
