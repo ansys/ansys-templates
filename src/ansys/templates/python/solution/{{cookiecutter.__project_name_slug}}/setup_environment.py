@@ -573,6 +573,11 @@ def load_env_file(file_path):
                 os.environ[key.strip()] = resolved_value
 
 
+def is_virtual_environment():
+    """Check if the current Python environment is a virtual environment."""
+    return sys.prefix != sys.base_prefix
+
+
 # Dependency Management System (Build System) -----------------------------------------------------------------------
 
 
@@ -1038,6 +1043,9 @@ def main() -> None:
 
     # Read command line inputs
     args = parser()
+
+    if is_virtual_environment():
+        raise Exception("Deactivate the current virtual environment before running this script.")
 
     load_env_file(args.env)
 
