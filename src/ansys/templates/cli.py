@@ -126,21 +126,21 @@ def pyace_grpc():
 @new.command()
 @click.option('-s', '--solution-name', type=str, help="Name of the solution in the definition.")
 @click.option('-d', '--solution-display-name', type=str, help="Name of the solution in the user interface.")
-@click.option("-u", "--with-dash-ui", type=click.Choice(["No", "Default", "AWC"]), help="Create a Dash UI for the solution.")
+@click.option("-u", "--with-dash-ui", type=click.Choice(["no", "dash", "awc-dash"]), help="Create a Dash UI for the solution.")
 def solution(solution_name, solution_display_name, with_dash_ui):
     """[Ansys Internal Use Only] Create a solution based on SAF."""
     template = "solution"
     extra_context = load_inputs_from_configuration_file(PYTHON_TEMPLATES_SOLUTION_PATH)
     no_input = True if solution_name or solution_display_name or with_dash_ui else False
     if solution_name:
-        extra_context["solution_name"] = solution_name
+        extra_context["What is the solution name?"] = solution_name
     if solution_display_name:
-        extra_context["solution_display_name"] = solution_display_name
+        extra_context["What is the solution display name?"] = solution_display_name
     if with_dash_ui == "No":
-        extra_context["dash_ui"] = "no"
-    elif with_dash_ui == "Default":
-        extra_context["dash_ui"] = "default"
-    elif with_dash_ui == "AWC":
-        extra_context["dash_ui"] = "awc"
+        extra_context["the type of solution UI"] = "no"
+    elif with_dash_ui == "dash":
+        extra_context["the type of solution UI"] = "dash"
+    elif with_dash_ui == "awc-dash":
+        extra_context["the type of solution UI"] = "awc-dash"
 
     create_project(template, no_input=no_input, extra_context=extra_context)
