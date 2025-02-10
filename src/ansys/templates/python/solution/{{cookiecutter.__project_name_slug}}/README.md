@@ -25,7 +25,7 @@
 | Python distribution | Python 3.10 |
 | IDE | [Visual Studio Code](https://code.visualstudio.com/download#) |
 | Virtualization | [Docker](https://www.docker.com/) |
-| Environment variables | - Set ``PYANSYS_PYPI_PRIVATE_PAT`` with the corresponding [token](https://dev-docs.solutions.ansys.com/solution_journey/journey_prepare/connect_to_private_pypi.html).<br>- Set ``MACHINE_IP`` with the IP address of your machine (only for containerized mode) |
+| Environment variables | - Set ``PYANSYS_PYPI_PRIVATE_PAT`` with the corresponding [token](https://dev-docs.solutions.ansys.com/version/dev/solution_journey/journey_prepare/connect_to_private_pypi.html).<br>- Set ``MACHINE_IP`` with the IP address of your machine (only for containerized mode) |
 | Software | <replace-with-product-name><br><replace-with-product-name> |
 
 
