@@ -354,10 +354,10 @@ def check_inputs(args: object) -> None:
         if token:
             url_scheme, relative_url = remove_scheme_from_url(source["url"])
             command = [
-                sys.executable, 
-                "-m", 
-                "pip", 
-                "install", 
+                sys.executable,
+                "-m",
+                "pip",
+                "install",
                 "ansys-saf-glow-engine==x",
                 "-i",
                 f"{url_scheme}://{token}@{relative_url}"
