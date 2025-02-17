@@ -364,13 +364,23 @@ def check_inputs(args: object) -> None:
             ]
 
             process = subprocess.run(
-                command, check=False, shell=DEPENDENCY_MANAGER_PATHS[sys.platform]["shell"], capture_output=True, text=True
+                command,
+                check=False,
+                shell=DEPENDENCY_MANAGER_PATHS[sys.platform]["shell"],
+                capture_output=True,
+                text=True
             )
             if process.returncode != 0:
                 if "401 Error, Credentials not correct" in str(process.stderr):
-                    raise Exception(f"Token for {source['name']} is incorrect. Please set the correct token in the environment variable {token_environment_variable}.")
+                    raise Exception(
+                        f"Token for {source['name']} is incorrect. "
+                        "Please set the correct token in the environment variable {token_environment_variable}."
+                    )
         else:
-            raise Exception(f"Token for {source['name']} is missing. Please set the environment variable {token_environment_variable} with the token.")
+            raise Exception(
+                f"Token for {source['name']} is missing. "
+                "Please set the environment variable {token_environment_variable} with the token."
+            )
 
 
 def modify_toml_file_in_case_of_wheel_files(args: object) -> None:
