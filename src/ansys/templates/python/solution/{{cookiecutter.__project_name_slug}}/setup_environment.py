@@ -360,7 +360,7 @@ def check_inputs(args: object) -> None:
                 "install",
                 "ansys-saf-glow-engine==x",
                 "-i",
-                f"{url_scheme}://{token}@{relative_url}"
+                f"{url_scheme}://{token}@{relative_url}",
             ]
 
             process = subprocess.run(
@@ -368,7 +368,7 @@ def check_inputs(args: object) -> None:
                 check=False,
                 shell=DEPENDENCY_MANAGER_PATHS[sys.platform]["shell"],
                 capture_output=True,
-                text=True
+                text=True,
             )
             if process.returncode != 0:
                 if "401 Error, Credentials not correct" in str(process.stderr):
