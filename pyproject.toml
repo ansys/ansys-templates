@@ -46,7 +46,7 @@ pydantic = "<2.9.2"
 [tool.poetry.group.ui]
 optional = true
 [tool.poetry.group.ui.dependencies]
-ansys-solutions-dash-super-components = {version = "0.1.dev0", source = "solutions-private-pypi", python = ">=3.10,<3.11"}
+ansys-solutions-dash-super-components = {version = "^0.1.dev10", source = "solutions-private-pypi"}
 
 dash = "^2.6"
 dash_bootstrap_components = "^1.2"
@@ -135,7 +135,6 @@ skip = '.github,.venv,.tox,requirements,CODEOWNERS,*.tmp'
 count = ''
 quiet-level = 3
 check-hidden = ""
-exclude-file = ".codespell.exclude"
 ignore-words = ".codespell.ignore"
 
 [tool.pydocstyle]
