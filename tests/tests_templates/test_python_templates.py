@@ -356,7 +356,6 @@ SOLUTION_STRUCTURE = [
     "tests/unit/test_unit_dummy.py",
     "tests/conftest.py",
     ".env",
-    ".codespell.exclude",
     ".codespell.ignore",
     ".flake8",
     ".gitignore",
