@@ -68,6 +68,10 @@ jobs:
     steps:
       - name: Checkout project  # to change for the repo  solution-templates-end-to-end-testing
         uses: actions/checkout@v3
+        with:
+          repository: ansys-internal/solution-templates-end-to-end-testing
+          token: ${{ secrets.ANSYS_SOLUTIONS_E2E_TESTS }}
+
 
       - name: Checkout ansys-templates
         uses: actions/checkout@v3
