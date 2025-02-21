@@ -71,7 +71,7 @@ jobs:
         with:
           repository: ansys-internal/solution-templates-end-to-end-testing
           token: ${{ secrets.ANSYS_SOLUTIONS_E2E_TESTS }}
-
+          ref: main
 
       - name: Checkout ansys-templates
         uses: actions/checkout@v3
@@ -89,7 +89,7 @@ jobs:
       - name: Create virtual environment
         shell: bash
         run: |
-          python -m venv .venv
+          python -m venv .venv   # to use the path of python
 
       - name: Upgrade to last PIP version
         shell: bash
@@ -101,9 +101,9 @@ jobs:
         run: |
           if [[ ${{ inputs.is-ansys-templates-ci}} == true ]]; then
             .venv/bin/python -m pip install --upgrade flit
-            # cd ./ansys-templates
+            cd ./ansys-templates
             ${{ github.workspace }}/.venv/bin/python -m flit install
-            # cd ${{ github.workspace }}
+            cd ${{ github.workspace }}
           else
             if [[ -z "${{ inputs.ansys-templates-version }}" ]]; then
               .venv/bin/python -m pip install --upgrade ansys-templates
