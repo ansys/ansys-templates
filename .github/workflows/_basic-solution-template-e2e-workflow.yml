@@ -1,0 +1,160 @@
+name: End-to-end workflow with SAF solution from ansys-templates
+
+on:
+  workflow_call:
+    inputs:
+      python-version:
+        type: string
+        description: 'Python version'
+        required: false
+        default: '3.10'
+      ansys-templates-version:
+        type: string
+        description: "Ansys-templates version OR sha (if is-ansys-templates-ci=true)"
+        required: false
+        default: ""
+      is-ansys-templates-ci:
+        type: boolean
+        description: "Triggered as part of a ansys-templates PR"
+        required: false
+        default: false
+      ui-type:
+        type: string
+        description: 'ui-type'
+        required: false
+        default: 'dash'
+      solution-name:
+        type: string
+        description: 'solution-name'
+        required: false
+        default: 'basic_template'
+      display-name:
+        type: string
+        description: 'display-name'
+        required: false
+        default: 'display-name-a'
+      poetry-version:
+        type: string
+        description: 'poetry-version'
+        required: false
+        default: '1.8.3'
+      push-to-validator:
+        type: boolean
+        description: 'Push to validator'
+        required: false
+        default: true
+
+
+jobs:
+  get-solution-folder-name:
+    name: Get solution folder name
+    outputs:
+      solution-folder-name: ${{ steps.get-solution-folder-name.outputs.solution-folder-name }}
+    runs-on: ubuntu-latest
+    steps:
+      - id: get-solution-folder-name
+        name: Get solution folder name
+        run: |
+          sol_name=${{ inputs.solution-name }}
+          folder_name="${sol_name/_/-}"
+          echo "solution-folder-name=$folder_name" >> $GITHUB_OUTPUT
+
+  push-solution-to-validator:
+    name: Push template to validator
+    needs: get-solution-folder-name
+    runs-on: ubuntu-latest
+    env:
+      SOLUTION_FOLDER_NAME: ${{ needs.get-solution-folder-name.outputs.solution-folder-name }}
+    steps:
+      - name: Checkout project  # to change for the repo  solution-templates-end-to-end-testing
+        uses: actions/checkout@v3
+
+      - name: Checkout ansys-templates
+        uses: actions/checkout@v3
+        if: ${{ inputs.is-ansys-templates-ci == true }}
+        with:
+          repository: ansys/ansys-templates
+          path: ./ansys-templates
+          ref: ${{ inputs.ansys-templates-version }} # to change
+
+      - name: Set up Python ${{ inputs.python-version }}
+        uses: actions/setup-python@v4
+        with:
+          python-version: ${{ inputs.python-version }}
+
+      - name: Create virtual environment
+        shell: bash
+        run: |
+          python -m venv .venv
+
+      - name: Upgrade to last PIP version
+        shell: bash
+        run: |
+            .venv/bin/python -m pip install --upgrade pip
+            
+      - name: Install ansys-templates
+        shell: bash
+        run: |
+          if [[ ${{ inputs.is-ansys-templates-ci}} == true ]]; then
+            .venv/bin/python -m pip install --upgrade flit
+            # cd ./ansys-templates
+            ${{ github.workspace }}/.venv/bin/python -m flit install
+            # cd ${{ github.workspace }}
+          else
+            if [[ -z "${{ inputs.ansys-templates-version }}" ]]; then
+              .venv/bin/python -m pip install --upgrade ansys-templates
+            else
+              .venv/bin/python -m pip install ansys-templates==${{ inputs.ansys-templates-version }}
+            fi
+          fi
+
+      - name: Create solution with ansys-templates
+        shell: bash 
+        run: |
+          .venv/bin/python ./create_new_solutions.py \
+            -o ${{ github.workspace }} \
+            -s ${{ inputs.solution-name }} \
+            -d ${{ inputs.display-name }} \
+            -u ${{ inputs.ui-type }}
+
+      - name: Get test files in place
+        shell: bash
+        run: |
+          rm  -rf ./${{ env.SOLUTION_FOLDER_NAME }}/tests/*
+          ls ./${{ env.SOLUTION_FOLDER_NAME }}
+          ls ./${{ env.SOLUTION_FOLDER_NAME }}/tests/
+          cp ./tests/basic-solution/* ./${{ env.SOLUTION_FOLDER_NAME }}/tests/ 
+          cp ./tests/*.py ./${{ env.SOLUTION_FOLDER_NAME }}/tests/
+          if [[ ${{ inputs.is-ansys-templates-ci}} == true ]]; then
+            echo ${{ inputs.ansys-templates-version }} >> ./${{ env.SOLUTION_FOLDER_NAME }}/ansys-templates-pr-commit-sha.txt
+          fi
+
+      - name: Create lock file for package action
+        working-directory: ./${{ env.SOLUTION_FOLDER_NAME }}
+        shell: bash
+        run: |
+          python -m venv .venv
+          .venv/bin/python -m pip install --upgrade pip
+          .venv/bin/python -m pip install --upgrade poetry==${{ inputs.poetry-version }}
+          .venv/bin/python -m poetry config virtualenvs.in-project true
+          .venv/bin/python -m poetry config http-basic.solutions-private-pypi PAT ${{ secrets.PYANSYS_PYPI_PRIVATE_PAT }}
+          .venv/bin/poetry lock --no-update
+
+      - name: Replace workflow file
+        shell: bash
+        run: |
+          rm -rf ./${{ env.SOLUTION_FOLDER_NAME }}/.github/workflows/*
+          cp ./validators/basic-solution-validator.yml ./${{ env.SOLUTION_FOLDER_NAME }}/.github/workflows/
+
+      - name: Pushes to validator
+        uses: cpina/github-action-push-to-another-repository@main
+        env:
+          API_TOKEN_GITHUB: ${{ secrets.WORKFLOW_TOKEN }}
+          PYANSYS_PYPI_PRIVATE_PAT: ${{ secrets.PYANSYS_PYPI_PRIVATE_PAT }}
+        with:
+          source-directory: ./${{ env.SOLUTION_FOLDER_NAME }}
+          destination-github-username: 'ansys-internal'
+          destination-repository-name: 'basic-solution-template-validator'
+          commit-message: 'Basic Solution validation workflow'
+          user-email: '<>'
+          target-branch: basic-solution-template-validation-branch

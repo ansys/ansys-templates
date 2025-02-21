@@ -22,7 +22,18 @@ jobs:
           filters: |
             solution-templates:
               - 'src/ansys/templates/python/solution/**'
+              - '.github/workflows/solutions_ci.yml'
+              - '.github/workflows/_basic-solution-template-e2e-workflow.yml'
 
+  refactoring:
+      name: Trigger Refactoring
+      uses: ./.github/workflows/_basic-solution-template-e2e-workflow.yml
+      with:
+        ansys-templates-version: ${{ github.ref }}
+        is-ansys-templates-ci: true
+      secrets: inherit
+
+  
   solutions-e2e-tests:
     name: Trigger solutions e2e tests
     needs: [check-changes]
