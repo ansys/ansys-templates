@@ -153,8 +153,7 @@ jobs:
       - name: Pushes to validator
         uses: cpina/github-action-push-to-another-repository@main
         env:
-          API_TOKEN_GITHUB: ${{ secrets.WORKFLOW_TOKEN }}
-          PYANSYS_PYPI_PRIVATE_PAT: ${{ secrets.PYANSYS_PYPI_PRIVATE_PAT }}
+          API_TOKEN_GITHUB: ${{ secrets.ANSYS_SOLUTIONS_E2E_TESTS }}
         with:
           source-directory: ./${{ env.SOLUTION_FOLDER_NAME }}
           destination-github-username: 'ansys-internal'
