@@ -83,7 +83,7 @@ jobs:
     timeout-minutes: 20
     strategy:
       matrix:
-        python-version: ["3.9", "3.10", "${{ env.MAIN_PYTHON_VERSION }}"]
+        python-version: ["3.9", "3.10", ${{ env.MAIN_PYTHON_VERSION }}]
       fail-fast: false
     steps:
       - name: Run tests
