@@ -39,7 +39,7 @@ url = "https://pkgs.dev.azure.com/pyansys/_packaging/ansys-solutions/pypi/simple
 priority = "supplemental"
 
 [tool.poetry.dependencies]
-python = ">=3.10,<3.11"
+python = ">=3.10,<3.13"
 ansys-saf-glow-engine = {version = "^1.17.0", source = "solutions-private-pypi"}
 pydantic = "<2.9.2"
 
