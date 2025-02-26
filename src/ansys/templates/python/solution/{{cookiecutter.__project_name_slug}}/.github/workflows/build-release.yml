@@ -13,7 +13,7 @@ on:
   workflow_dispatch:
 
 env:
-  MAIN_PYTHON_VERSION: "3.9"
+  MAIN_PYTHON_VERSION: "3.10"
   DOCUMENTATION_CNAME: "replace.me.ansys.com" # Replace with the CNAME of the documentation
   POETRY_HTTP_BASIC_SOLUTIONS_PRIVATE_PYPI_USERNAME: "PAT"
   POETRY_HTTP_BASIC_SOLUTIONS_PRIVATE_PYPI_PASSWORD: {{ "${{ secrets.PYANSYS_PRIVATE_PYPI_PAT }}" }}
@@ -83,7 +83,7 @@ jobs:
     timeout-minutes: 20
     strategy:
       matrix:
-        python-version: ["3.9", "3.10"]
+        python-version: ["3.9", "3.10", "3.11", "3.12"]
       fail-fast: false
     steps:
       - name: Run tests
@@ -117,7 +117,7 @@ jobs:
           desktop-utility-version: "v1"
           gh-token: {{ "${{ secrets.WORKFLOW_TOKEN }}" }}
           python-version: {{ "${{ env.MAIN_PYTHON_VERSION }}" }}
-          solution-display-name: "{{ cookiecutter.solution_display_name }}"
+          solution-display-name: "{{ cookiecutter.__solution_display_name }}"
           solution-name: "{{ cookiecutter.__project_name_slug }}"
           solutions-pypi-token: {{ "${{ secrets.SOLUTIONS_PRIVATE_PYPI_PAT }}" }}
 

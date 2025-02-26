@@ -1,0 +1,101 @@
+name: {{ cookiecutter.__container_name }}
+
+networks:
+  {{ cookiecutter.__container_name }}-internal:
+    internal: true
+  {{ cookiecutter.__container_name }}-external:
+    driver: bridge
+
+services:
+  {{ cookiecutter.__container_name }}-postgresql:
+    image: postgres:16.0
+    networks:
+      - {{ cookiecutter.__container_name }}-internal
+    environment:
+      - POSTGRES_USER=glow
+      - POSTGRES_PASSWORD=glow
+    healthcheck:
+      test: [ "CMD", "pg_isready", "-U", "glow" ]
+      interval: 5s
+      retries: 20
+    volumes:
+      - {{ cookiecutter.__container_name }}-database:/var/lib/postgresql/data
+
+  {{ cookiecutter.__container_name }}-api:
+    image: {{ cookiecutter.__container_name }}-api-dev
+    build:
+      context: ../../
+      dockerfile: deployments/dev/Dockerfile-dev
+      target: solution_api
+      args:
+        - PYANSYS_PRIVATE_PYPI_PAT=${PYANSYS_PRIVATE_PYPI_PAT}
+    depends_on:
+      {{ cookiecutter.__container_name }}-postgresql:
+        condition: service_healthy
+    networks:
+      - {{ cookiecutter.__container_name }}-external
+      - {{ cookiecutter.__container_name }}-internal
+    env_file:
+      - .env
+    environment:
+      - GLOW_API_HOST=0.0.0.0
+      - GLOW_API_PORT=50000
+      - GLOW_DATABASE_TYPE=postgresql
+      - GLOW_DATABASE_LOCATION=postgresql://glow:glow@{{ cookiecutter.__container_name }}-postgresql:5432
+      - GLOW_PROJECT_FILES_DIRECTORY=/projects
+      - GLOW_METHOD_EXECUTION_DIRECTORY=/transactions
+      - OTEL_EXPORTER_OTLP_TRACES_ENDPOINT=${OTEL_EXPORTER_OTLP_TRACES_ENDPOINT}
+      - OTEL_EXPORTER_OTLP_ENDPOINT=${OTEL_EXPORTER_OTLP_ENDPOINT}
+    ports:
+      - ${GLOW_API_CONTAINER_PORT}:50000
+    healthcheck:
+      test: [ "CMD", "curl", "-f", "http://localhost:50000/health" ]
+      interval: 5s
+      retries: 20
+    volumes:
+      - ${GLOW_PROJECTS_DIR_SOLUTION}:/projects
+      - ${GLOW_TRANSACTIONS_DIR_SOLUTION}:/transactions
+    develop:
+      watch:
+        - action: sync+restart
+          path: /src/ansys/solutions/{{ cookiecutter.__solution_name }}/solution
+          target: /app/src/ansys/solutions/{{ cookiecutter.__solution_name }}/solution
+
+  {{ cookiecutter.__container_name }}-ui:
+    image: {{ cookiecutter.__container_name }}-ui-dev
+    build:
+      context: ../../
+      dockerfile: deployments/dev/Dockerfile-dev
+      target: solution_ui
+      args:
+        - PYANSYS_PRIVATE_PYPI_PAT=${PYANSYS_PRIVATE_PYPI_PAT}
+    depends_on:
+      {{ cookiecutter.__container_name }}-api:
+        condition: service_healthy
+    networks:
+      - {{ cookiecutter.__container_name }}-external
+    env_file:
+      - .env
+    environment:
+      - GLOW_DEPLOYMENT=DockerCompose
+      - GLOW_UI_HOST=0.0.0.0
+      - GLOW_UI_PORT=50001
+      - GLOW_API_URL=http://{{ cookiecutter.__container_name }}-api:50000
+      - GLOW_UI_PROJECT_FILES_DIRECTORY=/projects
+      - GLOW_WS_EVENTS_ADDR=127.0.0.1:8000
+    ports:
+      - ${GLOW_UI_CONTAINER_PORT}:50001
+    healthcheck:
+      test: [ "CMD", "curl", "-f", "http://localhost:50001/health" ]
+      interval: 5s
+      retries: 20
+    volumes:
+      - ${GLOW_PROJECTS_DIR_SOLUTION}:/projects
+    develop:
+      watch:
+        - action: sync+restart
+          path: /src/ansys/solutions/{{ cookiecutter.__solution_name }}/ui
+          target: /app/src/ansys/solutions/{{ cookiecutter.__solution_name }}/ui
+
+volumes:
+  {{ cookiecutter.__container_name }}-database:

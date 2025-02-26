@@ -9,4 +9,4 @@ from ansys.saf.glow.solution import StepModel
 class SecondStep(StepModel):
     """Step definition of the second step."""
 
-    id: str = "hey"
+    id: str = ""

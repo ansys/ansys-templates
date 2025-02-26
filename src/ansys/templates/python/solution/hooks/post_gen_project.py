@@ -1,5 +1,6 @@
 from ansys.templates.utils import keep_files, rename_files
-
+import shutil
+import os
 
 DESIRED_STRUCTURE = [
     ".devcontainer/devcontainer.json",
@@ -10,11 +11,17 @@ DESIRED_STRUCTURE = [
     ".github/labels.yml",
     ".vscode/launch.json",
     ".vscode/extensions.json",
+    "deployments/dev/.env",
+    "deployments/dev/compose-dev.yaml",
+    "deployments/dev/Dockerfile-dev",
     "doc/changelog.d/changelog_template.jinja",
-    "doc/source/_static/ansys-solutions-logo-black-background.png",
-    "doc/source/_static/README.md",
+    "doc/source/_static/css/custom.css",
+    "doc/source/_static/images/repository-banner.png",
     "doc/source/_templates/README.md",
     "doc/source/getting_started/index.rst",
+    "doc/source/getting_started/desktop_installation.rst",
+    "doc/source/getting_started/docker_installation.rst",
+    "doc/source/user_guide/index.rst",
     "doc/source/changelog.rst",
     "doc/source/conf.py",
     "doc/source/examples.rst",
@@ -26,9 +33,14 @@ DESIRED_STRUCTURE = [
     "doc/make.bat",
     "doc/Makefile",
     "examples/README.md",
+    "lock_files/awc/poetry.lock",
+    "lock_files/dash/poetry.lock",
     f"src/ansys/solutions/{{ cookiecutter.__solution_name_slug }}/datamodel/README.md",
     f"src/ansys/solutions/{{ cookiecutter.__solution_name_slug }}/logic/assets/README.md",
     f"src/ansys/solutions/{{ cookiecutter.__solution_name_slug }}/logic/README.md",
+    f"src/ansys/solutions/{{ cookiecutter.__solution_name_slug }}/portal_assets/application.svg",
+    f"src/ansys/solutions/{{ cookiecutter.__solution_name_slug }}/portal_assets/description.json",
+    f"src/ansys/solutions/{{ cookiecutter.__solution_name_slug }}/portal_assets/project.svg",
     f"src/ansys/solutions/{{ cookiecutter.__solution_name_slug }}/solution/method_assets/README.md",
     f"src/ansys/solutions/{{ cookiecutter.__solution_name_slug }}/solution/definition.py",
     f"src/ansys/solutions/{{ cookiecutter.__solution_name_slug }}/solution/first_step.py",
@@ -48,9 +60,8 @@ DESIRED_STRUCTURE = [
     "tests/integration/test_integration_dummy.py",
     "tests/unit/test_unit_dummy.py",
     "tests/conftest.py",
-    ".codespell.exclude",
-    ".codespell.ignore",
     ".env",
+    ".codespell.ignore",
     ".flake8",
     ".gitignore",
     ".pre-commit-config.yaml",
@@ -63,11 +74,10 @@ DESIRED_STRUCTURE = [
     "LICENSE.rst",
     "poetry.lock",
     "pyproject.toml",
-    "README.rst",
+    "README.md",
     "setup_environment.py",
     "sonar-project.properties",
     "tox.ini",
-    ".env",
     "release-please-config.json",
     "release-please-manifest.json"
 ]
@@ -88,6 +98,7 @@ UI_STRUCTURE = [
     f"src/ansys/solutions/{{ cookiecutter.__solution_name_slug }}/ui/app.py",
 ]
 
+
 AWC_UI_STRUCTURE = [
     f"src/ansys/solutions/{{ cookiecutter.__solution_name_slug }}/ui-awc/assets/css/style.css",
     f"src/ansys/solutions/{{ cookiecutter.__solution_name_slug }}/ui-awc/assets/images/README.md",
@@ -104,11 +115,11 @@ AWC_UI_STRUCTURE = [
 ]
 
 # Add UI structure to desired structure if applicable
-if "{{ cookiecutter.dash_ui }}" == "default":
+if "{{ cookiecutter.__frontend_type }}" == "dash":
     DESIRED_STRUCTURE = DESIRED_STRUCTURE + UI_STRUCTURE
-elif "{{ cookiecutter.dash_ui }}" == "awc":
+elif "{{ cookiecutter.__frontend_type }}" == "awc-dash":
     DESIRED_STRUCTURE = DESIRED_STRUCTURE + AWC_UI_STRUCTURE
-if "{{ cookiecutter.dash_ui }}" != "default":
+if "{{ cookiecutter.__frontend_type }}" != "dash":
     DESIRED_STRUCTURE.remove("poetry.lock")
 
 
@@ -116,10 +127,13 @@ def main():
     """Entry point of the script."""
     # Apply the desired structure to the project
     keep_files(DESIRED_STRUCTURE)
-    if "{{ cookiecutter.dash_ui }}" == "awc":
+    if "{{ cookiecutter.__frontend_type }}" == "awc-dash":
         combined_structure = list(zip(AWC_UI_STRUCTURE, UI_STRUCTURE))
         rename_files(combined_structure)
-
+        shutil.copy(os.path.join("lock_files", "awc", "poetry.lock"), ".")
+    elif "{{ cookiecutter.__frontend_type }}" == "dash":
+        shutil.copy(os.path.join("lock_files", "dash", "poetry.lock"), ".")
+    shutil.rmtree("lock_files")
 
 if __name__ == "__main__":
     main()

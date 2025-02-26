@@ -91,8 +91,9 @@ def layout(step: FirstStep):
                                 inlineEdit=False,
                                 readOnly=True,
                                 placeholder="Calculated result",
-                                value=step.result,
+                                value=str(step.result),
                                 label="Result",
+                                type="number"
                             )
                         ],
                         style={"width": "100%", "display": "inline-block"},
@@ -120,4 +121,4 @@ def calculate(clicked, first_arg, second_arg, pathname):
     step.first_arg = first_arg
     step.second_arg = second_arg
     step.calculate()
-    return step.result
+    return str(step.result)
