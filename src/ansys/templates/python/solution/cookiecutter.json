@@ -14,7 +14,7 @@
   "__short_description": "",
   "__pkg_name": "ansys-solutions-{{ cookiecutter.__solution_name.lower().replace('_', '-') }}",
   "__pkg_namespace": "ansys.solutions.{{ cookiecutter.__solution_name.lower().replace('-', '_') }}",
-  "__requires_python": ["3.9", "3.10"],
+  "__requires_python": ["3.9", "3.10", "3.11", "3.12"],
   "__repository_url": "",
   "__documentation_url": "{{ cookiecutter.__solution_name.lower().replace('_', '-') }}.docs.solutions.ansys.com",
   "__build_system": "poetry",

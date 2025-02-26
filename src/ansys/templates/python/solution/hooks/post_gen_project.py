@@ -61,7 +61,6 @@ DESIRED_STRUCTURE = [
     "tests/unit/test_unit_dummy.py",
     "tests/conftest.py",
     ".env",
-    ".codespell.exclude",
     ".codespell.ignore",
     ".flake8",
     ".gitignore",
@@ -131,9 +130,9 @@ def main():
     if "{{ cookiecutter.__frontend_type }}" == "awc-dash":
         combined_structure = list(zip(AWC_UI_STRUCTURE, UI_STRUCTURE))
         rename_files(combined_structure)
-        shutil.move(os.path.join("lock_files", "awc", "poetry.lock"), ".")
+        shutil.copy(os.path.join("lock_files", "awc", "poetry.lock"), ".")
     elif "{{ cookiecutter.__frontend_type }}" == "dash":
-        shutil.move(os.path.join("lock_files", "dash", "poetry.lock"), ".")
+        shutil.copy(os.path.join("lock_files", "dash", "poetry.lock"), ".")
     shutil.rmtree("lock_files")
 
 if __name__ == "__main__":
