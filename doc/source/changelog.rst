@@ -9,6 +9,33 @@ This document contains the release notes for the project.
 
 .. towncrier release notes start
 
+`5.0.0 <https://github.com/ansys/ansys-templates/releases/tag/v5.0.0>`_ - 2024-12-09
+====================================================================================
+
+Fixed
+^^^^^
+
+- fix: contribut**** files `#509 <https://github.com/ansys/ansys-templates/pull/509>`_
+
+
+Miscellaneous
+^^^^^^^^^^^^^
+
+- Update solution template `#516 <https://github.com/ansys/ansys-templates/pull/516>`_
+
+
+Documentation
+^^^^^^^^^^^^^
+
+- chore: update CHANGELOG for v4.0.0 `#503 <https://github.com/ansys/ansys-templates/pull/503>`_
+
+
+Maintenance
+^^^^^^^^^^^
+
+- Update dev version. `#504 <https://github.com/ansys/ansys-templates/pull/504>`_
+- Add configuration file for containerized deployment. `#512 <https://github.com/ansys/ansys-templates/pull/512>`_
+
 `4.0.0 <https://github.com/ansys/ansys-templates/releases/tag/v4.0.0>`_ - 2024-08-19
 ====================================================================================
 
