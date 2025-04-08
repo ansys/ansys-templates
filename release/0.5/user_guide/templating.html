@@ -1,0 +1,608 @@
+
+<!DOCTYPE html>
+
+<html lang="en">
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" /><meta name="generator" content="Docutils 0.19: https://docutils.sourceforge.io/" />
+
+    <title>How to add a new template &#8212; ansys-templates</title>
+    
+<script>
+  document.documentElement.dataset.mode = localStorage.getItem("mode") || "";
+  document.documentElement.dataset.theme = localStorage.getItem("theme") || "light"
+</script>
+
+  <!-- Loaded before other Sphinx assets -->
+  <link href="../_static/styles/theme.css?digest=92025949c220c2e29695" rel="stylesheet">
+<link href="../_static/styles/pydata-sphinx-theme.css?digest=92025949c220c2e29695" rel="stylesheet">
+
+
+  <link rel="stylesheet"
+    href="../_static/vendor/fontawesome/5.13.0/css/all.min.css">
+  <link rel="preload" as="font" type="font/woff2" crossorigin
+    href="../_static/vendor/fontawesome/5.13.0/webfonts/fa-solid-900.woff2">
+  <link rel="preload" as="font" type="font/woff2" crossorigin
+    href="../_static/vendor/fontawesome/5.13.0/webfonts/fa-brands-400.woff2">
+
+    <link rel="stylesheet" type="text/css" href="../_static/pygments.css" />
+    <link rel="stylesheet" type="text/css" href="../_static/copybutton.css" />
+    <link rel="stylesheet" type="text/css" href="../_static/css/ansys_sphinx_theme.css" />
+
+  <!-- Pre-loaded scripts that we'll load fully later -->
+  <link rel="preload" as="script" href="../_static/scripts/pydata-sphinx-theme.js?digest=92025949c220c2e29695">
+
+    
+        <link href="../_static/css/breadcrumbs.css" rel="stylesheet">
+    
+    <script data-url_root="../" id="documentation_options" src="../_static/documentation_options.js"></script>
+    <script src="../_static/jquery.js"></script>
+    <script src="../_static/underscore.js"></script>
+    <script src="../_static/_sphinx_javascript_frameworks_compat.js"></script>
+    <script src="../_static/doctools.js"></script>
+    <script src="../_static/sphinx_highlight.js"></script>
+    <script src="../_static/clipboard.min.js"></script>
+    <script src="../_static/copybutton.js"></script>
+    <link rel="shortcut icon" href="../_static/ansys-favicon.png"/>
+    <link rel="index" title="Index" href="../genindex.html" />
+    <link rel="search" title="Search" href="../search.html" />
+    <link rel="next" title="Available templates" href="../templates.html" />
+    <link rel="prev" title="How to use ansys-templates" href="usage.html" />
+<meta name="viewport" content="width=device-width, initial-scale=1" />
+<meta name="docsearch:language" content="en">
+  </head>
+  
+  
+  <body data-spy="scroll" data-target="#bd-toc-nav" data-offset="180" data-default-mode="">
+    <div class="bd-header-announcement container-fluid" id="banner">
+      
+
+    </div>
+
+    
+    
+    <nav class="bd-header navbar navbar-light navbar-expand-lg bg-light fixed-top bd-navbar" id="navbar-main"><div class="bd-header__inner container-xl">
+
+  <div id="navbar-start">
+    
+    
+  
+
+
+<a class="navbar-brand logo" href="../index.html">
+  
+  
+  
+  
+    <img src="../_static/ansys_logo_black_cropped.jpg" class="logo__image only-light" alt="Logo image">
+    <img src="../_static/ansys_logo_black_cropped.jpg" class="logo__image only-dark" alt="Logo image">
+  
+  
+</a>
+    
+  </div>
+
+  <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbar-collapsible" aria-controls="navbar-collapsible" aria-expanded="false" aria-label="Toggle navigation">
+    <span class="fas fa-bars"></span>
+  </button>
+
+  
+  <div id="navbar-collapsible" class="col-lg-9 collapse navbar-collapse">
+    <div id="navbar-center" class="mr-auto">
+      
+      <div class="navbar-center-item">
+        <ul id="navbar-main-elements" class="navbar-nav">
+    <li class="toctree-l1 nav-item">
+ <a class="reference internal nav-link" href="../getting_started/index.html">
+  Getting started
+ </a>
+</li>
+
+<li class="toctree-l1 current active nav-item">
+ <a class="reference internal nav-link" href="index.html">
+  User guide
+ </a>
+</li>
+
+<li class="toctree-l1 nav-item">
+ <a class="reference internal nav-link" href="../templates.html">
+  Available templates
+ </a>
+</li>
+
+    
+</ul>
+      </div>
+      
+    </div>
+
+    <div id="navbar-end">
+      
+      <div class="navbar-end-item">
+        <div class="dropdown" id="version_switcher">
+    <button type="button" class="btn btn-sm navbar-btn dropdown-toggle" id="version_switcher_button" data-toggle="dropdown">
+        0.5  <!-- this text may get changed later by javascript -->
+        <span class="caret"></span>
+    </button>
+    <div id="version_switcher_menu" class="dropdown-menu list-group-flush py-0" aria-labelledby="version_switcher_button">
+    <!-- dropdown will be populated by javascript on page load -->
+    </div>
+</div>
+
+<!-- NOTE: this JS must live here (not in our global JS file) because it relies
+     on being processed by Jinja before it is run (specifically for replacing
+     variables user_guide/templating and {'json_url': 'https://templates.ansys.com/release/versions.json', 'version_match': '0.5'}.
+-->
+
+<script type="text/javascript">
+// Check if corresponding page path exists in other version of docs
+// and, if so, go there instead of the homepage of the other docs version
+function checkPageExistsAndRedirect(event) {
+    const currentFilePath = "user_guide/templating.html",
+          tryUrl = event.target.getAttribute("href");
+    let otherDocsHomepage = tryUrl.replace(currentFilePath, "");
+    $.ajax({
+        type: 'HEAD',
+        url: tryUrl,
+        // if the page exists, go there
+        success: function() {
+            location.href = tryUrl;
+        }
+    }).fail(function() {
+        location.href = otherDocsHomepage;
+    });
+    // this prevents the browser from following the href of the clicked node
+    // (which is fine because this function takes care of redirecting)
+    return false;
+}
+
+// Populate the version switcher from the JSON config file
+(function () {
+    $.getJSON("https://templates.ansys.com/release/versions.json", function(data, textStatus, jqXHR) {
+        const currentFilePath = "user_guide/templating.html";
+        let btn = document.getElementById("version_switcher_button");
+        // Set empty strings by default so that these attributes exist and can be used in CSS selectors
+        btn.dataset["activeVersionName"] = "";
+        btn.dataset["activeVersion"] = "";
+        // create links to the corresponding page in the other docs versions
+        $.each(data, function(index, entry) {
+            // if no custom name specified (e.g., "latest"), use version string
+            if (!("name" in entry)) {
+                entry.name = entry.version;
+            }
+            // create the node
+            const node = document.createElement("a");
+            node.setAttribute("class", "list-group-item list-group-item-action py-1");
+            node.textContent = `${entry.name}`;
+            node.setAttribute("href", `${entry.url}${currentFilePath}`);
+            // on click, AJAX calls will check if the linked page exists before
+            // trying to redirect, and if not, will redirect to the homepage
+            // for that version of the docs.
+            node.onclick = checkPageExistsAndRedirect;
+            // Add dataset values for the version and name in case people want
+            // to apply CSS styling based on this information.
+            node.dataset["versionName"] = entry.name;
+            node.dataset["version"] = entry.version;
+
+            $("#version_switcher_menu").append(node);
+            // replace dropdown button text with the preferred display name of
+            // this version, rather than using sphinx's 0.5.2 variable.
+            // also highlight the dropdown entry for the currently-viewed
+            // version's entry
+            if (entry.version == "0.5") {
+                node.classList.add("active");
+                btn.innerText = btn.dataset["activeVersionName"] = entry.name;
+                btn.dataset["activeVersion"] = entry.version;
+            }
+        });
+    });
+})();
+</script>
+      </div>
+      
+      <div class="navbar-end-item">
+        <span id="theme-switch" class="btn btn-sm btn-outline-primary navbar-btn rounded-circle">
+    <a class="theme-switch" data-mode="light"><i class="fas fa-sun"></i></a>
+    <a class="theme-switch" data-mode="dark"><i class="far fa-moon"></i></a>
+    <a class="theme-switch" data-mode="auto"><i class="fas fa-adjust"></i></a>
+</span>
+      </div>
+      
+      <div class="navbar-end-item">
+        <ul id="navbar-icon-links" class="navbar-nav" aria-label="Icon Links">
+        <li class="nav-item">
+          <a class="nav-link" href="https://github.com/pyansys/pyansys-template" rel="noopener" target="_blank" title="GitHub"><span><i class="fab fa-github-square"></i></span>
+            <label class="sr-only">GitHub</label></a>
+        </li>
+      </ul>
+      </div>
+      
+    </div>
+  </div>
+</div>
+    </nav>
+    
+     
+<div id="announcement_msg"></div>
+<script>
+  fetch("announcement.html")
+    .then((response) => {
+      if (!response.ok) {
+        throw new Error(`HTTP error: ${response.status}`);
+      }
+      return response.text();
+    })
+    .then(text => document.getElementById("announcement_msg").innerHTML = text)
+    .catch((error) => console.error(`Fetch problem: ${error.message}`));
+</script>
+
+    
+        <div class="container-xl">
+    <div class="row">
+        <div class="col-12 col-md-3" id="breadcrumbs-spacer"></div>
+        <div class="col-12 col-md-11 col-xl-9" id="breadcrumbs">
+          
+    <div class="related" role="navigation" aria-label="related navigation">
+      <h3>Navigation</h3>
+      <ul>
+    
+    
+        <li class="nav-item nav-item-0"><a href="../index.html">ansys-templates</a> » </li>
+    
+
+          <li class="nav-item nav-item-1"><a href="index.html" accesskey="U">User guide</a> » </li>
+        <li class="nav-item nav-item-this"><a href="">How to add a new template</a></li> 
+      </ul>
+    </div>
+        </div>
+  </div>
+</div>
+    
+
+
+    <div class="bd-container container-xl">
+      <div class="bd-container__inner row">
+          
+
+<!-- Only show if we have sidebars configured, else just a small margin  -->
+<div class="bd-sidebar-primary col-12 col-md-3 bd-sidebar">
+  <div class="sidebar-start-items"><form class="bd-search d-flex align-items-center" action="../search.html" method="get">
+  <i class="icon fas fa-search"></i>
+  <input type="search" class="form-control" name="q" id="search-input" placeholder="Search the docs ..." aria-label="Search the docs ..." autocomplete="off" >
+</form><nav class="bd-links" id="bd-docs-nav" aria-label="Main navigation">
+  <div class="bd-toc-item active">
+    
+    <ul class="current nav bd-sidenav">
+ <li class="toctree-l1">
+  <a class="reference internal" href="usage.html">
+   How to use
+   <code class="docutils literal notranslate">
+    <span class="pre">
+     ansys-templates
+    </span>
+   </code>
+  </a>
+ </li>
+ <li class="toctree-l1 current active">
+  <a class="current reference internal" href="#">
+   How to add a new template
+  </a>
+ </li>
+</ul>
+
+    
+  </div>
+</nav>
+  </div>
+  <div class="sidebar-end-items">
+  </div>
+</div>
+
+
+          
+
+
+<div class="bd-sidebar-secondary d-none d-xl-block col-xl-2 bd-toc">
+  
+    
+    <div class="toc-item">
+      
+<div class="tocsection onthispage mt-5 pt-1 pb-3">
+    <i class="fas fa-list"></i> On this page
+</div>
+
+<nav id="bd-toc-nav">
+    <ul class="visible nav section-nav flex-column">
+ <li class="toc-h2 nav-item toc-entry">
+  <a class="reference internal nav-link" href="#understanding-the-templates-directory">
+   Understanding the templates directory
+  </a>
+ </li>
+ <li class="toc-h2 nav-item toc-entry">
+  <a class="reference internal nav-link" href="#adding-a-new-family-of-templates">
+   Adding a new family of templates
+  </a>
+ </li>
+ <li class="toc-h2 nav-item toc-entry">
+  <a class="reference internal nav-link" href="#adding-a-new-template-to-a-family">
+   Adding a new template to a family
+  </a>
+  <ul class="nav section-nav flex-column">
+   <li class="toc-h3 nav-item toc-entry">
+    <a class="reference internal nav-link" href="#adding-a-new-template-to-the-cli">
+     Adding a new template to the CLI
+    </a>
+    <ul class="nav section-nav flex-column">
+     <li class="toc-h4 nav-item toc-entry">
+      <a class="reference internal nav-link" href="#adding-unit-tests">
+       Adding unit tests
+      </a>
+     </li>
+     <li class="toc-h4 nav-item toc-entry">
+      <a class="reference internal nav-link" href="#add-the-family-to-tox-envs">
+       Add the family to tox envs
+      </a>
+     </li>
+     <li class="toc-h4 nav-item toc-entry">
+      <a class="reference internal nav-link" href="#updating-the-ci">
+       Updating the CI
+      </a>
+     </li>
+    </ul>
+   </li>
+  </ul>
+ </li>
+ <li class="toc-h2 nav-item toc-entry">
+  <a class="reference internal nav-link" href="#removing-undesired-files">
+   Removing undesired files
+  </a>
+ </li>
+</ul>
+
+</nav>
+    </div>
+    
+    <div class="toc-item">
+      
+    </div>
+    
+  
+</div>
+
+
+          
+          
+          <div class="bd-content col-12 col-md-9 col-xl-7">
+              
+              <article class="bd-article" role="main">
+                
+  <section id="how-to-add-a-new-template">
+<h1>How to add a new template<a class="headerlink" href="#how-to-add-a-new-template" title="Permalink to this heading">#</a></h1>
+<p>You can easily add new templates. However, before doing so, it is important that
+you read the Contributing section.</p>
+<section id="understanding-the-templates-directory">
+<h2>Understanding the templates directory<a class="headerlink" href="#understanding-the-templates-directory" title="Permalink to this heading">#</a></h2>
+<p>In <code class="docutils literal notranslate"><span class="pre">ansys-templates</span></code>, all templates are placed in <code class="docutils literal notranslate"><span class="pre">src/ansys/templates/</span></code>.
+The <code class="docutils literal notranslate"><span class="pre">templates/</span></code> directory contains different families of templates.</p>
+<p>A <cite>family of templates</cite> is simply a directory with a <code class="docutils literal notranslate"><span class="pre">common/</span></code> folder and
+various templates folders.</p>
+<ul class="simple">
+<li><p>The <code class="docutils literal notranslate"><span class="pre">common/</span></code> folder contains various resources that are common to all
+templates of a given family. This avoids duplication of files across templates.</p></li>
+<li><p>Each template folder contains its own set of custom files.</p></li>
+</ul>
+<div class="highlight-bash notranslate"><div class="highlight"><pre><span></span>src/ansys/templates/
+│
+├──<span class="w"> </span>family_0/
+│<span class="w">    </span>├──<span class="w"> </span>common/
+│<span class="w">    </span>│<span class="w">   </span>├──<span class="w"> </span>cookiecutter.json
+│<span class="w">    </span>│<span class="w">   </span>└──<span class="w"> </span><span class="o">{{</span>cookiecutter.__project_name_slug<span class="o">}}</span>
+│<span class="w">    </span>│<span class="w">       </span>└──<span class="w"> </span>...
+│<span class="w">    </span>├──<span class="w"> </span>template_0/
+│<span class="w">    </span>│<span class="w">   </span>├──<span class="w"> </span>cookiecutter.json
+│<span class="w">    </span>│<span class="w">   </span>└──<span class="w"> </span><span class="o">{{</span>cookiecutter.__project_name_slug<span class="o">}}</span>
+│<span class="w">    </span>│<span class="w">       </span>└──<span class="w"> </span>...
+│<span class="w">    </span>├──<span class="w"> </span>template_1/
+│<span class="w">    </span>│<span class="w">   </span>├──<span class="w"> </span>cookiecutter.json
+│<span class="w">    </span>│<span class="w">   </span>└──<span class="w"> </span><span class="o">{{</span>cookiecutter.__project_name_slug<span class="o">}}</span>
+│<span class="w">    </span>│<span class="w">       </span>└──<span class="w"> </span>...
+│<span class="w">    </span>└──<span class="w"> </span>template_N/
+│<span class="w">        </span>├──<span class="w"> </span>cookiecutter.json
+│<span class="w">        </span>└──<span class="w"> </span><span class="o">{{</span>cookiecutter.__project_name_slug<span class="o">}}</span>
+│<span class="w">            </span>└──<span class="w"> </span>...
+└──<span class="w"> </span>family_N/
+</pre></div>
+</div>
+<p>Be sure to confirm if there is already a family for the template you want
+to add before creating a new one.</p>
+</section>
+<section id="adding-a-new-family-of-templates">
+<h2>Adding a new family of templates<a class="headerlink" href="#adding-a-new-family-of-templates" title="Permalink to this heading">#</a></h2>
+<p>Start by creating a new directory in <code class="docutils literal notranslate"><span class="pre">src/ansys/templates/</span></code> with the name of
+the new family of templates. For example, create <code class="docutils literal notranslate"><span class="pre">src/ansys/templates/new_family</span></code>:</p>
+<div class="highlight-bash notranslate"><div class="highlight"><pre><span></span>src/ansys/templates/
+│
+└──<span class="w"> </span>new_family/
+<span class="w">    </span>└──<span class="w"> </span>common/
+<span class="w">       </span>├──<span class="w"> </span>cookiecutter.json
+<span class="w">       </span>└──<span class="w"> </span><span class="o">{{</span>cookiecutter.__project_name_slug<span class="o">}}</span>/
+<span class="w">           </span>└──<span class="w"> </span>...<span class="w"> </span><span class="c1"># All these files will be included in each family template</span>
+</pre></div>
+</div>
+<p>Inside this new family, you must create at least two different files:</p>
+<ul class="simple">
+<li><p>A <code class="docutils literal notranslate"><span class="pre">cookiecutter.json</span></code> file for specifying the minimum required variables for
+any of this family’s templates to work. You must use cookie cutter private
+variables in this file.</p></li>
+<li><p>A <code class="docutils literal notranslate"><span class="pre">common/{{cookiecutter.__project_name_slug}}/</span></code> directory to contain all of
+the typical files for this family. All files in the <code class="docutils literal notranslate"><span class="pre">common/{{cookiecutter.__project_name_slug}}</span></code>
+directory will be copied to each template when rendering it.</p></li>
+</ul>
+<div class="admonition note">
+<p class="admonition-title">Note</p>
+<p>You can later add a <code class="docutils literal notranslate"><span class="pre">hooks/post_gen_project.py</span></code> file in the
+<code class="docutils literal notranslate"><span class="pre">family/template/</span></code> directory if you need to remove non-desired files coming from
+the <code class="docutils literal notranslate"><span class="pre">common/{{cookiecutter.__project_name_slug}}</span></code> directory.</p>
+</div>
+</section>
+<section id="adding-a-new-template-to-a-family">
+<h2>Adding a new template to a family<a class="headerlink" href="#adding-a-new-template-to-a-family" title="Permalink to this heading">#</a></h2>
+<p>To add a new template to a family, first create a new template folder. For example,
+<code class="docutils literal notranslate"><span class="pre">src/ansys/templates/family_0/new_template</span></code>:</p>
+<div class="highlight-bash notranslate"><div class="highlight"><pre><span></span>src/ansys/templates/
+│
+└──<span class="w"> </span>family_0/
+<span class="w">    </span>├──<span class="w"> </span>common/
+<span class="w">    </span>│<span class="w">   </span>├──<span class="w"> </span>cookiecutter.json
+<span class="w">    </span>│<span class="w">   </span>└──<span class="w"> </span><span class="o">{{</span>cookiecutter.__project_name_slug<span class="o">}}</span>
+<span class="w">    </span>│<span class="w">       </span>└──<span class="w"> </span>...<span class="w"> </span><span class="c1"># All these files will be included in new_template/</span>
+<span class="w">    </span>└──<span class="w"> </span>new_template/
+<span class="w">        </span>├──<span class="w"> </span>cookiecutter.json
+<span class="w">        </span>└──<span class="w"> </span><span class="o">{{</span>cookiecutter.__project_name_slug<span class="o">}}</span>/
+<span class="w">            </span>└──<span class="w"> </span>...<span class="w"> </span><span class="c1"># Custom template files</span>
+</pre></div>
+</div>
+<p>Inside the <code class="docutils literal notranslate"><span class="pre">new_template/</span></code> directory, you must create at least two different files:</p>
+<ul class="simple">
+<li><p>A <code class="docutils literal notranslate"><span class="pre">cookiecutter.json</span></code> file for specifying variables for the new template and
+overriding <code class="docutils literal notranslate"><span class="pre">common/cookiecutter.json</span></code> variables.</p></li>
+<li><p>A <code class="docutils literal notranslate"><span class="pre">{{cookiecutter.__project_name_slug}}/</span></code> directory to contain any additional files or
+directories that you would like to include in your new template. The files in this directory
+will be combined with the files in the  <code class="docutils literal notranslate"><span class="pre">common/{{cookiecutter.__project_name_slug}}/</span></code>
+directory.</p></li>
+</ul>
+<section id="adding-a-new-template-to-the-cli">
+<h3>Adding a new template to the CLI<a class="headerlink" href="#adding-a-new-template-to-the-cli" title="Permalink to this heading">#</a></h3>
+<p>To have access to a newly template from the CLI (command line interface), you must do
+the following:</p>
+<ol class="arabic">
+<li><p>Include the name and description of the new template in the
+<code class="docutils literal notranslate"><span class="pre">src/ansys/templates/__init__.py</span></code> file under the
+<code class="docutils literal notranslate"><span class="pre">AVAILABLE_TEMPLATES_AND_DESCRIPTION</span></code> dictionary.</p></li>
+<li><p>Add the path to the new template in <code class="docutils literal notranslate"><span class="pre">src/ansys/templates/paths.py</span></code> and in
+the <code class="docutils literal notranslate"><span class="pre">TEMPLATE_PATH_FINDER</span></code> dictionary.</p></li>
+<li><p>Create a command to expose the new template in the CLI:</p>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="nd">@new</span><span class="o">.</span><span class="n">command</span><span class="p">()</span>
+<span class="k">def</span> <span class="nf">template_name</span><span class="p">():</span>
+<span class="w">    </span><span class="sd">&quot;&quot;&quot;Short description of the template.&quot;&quot;&quot;</span>
+    <span class="n">bake_template</span><span class="p">(</span><span class="n">TEMPLATE_PATH_FINDER</span><span class="p">[</span><span class="s2">&quot;pyansys&quot;</span><span class="p">],</span> <span class="n">os</span><span class="o">.</span><span class="n">getcwd</span><span class="p">())</span>
+</pre></div>
+</div>
+</li>
+</ol>
+<section id="adding-unit-tests">
+<h4>Adding unit tests<a class="headerlink" href="#adding-unit-tests" title="Permalink to this heading">#</a></h4>
+<p>Each template must have its own unit test script. To organize the test suite,
+the following namespace is followed:</p>
+<ul class="simple">
+<li><p><code class="docutils literal notranslate"><span class="pre">tests/tests_templates_family/test_template_family_name_of_template.py</span></code></p></li>
+</ul>
+<div class="admonition note">
+<p class="admonition-title">Note</p>
+<p>If you created a new family template, make sure to include tests for the
+<code class="docutils literal notranslate"><span class="pre">family/common/</span></code> directory too.</p>
+</div>
+<p>Expected common files should be defined in <code class="docutils literal notranslate"><span class="pre">tests/tests_templates_family/conftest.py</span></code>
+as a <a class="reference external" href="https://docs.pytest.org/en/latest/explanation/fixtures.html">pytest fixture</a>. For example, consider the following code of a generic <code class="docutils literal notranslate"><span class="pre">conftest.py</span></code>
+file:</p>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="nd">@pytest</span><span class="o">.</span><span class="n">fixture</span><span class="p">(</span><span class="n">scope</span><span class="o">=</span><span class="s2">&quot;package&quot;</span><span class="p">)</span>
+<span class="k">def</span> <span class="nf">family_common_files</span><span class="p">():</span>
+
+    <span class="c1"># All expected common files</span>
+    <span class="n">basedir_files</span> <span class="o">=</span> <span class="p">[</span><span class="s2">&quot;README.rst&quot;</span><span class="p">,</span> <span class="s2">&quot;LICENSE&quot;</span><span class="p">]</span>
+    <span class="n">doc_files</span> <span class="o">=</span> <span class="p">[</span><span class="o">...</span><span class="p">]</span>
+    <span class="n">tests_files</span> <span class="o">=</span> <span class="p">[</span><span class="o">...</span><span class="p">]</span>
+
+    <span class="c1"># Combine all files and export those to be accessible to the tests</span>
+    <span class="n">all_common_files</span> <span class="o">=</span> <span class="n">basedir_files</span> <span class="o">+</span> <span class="n">doc_files</span> <span class="o">+</span> <span class="n">tests_files</span>
+    <span class="k">return</span> <span class="n">all_common_files</span>
+</pre></div>
+</div>
+</section>
+<section id="add-the-family-to-tox-envs">
+<h4>Add the family to tox envs<a class="headerlink" href="#add-the-family-to-tox-envs" title="Permalink to this heading">#</a></h4>
+<p>If you created a new family, you must add it to the [tox] set of
+environments:</p>
+<ol class="arabic">
+<li><p>Look for the <code class="docutils literal notranslate"><span class="pre">[testenv]</span></code> section in the <code class="docutils literal notranslate"><span class="pre">tox.ini</span></code> file.</p></li>
+<li><p>Within this section, look for the <code class="docutils literal notranslate"><span class="pre">setenv</span></code> variable.</p></li>
+<li><p>Add the following line:</p>
+<div class="highlight-text notranslate"><div class="highlight"><pre><span></span>family: PYTEST_MARKERS = -k &quot;tests_templates_family&quot;
+</pre></div>
+</div>
+</li>
+</ol>
+</section>
+<section id="updating-the-ci">
+<h4>Updating the CI<a class="headerlink" href="#updating-the-ci" title="Permalink to this heading">#</a></h4>
+<p>Each family of templates is tested within its own <a class="reference external" href="https://docs.github.com/en/actions">GitHub actions</a> workflow.
+Therefore, you need to create a YML file for a new family:</p>
+<ul class="simple">
+<li><p><code class="docutils literal notranslate"><span class="pre">.github/workflows/templates_family.yml</span></code></p></li>
+</ul>
+<div class="admonition note">
+<p class="admonition-title">Note</p>
+<p>To reduce the amount of CI jobs, templates are only tested under Linux.
+If you require testing from a particular programming language, try to test the
+minimum and maximum supported versions of the language. Avoid all intermediate
+versions if possible.</p>
+</div>
+</section>
+</section>
+</section>
+<section id="removing-undesired-files">
+<h2>Removing undesired files<a class="headerlink" href="#removing-undesired-files" title="Permalink to this heading">#</a></h2>
+<p>It is likely that there are some files coming from the <code class="docutils literal notranslate"><span class="pre">common/</span></code>
+directory that you do not want included in your rendered template. To exclude files,
+you can take advantage of <a class="reference external" href="https://cookiecutter.readthedocs.io/en/latest/advanced/hooks.html">cookiecutter hooks</a>.</p>
+<p>Hooks are Python scripts that allow you to control the rendering process both before
+and after the process is executed. With hooks, you can move or delete any files
+included in the final rendered project.</p>
+<p>To use hooks, you must create a new directory named <code class="docutils literal notranslate"><span class="pre">src/ansys/templates/new_family/new_template/hooks</span></code>.
+Only two hooks are allowed:</p>
+<ul class="simple">
+<li><p><code class="docutils literal notranslate"><span class="pre">pre_gen_project.py</span></code>: executes before rendering process.</p></li>
+<li><p><code class="docutils literal notranslate"><span class="pre">post_gen_project.py</span></code>: executes after the rendering process.</p></li>
+</ul>
+<div class="admonition warning">
+<p class="admonition-title">Warning</p>
+<p>Both hooks are executed once the cookiecutter context has been started. This
+implies that any file with a variable of the type <code class="docutils literal notranslate"><span class="pre">{{</span> <span class="pre">cookiecutter.some_var</span> <span class="pre">}}</span></code>
+or Jinja2 syntax is not rendered.</p>
+</div>
+</section>
+</section>
+
+
+              </article>
+              
+
+              
+          </div>
+          
+      </div>
+    </div>
+
+  
+  
+  <!-- Scripts loaded after <body> so the DOM is not blocked -->
+  <script src="../_static/scripts/pydata-sphinx-theme.js?digest=92025949c220c2e29695"></script>
+
+<footer class="bd-footer"><div class="bd-footer__inner container">
+  
+  <div class="footer-item">
+    <p class="copyright">
+    &copy; Copyright (c) 2022 ANSYS, Inc. All rights reserved.<br>
+</p>
+  </div>
+  
+  <div class="footer-item">
+    <p class="sphinx-version">
+Created using <a href="http://sphinx-doc.org/">Sphinx</a> 5.3.0.<br>
+</p>
+  </div>
+  
+</div>
+</footer>
+  </body>
+</html>

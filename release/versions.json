@@ -1,0 +1,18 @@
+[
+    {
+        "version": "dev",
+        "url": "https://templates.ansys.com/dev/"
+    },
+    {
+        "version": "0.5 (stable)",
+        "url": "https://templates.ansys.com/release/0.5/"
+    },
+    {
+        "version": "0.4",
+        "url": "https://templates.ansys.com/release/0.4/"
+    },
+    {
+        "version": "0.3",
+        "url": "https://templates.ansys.com/release/0.3/"
+    }
+]
