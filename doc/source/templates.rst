@@ -49,8 +49,6 @@ capabilities and features of each template:
 +--------------------------------+-----------------------+-----------------+---------+----------+----------------+---------+
 | :ref:`pyace-grpc`              |  ``X``                |  ``X``          |  ``X``  |  ``X``   |  ``X``         |  ``X``  |
 +--------------------------------+-----------------------+-----------------+---------+----------+----------------+---------+
-| :ref:`solution`                |                       |  ``X``          |  ``X``  |  ``X``   |  ``X``         |         |
-+--------------------------------+-----------------------+-----------------+---------+----------+----------------+---------+
 
 .. note::
 
@@ -281,29 +279,6 @@ To create a new project using this template, run:
 .. admonition:: Link to demo
 
     `ansys-templates/demo - pyace-grpc <https://github.com/ansys/ansys-templates/tree/demo/pyace-grpc>`_
-
-solution
---------
-This template renders to a Python project compliant with the latest Solutions
-Application guidelines:
-
-Main features of this package are:
-
-- The build system is imposed to be ``poetry``.
-- Uses a ``src/`` layout.
-- Includes a ``pyproject.toml`` for project and tools configuration.
-- Includes ``doc/`` and ``tests/``.
-- Includes GitHub workflows (actions).
-- Includes a ``tox.ini`` file.
-
-To create a new project using this template, run:
-.. code-block:: text
-
-    ansys-templates new solution
-
-.. admonition:: Link to demo
-
-    `ansys-templates/demo - solution <https://github.com/ansys/ansys-templates/tree/demo/solution>`_
 
 .. Links and references
 

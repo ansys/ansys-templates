@@ -1,1 +1,0 @@
-# Assets such as input decks required to run the business logic.
