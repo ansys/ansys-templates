@@ -21,9 +21,9 @@ jobs:
     name: Code style
     runs-on: ubuntu-latest
     steps:
-      - uses: actions/checkout@v3
+      - uses: actions/checkout@v4
       - name: Set up Python
-        uses: actions/setup-python@v4
+        uses: actions/setup-python@v5
         with:
           python-version: {{ '${{ env.MAIN_PYTHON_VERSION }}' }}
       - name: Install dependencies
@@ -36,7 +36,7 @@ jobs:
     name: Documentation Style Check
     runs-on: ubuntu-latest
     steps:
-      - uses: actions/checkout@v3
+      - uses: actions/checkout@v4
 
       - name: Running Vale
         uses: errata-ai/vale-action@reviewdog
@@ -55,10 +55,10 @@ jobs:
     needs: [style, docs-style]
     runs-on: ubuntu-latest
     steps:
-      - uses: actions/checkout@v3
+      - uses: actions/checkout@v4
 
       - name: Set up Python
-        uses: actions/setup-python@v4
+        uses: actions/setup-python@v5
         with:
           python-version: {{ '${{ env.MAIN_PYTHON_VERSION }}' }}
 
@@ -83,14 +83,14 @@ jobs:
           make -C doc pdf
 
       - name: Upload HTML documentation
-        uses: actions/upload-artifact@v3.1.0
+        uses: actions/upload-artifact@v4
         with:
           name: HTML-Documentation
           path: .tox/doc_out_html/
           retention-days: 7
 
       - name: Upload PDF Documentation
-        uses: actions/upload-artifact@v3.1.0
+        uses: actions/upload-artifact@v4
         with:
           name: PDF-Documentation
           path: doc/build/latex/*.pdf
@@ -111,15 +111,15 @@ jobs:
     needs: [style, docs-style, docs]
     runs-on: ubuntu-latest
     steps:
-      - uses: actions/checkout@v3
+      - uses: actions/checkout@v4
 
-      - uses: actions/download-artifact@v3
+      - uses: actions/download-artifact@v4
 
       - name: Display structure of downloaded files
         run: ls -R
 
       - name: Release
-        uses: softprops/action-gh-release@v1
+        uses: softprops/action-gh-release@v2
         with:
           generate_release_notes: true
           files: |
