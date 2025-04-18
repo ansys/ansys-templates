@@ -158,6 +158,8 @@ jobs:
         uses: ansys/actions/release-github@v8
         with:
           library-name: ${{ env.LIBRARY_NAME }}
+          token: ${{ secrets.GITHUB_TOKEN }}
+          changelog-release-notes: true
 
   doc-deploy-stable:
     name: Doc stable version deploy
