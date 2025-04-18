@@ -23,7 +23,8 @@ repos:
   rev: v2.2.4
   hooks:
   - id: codespell
-    exclude: 'src/ansys/templates/python/solution/{{cookiecutter.__project_name_slug}}/lock_files/dash/poetry.lock'
+    exclude: '.*poetry\.lock|.*pyproject\.toml|.*accept\.txt'
+    args: ['--ignore-words-list=SME']
 
 - repo: https://github.com/pycqa/pydocstyle
   rev: 6.3.0
