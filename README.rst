@@ -172,4 +172,3 @@ its corresponding demonstration branch.
 .. _pyace-flask: https://github.com/ansys/ansys-templates/tree/demo/pyace-flask
 .. _pyace-grpc: https://github.com/ansys/ansys-templates/tree/demo/pyace-grpc
 .. _solution: https://github.com/ansys/ansys-templates/tree/demo/solution
-
