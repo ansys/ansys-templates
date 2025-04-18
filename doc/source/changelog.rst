@@ -9,6 +9,9 @@ This document contains the release notes for the project.
 
 .. towncrier release notes start
 
+`5.1.0 <https://github.com/ansys/ansys-templates/releases/tag/v5.1.0>`_ - April 18, 2025
+========================================================================================
+No significant changes.
 `5.1.0 <https://github.com/ansys/ansys-templates/releases/tag/v5.1.0>`_ - April 17, 2025
 ========================================================================================
 
