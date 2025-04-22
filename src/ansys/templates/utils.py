@@ -21,7 +21,6 @@
 # SOFTWARE.
 
 """A collection of useful utilities and routines."""
-import json
 import os
 from pathlib import Path
 import shutil
@@ -224,4 +223,3 @@ def bake_template(template_path, output_path, license_path=MIT_LICENSE, **cookie
 
         # Bake the temporary project using cookiecutter with desired options
         cookiecutter(str(tmp_template_path), output_dir=str(output_path), **cookiecutter_kwargs)
-
