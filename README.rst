@@ -137,8 +137,6 @@ available in ``ansys-templates``:
 | pyace-grpc              |  ``X``                |  ``X``          |  ``X``  |  ``X``   |  ``X``         |  ``X``  |
 +-------------------------+-----------------------+-----------------+---------+----------+----------------+---------+
 
-.. warning::
-    "*" This template is for **Ansys Internal Use Only**.
 
 Demo branches
 -------------
