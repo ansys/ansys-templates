@@ -1,0 +1,806 @@
+
+<!DOCTYPE html>
+
+
+<html lang="en" data-content_root="../" >
+
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" /><meta name="viewport" content="width=device-width, initial-scale=1" />
+
+    <title>How to add a new template &#8212; Ansys Templates</title>
+
+  
+  
+  
+  <script data-cfasync="false">
+    document.documentElement.dataset.mode = localStorage.getItem("mode") || "";
+    document.documentElement.dataset.theme = localStorage.getItem("theme") || "";
+  </script>
+  
+  <!-- Loaded before other Sphinx assets -->
+  <link href="../_static/styles/theme.css?digest=dfe6caa3a7d634c4db9b" rel="stylesheet" />
+<link href="../_static/styles/bootstrap.css?digest=dfe6caa3a7d634c4db9b" rel="stylesheet" />
+<link href="../_static/styles/pydata-sphinx-theme.css?digest=dfe6caa3a7d634c4db9b" rel="stylesheet" />
+
+  
+  <link href="../_static/vendor/fontawesome/6.5.2/css/all.min.css?digest=dfe6caa3a7d634c4db9b" rel="stylesheet" />
+  <link rel="preload" as="font" type="font/woff2" crossorigin href="../_static/vendor/fontawesome/6.5.2/webfonts/fa-solid-900.woff2" />
+<link rel="preload" as="font" type="font/woff2" crossorigin href="../_static/vendor/fontawesome/6.5.2/webfonts/fa-brands-400.woff2" />
+<link rel="preload" as="font" type="font/woff2" crossorigin href="../_static/vendor/fontawesome/6.5.2/webfonts/fa-regular-400.woff2" />
+
+    <link rel="stylesheet" type="text/css" href="../_static/pygments.css?v=a746c00c" />
+    <link rel="stylesheet" type="text/css" href="../_static/copybutton.css?v=76b2166b" />
+    <link rel="stylesheet" type="text/css" href="../_static/css/ansys_sphinx_theme.css?v=d2ac875c" />
+    <link rel="stylesheet" type="text/css" href="https://cdn.datatables.net/1.10.23/css/jquery.dataTables.min.css" />
+    <link rel="stylesheet" type="text/css" href="https://www.nerdfonts.com/assets/css/webfont.css" />
+  
+  <!-- Pre-loaded scripts that we'll load fully later -->
+  <link rel="preload" as="script" href="../_static/scripts/bootstrap.js?digest=dfe6caa3a7d634c4db9b" />
+<link rel="preload" as="script" href="../_static/scripts/pydata-sphinx-theme.js?digest=dfe6caa3a7d634c4db9b" />
+  <script src="../_static/vendor/fontawesome/6.5.2/js/all.min.js?digest=dfe6caa3a7d634c4db9b"></script>
+ 
+<link href="../_static/css/breadcrumbs.css" rel="stylesheet" />
+
+    <script src="../_static/documentation_options.js?v=05a7714e"></script>
+    <script src="../_static/doctools.js?v=9a2dae69"></script>
+    <script src="../_static/sphinx_highlight.js?v=dc90522c"></script>
+    <script src="../_static/clipboard.min.js?v=a7894cd8"></script>
+    <script src="../_static/copybutton.js?v=f281be69"></script>
+    <script src="../_static/js/table.js?v=b64f5182"></script>
+    <script src="https://cdn.datatables.net/1.10.23/js/jquery.dataTables.min.js"></script>
+    <script>DOCUMENTATION_OPTIONS.pagename = 'user_guide/templating';</script>
+    <script>
+        DOCUMENTATION_OPTIONS.theme_version = '0.15.4';
+        DOCUMENTATION_OPTIONS.theme_switcher_json_url = 'https://templates.ansys.com/versions.json';
+        DOCUMENTATION_OPTIONS.theme_switcher_version_match = '5.0';
+        DOCUMENTATION_OPTIONS.show_version_warning_banner = false;
+        </script>
+    <link rel="icon" href="../_static/ansys-favicon.png"/>
+    <link rel="index" title="Index" href="../genindex.html" />
+    <link rel="search" title="Search" href="../search.html" />
+    <link rel="next" title="Templates" href="../templates.html" />
+    <link rel="prev" title="How to use ansys-templates" href="usage.html" />
+  <meta name="viewport" content="width=device-width, initial-scale=1"/>
+  <meta name="docsearch:language" content="en"/>
+  <link rel="canonical" href="https://templates.ansys.com/version/stable/user_guide/templating.html" />
+  </head>
+  
+  
+  <body data-bs-spy="scroll" data-bs-target=".bd-toc-nav" data-offset="180" data-bs-root-margin="0px 0px -60%" data-default-mode="">
+
+  
+  
+  <div id="pst-skip-link" class="skip-link d-print-none"><a href="#main-content">Skip to main content</a></div>
+  
+  <div id="pst-scroll-pixel-helper"></div>
+  
+  <button type="button" class="btn rounded-pill" id="pst-back-to-top">
+    <i class="fa-solid fa-arrow-up"></i>Back to top</button>
+
+  
+  <input type="checkbox"
+          class="sidebar-toggle"
+          id="pst-primary-sidebar-checkbox"/>
+  <label class="overlay overlay-primary" for="pst-primary-sidebar-checkbox"></label>
+  
+  <input type="checkbox"
+          class="sidebar-toggle"
+          id="pst-secondary-sidebar-checkbox"/>
+  <label class="overlay overlay-secondary" for="pst-secondary-sidebar-checkbox"></label>
+  
+  <div class="search-button__wrapper">
+    <div class="search-button__overlay"></div>
+    <div class="search-button__search-container"><!-- Debugging: html_theme_options =  -->
+
+  <!-- If there is no MeiliSearch enabled, use the PyData search -->
+<form class="bd-search d-flex align-items-center"
+      action="../search.html"
+      method="get">
+  <i class="fa-solid fa-magnifying-glass"></i>
+  <input type="search"
+         class="form-control"
+         name="q"
+         id="search-input"
+         placeholder="Search the docs ..."
+         aria-label="Search the docs ..."
+         autocomplete="off"
+         autocorrect="off"
+         autocapitalize="off"
+         spellcheck="false"/>
+  <span class="search-button__kbd-shortcut"><kbd class="kbd-shortcut__modifier">Ctrl</kbd>+<kbd>K</kbd></span>
+</form></div>
+  </div>
+
+  <div class="pst-async-banner-revealer d-none">
+  <aside id="bd-header-version-warning" class="d-none d-print-none" aria-label="Version warning"></aside>
+</div>
+
+   
+    <header class="bd-header navbar navbar-expand-lg bd-navbar d-print-none">
+<div class="bd-header__inner bd-page-width">
+  <button class="pst-navbar-icon sidebar-toggle primary-toggle" aria-label="Site navigation">
+    <span class="fa-solid fa-bars"></span>
+  </button>
+  
+  
+  <div class="col-lg-3 navbar-header-items__start">
+    
+      <div class="navbar-item">
+
+  
+
+<a class="navbar-brand logo" href="https://www.ansys.com/">
+  
+  
+  
+  
+  
+    
+    
+      
+    
+    
+    <img src="../_static/ansys_logo_transparent_black.png" class="logo__image only-light" alt="Ansys Templates - Home"/>
+    <script>document.write(`<img src="../_static/ansys_logo_transparent_white.png" class="logo__image only-dark" alt="Ansys Templates - Home"/>`);</script>
+  
+  
+</a></div>
+    
+  </div>
+  
+  <div class="col-lg-9 navbar-header-items">
+    
+    <div class="me-auto navbar-header-items__center">
+      
+        <div class="navbar-item">
+<nav>
+  <ul class="bd-navbar-elements navbar-nav">
+    
+<li class="nav-item ">
+  <a class="nav-link nav-internal" href="../getting_started/index.html">
+    Getting started
+  </a>
+</li>
+
+
+<li class="nav-item current active">
+  <a class="nav-link nav-internal" href="index.html">
+    User guide
+  </a>
+</li>
+
+
+<li class="nav-item ">
+  <a class="nav-link nav-internal" href="../templates.html">
+    Templates
+  </a>
+</li>
+
+
+<li class="nav-item ">
+  <a class="nav-link nav-internal" href="../changelog.html">
+    Release notes
+  </a>
+</li>
+
+  </ul>
+</nav></div>
+      
+    </div>
+    
+    
+    <div class="navbar-header-items__end">
+      
+        <div class="navbar-item navbar-persistent--container">
+          
+
+ <script>
+ document.write(`
+   <button class="btn search-button-field search-button__button" title="Search" aria-label="Search" data-bs-placement="bottom" data-bs-toggle="tooltip">
+    <i class="fa-solid fa-magnifying-glass"></i>
+    <span class="search-button__default-text">Search</span>
+    <span class="search-button__kbd-shortcut"><kbd class="kbd-shortcut__modifier">Ctrl</kbd>+<kbd class="kbd-shortcut__modifier">K</kbd></span>
+   </button>
+ `);
+ </script>
+        </div>
+      
+      
+        <div class="navbar-item">
+<script>
+document.write(`
+  <div class="version-switcher__container dropdown">
+    <button id="pst-version-switcher-button-2"
+      type="button"
+      class="version-switcher__button btn btn-sm dropdown-toggle"
+      data-bs-toggle="dropdown"
+      aria-haspopup="listbox"
+      aria-controls="pst-version-switcher-list-2"
+      aria-label="Version switcher list"
+    >
+      Choose version  <!-- this text may get changed later by javascript -->
+      <span class="caret"></span>
+    </button>
+    <div id="pst-version-switcher-list-2"
+      class="version-switcher__menu dropdown-menu list-group-flush py-0"
+      role="listbox" aria-labelledby="pst-version-switcher-button-2">
+      <!-- dropdown will be populated by javascript on page load -->
+    </div>
+  </div>
+`);
+</script></div>
+      
+        <div class="navbar-item">
+
+<script>
+document.write(`
+  <button class="btn btn-sm nav-link pst-navbar-icon theme-switch-button" title="light/dark" aria-label="light/dark" data-bs-placement="bottom" data-bs-toggle="tooltip">
+    <i class="theme-switch fa-solid fa-sun fa-lg" data-mode="light"></i>
+    <i class="theme-switch fa-solid fa-moon fa-lg" data-mode="dark"></i>
+    <i class="theme-switch fa-solid fa-circle-half-stroke fa-lg" data-mode="auto"></i>
+  </button>
+`);
+</script></div>
+      
+        <div class="navbar-item"><ul class="navbar-icon-links"
+    aria-label="Icon Links">
+        <li class="nav-item">
+          
+          
+          
+          
+          
+          
+          
+          
+          <a href="https://github.com/ansys/ansys-templates" title="GitHub" class="nav-link pst-navbar-icon" rel="noopener" target="_blank" data-bs-toggle="tooltip" data-bs-placement="bottom"><i class="fa-brands fa-github fa-lg" aria-hidden="true"></i>
+            <span class="sr-only">GitHub</span></a>
+        </li>
+</ul></div>
+      
+    </div>
+    
+  </div>
+  
+  
+    <div class="navbar-persistent--mobile">
+
+ <script>
+ document.write(`
+   <button class="btn search-button-field search-button__button" title="Search" aria-label="Search" data-bs-placement="bottom" data-bs-toggle="tooltip">
+    <i class="fa-solid fa-magnifying-glass"></i>
+    <span class="search-button__default-text">Search</span>
+    <span class="search-button__kbd-shortcut"><kbd class="kbd-shortcut__modifier">Ctrl</kbd>+<kbd class="kbd-shortcut__modifier">K</kbd></span>
+   </button>
+ `);
+ </script>
+    </div>
+  
+
+  
+    <button class="pst-navbar-icon sidebar-toggle secondary-toggle" aria-label="On this page">
+      <span class="fa-solid fa-outdent"></span>
+    </button>
+  
+</div>
+
+    </header>
+    <div id="announcement_msg"></div>
+<script>
+  fetch("announcement.html")
+    .then((response) => {
+      if (!response.ok) {
+        throw new Error(`HTTP error: ${response.status}`);
+      }
+      return response.text();
+    })
+    .then(
+      (text) => (document.getElementById("announcement_msg").innerHTML = text),
+    )
+    .catch((error) => console.error(`Fetch problem: ${error.message}`));
+</script>  
+
+  <div class="bd-container">
+    <div class="bd-container__inner bd-page-width">
+      
+      
+      
+      <div class="bd-sidebar-primary bd-sidebar">
+        
+
+  
+  <div class="sidebar-header-items sidebar-primary__section">
+    
+    
+      <div class="sidebar-header-items__center">
+        
+          
+          
+            <div class="navbar-item">
+<nav>
+  <ul class="bd-navbar-elements navbar-nav">
+    
+<li class="nav-item ">
+  <a class="nav-link nav-internal" href="../getting_started/index.html">
+    Getting started
+  </a>
+</li>
+
+
+<li class="nav-item current active">
+  <a class="nav-link nav-internal" href="index.html">
+    User guide
+  </a>
+</li>
+
+
+<li class="nav-item ">
+  <a class="nav-link nav-internal" href="../templates.html">
+    Templates
+  </a>
+</li>
+
+
+<li class="nav-item ">
+  <a class="nav-link nav-internal" href="../changelog.html">
+    Release notes
+  </a>
+</li>
+
+  </ul>
+</nav></div>
+          
+        
+      </div>
+    
+    
+    
+      <div class="sidebar-header-items__end">
+        
+          <div class="navbar-item">
+<script>
+document.write(`
+  <div class="version-switcher__container dropdown">
+    <button id="pst-version-switcher-button-3"
+      type="button"
+      class="version-switcher__button btn btn-sm dropdown-toggle"
+      data-bs-toggle="dropdown"
+      aria-haspopup="listbox"
+      aria-controls="pst-version-switcher-list-3"
+      aria-label="Version switcher list"
+    >
+      Choose version  <!-- this text may get changed later by javascript -->
+      <span class="caret"></span>
+    </button>
+    <div id="pst-version-switcher-list-3"
+      class="version-switcher__menu dropdown-menu list-group-flush py-0"
+      role="listbox" aria-labelledby="pst-version-switcher-button-3">
+      <!-- dropdown will be populated by javascript on page load -->
+    </div>
+  </div>
+`);
+</script></div>
+        
+          <div class="navbar-item">
+
+<script>
+document.write(`
+  <button class="btn btn-sm nav-link pst-navbar-icon theme-switch-button" title="light/dark" aria-label="light/dark" data-bs-placement="bottom" data-bs-toggle="tooltip">
+    <i class="theme-switch fa-solid fa-sun fa-lg" data-mode="light"></i>
+    <i class="theme-switch fa-solid fa-moon fa-lg" data-mode="dark"></i>
+    <i class="theme-switch fa-solid fa-circle-half-stroke fa-lg" data-mode="auto"></i>
+  </button>
+`);
+</script></div>
+        
+          <div class="navbar-item"><ul class="navbar-icon-links"
+    aria-label="Icon Links">
+        <li class="nav-item">
+          
+          
+          
+          
+          
+          
+          
+          
+          <a href="https://github.com/ansys/ansys-templates" title="GitHub" class="nav-link pst-navbar-icon" rel="noopener" target="_blank" data-bs-toggle="tooltip" data-bs-placement="bottom"><i class="fa-brands fa-github fa-lg" aria-hidden="true"></i>
+            <span class="sr-only">GitHub</span></a>
+        </li>
+</ul></div>
+        
+      </div>
+    
+  </div>
+  
+    <div class="sidebar-primary-items__start sidebar-primary__section">
+        <div class="sidebar-primary-item">
+<nav class="bd-docs-nav bd-links"
+     aria-label="Section Navigation">
+  <p class="bd-links__title" role="heading" aria-level="1">Section Navigation</p>
+  <div class="bd-toc-item navbar-nav"><ul class="current nav bd-sidenav">
+<li class="toctree-l1"><a class="reference internal" href="usage.html">How to use <code class="docutils literal notranslate"><span class="pre">ansys-templates</span></code></a></li>
+<li class="toctree-l1 current active"><a class="current reference internal" href="#">How to add a new template</a></li>
+</ul>
+</div>
+</nav></div>
+    </div>
+  
+  
+  <div class="sidebar-primary-items__end sidebar-primary__section">
+  </div>
+  
+  <div id="rtd-footer-container"></div>
+
+
+      </div>
+      
+      <main id="main-content" class="bd-main" role="main">
+        
+        
+          <div class="bd-content">
+            <div class="bd-article-container">
+              
+              <div class="bd-header-article d-print-none">
+<div class="header-article-items header-article__inner">
+  
+    <div class="header-article-items__start">
+      
+        <div class="header-article-item">
+<nav aria-label="Breadcrumb">
+  <ul class="bd-breadcrumbs">
+     
+    <li class="breadcrumb-item breadcrumb-home">
+      <a
+        href="../index.html"
+        class="nav-link"
+        aria-label="Home"
+      >
+        <i class="fa-solid fa-home"></i>
+      </a>
+    </li>
+     
+    <li class="breadcrumb-item">
+      <a href="index.html" class="nav-link">User guide</a>
+    </li>
+      
+    <li class="breadcrumb-item active" aria-current="page">How to add a new template</li>
+    
+  </ul>
+</nav>
+</div>
+      
+    </div>
+  
+  
+</div>
+</div>
+              
+              
+              
+                
+<div id="searchbox"></div>
+                <article class="bd-article">
+                  
+  <section id="how-to-add-a-new-template">
+<h1>How to add a new template<a class="headerlink" href="#how-to-add-a-new-template" title="Link to this heading">#</a></h1>
+<p>You can easily add new templates. However, before doing so, it is important that
+you read the Contributing section.</p>
+<section id="understanding-the-templates-directory">
+<h2>Understanding the templates directory<a class="headerlink" href="#understanding-the-templates-directory" title="Link to this heading">#</a></h2>
+<p>In <code class="docutils literal notranslate"><span class="pre">ansys-templates</span></code>, all templates are placed in <code class="docutils literal notranslate"><span class="pre">src/ansys/templates/</span></code>.
+The <code class="docutils literal notranslate"><span class="pre">templates/</span></code> directory contains different families of templates.</p>
+<p>A <cite>family of templates</cite> is simply a directory with a <code class="docutils literal notranslate"><span class="pre">common/</span></code> directory and
+various templates directories.</p>
+<ul class="simple">
+<li><p>The <code class="docutils literal notranslate"><span class="pre">common/</span></code> directory contains various resources that are common to all
+templates of a given family. This avoids duplication of files across templates.</p></li>
+<li><p>Each template directory contains its own set of custom files.</p></li>
+</ul>
+<div class="highlight-bash notranslate"><div class="highlight"><pre><span></span>src/ansys/templates/
+│
+├──<span class="w"> </span>family_0/
+│<span class="w">    </span>├──<span class="w"> </span>common/
+│<span class="w">    </span>│<span class="w">   </span>├──<span class="w"> </span>cookiecutter.json
+│<span class="w">    </span>│<span class="w">   </span>└──<span class="w"> </span><span class="o">{{</span>cookiecutter.__project_name_slug<span class="o">}}</span>
+│<span class="w">    </span>│<span class="w">       </span>└──<span class="w"> </span>...
+│<span class="w">    </span>├──<span class="w"> </span>template_0/
+│<span class="w">    </span>│<span class="w">   </span>├──<span class="w"> </span>cookiecutter.json
+│<span class="w">    </span>│<span class="w">   </span>└──<span class="w"> </span><span class="o">{{</span>cookiecutter.__project_name_slug<span class="o">}}</span>
+│<span class="w">    </span>│<span class="w">       </span>└──<span class="w"> </span>...
+│<span class="w">    </span>├──<span class="w"> </span>template_1/
+│<span class="w">    </span>│<span class="w">   </span>├──<span class="w"> </span>cookiecutter.json
+│<span class="w">    </span>│<span class="w">   </span>└──<span class="w"> </span><span class="o">{{</span>cookiecutter.__project_name_slug<span class="o">}}</span>
+│<span class="w">    </span>│<span class="w">       </span>└──<span class="w"> </span>...
+│<span class="w">    </span>└──<span class="w"> </span>template_N/
+│<span class="w">        </span>├──<span class="w"> </span>cookiecutter.json
+│<span class="w">        </span>└──<span class="w"> </span><span class="o">{{</span>cookiecutter.__project_name_slug<span class="o">}}</span>
+│<span class="w">            </span>└──<span class="w"> </span>...
+└──<span class="w"> </span>family_N/
+</pre></div>
+</div>
+<p>Be sure to confirm if there is already a family for the template you want
+to add before creating a new one.</p>
+</section>
+<section id="adding-a-new-family-of-templates">
+<h2>Adding a new family of templates<a class="headerlink" href="#adding-a-new-family-of-templates" title="Link to this heading">#</a></h2>
+<p>Start by creating a new directory in <code class="docutils literal notranslate"><span class="pre">src/ansys/templates/</span></code> with the name of
+the new family of templates. For example, create <code class="docutils literal notranslate"><span class="pre">src/ansys/templates/new_family</span></code>:</p>
+<div class="highlight-bash notranslate"><div class="highlight"><pre><span></span>src/ansys/templates/
+│
+└──<span class="w"> </span>new_family/
+<span class="w">    </span>└──<span class="w"> </span>common/
+<span class="w">       </span>├──<span class="w"> </span>cookiecutter.json
+<span class="w">       </span>└──<span class="w"> </span><span class="o">{{</span>cookiecutter.__project_name_slug<span class="o">}}</span>/
+<span class="w">           </span>└──<span class="w"> </span>...<span class="w"> </span><span class="c1"># All these files will be included in each family template</span>
+</pre></div>
+</div>
+<p>Inside this new family, you must create at least two different files:</p>
+<ul class="simple">
+<li><p>A <code class="docutils literal notranslate"><span class="pre">cookiecutter.json</span></code> file for specifying the minimum required variables for
+any of this family’s templates to work. You must use cookie cutter private
+variables in this file.</p></li>
+<li><p>A <code class="docutils literal notranslate"><span class="pre">common/{{cookiecutter.__project_name_slug}}/</span></code> directory to contain all of
+the typical files for this family. All files in the <code class="docutils literal notranslate"><span class="pre">common/{{cookiecutter.__project_name_slug}}</span></code>
+directory will be copied to each template when rendering it.</p></li>
+</ul>
+<div class="admonition note">
+<p class="admonition-title">Note</p>
+<p>You can later add a <code class="docutils literal notranslate"><span class="pre">hooks/post_gen_project.py</span></code> file in the
+<code class="docutils literal notranslate"><span class="pre">family/template/</span></code> directory if you need to remove non-desired files coming from
+the <code class="docutils literal notranslate"><span class="pre">common/{{cookiecutter.__project_name_slug}}</span></code> directory.</p>
+</div>
+</section>
+<section id="adding-a-new-template-to-a-family">
+<h2>Adding a new template to a family<a class="headerlink" href="#adding-a-new-template-to-a-family" title="Link to this heading">#</a></h2>
+<p>To add a new template to a family, first create a new template directory. For example,
+<code class="docutils literal notranslate"><span class="pre">src/ansys/templates/family_0/new_template</span></code>:</p>
+<div class="highlight-bash notranslate"><div class="highlight"><pre><span></span>src/ansys/templates/
+│
+└──<span class="w"> </span>family_0/
+<span class="w">    </span>├──<span class="w"> </span>common/
+<span class="w">    </span>│<span class="w">   </span>├──<span class="w"> </span>cookiecutter.json
+<span class="w">    </span>│<span class="w">   </span>└──<span class="w"> </span><span class="o">{{</span>cookiecutter.__project_name_slug<span class="o">}}</span>
+<span class="w">    </span>│<span class="w">       </span>└──<span class="w"> </span>...<span class="w"> </span><span class="c1"># All these files will be included in new_template/</span>
+<span class="w">    </span>└──<span class="w"> </span>new_template/
+<span class="w">        </span>├──<span class="w"> </span>cookiecutter.json
+<span class="w">        </span>└──<span class="w"> </span><span class="o">{{</span>cookiecutter.__project_name_slug<span class="o">}}</span>/
+<span class="w">            </span>└──<span class="w"> </span>...<span class="w"> </span><span class="c1"># Custom template files</span>
+</pre></div>
+</div>
+<p>Inside the <code class="docutils literal notranslate"><span class="pre">new_template/</span></code> directory, you must create at least two different files:</p>
+<ul class="simple">
+<li><p>A <code class="docutils literal notranslate"><span class="pre">cookiecutter.json</span></code> file for specifying variables for the new template and
+overriding <code class="docutils literal notranslate"><span class="pre">common/cookiecutter.json</span></code> variables.</p></li>
+<li><p>A <code class="docutils literal notranslate"><span class="pre">{{cookiecutter.__project_name_slug}}/</span></code> directory to contain any additional files or
+directories that you would like to include in your new template. The files in this directory
+will be combined with the files in the  <code class="docutils literal notranslate"><span class="pre">common/{{cookiecutter.__project_name_slug}}/</span></code>
+directory.</p></li>
+</ul>
+<section id="adding-a-new-template-to-the-cli">
+<h3>Adding a new template to the CLI<a class="headerlink" href="#adding-a-new-template-to-the-cli" title="Link to this heading">#</a></h3>
+<p>To have access to a newly template from the CLI (command line interface), you must do
+the following:</p>
+<ol class="arabic">
+<li><p>Include the name and description of the new template in the
+<code class="docutils literal notranslate"><span class="pre">src/ansys/templates/__init__.py</span></code> file under the
+<code class="docutils literal notranslate"><span class="pre">AVAILABLE_TEMPLATES_AND_DESCRIPTION</span></code> dictionary.</p></li>
+<li><p>Add the path to the new template in <code class="docutils literal notranslate"><span class="pre">src/ansys/templates/paths.py</span></code> and in
+the <code class="docutils literal notranslate"><span class="pre">TEMPLATE_PATH_FINDER</span></code> dictionary.</p></li>
+<li><p>Create a command to expose the new template in the CLI:</p>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="nd">@new</span><span class="o">.</span><span class="n">command</span><span class="p">()</span>
+<span class="k">def</span> <span class="nf">template_name</span><span class="p">():</span>
+<span class="w">    </span><span class="sd">&quot;&quot;&quot;Short description of the template.&quot;&quot;&quot;</span>
+    <span class="n">bake_template</span><span class="p">(</span><span class="n">TEMPLATE_PATH_FINDER</span><span class="p">[</span><span class="s2">&quot;pyansys&quot;</span><span class="p">],</span> <span class="n">os</span><span class="o">.</span><span class="n">getcwd</span><span class="p">())</span>
+</pre></div>
+</div>
+</li>
+</ol>
+<section id="adding-unit-tests">
+<h4>Adding unit tests<a class="headerlink" href="#adding-unit-tests" title="Link to this heading">#</a></h4>
+<p>Each template must have its own unit test script. To organize the test suite,
+the following namespace is followed:</p>
+<ul class="simple">
+<li><p><code class="docutils literal notranslate"><span class="pre">tests/tests_templates_family/test_template_family_name_of_template.py</span></code></p></li>
+</ul>
+<div class="admonition note">
+<p class="admonition-title">Note</p>
+<p>If you created a new family template, make sure to include tests for the
+<code class="docutils literal notranslate"><span class="pre">family/common/</span></code> directory too.</p>
+</div>
+<p>Expected common files should be defined in <code class="docutils literal notranslate"><span class="pre">tests/tests_templates_family/conftest.py</span></code>
+as a <a class="reference external" href="https://docs.pytest.org/en/latest/explanation/fixtures.html">pytest fixture</a>. For example, consider the following code of a generic <code class="docutils literal notranslate"><span class="pre">conftest.py</span></code>
+file:</p>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="nd">@pytest</span><span class="o">.</span><span class="n">fixture</span><span class="p">(</span><span class="n">scope</span><span class="o">=</span><span class="s2">&quot;package&quot;</span><span class="p">)</span>
+<span class="k">def</span> <span class="nf">family_common_files</span><span class="p">():</span>
+
+    <span class="c1"># All expected common files</span>
+    <span class="n">basedir_files</span> <span class="o">=</span> <span class="p">[</span><span class="s2">&quot;README.rst&quot;</span><span class="p">,</span> <span class="s2">&quot;LICENSE&quot;</span><span class="p">]</span>
+    <span class="n">doc_files</span> <span class="o">=</span> <span class="p">[</span><span class="o">...</span><span class="p">]</span>
+    <span class="n">tests_files</span> <span class="o">=</span> <span class="p">[</span><span class="o">...</span><span class="p">]</span>
+
+    <span class="c1"># Combine all files and export those to be accessible to the tests</span>
+    <span class="n">all_common_files</span> <span class="o">=</span> <span class="n">basedir_files</span> <span class="o">+</span> <span class="n">doc_files</span> <span class="o">+</span> <span class="n">tests_files</span>
+    <span class="k">return</span> <span class="n">all_common_files</span>
+</pre></div>
+</div>
+</section>
+<section id="add-the-family-to-tox-envs">
+<h4>Add the family to tox envs<a class="headerlink" href="#add-the-family-to-tox-envs" title="Link to this heading">#</a></h4>
+<p>If you created a new family, you must add it to the [tox] set of
+environments:</p>
+<ol class="arabic">
+<li><p>Look for the <code class="docutils literal notranslate"><span class="pre">[testenv]</span></code> section in the <code class="docutils literal notranslate"><span class="pre">tox.ini</span></code> file.</p></li>
+<li><p>Within this section, look for the <code class="docutils literal notranslate"><span class="pre">setenv</span></code> variable.</p></li>
+<li><p>Add the following line:</p>
+<div class="highlight-text notranslate"><div class="highlight"><pre><span></span>family: PYTEST_MARKERS = -k &quot;tests_templates_family&quot;
+</pre></div>
+</div>
+</li>
+</ol>
+</section>
+<section id="updating-the-ci">
+<h4>Updating the CI<a class="headerlink" href="#updating-the-ci" title="Link to this heading">#</a></h4>
+<p>Each family of templates is tested within its own <a class="reference external" href="https://docs.github.com/en/actions">GitHub actions</a> workflow.
+Therefore, you need to create a YML file for a new family:</p>
+<ul class="simple">
+<li><p><code class="docutils literal notranslate"><span class="pre">.github/workflows/templates_family.yml</span></code></p></li>
+</ul>
+<div class="admonition note">
+<p class="admonition-title">Note</p>
+<p>To reduce the amount of CI jobs, templates are only tested under Linux.
+If you require testing from a particular programming language, try to test the
+minimum and maximum supported versions of the language. Avoid all intermediate
+versions if possible.</p>
+</div>
+</section>
+</section>
+</section>
+<section id="removing-undesired-files">
+<h2>Removing undesired files<a class="headerlink" href="#removing-undesired-files" title="Link to this heading">#</a></h2>
+<p>It is likely that there are some files coming from the <code class="docutils literal notranslate"><span class="pre">common/</span></code>
+directory that you do not want included in your rendered template. To exclude files,
+you can take advantage of <a class="reference external" href="https://cookiecutter.readthedocs.io/en/latest/advanced/hooks.html">cookiecutter hooks</a>.</p>
+<p>Hooks are Python scripts that allow you to control the rendering process both before
+and after the process is executed. With hooks, you can move or delete any files
+included in the final rendered project.</p>
+<p>To use hooks, you must create a new directory named <code class="docutils literal notranslate"><span class="pre">src/ansys/templates/new_family/new_template/hooks</span></code>.
+Only two hooks are allowed:</p>
+<ul class="simple">
+<li><p><code class="docutils literal notranslate"><span class="pre">pre_gen_project.py</span></code>: executes before rendering process.</p></li>
+<li><p><code class="docutils literal notranslate"><span class="pre">post_gen_project.py</span></code>: executes after the rendering process.</p></li>
+</ul>
+<div class="admonition warning">
+<p class="admonition-title">Warning</p>
+<p>Both hooks are executed once the cookiecutter context has been started. This
+implies that any file with a variable of the type <code class="docutils literal notranslate"><span class="pre">{{</span> <span class="pre">cookiecutter.some_var</span> <span class="pre">}}</span></code>
+or Jinja2 syntax is not rendered.</p>
+</div>
+</section>
+</section>
+
+
+                </article>
+              
+              
+              
+              
+              
+            </div>
+            
+            
+              
+                <div class="bd-sidebar-secondary bd-toc"><div class="sidebar-secondary-items sidebar-secondary__inner">
+
+
+  <div class="sidebar-secondary-item">
+<div
+    id="pst-page-navigation-heading-2"
+    class="page-toc tocsection onthispage">
+    <i class="fa-solid fa-list"></i> On this page
+  </div>
+  <nav class="bd-toc-nav page-toc" aria-labelledby="pst-page-navigation-heading-2">
+    <ul class="visible nav section-nav flex-column">
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#understanding-the-templates-directory">Understanding the templates directory</a></li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#adding-a-new-family-of-templates">Adding a new family of templates</a></li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#adding-a-new-template-to-a-family">Adding a new template to a family</a><ul class="nav section-nav flex-column">
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#adding-a-new-template-to-the-cli">Adding a new template to the CLI</a><ul class="nav section-nav flex-column">
+<li class="toc-h4 nav-item toc-entry"><a class="reference internal nav-link" href="#adding-unit-tests">Adding unit tests</a></li>
+<li class="toc-h4 nav-item toc-entry"><a class="reference internal nav-link" href="#add-the-family-to-tox-envs">Add the family to tox envs</a></li>
+<li class="toc-h4 nav-item toc-entry"><a class="reference internal nav-link" href="#updating-the-ci">Updating the CI</a></li>
+</ul>
+</li>
+</ul>
+</li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#removing-undesired-files">Removing undesired files</a></li>
+</ul>
+  </nav></div>
+
+  <div class="sidebar-secondary-item"> 
+<div class="tocsection editthispage">
+  <a href="https://github.com/ansys/ansys-templates/edit/main/doc/source/user_guide/templating.rst">
+    <i class="fa-solid fa-pencil"></i>
+       Edit
+    on GitHub  
+  </a>
+</div>
+
+</div>
+
+  <div class="sidebar-secondary-item">
+
+  <div class="tocsection sourcelink">
+    <a href="../_sources/user_guide/templating.rst.txt">
+      <i class="fa-solid fa-file-lines"></i> Show Source
+    </a>
+  </div>
+</div>
+
+</div></div>
+              
+            
+          </div>
+          <footer class="bd-footer-content">
+            
+          </footer>
+        
+      </main>
+    </div>
+  </div>
+  
+  <!-- Scripts loaded after <body> so the DOM is not blocked -->
+  <script src="../_static/scripts/bootstrap.js?digest=dfe6caa3a7d634c4db9b"></script>
+<script src="../_static/scripts/pydata-sphinx-theme.js?digest=dfe6caa3a7d634c4db9b"></script>
+
+  <footer class="bd-footer">
+<div class="bd-footer__inner bd-page-width">
+  
+    <div class="footer-items__start">
+      
+        <div class="footer-item">
+
+  <p class="copyright">
+    
+      © Copyright (c) 2022-2024 ANSYS, Inc. and/or its affiliates..
+      <br/>
+    
+  </p>
+</div>
+      
+        <div class="footer-item">
+
+  <p class="sphinx-version">
+    Created using <a href="https://www.sphinx-doc.org/">Sphinx</a> 8.0.2.
+    <br/>
+  </p>
+</div>
+      
+    </div>
+  
+  
+  
+    <div class="footer-items__end">
+      
+        <div class="footer-item"><p class="theme-version">
+  Built with the
+  <a href="https://sphinxdocs.ansys.com/version/stable/index.html"
+    >Ansys Sphinx Theme</a
+  >
+  1.0.5. <br />Last updated on
+  <span id="date"></span>
+</p>
+<script>
+  var options = { day: "numeric", month: "long", year: "numeric" };
+  var lastModifiedDate = new Date(document.lastModified);
+  var date = lastModifiedDate.toLocaleDateString("en-US", options);
+  document.getElementById("date").innerHTML = date;
+</script></div>
+      
+    </div>
+  
+</div>
+
+  </footer>
+  </body>
+</html>
