@@ -49,8 +49,8 @@ jobs:
         with:
           token: {{ '${{ secrets.GITHUB_TOKEN }}' }}
 
-  smoke-tests:
-    name: "Build and Smoke tests"
+  build-wheelhouse:
+    name: "Build wheelhouse"
     runs-on: {{ '${{ matrix.os }}' }}
     needs: [code-style]
     strategy:
@@ -75,7 +75,7 @@ jobs:
   tests:
     name: "Tests"
     runs-on: {{ '${{ matrix.os }}' }}
-    needs: [smoke-tests]
+    needs: [build-wheelhouse]
     strategy:
       matrix:
        os: [ubuntu-latest, windows-latest]
@@ -225,7 +225,7 @@ jobs:
   release-github:
     name: "Release to GitHub"
     runs-on: ubuntu-latest
-    needs: [doc-build, release-pypi-private]
+    needs: [doc-build, build-wheelhouse, release-pypi-private]
     steps:
       - name: "Release to GitHub"
         if: github.event_name == 'push' && contains(github.ref, 'refs/tags')
