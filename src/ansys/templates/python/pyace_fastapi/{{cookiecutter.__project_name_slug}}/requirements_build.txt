@@ -1,5 +1,5 @@
 build>=0.7.0
 fastapi==0.115.12
-pydantic==2.11.4
+pydantic==2.11.5
 twine>=3.8
-uvicorn==0.34.2
+uvicorn==0.34.3
