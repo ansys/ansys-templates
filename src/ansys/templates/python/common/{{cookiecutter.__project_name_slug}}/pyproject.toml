@@ -36,11 +36,11 @@ dependencies = []
 
 [project.optional-dependencies]
 tests = [
-    "pytest==8.3.5",
+    "pytest==8.4.0",
     "pytest-cov==6.1.1",
 ]
 doc = [
-    "ansys-sphinx-theme==1.5.0",
+    "ansys-sphinx-theme==1.5.2",
     "numpydoc==1.8.0",
     "Sphinx==8.2.3",
     "sphinx-copybutton==0.5.2",
@@ -90,14 +90,14 @@ optional = true
 [tool.poetry.group.doc.dependencies]
 Sphinx = "^8.2.3"
 numpydoc = "^1.8.0"
-ansys-sphinx-theme = "^1.5.0"
+ansys-sphinx-theme = "^1.5.2"
 sphinx-copybutton = "^0.5.2"
 
 # Optional testing dependencies
 [tool.poetry.group.tests]
 optional = true
 [tool.poetry.group.tests.dependencies]
-pytest = "^8.3.5"
+pytest = "^8.4.0"
 pytest-cov = "^6.1.1"
 
 # Optional build requirements
