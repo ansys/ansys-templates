@@ -1,5 +1,5 @@
 build>=0.7.0
 flask==3.1.1
-flask-cors==6.0.0
+flask-cors==6.0.1
 flask-swagger-ui==5.21.0
 twine>=3.8
