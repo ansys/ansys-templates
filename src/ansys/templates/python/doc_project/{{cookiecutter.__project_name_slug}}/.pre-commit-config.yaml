@@ -19,7 +19,7 @@ repos:
     - '100'
 
 - repo: https://github.com/PyCQA/flake8
-  rev: 7.2.0
+  rev: 7.3.0
   hooks:
   - id: flake8
 
@@ -67,7 +67,7 @@ repos:
   - id: debug-statements
 
 - repo: https://github.com/python-jsonschema/check-jsonschema
-  rev: 0.33.0
+  rev: 0.33.2
   hooks:
   - id: check-github-workflows
     name: Check GitHub workflows
