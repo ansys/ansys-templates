@@ -1,4 +1,4 @@
 build>=0.7.0
-grpcio==1.73.1
-grpcio-tools==1.73.1
+grpcio==1.74.0
+grpcio-tools==1.74.0
 twine>=3.8
