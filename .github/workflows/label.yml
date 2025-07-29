@@ -47,6 +47,7 @@ jobs:
         startsWith(github.event.pull_request.head.ref, 'doc') ||
         startsWith(github.event.pull_request.head.ref, 'docs')
       with:
+        github_token: ${{ secrets.GITHUB_TOKEN }}
         labels: documentation
 
     - uses: actions-ecosystem/action-add-labels@v1.1.0
@@ -55,11 +56,13 @@ jobs:
         startsWith(github.event.pull_request.head.ref, 'no-ci') ||
         startsWith(github.event.pull_request.head.ref, 'ci')
       with:
+        github_token: ${{ secrets.GITHUB_TOKEN }}
         labels: maintenance
 
     - uses: actions-ecosystem/action-add-labels@v1.1.0
       if: startsWith(github.event.pull_request.head.ref, 'feat')
       with:
+        github_token: ${{ secrets.GITHUB_TOKEN }}
         labels: |
           enhancement
 
@@ -68,6 +71,7 @@ jobs:
         startsWith(github.event.pull_request.head.ref, 'fix') ||
         startsWith(github.event.pull_request.head.ref, 'patch')
       with:
+        github_token: ${{ secrets.GITHUB_TOKEN }}
         labels: bug
 
   commenter:
