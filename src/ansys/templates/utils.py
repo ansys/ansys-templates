@@ -21,7 +21,6 @@
 # SOFTWARE.
 
 """A collection of useful utilities and routines."""
-import json
 import os
 from pathlib import Path
 import shutil
@@ -224,27 +223,3 @@ def bake_template(template_path, output_path, license_path=MIT_LICENSE, **cookie
 
         # Bake the temporary project using cookiecutter with desired options
         cookiecutter(str(tmp_template_path), output_dir=str(output_path), **cookiecutter_kwargs)
-
-
-def load_inputs_from_configuration_file(template_path):
-    """
-    Read the cookiecutter.json file and return the inputs only.
-
-    Parameters
-    ----------
-    template_path: ~pathlib.Path
-        Path to the template.
-    """
-    with open(template_path / "cookiecutter.json", 'r') as json_file:
-        configuration = json.load(json_file)
-
-    inputs = {}
-    for key, value in configuration.items():
-        if key.startswith("_"):
-            continue
-        if isinstance(value, list):
-            inputs[key] = value[0]
-        else:
-            inputs[key] = value
-
-    return inputs
