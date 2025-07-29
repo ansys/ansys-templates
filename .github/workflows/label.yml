@@ -38,7 +38,8 @@ jobs:
     - name: Label based on changed files
       uses: actions/labeler@v5
       with:
-        repo-token: "${{ secrets.GITHUB_TOKEN }}"
+        repo-token: ${{ secrets.GITHUB_TOKEN }}
+        sync-labels: true
 
     # Label based on branch name
     - uses: actions-ecosystem/action-add-labels@v1.1.0
