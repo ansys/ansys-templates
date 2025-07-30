@@ -8,6 +8,9 @@ on:
       - main
   workflow_dispatch:
 
+env:
+  MAIN_PYTHON_VERSION: '3.12'
+
 concurrency:
   group: ${{ github.workflow }}-${{ github.ref }}
   cancel-in-progress: true
@@ -19,15 +22,23 @@ jobs:
     runs-on: ubuntu-latest
     strategy:
       matrix:
-        python-version: ["3.9", "3.11"]
+        python-version: ["3.10", "3.11", "3.12", "3.13"]
         include:
 
-          - python-version: "3.9"
-            toxenv: py39
+          - python-version: "3.10"
+            toxenv: py310
             toxextra: keep-output
 
           - python-version: "3.11"
             toxenv: py311
+            toxextra: keep-output
+
+          - python-version: "3.12"
+            toxenv: py312
+            toxextra: keep-output
+
+          - python-version: "3.13"
+            toxenv: py313
             toxextra: keep-output
 
         cfg:
@@ -72,7 +83,7 @@ jobs:
           tox -e ${{ matrix.toxenv }}-${{ matrix.toxextra }}-template
 
       - name: Move baked project to repo again
-        if: matrix.python-version == '3.9' && github.event_name == 'push'
+        if: matrix.python-version == env.MAIN_PYTHON_VERSION && github.event_name == 'push'
         run: |
           mv "output/test_template_python_${{ matrix.cfg.outdir }}" baked_template
           # GitHub Apps are not allowed to deal with .github workflows
@@ -80,7 +91,7 @@ jobs:
           ls -a baked_template
 
       - name: Create demo branch
-        if: matrix.python-version == '3.9' && github.event_name == 'push'
+        if: matrix.python-version == env.MAIN_PYTHON_VERSION && github.event_name == 'push'
         uses: peterjgrainger/action-create-branch@v3.0.0
         env:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
@@ -88,7 +99,7 @@ jobs:
           branch: "demo/${{ matrix.cfg.name }}"
 
       - name: Publish demo branch
-        if: matrix.python-version == '3.9' && github.event_name == 'push'
+        if: matrix.python-version == env.MAIN_PYTHON_VERSION && github.event_name == 'push'
         uses: s0/git-publish-subdir-action@develop
         env:
           REPO: self
