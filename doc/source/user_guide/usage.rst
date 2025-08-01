@@ -74,7 +74,6 @@ The following templates are returned:
    pyace-flask: Create a Flask project initialized for any developer.
    pyace-grpc: Create gRPC project initialized for any developer.
    pyace-fast: Create a FastAPI project initialized for any developer.
-   solution: Create a Solution based on the Solution Application Framework. **For Ansys Internal Use Only**
 
 Creating a new PyAnsys project
 ------------------------------

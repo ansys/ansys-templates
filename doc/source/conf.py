@@ -68,6 +68,7 @@ extensions = [
     "sphinx.ext.autosectionlabel",
     "sphinx.ext.intersphinx",
     "sphinx_copybutton",
+    "sphinx_design",
 ]
 
 suppress_warnings = ["autosectionlabel.changelog"]
