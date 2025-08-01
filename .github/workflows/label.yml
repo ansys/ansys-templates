@@ -38,35 +38,40 @@ jobs:
     - name: Label based on changed files
       uses: actions/labeler@v5
       with:
-        repo-token: "${{ secrets.GITHUB_TOKEN }}"
+        repo-token: ${{ secrets.GITHUB_TOKEN }}
+        sync-labels: true
 
     # Label based on branch name
-    - uses: actions-ecosystem/action-add-labels@v1
+    - uses: actions-ecosystem/action-add-labels@v1.1.0
       if: |
         startsWith(github.event.pull_request.head.ref, 'doc') ||
         startsWith(github.event.pull_request.head.ref, 'docs')
       with:
+        github_token: ${{ secrets.GITHUB_TOKEN }}
         labels: documentation
 
-    - uses: actions-ecosystem/action-add-labels@v1
+    - uses: actions-ecosystem/action-add-labels@v1.1.0
       if: |
         startsWith(github.event.pull_request.head.ref, 'maint') ||
         startsWith(github.event.pull_request.head.ref, 'no-ci') ||
         startsWith(github.event.pull_request.head.ref, 'ci')
       with:
+        github_token: ${{ secrets.GITHUB_TOKEN }}
         labels: maintenance
 
-    - uses: actions-ecosystem/action-add-labels@v1
+    - uses: actions-ecosystem/action-add-labels@v1.1.0
       if: startsWith(github.event.pull_request.head.ref, 'feat')
       with:
+        github_token: ${{ secrets.GITHUB_TOKEN }}
         labels: |
           enhancement
 
-    - uses: actions-ecosystem/action-add-labels@v1
+    - uses: actions-ecosystem/action-add-labels@v1.1.0
       if: |
         startsWith(github.event.pull_request.head.ref, 'fix') ||
         startsWith(github.event.pull_request.head.ref, 'patch')
       with:
+        github_token: ${{ secrets.GITHUB_TOKEN }}
         labels: bug
 
   commenter:
@@ -95,7 +100,7 @@ jobs:
       pull-requests: write
     runs-on: ubuntu-latest
     steps:
-    - uses: ansys/actions/doc-changelog@v8
+    - uses: ansys/actions/doc-changelog@v10
       with:
         token: ${{ secrets.PYANSYS_CI_BOT_TOKEN }}
         bot-user: ${{ secrets.PYANSYS_CI_BOT_USERNAME }}

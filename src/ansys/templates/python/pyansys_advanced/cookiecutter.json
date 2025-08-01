@@ -15,7 +15,7 @@
   "__repository_url": "{{ cookiecutter.repository_url }}",
   "documentation_url": "https://{{ cookiecutter.product_name }}.docs.pyansys.com",
   "__documentation_url": "{{ cookiecutter.documentation_url }}",
-  "requires_python": ["3.9", "3.10", "3.11", "3.12"],
+  "requires_python": ["3.10", "3.11", "3.12", "3.13"],
   "__requires_python": "{{ cookiecutter.requires_python }}",
   "build_system": ["flit", "poetry", "setuptools"],
   "__build_system": "{{ cookiecutter.build_system }}",
