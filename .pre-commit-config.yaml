@@ -22,7 +22,10 @@ repos:
   rev: v2.4.1
   hooks:
   - id: codespell
-    args: ["--ignore-words", "doc/styles/config/vocabularies/ANSYS/accept.txt", "-w"]
+    args:
+    - --ignore-words
+    - doc/styles/config/vocabularies/ANSYS/accept.txt
+    - -w
     exclude: src/ansys/templates/python/solution/{{cookiecutter.__project_name_slug}}/lock_files/dash/poetry.lock
 
 - repo: https://github.com/pycqa/pydocstyle
