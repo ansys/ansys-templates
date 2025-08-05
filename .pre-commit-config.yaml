@@ -1,39 +1,43 @@
 repos:
 
 - repo: https://github.com/psf/black
-  rev: 24.8.0
+  rev: 25.1.0
   hooks:
   - id: black
     exclude: ^src/ansys/templates/python/
 
 - repo: https://github.com/pycqa/isort
-  rev: 5.13.2
+  rev: 6.0.1
   hooks:
   - id: isort
 
 - repo: https://github.com/PyCQA/flake8
-  rev: 7.1.1
+  rev: 7.3.0
   hooks:
   - id: flake8
-    args: [
-      tests,
-    ]
+    args:
+    - tests
 
 - repo: https://github.com/codespell-project/codespell
-  rev: v2.2.4
+  rev: v2.4.1
   hooks:
   - id: codespell
-    exclude: 'src/ansys/templates/python/solution/{{cookiecutter.__project_name_slug}}/lock_files/dash/poetry.lock'
+    args:
+    - --ignore-words
+    - doc/styles/config/vocabularies/ANSYS/accept.txt
+    - -w
+    exclude: src/ansys/templates/python/solution/{{cookiecutter.__project_name_slug}}/lock_files/dash/poetry.lock
 
 - repo: https://github.com/pycqa/pydocstyle
   rev: 6.3.0
   hooks:
   - id: pydocstyle
-    additional_dependencies: [toml]
+    additional_dependencies:
+    - toml
     exclude: ^src/ansys/templates/python/|^tests
 
 - repo: https://github.com/pre-commit/pre-commit-hooks
-  rev: v4.6.0
+  rev: v5.0.0
   hooks:
   - id: check-merge-conflict
   - id: check-yaml
@@ -41,16 +45,15 @@ repos:
   - id: requirements-txt-fixer
   - id: trailing-whitespace
 
-# Validates github workflow files
 - repo: https://github.com/python-jsonschema/check-jsonschema
-  rev: 0.29.1
+  rev: 0.33.2
   hooks:
-    - id: check-github-workflows
+  - id: check-github-workflows
 
 - repo: https://github.com/ansys/pre-commit-hooks
-  rev: v0.4.4
+  rev: v0.5.2
   hooks:
   - id: add-license-headers
     args:
     - --start_year=2022
-    exclude: 'src/ansys/templates/python/'
+    exclude: src/ansys/templates/python/
