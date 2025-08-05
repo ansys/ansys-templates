@@ -8,7 +8,7 @@ on:
       - main
 
 env:
-  MAIN_PYTHON_VERSION : '3.10'
+  MAIN_PYTHON_VERSION : '3.12'
   LIBRARY_NAME: 'ansys-templates'
   DOCUMENTATION_CNAME: 'templates.ansys.com'
 
@@ -64,7 +64,7 @@ jobs:
       fail-fast: false
       matrix:
         os: [ubuntu-latest, windows-latest, macos-latest]
-        python-version: ['3.10', '3.11', '3.12']
+        python-version: ['3.10', '3.11', '3.12', '3.13']
         should-release:
           - ${{ github.event_name == 'push' && contains(github.ref, 'refs/tags') }}
         exclude:
@@ -86,10 +86,10 @@ jobs:
       matrix:
         os: [windows-latest, ubuntu-latest]
         cfg:
-          - {python-version: "3.9", toxenv: "py39"}
           - {python-version: "3.10", toxenv: "py310"}
           - {python-version: "3.11", toxenv: "py311"}
           - {python-version: "3.12", toxenv: "py312"}
+          - {python-version: "3.13", toxenv: "py313"}
       fail-fast: false
 
     steps:
@@ -158,6 +158,7 @@ jobs:
         uses: ansys/actions/release-github@v10
         with:
           library-name: ${{ env.LIBRARY_NAME }}
+          token: ${{ secrets.GITHUB_TOKEN }}
 
   doc-deploy-stable:
     name: Doc stable version deploy
