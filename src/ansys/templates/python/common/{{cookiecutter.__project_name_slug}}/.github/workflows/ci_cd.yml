@@ -55,22 +55,13 @@ jobs:
     name: Vulnerabilities
     runs-on: ubuntu-latest
     steps:
-      - name: PyAnsys Vulnerability check (on main)
-        if: github.ref == 'refs/heads/main'
+      - name: PyAnsys Vulnerability check
         uses: ansys/actions/check-vulnerabilities@v10
         with:
           python-version: {{ '${{ env.MAIN_PYTHON_VERSION }}' }}
           python-package-name: {{ '${{ env.PACKAGE_NAME }}' }}
           token: {{ '${{ secrets.PYANSYS_CI_BOT_TOKEN }}' }}
-
-      - name: PyAnsys Vulnerability check (on dev mode)
-        if: github.ref != 'refs/heads/main'
-        uses: ansys/actions/check-vulnerabilities@v10
-        with:
-          python-version: {{ '${{ env.MAIN_PYTHON_VERSION }}' }}
-          python-package-name: {{ '${{ env.PACKAGE_NAME }}' }}
-          token: {{ '${{ secrets.PYANSYS_CI_BOT_TOKEN }}' }}
-          dev-mode: true
+          dev-mode: ${{ github.ref != 'refs/heads/main' }}
 
   smoke-tests:
     name: "Build and Smoke tests"
