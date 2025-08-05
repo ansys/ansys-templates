@@ -1,4 +1,4 @@
-# Copyright (C) 2022 - 2024 ANSYS, Inc. and/or its affiliates.
+# Copyright (C) 2022 - 2025 ANSYS, Inc. and/or its affiliates.
 # SPDX-License-Identifier: MIT
 #
 #
@@ -63,9 +63,6 @@ PYTHON_TEMPLATES_PYACE_FLASK_PATH = PYTHON_TEMPLATES_PATH / "pyace_flask"
 PYTHON_TEMPLATES_PYACE_FAST_PATH = PYTHON_TEMPLATES_PATH / "pyace_fastapi"
 """Path to the FastAPI based Python Project template."""
 
-PYTHON_TEMPLATES_SOLUTION_PATH = PYTHON_TEMPLATES_PATH / "solution"
-"""Path to the Solution template."""
-
 TEMPLATE_PATH_FINDER = {
     "common": PYTHON_TEMPLATES_COMMON_PATH,
     "doc-project": PYTHON_TEMPLATES_DOC_PROJECT,
@@ -77,6 +74,5 @@ TEMPLATE_PATH_FINDER = {
     "pyace-grpc": PYTHON_TEMPLATES_PYACE_GRPC_PATH,
     "pyace-flask": PYTHON_TEMPLATES_PYACE_FLASK_PATH,
     "pyace-fast": PYTHON_TEMPLATES_PYACE_FAST_PATH,
-    "solution": PYTHON_TEMPLATES_SOLUTION_PATH,
 }
 """A dictionary relating templates names with their paths."""

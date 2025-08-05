@@ -9,6 +9,90 @@ This document contains the release notes for the project.
 
 .. towncrier release notes start
 
+`5.1.0 <https://github.com/ansys/ansys-templates/releases/tag/v5.1.0>`_ - April 08, 2025
+========================================================================================
+
+.. tab-set::
+
+
+  .. tab-item:: Miscellaneous
+
+    .. list-table::
+        :header-rows: 0
+        :widths: auto
+
+        * - Add method to detect activated venv.
+          - `#520 <https://github.com/ansys/ansys-templates/pull/520>`_
+
+        * - fix: replace move by copy method to enable overwrite.
+          - `#522 <https://github.com/ansys/ansys-templates/pull/522>`_
+
+        * - Add token validity check.
+          - `#528 <https://github.com/ansys/ansys-templates/pull/528>`_
+
+        * - Use more recent version of dash-super-components
+          - `#530 <https://github.com/ansys/ansys-templates/pull/530>`_
+
+        * - [new solution] Support for python 3.12
+          - `#531 <https://github.com/ansys/ansys-templates/pull/531>`_
+
+        * - [new-solution] runtime error in the UI container
+          - `#533 <https://github.com/ansys/ansys-templates/pull/533>`_
+
+
+  .. tab-item:: Documentation
+
+    .. list-table::
+        :header-rows: 0
+        :widths: auto
+
+        * - chore: update CHANGELOG for v5.0.0
+          - `#517 <https://github.com/ansys/ansys-templates/pull/517>`_
+
+        * - fix PYPI PAT in README
+          - `#527 <https://github.com/ansys/ansys-templates/pull/527>`_
+
+
+  .. tab-item:: Maintenance
+
+    .. list-table::
+        :header-rows: 0
+        :widths: auto
+
+        * - Build(deps): Bump ansys/actions from 7 to 8
+          - `#507 <https://github.com/ansys/ansys-templates/pull/507>`_
+
+        * - feat: Add .gitattributes file
+          - `#536 <https://github.com/ansys/ansys-templates/pull/536>`_
+
+
+`5.0.0 <https://github.com/ansys/ansys-templates/releases/tag/v5.0.0>`_ - 2024-12-09
+====================================================================================
+
+Fixed
+^^^^^
+
+- fix: contribut**** files `#509 <https://github.com/ansys/ansys-templates/pull/509>`_
+
+
+Miscellaneous
+^^^^^^^^^^^^^
+
+- Update solution template `#516 <https://github.com/ansys/ansys-templates/pull/516>`_
+
+
+Documentation
+^^^^^^^^^^^^^
+
+- chore: update CHANGELOG for v4.0.0 `#503 <https://github.com/ansys/ansys-templates/pull/503>`_
+
+
+Maintenance
+^^^^^^^^^^^
+
+- Update dev version. `#504 <https://github.com/ansys/ansys-templates/pull/504>`_
+- Add configuration file for containerized deployment. `#512 <https://github.com/ansys/ansys-templates/pull/512>`_
+
 `4.0.0 <https://github.com/ansys/ansys-templates/releases/tag/v4.0.0>`_ - 2024-08-19
 ====================================================================================
 

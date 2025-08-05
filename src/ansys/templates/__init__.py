@@ -1,4 +1,4 @@
-# Copyright (C) 2022 - 2024 ANSYS, Inc. and/or its affiliates.
+# Copyright (C) 2022 - 2025 ANSYS, Inc. and/or its affiliates.
 # SPDX-License-Identifier: MIT
 #
 #
@@ -44,6 +44,5 @@ AVAILABLE_TEMPLATES_AND_DESCRIPTION = {
     "pyace-flask": "Create a Flask project initialized for any developer.",
     "pyace-grpc": "Create gRPC project initialized for any developer.",
     "pyace-fast": "Create a FastAPI project initialized for any developer.",
-    "solution": "[Ansys Internal Use Only] Create a solution based on SAF.",
 }
 """A list holding all available templates names."""

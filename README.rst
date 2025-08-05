@@ -45,7 +45,7 @@ Ansys templates
    :alt: CH-CI
 
 .. |MIT| image:: https://img.shields.io/badge/License-MIT-yellow.svg
-   :target: https://opensource.org/licenses/MIT
+   :target: https://spdx.org/licenses/MIT.html
    :alt: MIT
 
 .. |black| image:: https://img.shields.io/badge/code%20style-black-000000.svg?style=flat
@@ -108,7 +108,6 @@ Available templates in ``ansys-templates`` are:
 - ``pyace-flask``: Create a Flask project initialized for any developer.
 - ``pyace-grpc``: Create gRPC project initialized for any developer.
 - ``pyace-fast``: Create a FastAPI project initialized for any developer.
-- ``solution``: Create a Solution based on the Solution Application Framework. **For Ansys Internal Use Only**
 
 
 Template features
@@ -137,11 +136,7 @@ available in ``ansys-templates``:
 +-------------------------+-----------------------+-----------------+---------+----------+----------------+---------+
 | pyace-grpc              |  ``X``                |  ``X``          |  ``X``  |  ``X``   |  ``X``         |  ``X``  |
 +-------------------------+-----------------------+-----------------+---------+----------+----------------+---------+
-| solution "*"            |                       |  ``X``          |  ``X``  |  ``X``   |  ``X``         |         |
-+-------------------------+-----------------------+-----------------+---------+----------+----------------+---------+
 
-.. warning::
-    "*" This template is for **Ansys Internal Use Only**.
 
 Demo branches
 -------------
@@ -158,7 +153,6 @@ its corresponding demonstration branch.
 * Demo branch for `pyace-fast`_
 * Demo branch for `pyace-flask`_
 * Demo branch for `pyace-grpc`_
-* Demo branch for `solution`_
 
 
 .. _doc-project: https://github.com/ansys/ansys-templates/tree/demo/doc-project
@@ -171,5 +165,4 @@ its corresponding demonstration branch.
 .. _pyace-fast: https://github.com/ansys/ansys-templates/tree/demo/pyace-fast
 .. _pyace-flask: https://github.com/ansys/ansys-templates/tree/demo/pyace-flask
 .. _pyace-grpc: https://github.com/ansys/ansys-templates/tree/demo/pyace-grpc
-.. _solution: https://github.com/ansys/ansys-templates/tree/demo/solution
 

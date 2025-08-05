@@ -1,4 +1,4 @@
-# Copyright (C) 2022 - 2024 ANSYS, Inc. and/or its affiliates.
+# Copyright (C) 2022 - 2025 ANSYS, Inc. and/or its affiliates.
 # SPDX-License-Identifier: MIT
 #
 #
@@ -27,8 +27,8 @@ import os
 import click
 
 from ansys.templates import AVAILABLE_TEMPLATES_AND_DESCRIPTION, __version__
-from ansys.templates.paths import PYTHON_TEMPLATES_SOLUTION_PATH, TEMPLATE_PATH_FINDER
-from ansys.templates.utils import bake_template, load_inputs_from_configuration_file
+from ansys.templates.paths import TEMPLATE_PATH_FINDER
+from ansys.templates.utils import bake_template
 
 
 def create_project(template, no_input=False, extra_context={}):
@@ -121,26 +121,3 @@ def pyace_flask():
 def pyace_grpc():
     """Create gRPC project initialized for any developer."""
     create_project("pyace-grpc")
-
-
-@new.command()
-@click.option('-s', '--solution-name', type=str, help="Name of the solution in the definition.")
-@click.option('-d', '--solution-display-name', type=str, help="Name of the solution in the user interface.")
-@click.option("-u", "--with-dash-ui", type=click.Choice(["No", "Default", "AWC"]), help="Create a Dash UI for the solution.")
-def solution(solution_name, solution_display_name, with_dash_ui):
-    """[Ansys Internal Use Only] Create a solution based on SAF."""
-    template = "solution"
-    extra_context = load_inputs_from_configuration_file(PYTHON_TEMPLATES_SOLUTION_PATH)
-    no_input = True if solution_name or solution_display_name or with_dash_ui else False
-    if solution_name:
-        extra_context["solution_name"] = solution_name
-    if solution_display_name:
-        extra_context["solution_display_name"] = solution_display_name
-    if with_dash_ui == "No":
-        extra_context["dash_ui"] = "no"
-    elif with_dash_ui == "Default":
-        extra_context["dash_ui"] = "default"
-    elif with_dash_ui == "AWC":
-        extra_context["dash_ui"] = "awc"
-
-    create_project(template, no_input=no_input, extra_context=extra_context)

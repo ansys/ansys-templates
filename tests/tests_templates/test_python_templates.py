@@ -1,4 +1,4 @@
-# Copyright (C) 2022 - 2024 ANSYS, Inc. and/or its affiliates.
+# Copyright (C) 2022 - 2025 ANSYS, Inc. and/or its affiliates.
 # SPDX-License-Identifier: MIT
 #
 #
@@ -38,7 +38,7 @@ PYBASIC_VARS = dict(
     __project_name_slug="pybasic",
     short_description="A basic Python Package",
     repository_url="https://platform.domain/organization/pybasic",
-    requires_python="3.9",
+    requires_python="3.12",
 )
 
 PYANSYS_VARS = PYANSYS_ADVANCED_VARS = dict(
@@ -47,7 +47,7 @@ PYANSYS_VARS = PYANSYS_ADVANCED_VARS = dict(
     __product_name_slug="product",
     __library_name_slug="library",
     __project_name_slug="pyproduct-library",
-    requires_python="3.9",
+    requires_python="3.12",
 )
 
 PYANSYS_OPENAPI_VARS = dict(
@@ -56,7 +56,7 @@ PYANSYS_OPENAPI_VARS = dict(
     __product_name_slug="product",
     __library_name_slug="library",
     __project_name_slug="pyproduct-library-openapi",
-    requires_python="3.9",
+    requires_python="3.12",
 )
 
 PYACE_VARS = dict(
@@ -66,7 +66,7 @@ PYACE_VARS = dict(
     copyright="My Company",
     enable_docker="Yes",
     __project_name_slug = "project",
-    requires_python="3.9",
+    requires_python="3.12",
 )
 
 DOC_PROJECT_VARS = dict(
@@ -74,13 +74,7 @@ DOC_PROJECT_VARS = dict(
     __project_name_slug = "doc-project",
     logo="Ansys",
     logo_color="black",
-    requires_python="3.9",
-)
-
-SOLUTION_VARS = dict(
-    __solution_name_slug="solution",
-    __project_name_slug="solution",
-    dash_ui="default",
+    requires_python="3.12",
 )
 
 PYCOMMON_STRUCTURE = [
@@ -286,89 +280,6 @@ DOC_PROJECT_STRUCTURE = [
     "tox.ini",
 ]
 
-# Structure for solution projects
-SOLUTION_STRUCTURE = [
-    ".devcontainer/devcontainer.json",
-    ".github/workflows/build-release.yml",
-    ".github/workflows/release-please.yml",
-    ".github/workflows/label.yml",
-    ".github/labeler.yml",
-    ".github/labels.yml",
-    ".vscode/launch.json",
-    ".vscode/extensions.json",
-    "doc/changelog.d/changelog_template.jinja",
-    "doc/source/_static/ansys-solutions-logo-black-background.png",
-    "doc/source/_static/README.md",
-    "doc/source/_templates/README.md",
-    "doc/source/getting_started/index.rst",
-    "doc/source/changelog.rst",
-    "doc/source/conf.py",
-    "doc/source/examples.rst",
-    "doc/source/index.rst",
-    "doc/styles/config/vocabularies/ANSYS/accept.txt",
-    "doc/styles/config/vocabularies/ANSYS/reject.txt",
-    "doc/styles/.gitignore",
-    "doc/.vale.ini",
-    "doc/make.bat",
-    "doc/Makefile",
-    "examples/README.md",
-    f"src/ansys/solutions/{SOLUTION_VARS['__solution_name_slug']}/datamodel/README.md",
-    f"src/ansys/solutions/{SOLUTION_VARS['__solution_name_slug']}/logic/assets/README.md",
-    f"src/ansys/solutions/{SOLUTION_VARS['__solution_name_slug']}/logic/README.md",
-    f"src/ansys/solutions/{SOLUTION_VARS['__solution_name_slug']}/solution/method_assets/README.md",
-    f"src/ansys/solutions/{SOLUTION_VARS['__solution_name_slug']}/solution/definition.py",
-    f"src/ansys/solutions/{SOLUTION_VARS['__solution_name_slug']}/solution/first_step.py",
-    f"src/ansys/solutions/{SOLUTION_VARS['__solution_name_slug']}/solution/second_step.py",
-    f"src/ansys/solutions/{SOLUTION_VARS['__solution_name_slug']}/__init__.py",
-    f"src/ansys/solutions/{SOLUTION_VARS['__solution_name_slug']}/main.py",
-    f"src/ansys/solutions/{SOLUTION_VARS['__solution_name_slug']}/ui/assets/css/style.css",
-    f"src/ansys/solutions/{SOLUTION_VARS['__solution_name_slug']}/ui/assets/images/README.md",
-    f"src/ansys/solutions/{SOLUTION_VARS['__solution_name_slug']}/ui/assets/images/solution-workflow-sketch.png",
-    f"src/ansys/solutions/{SOLUTION_VARS['__solution_name_slug']}/ui/assets/logos/ansys_solutions_logo_black.png",
-    f"src/ansys/solutions/{SOLUTION_VARS['__solution_name_slug']}/ui/assets/logos/ansys_solutions_logo_white.png",
-    f"src/ansys/solutions/{SOLUTION_VARS['__solution_name_slug']}/ui/assets/scripts/README.md",
-    f"src/ansys/solutions/{SOLUTION_VARS['__solution_name_slug']}/ui/components/README.md",
-    f"src/ansys/solutions/{SOLUTION_VARS['__solution_name_slug']}/ui/pages/about_page.py",
-    f"src/ansys/solutions/{SOLUTION_VARS['__solution_name_slug']}/ui/pages/first_page.py",
-    f"src/ansys/solutions/{SOLUTION_VARS['__solution_name_slug']}/ui/pages/second_page.py",
-    f"src/ansys/solutions/{SOLUTION_VARS['__solution_name_slug']}/ui/pages/page.py",
-    f"src/ansys/solutions/{SOLUTION_VARS['__solution_name_slug']}/ui/app.py",
-    "telemetry/grafana/compose.yaml",
-    "telemetry/grafana/_deploy/compose/collector/otel-collector-config.yaml",
-    "telemetry/grafana/_deploy/compose/grafana/grafana-dashboard.json",
-    "telemetry/grafana/_deploy/compose/grafana/grafana-dashboards.yml",
-    "telemetry/grafana/_deploy/compose/grafana/grafana-datasources.yml",
-    "telemetry/grafana/_deploy/compose/grafana/grafana.ini",
-    "telemetry/grafana/_deploy/compose/loki/loki.yml",
-    "telemetry/grafana/_deploy/compose/prometheus/prometheus.yml",
-    "telemetry/tracelens/compose.yaml",
-    "tests/common_test_files/README.md",
-    "tests/integration/test_integration_dummy.py",
-    "tests/unit/test_unit_dummy.py",
-    "tests/conftest.py",
-    ".codespell.exclude",
-    ".codespell.ignore",
-    ".env",
-    ".flake8",
-    ".gitignore",
-    ".pre-commit-config.yaml",
-    "AUTHORS",
-    "CHANGELOG.md",
-    "CODE_OF_CONDUCT.md",
-    "CODEOWNERS",
-    "CONTRIBUTING.md",
-    "CONTRIBUTORS.md",
-    "LICENSE.rst",
-    "poetry.lock",
-    "pyproject.toml",
-    "README.rst",
-    "setup_environment.py",
-    "sonar-project.properties",
-    "tox.ini",
-    "release-please-config.json",
-    "release-please-manifest.json"
-]
-
 
 # A dictionary relating templates name with their variables and structure
 TEMPLATES_VARIABLES_AND_STRUCTURE = {
@@ -382,7 +293,6 @@ TEMPLATES_VARIABLES_AND_STRUCTURE = {
     "pyace-fast": [PYACE_VARS, PYACE_FAST_STRUCTURE],
     "pyace": [PYACE_VARS, PYACE_PKG_STRUCTURE],
     "doc-project": [DOC_PROJECT_VARS, DOC_PROJECT_STRUCTURE],
-    "solution": [SOLUTION_VARS, SOLUTION_STRUCTURE],
 }
 
 
@@ -394,7 +304,7 @@ def test_template_python(tmp_path, build_system, template):
     template_path = TEMPLATE_PATH_FINDER[template]
     with open(template_path / "cookiecutter.json", 'r', encoding="utf-8") as fp:
         config_json = json.load(fp)
-    default_build_system = "setuptools" if template != "solution" else "poetry"
+    default_build_system = "setuptools"
     supported_build_systems = config_json.get("build_system", [default_build_system])
 
     # Skip if template does not support a particular build system
