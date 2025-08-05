@@ -21,7 +21,7 @@ setup(
     description="A my_company Python project for my_company library",
     long_description=open("README.rst").read(),
     install_requires=["importlib-metadata >=4.0"],
-    python_requires=">=3.9",
+    python_requires=">=3.12",
     packages=find_namespace_packages(where="src"),
     package_dir={"": "src"},
 )
