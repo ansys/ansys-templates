@@ -42,7 +42,7 @@ jobs:
         sync-labels: true
 
     # Label based on branch name
-    - uses: actions-ecosystem/action-add-labels@v1.1.0
+    - uses: actions-ecosystem/action-add-labels@v1.1.3
       if: |
         startsWith(github.event.pull_request.head.ref, 'doc') ||
         startsWith(github.event.pull_request.head.ref, 'docs')
@@ -50,7 +50,7 @@ jobs:
         github_token: ${{ secrets.GITHUB_TOKEN }}
         labels: documentation
 
-    - uses: actions-ecosystem/action-add-labels@v1.1.0
+    - uses: actions-ecosystem/action-add-labels@v1.1.3
       if: |
         startsWith(github.event.pull_request.head.ref, 'maint') ||
         startsWith(github.event.pull_request.head.ref, 'no-ci') ||
@@ -59,14 +59,14 @@ jobs:
         github_token: ${{ secrets.GITHUB_TOKEN }}
         labels: maintenance
 
-    - uses: actions-ecosystem/action-add-labels@v1.1.0
+    - uses: actions-ecosystem/action-add-labels@v1.1.3
       if: startsWith(github.event.pull_request.head.ref, 'feat')
       with:
         github_token: ${{ secrets.GITHUB_TOKEN }}
         labels: |
           enhancement
 
-    - uses: actions-ecosystem/action-add-labels@v1.1.0
+    - uses: actions-ecosystem/action-add-labels@v1.1.3
       if: |
         startsWith(github.event.pull_request.head.ref, 'fix') ||
         startsWith(github.event.pull_request.head.ref, 'patch')
