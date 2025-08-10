@@ -11,6 +11,7 @@
 * [Alex Fernandez](https://github.com/AlejandroFernandezLuces)
 * [Alex Kaszynski](https://github.com/akaszynski)
 * [Babacar FALL](https://github.com/asbfall)
+* [Camille Latapie](https://github.com/clatapie)
 * [ccpansys](https://github.com/ccpansys)
 * [Dan Williams](https://github.com/dnwillia-work)
 * [Dave Rojas](https://github.com/daveek)
