@@ -1,4 +1,4 @@
-coverage==7.10.2
+coverage==7.10.4
 docker==7.1.0
 fastapi==0.116.1
 pydantic==2.11.7
