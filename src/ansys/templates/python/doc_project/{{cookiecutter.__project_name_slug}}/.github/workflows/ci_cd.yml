@@ -21,7 +21,7 @@ jobs:
     name: Code style
     runs-on: ubuntu-latest
     steps:
-      - uses: actions/checkout@v4
+      - uses: actions/checkout@v5
       - name: Set up Python
         uses: actions/setup-python@v5
         with:
@@ -36,7 +36,7 @@ jobs:
     name: Documentation Style Check
     runs-on: ubuntu-latest
     steps:
-      - uses: actions/checkout@v4
+      - uses: actions/checkout@v5
 
       - name: Running Vale
         uses: errata-ai/vale-action@reviewdog
@@ -55,7 +55,7 @@ jobs:
     needs: [style, docs-style]
     runs-on: ubuntu-latest
     steps:
-      - uses: actions/checkout@v4
+      - uses: actions/checkout@v5
 
       - name: Set up Python
         uses: actions/setup-python@v5
@@ -111,9 +111,9 @@ jobs:
     needs: [style, docs-style, docs]
     runs-on: ubuntu-latest
     steps:
-      - uses: actions/checkout@v4
+      - uses: actions/checkout@v5
 
-      - uses: actions/download-artifact@v4
+      - uses: actions/download-artifact@v5
 
       - name: Display structure of downloaded files
         run: ls -R

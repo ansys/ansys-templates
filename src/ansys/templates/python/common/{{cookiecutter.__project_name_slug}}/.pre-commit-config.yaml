@@ -33,14 +33,14 @@ repos:
     exclude: tests/
 
 - repo: https://github.com/pre-commit/pre-commit-hooks
-  rev: v5.0.0
+  rev: v6.0.0
   hooks:
   - id: check-merge-conflict
   - id: requirements-txt-fixer
   - id: trailing-whitespace
 
 - repo: https://github.com/python-jsonschema/check-jsonschema
-  rev: 0.33.2
+  rev: 0.33.3
   hooks:
   - id: check-github-workflows
 
