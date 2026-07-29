@@ -76,5 +76,5 @@ def test_cli_main_version_command():
 def test_cli_main_new(template):
     runner = CliRunner()
     with runner.isolated_filesystem() as td:
-        result = runner.invoke(main, ["new", template.replace("_", "-")])
+        result = runner.invoke(main, ["new", template.replace("_", "-")], input="\n" * 20)
         assert result.exit_code == 0
