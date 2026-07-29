@@ -55,6 +55,8 @@ jobs:
     steps:
       - name: "Run Ansys documentation building action"
         uses: ansys/actions/doc-build@v10
+        with:
+          python-version: ${{ env.MAIN_PYTHON_VERSION }}
 
   wheelhouse:
     name: Wheelhouse Python ${{ matrix.os }}
