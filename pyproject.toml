@@ -30,7 +30,7 @@ name = "ansys-templates"
 version = "5.0.dev0"
 description = "Creates Python projects according to PyAnsys guidelines"
 readme = "README.rst"
-requires-python = ">=3.9,<4"
+requires-python = ">=3.11,<4"
 license = {file = "LICENSE"}
 authors = [
     {name = "ANSYS, Inc.", email = "pyansys.core@ansys.com"},
@@ -42,11 +42,10 @@ maintainers = [
 classifiers = [
     "Development Status :: 4 - Beta",
     "Programming Language :: Python :: 3",
-    "Programming Language :: Python :: 3.9",
-    "Programming Language :: Python :: 3.10",
-    "Programming Language :: Python :: 3.11",
     "Programming Language :: Python :: 3.11",
     "Programming Language :: Python :: 3.12",
+    "Programming Language :: Python :: 3.13",
+    "Programming Language :: Python :: 3.14",
     "License :: OSI Approved :: MIT License",
     "Operating System :: OS Independent",
 ]

@@ -1,5 +1,3 @@
-version: '3.9'
-
 services:
   {{ cookiecutter.library_name }}-grpc-api:
     image: {{ cookiecutter.__project_name_slug }}/{{ cookiecutter.__library_name_slug }}-grpc-api
