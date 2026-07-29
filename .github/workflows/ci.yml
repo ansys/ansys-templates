@@ -100,7 +100,7 @@ jobs:
           python-version: ${{ matrix.cfg.python-version }}
 
       - name: Install dependencies
-        run: python -m pip install --upgrade pip ${{ matrix.cfg.toxenv }} tox
+        run: python -m pip install --upgrade pip tox
 
       - name: Run Tox
         run: tox -e ${{ matrix.cfg.toxenv }}-smoke-cov
