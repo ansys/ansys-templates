@@ -1,25 +1,25 @@
 repos:
 
 - repo: https://github.com/psf/black
-  rev: 25.1.0
+  rev: 87928e6d6761a4a6d22250e1fee5601b3998086e  # frozen: 26.5.1
   hooks:
   - id: black
     exclude: ^src/ansys/templates/python/
 
 - repo: https://github.com/pycqa/isort
-  rev: 6.0.1
+  rev: 7f321d375f31a2f03833bc9a548e8783f2b5c420  # frozen: 9.0.0b1
   hooks:
   - id: isort
 
 - repo: https://github.com/PyCQA/flake8
-  rev: 7.3.0
+  rev: d93590f5be797aabb60e3b09f2f52dddb02f349f  # frozen: 7.3.0
   hooks:
   - id: flake8
     args:
     - tests
 
 - repo: https://github.com/codespell-project/codespell
-  rev: v2.4.1
+  rev: 57b21406f092110c18776e39b0bda50d37c945c8  # frozen: v2.4.3
   hooks:
   - id: codespell
     args:
@@ -29,7 +29,7 @@ repos:
     exclude: src/ansys/templates/python/solution/{{cookiecutter.__project_name_slug}}/lock_files/dash/poetry.lock
 
 - repo: https://github.com/pycqa/pydocstyle
-  rev: 6.3.0
+  rev: 07f6707e2c5612960347f7c00125620457f490a7  # frozen: 6.3.0
   hooks:
   - id: pydocstyle
     additional_dependencies:
@@ -37,7 +37,7 @@ repos:
     exclude: ^src/ansys/templates/python/|^tests
 
 - repo: https://github.com/pre-commit/pre-commit-hooks
-  rev: v5.0.0
+  rev: 3e8a8703264a2f4a69428a0aa4dcb512790b2c8c  # frozen: v6.0.0
   hooks:
   - id: check-merge-conflict
   - id: check-yaml
@@ -46,12 +46,12 @@ repos:
   - id: trailing-whitespace
 
 - repo: https://github.com/python-jsonschema/check-jsonschema
-  rev: 0.33.2
+  rev: 1a4bb160cab6417b3045e1b37b6b72449243e658  # frozen: 0.37.4
   hooks:
   - id: check-github-workflows
 
 - repo: https://github.com/ansys/pre-commit-hooks
-  rev: v0.5.2
+  rev: 55c5b6a5439abd847613579c6924da750e8b78b2  # frozen: v0.8.0
   hooks:
   - id: add-license-headers
     args:

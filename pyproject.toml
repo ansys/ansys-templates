@@ -20,7 +20,6 @@
 # OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
 # SOFTWARE.
 
-
 [build-system]
 requires = ["flit_core >=3.2,<4"]
 build-backend = "flit_core.buildapi"
@@ -30,7 +29,7 @@ name = "ansys-templates"
 version = "5.0.dev0"
 description = "Creates Python projects according to PyAnsys guidelines"
 readme = "README.rst"
-requires-python = ">=3.9,<4"
+requires-python = ">=3.11,<4"
 license = {file = "LICENSE"}
 authors = [
     {name = "ANSYS, Inc.", email = "pyansys.core@ansys.com"},
@@ -42,17 +41,16 @@ maintainers = [
 classifiers = [
     "Development Status :: 4 - Beta",
     "Programming Language :: Python :: 3",
-    "Programming Language :: Python :: 3.9",
-    "Programming Language :: Python :: 3.10",
-    "Programming Language :: Python :: 3.11",
     "Programming Language :: Python :: 3.11",
     "Programming Language :: Python :: 3.12",
+    "Programming Language :: Python :: 3.13",
+    "Programming Language :: Python :: 3.14",
     "License :: OSI Approved :: MIT License",
     "Operating System :: OS Independent",
 ]
 dependencies = [
     "importlib-metadata >=4.0",
-    "click==8.1.8",
+    "click==8.4.2",
     "cookiecutter>=2.1.0,<2.3.0",
     "isort>=5.10.1",
 ]
@@ -60,14 +58,14 @@ dependencies = [
 [project.optional-dependencies]
 tests = [
     "pytest==8.4.1",
-    "pytest-cov==6.2.1",
+    "pytest-cov==7.1.0",
 ]
 doc = [
-    "ansys-sphinx-theme==1.5.3",
-    "numpydoc==1.9.0",
-    "Sphinx==8.2.3",
+    "ansys-sphinx-theme==1.9.0",
+    "numpydoc==1.10.0",
+    "Sphinx==9.1.0",
     "sphinx-copybutton==0.5.2",
-    "sphinx_design==0.6.1",
+    "sphinx_design==0.7.0",
 ]
 
 [tool.flit.module]
@@ -112,13 +110,13 @@ title_format = "`{version} <https://github.com/ansys/ansys-templates/releases/ta
 issue_format = "`#{issue} <https://github.com/ansys/ansys-templates/pull/{issue}>`_"
 
 [[tool.towncrier.type]]
-directory = "added"
-name = "Added"
+directory = "breaking"
+name = "Breaking"
 showcontent = true
 
 [[tool.towncrier.type]]
-directory = "changed"
-name = "Changed"
+directory = "added"
+name = "Added"
 showcontent = true
 
 [[tool.towncrier.type]]
@@ -127,17 +125,13 @@ name = "Fixed"
 showcontent = true
 
 [[tool.towncrier.type]]
-directory = "dependencies"
-name = "Dependencies"
+directory = "documentation"
+name = "Documentation"
 showcontent = true
 
 [[tool.towncrier.type]]
-directory = "miscellaneous"
-name = "Miscellaneous"
-showcontent = true
-[[tool.towncrier.type]]
-directory = "documentation"
-name = "Documentation"
+directory = "dependencies"
+name = "Dependencies"
 showcontent = true
 
 [[tool.towncrier.type]]
@@ -146,6 +140,17 @@ name = "Maintenance"
 showcontent = true
 
 [[tool.towncrier.type]]
+directory = "miscellaneous"
+name = "Miscellaneous"
+showcontent = true
+
+[[tool.towncrier.type]]
 directory = "test"
 name = "Test"
 showcontent = true
+
+[[tool.towncrier.type]]
+directory = "changed"
+name = "Changed"
+showcontent = true
+

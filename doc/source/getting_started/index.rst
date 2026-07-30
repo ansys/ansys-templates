@@ -118,4 +118,4 @@ The following code is returned:
 .. LINKS & REFERENCES
 .. _pip: https://pypi.org/project/pip/
 .. _pipx: https://github.com/pypa/pipx
-.. _pipx installation guidelines: https://pipx.pypa.io/stable/installation/
+.. _pipx installation guidelines: https://pipx.pypa.io/stable/how-to/install-pipx.html

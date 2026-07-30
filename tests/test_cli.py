@@ -1,4 +1,4 @@
-# Copyright (C) 2022 - 2025 ANSYS, Inc. and/or its affiliates.
+# Copyright (C) 2022 - 2026 Synopsys, Inc. and ANSYS, Inc. All rights reserved.
 # SPDX-License-Identifier: MIT
 #
 #
@@ -76,5 +76,5 @@ def test_cli_main_version_command():
 def test_cli_main_new(template):
     runner = CliRunner()
     with runner.isolated_filesystem() as td:
-        result = runner.invoke(main, ["new", template.replace("_", "-")])
+        result = runner.invoke(main, ["new", template.replace("_", "-")], input="\n" * 20)
         assert result.exit_code == 0
