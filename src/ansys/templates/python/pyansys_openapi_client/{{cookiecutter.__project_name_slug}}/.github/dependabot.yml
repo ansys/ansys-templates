@@ -1,12 +1,16 @@
 version: 2
 updates:
   - package-ecosystem: "maven"
+    cooldown:
+      default-days: 10 # Fallback cooldown if no specific rule applies
     directory: "/"
     schedule:
       interval: "weekly"
 
  updates:
    - package-ecosystem: "pip"
+     cooldown:
+       default-days: 10 # Fallback cooldown if no specific rule applies
      directory: "/{{ cookiecutter.__pkg_name }}/"
      schedule:
        interval: "weekly"
