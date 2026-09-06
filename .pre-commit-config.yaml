@@ -1,13 +1,13 @@
 repos:
 
 - repo: https://github.com/psf/black
-  rev: 25.1.0
+  rev: 26.5.1
   hooks:
   - id: black
     exclude: ^src/ansys/templates/python/
 
 - repo: https://github.com/pycqa/isort
-  rev: 6.0.1
+  rev: 9.0.1
   hooks:
   - id: isort
 
@@ -19,7 +19,7 @@ repos:
     - tests
 
 - repo: https://github.com/codespell-project/codespell
-  rev: v2.4.1
+  rev: v2.4.3
   hooks:
   - id: codespell
     args:
@@ -37,7 +37,7 @@ repos:
     exclude: ^src/ansys/templates/python/|^tests
 
 - repo: https://github.com/pre-commit/pre-commit-hooks
-  rev: v5.0.0
+  rev: v6.0.0
   hooks:
   - id: check-merge-conflict
   - id: check-yaml
@@ -46,12 +46,12 @@ repos:
   - id: trailing-whitespace
 
 - repo: https://github.com/python-jsonschema/check-jsonschema
-  rev: 0.33.2
+  rev: 0.38.0
   hooks:
   - id: check-github-workflows
 
 - repo: https://github.com/ansys/pre-commit-hooks
-  rev: v0.5.2
+  rev: v0.8.0
   hooks:
   - id: add-license-headers
     args:
