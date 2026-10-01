@@ -1,6 +1,8 @@
 version: 2
 updates:
   - package-ecosystem: "pip"
+    cooldown:
+      default-days: 10 # Fallback cooldown if no specific rule applies
     {%- if cookiecutter.__build_system != "setuptools" %}
     directory: "/"
     {%- else -%}
@@ -13,6 +15,8 @@ updates:
       - "dependencies"
 
   - package-ecosystem: "github-actions"
+    cooldown:
+      default-days: 10 # Fallback cooldown if no specific rule applies
     directory: "/"
     schedule:
       interval: "weekly"
